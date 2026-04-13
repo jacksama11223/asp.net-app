@@ -1,0 +1,96 @@
+@{
+    ViewData["Title"] = "Executive Dashboard";
+}
+
+<div class="dashboard-header animate-fade">
+    <h1 class="title-gradient">Student Insights</h1>
+    <p style="color: var(--text-muted); font-size: 1.1rem;">Live data fetched from MS-SQL via Stored Procedures & Dapper.</p>
+</div>
+
+<!-- Stats Section with AJAX Loaders -->
+<div class="stats-grid animate-fade" style="animation-delay: 0.2s;">
+    <div class="glass-card stat-item">
+        <h3>Total Students</h3>
+        <div id="total-students" class="value">--</div>
+        <div style="color: #4ade80; font-size: 0.8rem;">Real-time from SQL</div>
+    </div>
+    <div class="glass-card stat-item">
+        <h3>Avg. Progress</h3>
+        <div id="avg-progress" class="value">--</div>
+        <div class="progress-bar" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 10px;">
+            <div id="progress-fill" style="width: 0%; height: 100%; background: var(--accent-color); border-radius: 2px; transition: width 1s;"></div>
+        </div>
+    </div>
+    <div class="glass-card stat-item">
+        <h3>Dropout Risk</h3>
+        <div id="dropout-risk" class="value" style="color: #f87171;">--</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem;">Analyzed by ML.NET</div>
+    </div>
+</div>
+
+<!-- Recent Activity Table -->
+<div class="animate-fade" style="padding: 2rem; animation-delay: 0.4s;">
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Live Activity Feed</h2>
+            <button id="btn-refresh" class="nav-link active" style="border: none; cursor: pointer; padding: 0.5rem 1rem;">
+                🔄 Refresh Data
+            </button>
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse; color: var(--text-primary);">
+            <thead>
+                <tr style="text-align: left; color: var(--text-muted); border-bottom: 1px solid var(--glass-border);">
+                    <th style="padding: 1rem;">Student</th>
+                    <th style="padding: 1rem;">Course</th>
+                    <th style="padding: 1rem;">Progress</th>
+                    <th style="padding: 1rem;">Risk Status</th>
+                </tr>
+            </thead>
+            <tbody id="activity-list">
+                <!-- Rows will be injected here via AJAX -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            loadDashboardData();
+
+            $('#btn-refresh').click(function() {
+                $(this).text('⌛ Refreshing...');
+                loadDashboardData();
+            });
+
+            function loadDashboardData() {
+                // 1. AJAX lấy Stats
+                $.get('/Dashboard/GetStats', function(data) {
+                    $('#total-students').text(data.totalStudents.toLocaleString());
+                    $('#avg-progress').text(data.avgCompletionRate + '%');
+                    $('#progress-fill').css('width', data.avgCompletionRate + '%');
+                    $('#dropout-risk').text(data.dropoutRiskRate + '%');
+                });
+
+                // 2. AJAX lấy Activities
+                $.get('/Dashboard/GetActivities', function(data) {
+                    let html = '';
+                    data.forEach(item => {
+                        let color = item.riskStatus === 'High Risk' ? '#f87171' : 
+                                   (item.riskStatus === 'Moderate' ? '#fbbf24' : '#4ade80');
+                        
+                        html += `<tr style="border-bottom: 1px solid var(--glass-border); animation: fadeIn 0.5s ease forwards;">
+                                    <td style="padding: 1rem;">${item.studentName}</td>
+                                    <td style="padding: 1rem;">${item.courseName}</td>
+                                    <td style="padding: 1rem;">${item.progress}%</td>
+                                    <td style="padding: 1rem;"><span style="color: ${color}">${item.riskStatus}</span></td>
+                                 </tr>`;
+                    });
+                    $('#activity-list').html(html);
+                    $('#btn-refresh').html('🔄 Refresh Data');
+                });
+            }
+        });
+    </script>
+}

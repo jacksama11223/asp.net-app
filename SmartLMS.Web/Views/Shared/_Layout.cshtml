@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartLMS AI</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand" style="margin-bottom: 3rem;">
+            <h2 class="title-gradient" style="font-size: 1.5rem;">SmartLMS.AI</h2>
+        </div>
+        <nav>
+            <a href="/Dashboard" class="nav-link active">Dashboard</a>
+            <a href="/Courses" class="nav-link">Courses</a>
+            <a href="/Students" class="nav-link">Predictor</a>
+            <a href="/Settings" class="nav-link">Settings</a>
+        </nav>
+    </div>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

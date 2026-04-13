@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Welcome to SmartLMS";
+}
+
+<div class="dashboard-header animate-fade">
+    <h1 class="title-gradient">Student Insights</h1>
+    <p style="color: var(--text-muted); font-size: 1.1rem;">AI-Driven monitoring of student competency and dropout risks.</p>
+</div>
+
+<div class="stats-grid animate-fade" style="animation-delay: 0.2s;">
+    <div class="glass-card stat-item">
+        <h3>Total Students</h3>
+        <div class="value">1,024</div>
+        <div style="color: #4ade80; font-size: 0.8rem;">+12% from last month</div>
+    </div>
+    <div class="glass-card stat-item">
+        <h3>Course Completion</h3>
+        <div class="value">78%</div>
+        <div class="progress-bar" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 10px;">
+            <div style="width: 78%; height: 100%; background: var(--accent-color); border-radius: 2px;"></div>
+        </div>
+    </div>
+    <div class="glass-card stat-item">
+        <h3>Risk of Dropout</h3>
+        <div class="value" style="color: #f87171;">12.5%</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem;">Detected by ML.NET</div>
+    </div>
+</div>
+
+<div class="animate-fade" style="padding: 2rem; animation-delay: 0.4s;">
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Recent Activity</h2>
+            <button class="nav-link active" style="border: none; cursor: pointer;">View All</button>
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse; color: var(--text-primary);">
+            <thead>
+                <tr style="text-align: left; color: var(--text-muted); border-bottom: 1px solid var(--glass-border);">
+                    <th style="padding: 1rem;">Student</th>
+                    <th style="padding: 1rem;">Course</th>
+                    <th style="padding: 1rem;">Progress</th>
+                    <th style="padding: 1rem;">Risk Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 1rem;">Nguyen Van A</td>
+                    <td style="padding: 1rem;">C# Masterclass</td>
+                    <td style="padding: 1rem;">85%</td>
+                    <td style="padding: 1rem;"><span style="color: #4ade80;">Safe</span></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 1rem;">Le Thi B</td>
+                    <td style="padding: 1rem;">ASP.NET Core MVC</td>
+                    <td style="padding: 1rem;">12%</td>
+                    <td style="padding: 1rem;"><span style="color: #f87171;">High Risk</span></td>
+                </tr>
+                 <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 1rem;">Tran Van C</td>
+                    <td style="padding: 1rem;">AI with Python</td>
+                    <td style="padding: 1rem;">45%</td>
+                    <td style="padding: 1rem;"><span style="color: #fbbf24;">Moderate</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: rgba(56, 189, 248, 0.1); border-radius: 12px; border: 1px dashed var(--accent-color);">
+            <p><strong>💡 AI Recommendation:</strong> 3 students in 'Web Development' have not logged in for 4 days. Consider sending a nudge email.</p>
+        </div>
+    </div>
+</div>
