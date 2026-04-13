@@ -34,4 +34,12 @@ public class DashboardController : Controller
         var activities = await _reportingService.GetRecentActivitiesAsync(5);
         return Json(activities);
     }
+
+    // API Endpoint giả lập gửi thông báo (AI Nudge)
+    [HttpPost]
+    public IActionResult SendNudge(string message)
+    {
+        // Trong thực tế, đây là nơi gọi Service gửi Email hoặc Notification
+        return Ok(new { success = true, sentMessage = message });
+    }
 }

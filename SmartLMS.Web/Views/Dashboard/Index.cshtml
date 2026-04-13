@@ -1,17 +1,17 @@
 @{
-    ViewData["Title"] = "AI Analytics Hub";
+    ViewData["Title"] = "Executive Dashboard";
 }
 
 <!-- Content Header -->
-<div class="content-header">
+<div class="content-header animate-fade">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Smart Intelligence Center</h1>
+                <h1 class="m-0" style="font-weight: 700;">Hệ thống Quản trị SmartLMS</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" id="btn-refresh" class="btn btn-primary shadow-sm">
-                    <i class="fas fa-sync-alt mr-1"></i> Refresh AI Data
+                <button type="button" id="btn-refresh" class="btn btn-outline-primary btn-sm shadow-sm">
+                    <i data-lucide="refresh-cw" class="mr-1" style="width:14px; height:14px;"></i> Làm mới dữ liệu
                 </button>
             </div>
         </div>
@@ -21,83 +21,58 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        
-        <!-- Top Stats Row -->
+        <!-- 1. 3 Cột Stats (Sử dụng Info-Box) -->
         <div class="row">
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-sm">
-                    <span class="info-box-icon bg-info"><i class="fas fa-user-graduate"></i></span>
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="info-box shadow-sm border">
+                    <span class="info-box-icon bg-info elevation-1"><i data-lucide="users"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Students</span>
-                        <span id="total-students" class="info-box-number">--</span>
+                        <span class="info-box-text">Tổng số Sinh viên</span>
+                        <span id="total-students" class="info-box-number text-bold-xl">--</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-sm">
-                    <span class="info-box-icon bg-success"><i class="fas fa-tasks"></i></span>
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="info-box shadow-sm border">
+                    <span class="info-box-icon bg-success elevation-1"><i data-lucide="check-circle"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Avg. Progress</span>
-                        <span id="avg-progress" class="info-box-number">--</span>
+                        <span class="info-box-text">Tỉ lệ Hoàn thành</span>
+                        <span id="avg-progress" class="info-box-number text-bold-xl">--%</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-sm">
-                    <span class="info-box-icon bg-danger"><i class="fas fa-biohazard"></i></span>
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="info-box shadow-sm border">
+                    <span class="info-box-icon bg-danger elevation-1"><i data-lucide="alert-circle"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Dropout Risk</span>
-                        <span id="dropout-risk" class="info-box-number">--</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-sm">
-                    <span class="info-box-icon bg-warning text-white"><i class="fas fa-search"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Quick Lookup</span>
-                        <select id="student-search" class="form-control select2" style="width: 100%;">
-                            <option value="">Search Student...</option>
-                            <option>Student 1</option>
-                            <option>Student 2</option>
-                        </select>
+                        <span class="info-box-text">Rủi ro Bỏ học (AI)</span>
+                        <span id="dropout-risk" class="info-box-number text-bold-xl">--%</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <!-- Left col: Chart -->
-            <div class="col-md-5">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header border-0">
-                        <h3 class="card-title"><strong>AI Risk Distribution</strong></h3>
-                    </div>
-                    <div class="card-body">
-                        <div id="risk-chart" style="min-height: 250px;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right col: DataTable -->
-            <div class="col-md-7">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header border-0">
-                        <h3 class="card-title"><strong>Live Performance Monitor</strong></h3>
+        <div class="row mt-3">
+            <!-- 2. Nâng cấp Bảng bằng DataTables -->
+            <div class="col-md-12">
+                <div class="card card-outline card-primary shadow-sm">
+                    <div class="card-header border-0 bg-white">
+                        <h3 class="card-title" style="font-weight: 600;">Giám sát Hiệu suất Sinh viên</h3>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive p-3">
-                            <table id="activity-table" class="table table-hover table-valign-middle">
+                            <table id="activity-table" class="table table-hover align-middle">
                                 <thead>
-                                    <tr>
-                                        <th>Student</th>
-                                        <th>Course</th>
-                                        <th>Progress</th>
-                                        <th>Status</th>
+                                    <tr class="text-muted" style="font-size: 0.85rem; text-transform: uppercase;">
+                                        <th>Sinh viên</th>
+                                        <th>Khóa học</th>
+                                        <th style="width: 250px;">Tiến trình</th>
+                                        <th>Trạng thái rủi ro</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody id="activity-list">
-                                    <!-- Injected via AJAX -->
+                                    <!-- AJAX Data -->
                                 </tbody>
                             </table>
                         </div>
@@ -106,47 +81,77 @@
             </div>
         </div>
 
+        <!-- 3. Nổi bật AI Recommendation bằng Callout Custom -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="callout callout-warning shadow-sm animate-fade" style="border-left-width: 5px; background: #fffcf0;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 style="color: #856404; font-weight: 700;"><i data-lucide="sparkles" class="mr-2"></i>Đề xuất từ Trí tuệ Nhân tạo (AI)</h5>
+                            <p class="mb-0">Hệ thống phát hiện <strong>3 sinh viên</strong> có dấu hiệu giảm tương tác trong tuần này. Bạn nên gửi email động viên ngay.</p>
+                        </div>
+                        <button id="btn-nudge" class="btn btn-warning shadow-sm" style="font-weight: 600;">
+                            <i data-lucide="mail" class="mr-1" style="width: 16px; height: 16px;"></i> Gửi Email Ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // 1. Initialize Select2
-            $('.select2').select2({
-                placeholder: "Quick Student Lookup",
-                allowClear: true
-            });
+            lucide.createIcons();
 
-            // 2. Initialize ApexCharts
-            var options = {
-                series: [44, 55, 13],
-                chart: { type: 'donut', height: 300 },
-                labels: ['Safe', 'Moderate', 'High Risk'],
-                colors: ['#28a745', '#ffc107', '#dc3545'],
-                legend: { position: 'bottom' },
-                dataLabels: { enabled: true }
-            };
-            var chart = new ApexCharts(document.querySelector("#risk-chart"), options);
-            chart.render();
-
-            // 3. Initialize DataTable (Placeholder instance)
+            // Initialize DataTable
             var table = $('#activity-table').DataTable({
                 "paging": true,
-                "lengthChange": false,
                 "searching": true,
                 "ordering": true,
-                "info": true,
+                "info": false,
                 "autoWidth": false,
                 "responsive": true,
-                "pageLength": 5
+                "pageLength": 5,
+                "language": {
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                }
             });
 
-            // Load Initial Data
             loadDashboardData();
 
             $('#btn-refresh').click(function() {
+                $(this).find('i').addClass('animate-spin');
                 loadDashboardData(true);
+            });
+
+            // Gửi Email Ngay với SweetAlert2
+            $('#btn-nudge').click(function() {
+                Swal.fire({
+                    title: 'Xác nhận gửi Email',
+                    text: "Bạn có chắc chắn muốn gửi email động viên tới nhóm sinh viên này?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ffc107',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Xác nhận gửi',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post('/Dashboard/SendNudge', function() {
+                            Swal.fire(
+                                'Đã gửi!',
+                                'Email động viên đã được gửi tới 3 sinh viên.',
+                                'success'
+                            );
+                        });
+                    }
+                });
             });
 
             function loadDashboardData(withAlert = false) {
@@ -154,42 +159,58 @@
                     $('#total-students').text(data.totalStudents);
                     $('#avg-progress').text(data.avgCompletionRate + '%');
                     $('#dropout-risk').text(data.dropoutRiskRate + '%');
-                    
-                    // Update Chart with real ratios
-                    chart.updateSeries([
-                        100 - parseFloat(data.dropoutRiskRate), 
-                        Math.random() * 20, // Dummy for Moderate
-                        parseFloat(data.dropoutRiskRate)
-                    ]);
                 });
 
                 $.get('/Dashboard/GetActivities', function(data) {
-                    table.clear(); // Clear DataTable
+                    table.clear();
                     data.forEach(item => {
-                        let badgeColor = item.riskStatus === 'High Risk' ? 'danger' : (item.riskStatus === 'Moderate' ? 'warning' : 'success');
+                        let badgeClass = item.riskStatus === 'High Risk' ? 'badge-danger' : 
+                                        (item.riskStatus === 'Moderate' ? 'badge-warning' : 'badge-success');
                         
                         table.row.add([
                             `<strong>${item.studentName}</strong>`,
                             item.courseName,
-                            `<div class="progress progress-xs"><div class="progress-bar bg-primary" style="width: ${item.progress}%"></div></div><small>${item.progress}%</small>`,
-                            `<span class="badge badge-${badgeColor}">${item.riskStatus}</span>`
+                            `<div>
+                                <div class="progress progress-xxs mb-1" style="height: 8px; border-radius: 10px;">
+                                    <div class="progress-bar bg-primary" style="width: ${item.progress}%;"></div>
+                                </div>
+                                <small class="text-muted">${item.progress}% Hoàn thành</small>
+                            </div>`,
+                            `<span class="badge ${badgeClass}">${item.riskStatus}</span>`,
+                            `<button class="btn btn-sm btn-info" onclick="Swal.fire('Tính năng đang phát triển', '', 'info')">
+                                <i data-lucide="eye" style="width:14px; height:14px;"></i>
+                             </button>`
                         ]);
                     });
-                    table.draw(); // Refresh DataTable
+                    table.draw();
+                    lucide.createIcons();
+                    $('#btn-refresh').find('i').removeClass('animate-spin');
 
                     if (withAlert) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Data Synced!',
-                            text: 'All AI metrics and activities have been updated from SQL Server.',
-                            timer: 2000,
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
                             showConfirmButton: false,
-                            background: $('body').hasClass('dark-mode') ? '#343a40' : '#fff',
-                            color: $('body').hasClass('dark-mode') ? '#fff' : '#000'
+                            timer: 2000
+                        });
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Dữ liệu đã được đồng bộ'
                         });
                     }
                 });
             }
         });
     </script>
+    <style>
+        .badge-danger { padding: 8px 12px; border-radius: 4px; }
+        .badge-success { padding: 8px 12px; border-radius: 4px; }
+        .badge-warning { padding: 8px 12px; border-radius: 4px; }
+        
+        @@keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin { animation: spin 1s linear infinite; }
+    </style>
 }

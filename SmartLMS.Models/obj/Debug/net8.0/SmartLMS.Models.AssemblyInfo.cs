@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartLMS.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b73d442d9094dfa2a9df993acdcea4dbe48857d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e73c48da662d1030f2ef223aac3b7140e19562f")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartLMS.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartLMS.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

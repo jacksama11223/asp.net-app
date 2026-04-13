@@ -4,12 +4,35 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SmartLMS Admin</title>
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Inter -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .main-sidebar { background-color: #312e81 !important; } /* Deep Indigo */
+        .brand-link { background-color: #312e81 !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
+        .nav-sidebar .nav-item > .nav-link.active { background-color: #4338ca !important; }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active { background-color: #4338ca !important; }
+        
+        /* Visual Hierarchy Utility */
+        .text-bold-xl { font-weight: 700; font-size: 2.2rem; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        .dark-mode .glass-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+    <!-- DataTables -->
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
     <!-- Select2 -->
@@ -127,6 +150,9 @@
                     $('.navbar').removeClass('navbar-dark navbar-black').addClass('navbar-white navbar-light');
                 }
             });
+
+            // Initialize Lucide Icons
+            lucide.createIcons();
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
