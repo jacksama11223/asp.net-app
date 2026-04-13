@@ -15,3 +15,4 @@ C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.dll
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\refint\SmartLMS.Business.dll
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.pdb
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\ref\SmartLMS.Business.dll
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.sourcelink.json

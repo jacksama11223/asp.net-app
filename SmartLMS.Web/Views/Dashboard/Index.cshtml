@@ -1,94 +1,193 @@
 @{
-    ViewData["Title"] = "Executive Dashboard";
+    ViewData["Title"] = "AI Analytics Hub";
 }
 
-<div class="dashboard-header animate-fade">
-    <h1 class="title-gradient">Student Insights</h1>
-    <p style="color: var(--text-muted); font-size: 1.1rem;">Live data fetched from MS-SQL via Stored Procedures & Dapper.</p>
-</div>
-
-<!-- Stats Section with AJAX Loaders -->
-<div class="stats-grid animate-fade" style="animation-delay: 0.2s;">
-    <div class="glass-card stat-item">
-        <h3>Total Students</h3>
-        <div id="total-students" class="value">--</div>
-        <div style="color: #4ade80; font-size: 0.8rem;">Real-time from SQL</div>
-    </div>
-    <div class="glass-card stat-item">
-        <h3>Avg. Progress</h3>
-        <div id="avg-progress" class="value">--</div>
-        <div class="progress-bar" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 10px;">
-            <div id="progress-fill" style="width: 0%; height: 100%; background: var(--accent-color); border-radius: 2px; transition: width 1s;"></div>
+<!-- Content Header -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Smart Intelligence Center</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button type="button" id="btn-refresh" class="btn btn-primary shadow-sm">
+                    <i class="fas fa-sync-alt mr-1"></i> Refresh AI Data
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="glass-card stat-item">
-        <h3>Dropout Risk</h3>
-        <div id="dropout-risk" class="value" style="color: #f87171;">--</div>
-        <div style="color: var(--text-muted); font-size: 0.8rem;">Analyzed by ML.NET</div>
     </div>
 </div>
 
-<!-- Recent Activity Table -->
-<div class="animate-fade" style="padding: 2rem; animation-delay: 0.4s;">
-    <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h2>Live Activity Feed</h2>
-            <button id="btn-refresh" class="nav-link active" style="border: none; cursor: pointer; padding: 0.5rem 1rem;">
-                🔄 Refresh Data
-            </button>
-        </div>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
         
-        <table style="width: 100%; border-collapse: collapse; color: var(--text-primary);">
-            <thead>
-                <tr style="text-align: left; color: var(--text-muted); border-bottom: 1px solid var(--glass-border);">
-                    <th style="padding: 1rem;">Student</th>
-                    <th style="padding: 1rem;">Course</th>
-                    <th style="padding: 1rem;">Progress</th>
-                    <th style="padding: 1rem;">Risk Status</th>
-                </tr>
-            </thead>
-            <tbody id="activity-list">
-                <!-- Rows will be injected here via AJAX -->
-            </tbody>
-        </table>
+        <!-- Top Stats Row -->
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-info"><i class="fas fa-user-graduate"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Students</span>
+                        <span id="total-students" class="info-box-number">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-success"><i class="fas fa-tasks"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Avg. Progress</span>
+                        <span id="avg-progress" class="info-box-number">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-danger"><i class="fas fa-biohazard"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Dropout Risk</span>
+                        <span id="dropout-risk" class="info-box-number">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-warning text-white"><i class="fas fa-search"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Quick Lookup</span>
+                        <select id="student-search" class="form-control select2" style="width: 100%;">
+                            <option value="">Search Student...</option>
+                            <option>Student 1</option>
+                            <option>Student 2</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Left col: Chart -->
+            <div class="col-md-5">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header border-0">
+                        <h3 class="card-title"><strong>AI Risk Distribution</strong></h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="risk-chart" style="min-height: 250px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right col: DataTable -->
+            <div class="col-md-7">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header border-0">
+                        <h3 class="card-title"><strong>Live Performance Monitor</strong></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive p-3">
+                            <table id="activity-table" class="table table-hover table-valign-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Course</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-list">
+                                    <!-- Injected via AJAX -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-</div>
+</section>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
+            // 1. Initialize Select2
+            $('.select2').select2({
+                placeholder: "Quick Student Lookup",
+                allowClear: true
+            });
+
+            // 2. Initialize ApexCharts
+            var options = {
+                series: [44, 55, 13],
+                chart: { type: 'donut', height: 300 },
+                labels: ['Safe', 'Moderate', 'High Risk'],
+                colors: ['#28a745', '#ffc107', '#dc3545'],
+                legend: { position: 'bottom' },
+                dataLabels: { enabled: true }
+            };
+            var chart = new ApexCharts(document.querySelector("#risk-chart"), options);
+            chart.render();
+
+            // 3. Initialize DataTable (Placeholder instance)
+            var table = $('#activity-table').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "pageLength": 5
+            });
+
+            // Load Initial Data
             loadDashboardData();
 
             $('#btn-refresh').click(function() {
-                $(this).text('⌛ Refreshing...');
-                loadDashboardData();
+                loadDashboardData(true);
             });
 
-            function loadDashboardData() {
-                // 1. AJAX lấy Stats
+            function loadDashboardData(withAlert = false) {
                 $.get('/Dashboard/GetStats', function(data) {
-                    $('#total-students').text(data.totalStudents.toLocaleString());
+                    $('#total-students').text(data.totalStudents);
                     $('#avg-progress').text(data.avgCompletionRate + '%');
-                    $('#progress-fill').css('width', data.avgCompletionRate + '%');
                     $('#dropout-risk').text(data.dropoutRiskRate + '%');
+                    
+                    // Update Chart with real ratios
+                    chart.updateSeries([
+                        100 - parseFloat(data.dropoutRiskRate), 
+                        Math.random() * 20, // Dummy for Moderate
+                        parseFloat(data.dropoutRiskRate)
+                    ]);
                 });
 
-                // 2. AJAX lấy Activities
                 $.get('/Dashboard/GetActivities', function(data) {
-                    let html = '';
+                    table.clear(); // Clear DataTable
                     data.forEach(item => {
-                        let color = item.riskStatus === 'High Risk' ? '#f87171' : 
-                                   (item.riskStatus === 'Moderate' ? '#fbbf24' : '#4ade80');
+                        let badgeColor = item.riskStatus === 'High Risk' ? 'danger' : (item.riskStatus === 'Moderate' ? 'warning' : 'success');
                         
-                        html += `<tr style="border-bottom: 1px solid var(--glass-border); animation: fadeIn 0.5s ease forwards;">
-                                    <td style="padding: 1rem;">${item.studentName}</td>
-                                    <td style="padding: 1rem;">${item.courseName}</td>
-                                    <td style="padding: 1rem;">${item.progress}%</td>
-                                    <td style="padding: 1rem;"><span style="color: ${color}">${item.riskStatus}</span></td>
-                                 </tr>`;
+                        table.row.add([
+                            `<strong>${item.studentName}</strong>`,
+                            item.courseName,
+                            `<div class="progress progress-xs"><div class="progress-bar bg-primary" style="width: ${item.progress}%"></div></div><small>${item.progress}%</small>`,
+                            `<span class="badge badge-${badgeColor}">${item.riskStatus}</span>`
+                        ]);
                     });
-                    $('#activity-list').html(html);
-                    $('#btn-refresh').html('🔄 Refresh Data');
+                    table.draw(); // Refresh DataTable
+
+                    if (withAlert) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Data Synced!',
+                            text: 'All AI metrics and activities have been updated from SQL Server.',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            background: $('body').hasClass('dark-mode') ? '#343a40' : '#fff',
+                            color: $('body').hasClass('dark-mode') ? '#fff' : '#000'
+                        });
+                    }
                 });
             }
         });
