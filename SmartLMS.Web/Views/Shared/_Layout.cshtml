@@ -31,14 +31,68 @@
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* FIX DataTables Sorting Icons */
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+            font-family: "Font Awesome 5 Free"; font-weight: 900; opacity: 0.3; font-size: 0.8rem;
+        }
+        table.dataTable thead .sorting:before { content: "\f0dc"; opacity: 0.1; }
+        table.dataTable thead .sorting_asc:before { content: "\f0de"; opacity: 1; color: #4e73df; }
+        table.dataTable thead .sorting_desc:before { content: "\f0dd"; opacity: 1; color: #4e73df; }
+        table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after { content: ""; }
     </style>
-    <!-- DataTables -->
-    <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <!-- Select2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <!-- ADVANCED UPGRADE LIBRARIES -->
+    <!-- DataTables Select -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.4/css/select.bootstrap4.min.css">
+    <!-- iCheck Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icheck-bootstrap@3.0.1/icheck-bootstrap.min.css">
+    <!-- jsTree -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css">
+    
+    <!-- ADVANCED UI UPGRADE (WOW FACTOR) -->
+    <!-- Select2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css">
+    <!-- ApexCharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
+    <!-- Quill (Rich Text Editor) -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- Shepherd (Product Tour) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.1.0/dist/css/shepherd.css">
+
+    <style>
+        /* SKELETON LOADERS CSS */
+        .skeleton {
+            background-color: #e2e8f0;
+            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+            background-size: 200px 100%;
+            background-repeat: no-repeat;
+            background-position: left -200px top 0;
+            animation: shine 1.5s ease-in-out infinite;
+            border-radius: 4px;
+            display: inline-block;
+            height: 1em;
+            width: 100%;
+        }
+
+        @@keyframes shine {
+            to { background-position: right -200px top 0; }
+        }
+
+        .skeleton-circle { border-radius: 50%; width: 40px; height: 40px; }
+        .skeleton-text { height: 12px; margin-bottom: 8px; width: 80%; }
+        .skeleton-title { height: 20px; margin-bottom: 12px; width: 60%; }
+
+        /* Select2 BS4 Override */
+        .select2-container--bootstrap4 .select2-selection--single { height: calc(2.25rem + 2px) !important; }
+        
+        .transition-hover { transition: all 0.3s ease; }
+        .transition-hover:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -54,6 +108,24 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                <!-- User Profile Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="fas fa-user-circle mr-1"></i>
+                        <span class="d-none d-md-inline">@User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right shadow border-0">
+                        <span class="dropdown-header">Hệ thống SmartLMS</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user mr-2 text-primary"></i> Hồ sơ cá nhân
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/Account/Logout" class="dropdown-item dropdown-footer text-danger font-weight-bold">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                        </a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" id="dark-mode-toggle" href="#" role="button">
                         <i class="fas fa-moon"></i>
@@ -78,24 +150,47 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar Menu -->
+@{
+                    var _ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+                }
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="/Dashboard" class="nav-link active">
+                            <a href="/Dashboard" class="nav-link @(_ctrl == "Dashboard" ? "active" : "")">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-2">Dữ liệu & Học tập</li>
                         <li class="nav-item">
-                            <a href="/CourseManagement" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
+                            <a href="/CourseManagement" class="nav-link @(_ctrl == "CourseManagement" ? "active" : "")">
+                                <i class="nav-icon fas fa-book text-warning"></i>
                                 <p>Courses Management</p>
                             </a>
                         </li>
-                         <li class="nav-item">
-                            <a href="/Students" class="nav-link">
-                                <i class="nav-icon fas fa-user-graduate"></i>
+                        <li class="nav-item">
+                            <a href="/Students" class="nav-link @(_ctrl == "Students" ? "active" : "")">
+                                <i class="nav-icon fas fa-user-graduate text-info"></i>
                                 <p>Students AI Predictor</p>
+                            </a>
+                        </li>
+                        <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-2">Quản trị Hệ thống</li>
+                        <li class="nav-item">
+                            <a href="/UserManagement" class="nav-link @(_ctrl == "UserManagement" ? "active" : "")">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Quản lý Tài khoản</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Cohort" class="nav-link @(_ctrl == "Cohort" ? "active" : "")">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>Quản lý Lớp (Cohorts)</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/SqlManagement" class="nav-link @(_ctrl == "SqlManagement" ? "active" : "")">
+                                <i class="nav-icon fas fa-database"></i>
+                                <p>Master Console</p>
                             </a>
                         </li>
                     </ul>
@@ -131,10 +226,29 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+    <!-- ADVANCED UPGRADE SCRIPTS -->
+    <!-- DataTables Select -->
+    <script src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+    <!-- jsTree -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+
+    <!-- ADVANCED UI SCRIPTS (WOW FACTOR) -->
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- Lottie Web (Animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <!-- Quill (Rich Text Editor) -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- Shepherd (Product Tour) -->
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.1.0/dist/js/shepherd.js"></script>
 
     <script>
         $(document).ready(function() {

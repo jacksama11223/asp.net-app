@@ -1,0 +1,237 @@
+@{
+    ViewData["Title"] = "SmartDB Master Console";
+}
+
+<style>
+    .sql-console { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 15px; font-family: 'Consolas', 'Monaco', monospace; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; }
+    .sql-editor { width: 100%; height: 200px; background: transparent; color: #9cdcfe; border: none; outline: none; resize: vertical; font-size: 1.1rem; line-height: 1.5; }
+    .console-header { border-bottom: 1px solid #333; margin-bottom: 10px; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+    .status-online { background: #4ec9b0; box-shadow: 0 0 5px #4ec9b0; }
+    .result-section { background: #fff; border-radius: 12px; margin-top: 20px; min-height: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .template-item { cursor: pointer; transition: 0.2s; border-radius: 6px; padding: 8px 12px; margin-bottom: 5px; font-size: 0.9rem; border: 1px solid transparent; }
+    .template-item:hover { background: #f0f4ff; color: #4e73df; border-color: #d1d9e6; }
+    .table-fixed-header { height: 400px; overflow-y: auto; }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold text-dark">
+                    <i class="fas fa-terminal text-secondary mr-2"></i>SmartDB Master Console
+                </h1>
+                <p class="text-muted small mt-1">Truy vấn dữ liệu trực tiếp và tối ưu hóa hệ thống SQL Server.</p>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button class="btn btn-dark btn-sm rounded-pill px-3 shadow" id="btn-execute">
+                    <i class="fas fa-play mr-1 text-success"></i> Execute Query (Ctrl+Enter)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left: Console Editor -->
+            <div class="col-md-9">
+                <div class="sql-console animate__animated animate__fadeIn">
+                    <div class="console-header">
+                        <span class="small font-weight-bold"><span class="status-indicator status-online"></span> connected: SmartLMS_DB</span>
+                        <div class="actions">
+                            <i class="fas fa-eraser mr-3 cursor-pointer" title="Clear Console" onclick="$('.sql-editor').val('')"></i>
+                            <i class="fas fa-cog cursor-pointer" title="Settings"></i>
+                        </div>
+                    </div>
+                    <textarea class="sql-editor" placeholder="-- Nhập truy vấn SQL tại đây...&#10;SELECT TOP 10 * FROM Users WHERE Role='Student';" id="txt-sql"></textarea>
+                </div>
+
+                <div id="loading-query" class="text-center mt-3 d-none">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                    <span class="ml-2 small text-muted">Đang truy vấn database...</span>
+                </div>
+
+                <div class="result-section shadow-sm border-0 animate__animated animate__fadeInUp">
+                    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 font-weight-bold" id="result-title">Kết quả truy vấn</h6>
+                        <span id="rows-count" class="badge badge-light border text-muted">0 rows</span>
+                    </div>
+                    <div class="card-body p-0 table-fixed-header" id="query-result">
+                        <div class="text-center p-5 text-muted opacity-50">
+                            <i class="fas fa-table fa-3x mb-3"></i>
+                            <p>Chưa có dữ liệu. Hãy chạy một truy vấn để xem kết quả.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Insights & Templates -->
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white font-weight-bold small text-uppercase">
+                        <i class="fas fa-heartbeat text-danger mr-2"></i>DB Health
+                    </div>
+                    <div class="card-body p-2" id="db-health-list">
+                        <div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i></div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white font-weight-bold small text-uppercase">
+                        <i class="fas fa-lightbulb text-warning mr-2"></i>Gợi ý truy vấn
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="template-item" onclick="setQuery('SELECT * FROM SqlAuditLogs ORDER BY ExecutionTime DESC')">
+                            <i class="fas fa-history mr-2 opacity-50"></i> Xem lịch sử truy vấn
+                        </div>
+                        <div class="template-item" onclick="setQuery('SELECT TOP 5 * FROM Enrollments WHERE Progress < 20')">
+                            <i class="fas fa-user-slash mr-2 opacity-50"></i> Sv rủi ro cao
+                        </div>
+                        <div class="template-item" onclick="setQuery('SELECT CourseId, Title, Price FROM Courses WHERE IsDeleted = 0')">
+                            <i class="fas fa-book mr-2 opacity-50"></i> Danh sách Khóa học
+                        </div>
+                        <div class="template-item" onclick="setQuery('EXEC sp_GetDBHealth')">
+                            <i class="fas fa-stethoscope mr-2 opacity-50"></i> Kiểm tra dung lượng
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    function setQuery(sql) {
+        $('.sql-editor').val(sql).focus();
+    }
+
+    $(document).ready(function() {
+        // Load DB Health
+        $.get('/SqlManagement/GetHealth', function(data) {
+            var html = '';
+            data.forEach(function(item) {
+                html += `
+                    <div class="px-2 py-1 mb-2 border-bottom">
+                        <div class="d-flex justify-content-between small">
+                            <span class="font-weight-bold">${item.TableName}</span>
+                            <span class="text-muted">${item.RowCounts} rows</span>
+                        </div>
+                        <div class="progress progress-xxs mt-1">
+                            <div class="progress-bar bg-info" style="width: ${Math.min(item.TotalSpaceMB * 10, 100)}%"></div>
+                        </div>
+                    </div>`;
+            });
+            $('#db-health-list').html(html || '<p class="small text-center p-3">No data</p>');
+        });
+
+        // Execute Query
+        $('#btn-execute').click(function() {
+            var sqlSnippet = $('#txt-sql').val();
+            if(!sqlSnippet) return;
+
+            $('#loading-query').removeClass('d-none');
+            $('#btn-execute').prop('disabled', true);
+
+            $.ajax({
+                url: '/SqlManagement/Execute',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ sql: sqlSnippet }),
+                success: function(res) {
+                    $('#loading-query').addClass('d-none');
+                    $('#btn-execute').prop('disabled', false);
+
+                    if(!res.success) {
+                        Swal.fire('Error', res.error, 'error');
+                        return;
+                    }
+
+                    $('#rows-count').text(res.rowsAffected + ' rows');
+                    
+                    if(res.data && res.data.length > 0) {
+                        var columns = Object.keys(res.data[0]);
+                        var table = '<table class="table table-sm table-striped table-hover small"><thead><tr class="bg-light">';
+                        columns.forEach(c => table += `<th>${c}</th>`);
+                        table += '</tr></thead><tbody>';
+                        
+                        res.data.forEach(row => {
+                            table += '<tr>';
+                            columns.forEach(c => table += `<td>${row[c] !== null ? row[c] : '<span class="text-muted">null</span>'}</td>`);
+                            table += '</tr>';
+                        });
+                        table += '</tbody></table>';
+                        $('#query-result').html(table);
+                        toastr.success(res.message);
+                    } else {
+                        $('#query-result').html('<div class="text-center p-5 text-success"><i class="fas fa-check-circle fa-2x mb-2"></i><p>' + res.message + '</p></div>');
+                        toastr.info(res.message);
+                    }
+                },
+                error: function() {
+                    $('#loading-query').addClass('d-none');
+                    $('#btn-execute').prop('disabled', false);
+                    Swal.fire('Critical Error', 'Không thể kết nối với Server.', 'error');
+                }
+            });
+        });
+
+        // Ctrl + Enter shortcut
+        $('#txt-sql').keydown(function (e) {
+            if (e.ctrlKey && e.keyCode == 13) {
+                $('#btn-execute').click();
+            }
+        });
+
+        // SHEPHERD.JS PRODUCT TOUR
+        const tour = new Shepherd.Tour({
+            useModalOverlay: true,
+            defaultStepOptions: {
+                classes: 'shadow-lg border-0 rounded-lg',
+                scrollTo: { behavior: 'smooth', block: 'center' }
+            }
+        });
+
+        tour.addStep({
+            id: 'console-step',
+            text: 'Chào mừng bạn đến với <b>SmartDB Console</b>! Đây là nơi bạn có thể nhập các câu lệnh T-SQL để truy vấn dữ liệu trực tiếp.',
+            attachTo: { element: '#txt-sql', on: 'bottom' },
+            buttons: [{ text: 'Tiếp tục', action: tour.next }]
+        });
+
+        tour.addStep({
+            id: 'execute-step',
+            text: 'Sau khi nhập lệnh, hãy nhấn nút <b>Execute Query</b> (hoặc phím tắt Ctrl+Enter) để thực thi.',
+            attachTo: { element: '#btn-execute', on: 'bottom' },
+            buttons: [{ text: 'Tiếp tục', action: tour.next }]
+        });
+
+        tour.addStep({
+            id: 'health-step',
+            text: 'Bảng bên phải hiển thị <b>Sức khỏe Database</b>, giúp bạn theo dõi dung lượng và số lượng bản ghi của từng bảng.',
+            attachTo: { element: '#db-health-list', on: 'left' },
+            buttons: [{ text: 'Tiếp tục', action: tour.next }]
+        });
+
+        tour.addStep({
+            id: 'results-step',
+            text: 'Kết quả truy vấn sẽ được hiển thị ngay tại bảng này dưới dạng DataTables chuyên nghiệp.',
+            attachTo: { element: '#query-result', on: 'top' },
+            buttons: [{ text: 'Hoàn tất', action: tour.complete }]
+        });
+
+        // Start tour after a short delay if it's the first time
+        if (!localStorage.getItem('sql-tour-done')) {
+            setTimeout(() => {
+                tour.start();
+                localStorage.setItem('sql-tour-done', 'true');
+            }, 1000);
+        }
+
+        // Manual help button (could be added to UI)
+        window.startSqlTour = () => tour.start();
+    });
+</script>
+}

@@ -1,0 +1,67 @@
+@model SmartLMS.Models.Course
+
+<div class="p-3">
+    <div class="text-center mb-4">
+        @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
+        {
+            <img src="@Model.ThumbnailUrl" class="img-fluid rounded shadow" style="max-height: 200px;" alt="Thumbnail" />
+        }
+        else
+        {
+            <div class="bg-light rounded py-5 shadow-sm border">
+                <i class="fas fa-image fa-4x text-muted"></i>
+            </div>
+        }
+    </div>
+
+    <h4 class="font-weight-bold text-dark mb-2">@Model.Title</h4>
+    <div class="mb-3">
+        <span class="badge badge-primary px-3 py-2">@Model.Category</span>
+        <span class="badge @(Model.Status == "Published" ? "badge-success" : "badge-warning") px-3 py-2">@Model.Status</span>
+    </div>
+
+    <hr />
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <small class="text-muted d-block uppercase font-weight-bold" style="font-size: 10px;">GIẢNG VIÊN</small>
+            <div class="d-flex align-items-center mt-1">
+                <div class="bg-info rounded-circle mr-2 d-flex align-items-center justify-content-center" style="width:30px; height:30px;">
+                    <i class="fas fa-user text-white fa-sm"></i>
+                </div>
+                <span class="font-weight-bold">@(Model.Instructor?.FullName ?? "N/A")</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <small class="text-muted d-block uppercase font-weight-bold" style="font-size: 10px;">GIÁ BÁN</small>
+            <span class="text-danger font-weight-bold h5 mt-1 d-block">@string.Format("{0:N0}", Model.Price ?? 0) đ</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="small font-weight-bold text-muted mb-1">MÔ TẢ KHÓA HỌC</label>
+        <div class="bg-light p-3 rounded border" style="min-height: 100px; font-size: 14px; line-height: 1.6;">
+            @(string.IsNullOrEmpty(Model.Description) ? "Chưa có mô tả cho khóa học này." : Model.Description)
+        </div>
+    </div>
+
+    <div class="card mt-4 border-info">
+        <div class="card-body bg-light py-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="mb-0 font-weight-bold text-info"><i class="fas fa-brain mr-2"></i>AI Salary Forecast</h6>
+                    <small class="text-muted">Mức lương tăng thêm kỳ vọng</small>
+                </div>
+                <div class="h5 mb-0 text-success font-weight-bold">
+                    +@string.Format("{0:N0}", Model.AI_BaseSalaryImpact) đ
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button class="btn btn-block btn-outline-primary" onclick="location.href='/CourseManagement/Edit/@Model.CourseId'">
+            <i class="fas fa-edit mr-2"></i> Chỉnh sửa toàn bộ
+        </button>
+    </div>
+</div>

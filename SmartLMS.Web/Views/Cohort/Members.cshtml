@@ -1,0 +1,168 @@
+@model IEnumerable<SmartLMS.Models.User>
+@{
+    ViewData["Title"] = "Thành viên Lớp học";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold text-dark">
+                    <a href="/Cohort" class="text-muted"><i class="fas fa-arrow-left mr-2"></i></a>
+                    Thành viên Lớp học
+                </h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button type="button" class="btn btn-primary shadow-sm" data-toggle="modal" data-target="#modalAddMember">
+                    <i class="fas fa-user-plus mr-1"></i> Thêm Sinh viên vào lớp
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card shadow-sm border-0 rounded-lg">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="pl-4">Sinh viên</th>
+                            <th>Email</th>
+                            <th>Ngày tham gia lớp</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <div id="lottie-empty" style="width: 200px; height: 200px; margin: 0 auto;"></div>
+                                    <div class="text-muted mt-3">
+                                        <p class="font-weight-bold">Lớp học này chưa có thành viên nào.</p>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-toggle="modal" data-target="#modalAddMember">
+                                            <i class="fas fa-plus mr-1"></i> Thêm thành viên ngay
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="pl-4 font-weight-600">@user.FullName</td>
+                                <td>@user.Email</td>
+                                <td>@DateTime.Now.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center">
+                                    <button onclick="removeMember(@user.UserId)" class="btn btn-sm btn-outline-danger" title="Xóa khỏi lớp">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal Add Member -->
+<div class="modal fade" id="modalAddMember" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm sinh viên vào lớp</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Tìm kiếm Sinh viên</label>
+                    <select id="userSelect" class="form-control select2-modal" style="width: 100%;">
+                        <option value="">Nhập tên hoặc username...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" onclick="addMember()" class="btn btn-primary">Xác nhận thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 with AJAX search
+            $('.select2-modal').select2({
+                theme: 'bootstrap4',
+                dropdownParent: $('#modalAddMember'),
+                ajax: {
+                    url: '/UserManagement/Search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { term: params.term };
+                    },
+                    processResults: function (data) {
+                        return { results: data };
+                    },
+                    cache: true
+                },
+                placeholder: 'Nhập tên hoặc username sinh viên...',
+                minimumInputLength: 2
+            });
+
+            // Init Lottie Empty State if div exists
+            if (document.getElementById('lottie-empty')) {
+                lottie.loadAnimation({
+                    container: document.getElementById('lottie-empty'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: 'https://assets9.lottiefiles.com/packages/lf20_glp9al9n.json' // Empty Box Animation
+                });
+            }
+        });
+
+        function addMember() {
+            let uid = $('#userSelect').val();
+            let cid = @ViewBag.CohortId;
+
+            if(!uid) {
+                Swal.fire('Chú ý!', 'Vui lòng chọn sinh viên.', 'info');
+                return;
+            }
+
+            $.post('/Cohort/AddStudent', { userId: uid, cohortId: cid }, function(res) {
+                if(res.success) {
+                    location.reload();
+                } else {
+                    Swal.fire('Lỗi!', 'Không thể thêm sinh viên này.', 'error');
+                }
+            });
+        }
+
+        function removeMember(uid) {
+            let cid = @ViewBag.CohortId;
+            Swal.fire({
+                title: 'Xóa sinh viên?',
+                text: "Bạn có chắc muốn xóa sinh viên này khỏi lớp?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Cohort/RemoveStudent', { userId: uid, cohortId: cid }, function(res) {
+                        if(res.success) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

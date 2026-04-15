@@ -18,12 +18,40 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\code\asp.net\SmartLMS.Web
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Cohort/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29ob3J0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Cohort/Members.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29ob3J0XE1lbWJlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Curriculum.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxDdXJyaWN1bHVtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/_CourseDetailPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxfQ291cnNlRGV0YWlsUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/code/asp.net/SmartLMS.Web/Views/Dashboard/Index.cshtml]
@@ -44,6 +72,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/code/asp.net/SmartLMS.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/SqlManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3FsTWFuYWdlbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Students/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/UserManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hbmFnZW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/code/asp.net/SmartLMS.Web/Views/_ViewImports.cshtml]

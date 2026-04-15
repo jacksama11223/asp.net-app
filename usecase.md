@@ -25,11 +25,42 @@ Tài liệu này mô tả các tình huống sử dụng thực tế của 3 đ�
 
 ---
 
+## 4. Technical Interaction Flow (Frontend ⇆ Backend)
+
+Hệ thống sử dụng mô hình **AJAX-First Interaction** để đảm bảo trải nghiệm người dùng mượt mà (SPA-like experience):
+
+| Tầng | Công nghệ / Thư viện | Vai trò |
+| :--- | :--- | :--- |
+| **Frontend (UI)** | AdminLTE 3.2, Bootstrap 4 | Cung cấp giao diện chuẩn Admin, di động và hiện đại. |
+| **Interaction** | jQuery & AJAX | Gửi yêu cầu bất đồng bộ từ người dùng tới Server. |
+| **Data Grid** | DataTables.net (Select, Scroller) | Hiển thị, tìm kiếm và thao tác hàng loạt (Bulk Actions) trên dữ liệu lớn. |
+| **Backend (Logic)** | ASP.NET Core 8.0 (MVC) | Điều phối trung tâm, xác thực và xử lý nghiệp vụ. |
+| **Service Layer** | Business Services (Dapper) | Thực thi logic nghiệp vụ và truy vấn SQL hiệu năng cao. |
+| **Database** | SQL Server (T-SQL) | Lưu trữ dữ liệu an toàn, hỗ trợ Indexing và Auditing. |
+
+### Ví dụ Luồng UC-10: SmartDB Master Console
+1. **User**: Nhập SQL vào Console và bấm mang lệnh Run (Ctrl+Enter).
+2. **Frontend**: Gửi JSON payload `/SqlManagement/Execute` qua AJAX.
+3. **Backend**: `SqlManagementController` nhận yêu cầu, kiểm tra an toàn.
+4. **Service**: `SqlService` sử dụng Dapper thực thi chuỗi SQL động, đồng thời ghi log vào bảng `SqlAuditLogs`.
+5. **Result**: Trả về dữ liệu dạng JSON dynamic, Frontend render thành bảng HTML tự động.
+
+## 5. Danh mục Thư viện tích hợp
+
+- **Giao diện**: AdminLTE, Bootstrap 4, FontAwesome 5, Lucide Icons.
+- **Tương tác**: jQuery, SweetAlert2 (Thông báo), Toastr (Báo tin nhắn nhanh).
+- **Dữ liệu & Cấu trúc**: DataTables (Quản lý bảng), jsTree (Quản lý đề cương cây), jQuery Sparklines (Biểu đồ xu hướng).
+- **Backend**: Dapper (Micro-ORM), Microsoft.Data.SqlClient (Kết nối DB), Newtonsoft.Json (Xử lý chuỗi).
+
+---
+
 ## Mối liên hệ chính (Relationship Flow)
 ```mermaid
-graph LR
-    Admin -- Quản lý --> Course
-    Student -- Đăng ký --> Enrollment
-    Enrollment -- Sinh dữ liệu --> AI_Model
-    AI_Model -- Cung cấp kết quả --> Admin
+graph TD
+    Admin -- Query/Optimize --> SQL_Console
+    SQL_Console -- Execute --> SqlService
+    SqlService -- Query --> Database
+    Database -- Return --> SqlService
+    SqlService -- Result_JSON --> SQL_Console
+    SQL_Console -- Render_Grid --> Admin
 ```

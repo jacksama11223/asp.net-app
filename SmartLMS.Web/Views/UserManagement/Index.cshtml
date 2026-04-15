@@ -1,0 +1,156 @@
+@model IEnumerable<SmartLMS.Models.User>
+@{
+    ViewData["Title"] = "Quản lý Tài khoản người dùng";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold text-primary"><i class="fas fa-users-cog mr-2"></i>Quản lý Tài khoản</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <a href="/UserManagement/ExportToExcel" class="btn btn-success shadow-sm">
+                    <i class="fas fa-file-excel mr-1"></i> Xuất Excel (UC-16)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card shadow-sm border-0 rounded-lg">
+            <div class="card-header bg-white py-3">
+                <h3 class="card-title text-muted font-weight-bold">Danh sách Người dùng Hệ thống</h3>
+            </div>
+            <div class="card-body">
+                <table id="userTable" class="table table-hover table-borderless align-middle" style="width:100%">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Họ và tên</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tham gia</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm mr-3 bg-primary-light text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; background: rgba(78,115,223,0.1)">
+                                            @user.FullName?.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span class="font-weight-600">@user.FullName</span>
+                                    </div>
+                                </td>
+                                <td><code class="text-primary">@user.Username</code></td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if(user.Role == "Admin") {
+                                        <span class="badge badge-danger">Administrator</span>
+                                    } else if(user.Role == "Teacher") {
+                                        <span class="badge badge-warning">Giảng viên</span>
+                                    } else {
+                                        <span class="badge badge-info">Sinh viên</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.Status == 1)
+                                    {
+                                        <span class="badge badge-pill badge-success"><i class="fas fa-check-circle mr-1"></i>Hoạt động</span>
+                                    }
+                                    else if (user.Status == 2)
+                                    {
+                                        <span class="badge badge-pill badge-danger"><i class="fas fa-ban mr-1"></i>Đã khóa</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-pill badge-secondary">Chờ duyệt</span>
+                                    }
+                                </td>
+                                <td class="text-muted small">@user.CreatedDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="text-center">
+                                    @if (user.Role != "Admin")
+                                    {
+                                        <div class="btn-group">
+                                            @if (user.Status == 1)
+                                            {
+                                                <button onclick="changeStatus(@user.UserId, 2)" class="btn btn-sm btn-outline-danger" title="Khóa tài khoản">
+                                                    <i class="fas fa-user-slash"></i>
+                                                </button>
+                                            }
+                                            else if (user.Status == 2)
+                                            {
+                                                <button onclick="changeStatus(@user.UserId, 1)" class="btn btn-sm btn-outline-success" title="Mở khóa tài khoản">
+                                                    <i class="fas fa-user-check"></i>
+                                                </button>
+                                            }
+                                            <button class="btn btn-sm btn-outline-primary" title="Sửa thông tin"><i class="fas fa-edit"></i></button>
+                                        </div>
+                                    }
+                                    else 
+                                    {
+                                        <span class="text-muted small italic">N/A</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#userTable').DataTable({
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Tìm kiếm người dùng...",
+                    lengthMenu: "Hiển thị _MENU_ dòng",
+                    info: "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ người dùng",
+                    paginate: {
+                        next: '<i class="fas fa-chevron-right"></i>',
+                        previous: '<i class="fas fa-chevron-left"></i>'
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: 6 }
+                ]
+            });
+        });
+
+        function changeStatus(id, status) {
+            let action = status === 2 ? "khóa" : "mở khóa";
+            Swal.fire({
+                title: 'Xác nhận ' + action + '?',
+                text: "Bạn có chắc chắn muốn " + action + " tài khoản này không?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: status === 2 ? '#e74a3b' : '#1cc88a',
+                cancelButtonColor: '#858796',
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/UserManagement/UpdateStatus', { userId: id, status: status }, function(res) {
+                        if(res.success) {
+                            Swal.fire('Thành công!', 'Trạng thái đã được cập nhật.', 'success').then(() => {
+                                location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

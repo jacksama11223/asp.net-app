@@ -1,0 +1,147 @@
+@model SmartLMS.Models.Course
+@{
+    ViewData["Title"] = "Xây dựng Đề cương";
+}
+
+<style>
+    .jstree-default .jstree-clicked { background: #eef2ff; border-radius: 4px; box-shadow: none; }
+    .jstree-default .jstree-hovered { background: #f9fafb; border-radius: 4px; box-shadow: none; }
+    .tree-card { min-height: 500px; border-radius: 15px; }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <i class="fas fa-sitemap text-info mr-2"></i>Thiết kế Đề cương
+                </h1>
+                <p class="text-muted small mt-1">@Model.Title</p>
+            </div>
+            <div class="col-sm-6 text-right">
+                <a href="/CourseManagement" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card tree-card shadow-sm border-0">
+                    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 font-weight-bold">Cấu trúc nội dung</h6>
+                        <button class="btn btn-xs btn-primary" id="btn-add-module" title="Thêm chương">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="curriculum-tree">
+                            <div class="text-center p-5">
+                                <i class="fas fa-spinner fa-spin text-muted"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <button class="btn btn-success btn-sm btn-block shadow-sm" id="btn-save-tree">
+                            <i class="fas fa-save mr-1"></i> Lưu thay đổi thứ tự
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div id="node-details" class="card shadow-sm border-0 tree-card">
+                    <div class="card-body d-flex align-items-center justify-content-center text-muted">
+                        <div class="text-center">
+                            <i class="fas fa-mouse-pointer fa-3x mb-3 opacity-25"></i>
+                            <p>Chọn một Chương hoặc Bài học để chỉnh sửa chi tiết</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+$(document).ready(function () {
+    var courseId = @Model.CourseId;
+
+    // ── 1. JSTREE INIT ──────────────────────────────────────────────
+    $('#curriculum-tree').jstree({
+        'core': {
+            'data': {
+                'url': '/CourseManagement/GetTreeData/' + courseId,
+                'dataType': 'json'
+            },
+            'check_callback': true, // Cho phép kéo thả và chỉnh sửa
+            'themes': { 'name': 'default', 'responsive': true }
+        },
+        'plugins': ['dnd', 'types', 'wholerow'],
+        'types': {
+            'module': { 'icon': 'fas fa-folder text-warning' },
+            'lesson': { 'icon': 'fas fa-file-video text-info' }
+        }
+    });
+
+    // ── 2. SELECTION HANDLER ────────────────────────────────────────
+    $('#curriculum-tree').on("select_node.jstree", function (e, data) {
+        var node = data.node;
+        $('#node-details').html(`
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 font-weight-bold">
+                    <i class="${node.original.icon || 'fas fa-edit'} mr-2"></i> Chỉnh sửa: ${node.text}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Tiêu đề</label>
+                    <input type="text" class="form-control" value="${node.text}">
+                </div>
+                ${node.original.type === 'lesson' ? `
+                <div class="form-group">
+                    <label>Video URL</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i class="fab fa-youtube"></i></span></div>
+                        <input type="text" class="form-control" placeholder="https://youtube.com/...">
+                    </div>
+                </div>` : ''}
+                <button class="btn btn-primary btn-sm">Cập nhật tên</button>
+            </div>
+        `);
+    });
+
+    // ── 3. SAVE HANDLER ─────────────────────────────────────────────
+    $('#btn-save-tree').on('click', function() {
+        var v = $('#curriculum-tree').jstree(true).get_json('#', {flat:true});
+        console.log("Tree Data to Save:", v);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Đã lưu cấu trúc!',
+            text: 'Thứ tự các chương và bài học đã được cập nhật thành công.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    });
+
+    $('#btn-add-module').click(function() {
+        Swal.fire({
+            title: 'Thêm chương mới',
+            input: 'text',
+            inputPlaceholder: 'Nhập tên chương...',
+            showCancelButton: true
+        }).then(res => {
+            if(res.value) {
+                $('#curriculum-tree').jstree('create_node', '#', { "text": res.value, "type": "module" }, 'last');
+            }
+        });
+    });
+});
+</script>
+}

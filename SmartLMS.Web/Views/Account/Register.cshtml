@@ -1,0 +1,120 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Đăng ký thành viên | SmartLMS.AI";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Outfit:300,400,500,600,700&display=fallback">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .register-glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .brand-logo { text-align: center; margin-bottom: 25px; }
+        .brand-logo i { font-size: 2.5rem; color: #fff; }
+        .brand-text { color: #fff; font-weight: 700; font-size: 1.5rem; margin-top: 5px; }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            padding: 10px 15px;
+            height: auto;
+        }
+
+        .form-control::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .form-control:focus { background: rgba(255, 255, 255, 0.2); border-color: #fff; color: #fff; box-shadow: none; }
+
+        .btn-success {
+            background: #fff;
+            border: none;
+            color: #1cc88a;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .btn-success:hover { background: #f8f9fa; transform: scale(1.02); color: #13855c; }
+        
+        label { color: rgba(255, 255, 255, 0.7); font-size: 0.85rem; margin-bottom: 5px; font-weight: 500; }
+        .footer-links { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .footer-links a { color: #fff; font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="register-glass-card animate__animated animate__fadeInUp">
+    <div class="brand-logo">
+        <i class="fas fa-user-plus"></i>
+        <div class="brand-text">Gia nhập SmartLMS.AI</div>
+        <p class="text-white-50 small">Bắt đầu hành trình học tập bứt phá</p>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger border-0 rounded-lg text-center small mb-4">
+            @ViewBag.Error
+        </div>
+    }
+
+    <form action="/Account/Register" method="post">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Họ và tên</label>
+                <input type="text" name="FullName" class="form-control" placeholder="Nguyễn Văn A" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" name="Username" class="form-control" placeholder="user123" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Email liên hệ</label>
+            <input type="email" name="Email" class="form-control" placeholder="example@lms.ai" required>
+        </div>
+        <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="btn btn-success btn-block mt-4 shadow-lg">
+            Đăng Ký Tài Khoản <i class="fas fa-check-circle ml-2"></i>
+        </button>
+    </form>
+
+    <div class="footer-links">
+        <p class="text-white-50">Bạn đã có tài khoản? <a href="/Account/Login">Quay lại Đăng nhập</a></p>
+    </div>
+</div>
+
+</body>
+</html>

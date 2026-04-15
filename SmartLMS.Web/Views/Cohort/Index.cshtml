@@ -1,0 +1,119 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Quản lý Lớp học (Cohorts)";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold text-indigo"><i class="fas fa-users-cog mr-2"></i>Quản lý Nhóm/Lớp (UC-15)</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button type="button" class="btn btn-indigo shadow-sm" data-toggle="modal" data-target="#modalAddCohort">
+                    <i class="fas fa-plus-circle mr-1"></i> Tạo Lớp học mới
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var cohort in Model)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="card shadow-sm border-0 rounded-lg h-100 mb-4 transition-hover">
+                        <div class="card-body">
+                            <div class="dropdown float-right">
+                                <a class="text-muted" href="#" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><i class="fas fa-edit mr-2"></i>Chỉnh sửa</a>
+                                    <a class="dropdown-item text-danger" href="#"><i class="fas fa-trash mr-2"></i>Xóa lớp</a>
+                                </div>
+                            </div>
+                            <h5 class="font-weight-bold">@cohort.Name</h5>
+                            <p class="text-muted small">@cohort.Description</p>
+                            
+                            <hr class="my-3 opacity-10">
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <span class="text-xs text-uppercase text-muted d-block">Sĩ số lớp</span>
+                                    <span class="font-weight-bold h4">@cohort.StudentCount</span> <span class="text-muted small">sinh viên</span>
+                                </div>
+                                <div class="text-right">
+                                    <a href="/Cohort/Members/@cohort.CohortId" class="btn btn-sm btn-outline-indigo rounded-pill px-3">
+                                        Quản lý thành viên <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="progress progress-xxs mb-1 rounded-pill">
+                                <div class="progress-bar bg-indigo" style="width: 70%"></div>
+                            </div>
+                            <span class="text-xs text-muted">70% hoàn thành khóa học</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Modal Add Cohort -->
+<div class="modal fade" id="modalAddCohort" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-0 rounded-lg shadow">
+            <div class="modal-header bg-indigo text-white">
+                <h5 class="modal-title font-weight-bold">Tạo Lớp học (Cohort) Mới</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Tên lớp học</label>
+                    <input type="text" id="cohortName" class="form-control" placeholder="Ví dụ: K65-AI-Fundamentals">
+                </div>
+                <div class="form-group">
+                    <label>Mô tả ngắn</label>
+                    <textarea id="cohortDesc" class="form-control" rows="3" placeholder="Mô tả về mục tiêu hoặc đối tượng của lớp học..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" onclick="saveCohort()" class="btn btn-indigo px-4">Lưu Lớp Học</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-indigo { background-color: #312e81; color: white; }
+    .btn-indigo:hover { background-color: #4338ca; color: white; }
+    .text-indigo { color: #312e81; }
+    .btn-outline-indigo { border-color: #312e81; color: #312e81; }
+    .btn-outline-indigo:hover { background-color: #312e81; color: white; }
+    .transition-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; transition: all 0.3s ease; }
+</style>
+
+@section Scripts {
+    <script>
+        function saveCohort() {
+            let name = $('#cohortName').val();
+            let desc = $('#cohortDesc').val();
+            
+            if(!name) {
+                Swal.fire('Lỗi!', 'Vui lòng nhập tên lớp học.', 'error');
+                return;
+            }
+
+            $.post('/Cohort/Create', { name: name, description: desc }, function(res) {
+                if(res.success) {
+                    Swal.fire('Thành công!', 'Lớp học mới đã được tạo.', 'success').then(() => {
+                        location.reload();
+                    });
+                }
+            });
+        }
+    </script>
+}

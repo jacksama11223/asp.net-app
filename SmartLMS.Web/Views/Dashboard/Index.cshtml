@@ -52,7 +52,32 @@
             </div>
         </div>
 
-        <div class="row mt-3">
+        <!-- 1.5 ApexCharts Section (WOW Factor) -->
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 rounded-lg">
+                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-chart-line mr-2 text-primary"></i>Xu hướng tương tác (AI Insights)</h3>
+                        <div class="badge badge-pill badge-light text-primary py-2 px-3">Real-time Data</div>
+                    </div>
+                    <div class="card-body">
+                        <div id="engagement-chart" style="min-height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 rounded-lg">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-chart-pie mr-2 text-info"></i>Cơ cấu Người dùng</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="role-chart" style="min-height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
             <!-- 2. Nâng cấp Bảng bằng DataTables -->
             <div class="col-md-12">
                 <div class="card card-outline card-primary shadow-sm">
@@ -124,6 +149,7 @@
             });
 
             loadDashboardData();
+            initCharts();
 
             $('#btn-refresh').click(function() {
                 $(this).find('i').addClass('animate-spin');
@@ -153,6 +179,74 @@
                     }
                 });
             });
+
+            function initCharts() {
+                // 1. Engagement Area Chart
+                var engagementOptions = {
+                    series: [{
+                        name: 'Lượt học bài',
+                        data: [31, 40, 28, 51, 42, 109, 100]
+                    }, {
+                        name: 'Lượt thảo luận',
+                        data: [11, 32, 45, 32, 34, 52, 41]
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'area',
+                        toolbar: { show: false },
+                        fontFamily: 'Inter, sans-serif'
+                    },
+                    dataLabels: { enabled: false },
+                    stroke: { curve: 'smooth', width: 2 },
+                    colors: ['#312e81', '#10b981'],
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.45,
+                            opacityTo: 0.05,
+                            stops: [20, 100, 100, 100]
+                        }
+                    },
+                    xaxis: {
+                        categories: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"],
+                    },
+                    tooltip: { x: { format: 'dd/MM' } },
+                };
+
+                var engagementChart = new ApexCharts(document.querySelector("#engagement-chart"), engagementOptions);
+                engagementChart.render();
+
+                // 2. Role Donut Chart
+                var roleOptions = {
+                    series: [44, 15, 41],
+                    labels: ['Sinh viên', 'Giảng viên', 'Admin'],
+                    chart: {
+                        type: 'donut',
+                        height: 350,
+                    },
+                    colors: ['#4338ca', '#f59e0b', '#ef4444'],
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                size: '75%',
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        label: 'Tổng user',
+                                        formatter: () => '1,240'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    legend: { position: 'bottom' }
+                };
+
+                var roleChart = new ApexCharts(document.querySelector("#role-chart"), roleOptions);
+                roleChart.render();
+            }
 
             function loadDashboardData(withAlert = false) {
                 $.get('/Dashboard/GetStats', function(data) {

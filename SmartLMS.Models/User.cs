@@ -15,6 +15,16 @@ public partial class User
 
     public string? Role { get; set; }
 
+    public string? PasswordHash { get; set; }
+
+    public int Status { get; set; } // 1: Active, 2: Banned, 0: Pending
+
+    public int LecturerStatus { get; set; } // 0: None, 1: Pending, 2: Approved
+
+    public string? Bio { get; set; }
+
+    public string? KYCDocUrl { get; set; }
+
     public DateTime? CreatedDate { get; set; }
 
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();

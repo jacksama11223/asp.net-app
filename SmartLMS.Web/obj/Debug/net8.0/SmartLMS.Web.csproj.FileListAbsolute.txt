@@ -176,3 +176,12 @@ C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\code\asp.net\SmartLMS.Web\obj\Debug\net8.0\SmartLMS.Web.sourcelink.json
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\ClosedXML.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\ClosedXML.Parser.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\ExcelNumberFormat.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\RBush.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\System.IO.Packaging.dll

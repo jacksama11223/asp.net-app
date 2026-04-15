@@ -1,67 +1,363 @@
-@model IEnumerable<SmartLMS.Models.Course>
 @{
-    ViewData["Title"] = "Quản lý khóa học";
+    ViewData["Title"] = "Quản lý Khóa học";
+    var stats = ViewBag.Stats as SmartLMS.Business.CourseStatsDto;
 }
 
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary font-weight-bold">
-            <i class="fas fa-book-open"></i> Quản lý khóa học
-        </h2>
-        <a asp-action="Create" class="btn btn-success shadow-sm rounded-pill px-4">
-            <i class="fas fa-plus"></i> Thêm khóa học mới
-        </a>
-    </div>
+<style>
+    /* DataTables Select Styling */
+    table.dataTable tr.selected { background-color: rgba(67, 56, 202, 0.1) !important; }
+    
+    /* Quick Preview Sidebar Customization */
+    .control-sidebar-dark, .control-sidebar-dark + .control-sidebar-bg {
+        width: 400px !important;
+        right: -400px !important;
+    }
+    .control-sidebar-open .control-sidebar { right: 0 !important; }
+    #preview-container { padding-top: 60px; }
+</style>
 
-    <div class="card shadow-lg border-0 rounded-lg">
-        <div class="card-body p-0">
-            <table class="table table-hover table-striped mb-0 text-center align-middle">
-                <thead class="bg-primary text-white">
-                    <tr>
-                        <th class="py-3">Hình ảnh</th>
-                        <th>Tên khóa học</th>
-                        <th>Danh mục</th>
-                        <th>Giảng viên</th>
-                        <th>Giá (VNĐ)</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model) {
-                        <tr>
-                            <td class="p-3">
-                                @if(!string.IsNullOrEmpty(item.ThumbnailUrl)) {
-                                    <img src="@item.ThumbnailUrl" class="img-thumbnail rounded" style="max-height:60px" alt="Course Thumbnail" />
-                                } else {
-                                    <div class="bg-secondary text-white rounded d-flex justify-content-center align-items-center" style="width:80px; height:60px; margin:0 auto;">No Image</div>
-                                }
-                            </td>
-                            <td class="font-weight-bold">@item.Title</td>
-                            <td><span class="badge bg-info text-dark">@item.Category</span></td>
-                            <td>@(item.Instructor != null ? item.Instructor.FullName : "N/A")</td>
-                            <td class="text-danger font-weight-bold">@string.Format("{0:N0}", item.Price) đ</td>
-                            <td>
-                                @if(item.Status == "Published") {
-                                    <span class="badge bg-success">Đã xuất bản</span>
-                                } else if(item.Status == "Draft") {
-                                    <span class="badge bg-warning text-dark">Bản nháp</span>
-                                } else {
-                                    <span class="badge bg-secondary">Đã lưu trữ</span>
-                                }
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-sm btn-outline-primary rounded-pill">
-                                    <i class="fas fa-edit"></i> Sửa
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-sm btn-outline-danger rounded-pill">
-                                    <i class="fas fa-trash"></i> Xóa
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+@* ─── HEADER & BREADCRUMB ────────────────────────────────────────── *@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">
+                    <i class="fas fa-book-open text-primary mr-2"></i>Quản lý Khóa học
+                </h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Courses Management</li>
+                </ol>
+            </div>
         </div>
     </div>
 </div>
+
+<section class="content">
+    <div class="container-fluid">
+
+        @* ─── STATS CARDS ─── *@
+        <div class="row mb-4">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-gradient-primary shadow-sm hover-elevate">
+                    <div class="inner">
+                        <h3>@(stats?.Total ?? 0)</h3>
+                        <p>Tổng Khóa Học</p>
+                    </div>
+                    <div class="icon"><i class="fas fa-book"></i></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-gradient-success shadow-sm hover-elevate">
+                    <div class="inner">
+                        <h3>@(stats?.Published ?? 0)</h3>
+                        <p>Đang Xuất Bản</p>
+                    </div>
+                    <div class="icon"><i class="fas fa-check-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-gradient-warning shadow-sm hover-elevate">
+                    <div class="inner">
+                        <h3>@(stats?.Draft ?? 0)</h3>
+                        <p>Bản Nháp</p>
+                    </div>
+                    <div class="icon"><i class="fas fa-pencil-alt"></i></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-gradient-info shadow-sm hover-elevate">
+                    <div class="inner">
+                        <h3>@(stats?.TotalEnrollments ?? 0)</h3>
+                        <p>Lượt Đăng Ký</p>
+                    </div>
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                </div>
+            </div>
+        </div>
+
+        @* ─── TABLE TOOLBAR ─── *@
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <h5 class="mb-0 font-weight-bold text-dark">
+                            <i class="fas fa-list-ul text-primary mr-2"></i>Danh Sách Khóa Học
+                        </h5>
+                    </div>
+                    <div class="col-md-8 text-right">
+                        @* Bulk Action Group (Hidden by default) *@
+                        <div id="bulk-actions" class="d-none mr-3 d-inline-block">
+                            <span class="mr-2 text-muted small"><span id="selected-count">0</span> đã chọn:</span>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fas fa-tasks mr-1"></i> Xử lý hàng loạt
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item text-success" href="#" onclick="handleBulk('Published')">
+                                        <i class="fas fa-check-circle mr-2"></i> Xuất bản tất cả
+                                    </a>
+                                    <a class="dropdown-item text-warning" href="#" onclick="handleBulk('Draft')">
+                                        <i class="fas fa-file-alt mr-2"></i> Gỡ xuống (Draft)
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="#" onclick="handleBulkDelete()">
+                                        <i class="fas fa-trash-alt mr-2"></i> Xóa mục đã chọn
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btn-export-csv" class="btn btn-sm btn-outline-success mr-2" title="Xuất CSV">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <a asp-action="Create" class="btn btn-sm btn-primary shadow-sm">
+                            <i class="fas fa-plus mr-1"></i> Thêm Mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="tbl-courses" class="table table-hover align-middle mb-0" style="width:100%">
+                        <thead class="bg-light">
+                            <tr>
+                                <th style="width:40px" class="text-center">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="check-all">
+                                        <label for="check-all"></label>
+                                    </div>
+                                </th>
+                                <th class="text-center" style="width:60px">Ảnh</th>
+                                <th>Khóa Học</th>
+                                <th>Giảng Viên</th>
+                                <th class="text-center">Nhãn</th>
+                                <th class="text-center">Trend (7D)</th>
+                                <th class="text-right">Giá</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center" style="width:130px">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @* DataTables AJAX *@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@* ─── SIDEBAR PREVIEW (OFFCANVAS) ─────────────────────────────────── *@
+<aside class="control-sidebar control-sidebar-light shadow">
+    <div id="preview-container">
+        <div class="p-4 text-center mt-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Đang tải thông tin chi tiết...</p>
+        </div>
+    </div>
+</aside>
+
+@section Scripts {
+<script>
+$(document).ready(function () {
+
+    // ── 1. DATATABLES INIT ──────────────────────────────────────────
+    var table = $('#tbl-courses').DataTable({
+        ajax: {
+            url: '@Url.Action("GetCoursesJson", "CourseManagement")',
+            type: 'GET', dataSrc: 'data'
+        },
+        select: { style: 'multi', selector: 'td:first-child' },
+        columns: [
+            // Checkbox column
+            {
+                data: null, orderable: false, className: 'text-center',
+                render: function (_, __, row) {
+                    return `<div class="icheck-primary d-inline">
+                                <input type="checkbox" id="check-${row.courseId}" class="row-checkbox">
+                                <label for="check-${row.courseId}"></label>
+                            </div>`;
+                }
+            },
+            // Thumbnail
+            {
+                data: 'thumbnailUrl', orderable: false, className: 'text-center',
+                render: function (url) {
+                    var img = url ? url : '/img/no-image.png';
+                    return `<img src="${img}" class="rounded shadow-sm" style="height:35px;width:55px;object-fit:cover;" onerror="this.src='https://placehold.jp/100x100.png?text=No%20Image'" />`;
+                }
+            },
+            // Title & Preview Link
+            {
+                data: 'title',
+                render: function (val, type, row) {
+                    return `<a href="#" class="text-dark font-weight-bold btn-preview" data-id="${row.courseId}">${val}</a>
+                            <small class="text-muted d-block mt-1"><i class="far fa-calendar-alt mr-1"></i>${row.createdAt}</small>`;
+                }
+            },
+            // Instructor
+            {
+                data: 'instructorName',
+                render: function (name) { return `<span class="text-muted"><i class="fas fa-user-tie mr-1"></i>${name}</span>`; }
+            },
+            // Category Badge
+            {
+                data: 'category', className: 'text-center',
+                render: function (cat) {
+                    var colors = { 'Web': 'primary', 'AI': 'danger', 'Mobile': 'success' };
+                    return `<span class="badge badge-pill badge-outline-${colors[cat] || 'secondary'}">${cat}</span>`;
+                }
+            },
+            // Sparkline (Trend)
+            {
+                data: 'enrollmentTrend', className: 'text-center',
+                render: function (data) {
+                    return `<span class="inlinesparkline" data-values="${data.join(',')}"></span>`;
+                }
+            },
+            // Price
+            {
+                data: 'priceFormatted', className: 'text-right font-weight-bold text-dark'
+            },
+            // Status Toggle
+            {
+                data: 'status', className: 'text-center',
+                render: function (st, _, row) {
+                    var checked = st === 'Published' ? 'checked' : '';
+                    return `<div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input toggle-status" id="tg-${row.courseId}" data-id="${row.courseId}" ${checked}>
+                                <label class="custom-control-label" for="tg-${row.courseId}"></label>
+                            </div>`;
+                }
+            },
+            // Actions
+            {
+                data: 'courseId', orderable: false, className: 'text-center',
+                render: function (id) {
+                    return `
+                        <div class="btn-group">
+                            <a href="/CourseManagement/Edit/${id}" class="btn btn-xs btn-default" title="Sửa"><i class="fas fa-edit text-primary"></i></a>
+                            <a href="/CourseManagement/Curriculum/${id}" class="btn btn-xs btn-default" title="Đề cương"><i class="fas fa-sitemap text-info"></i></a>
+                            <button class="btn btn-xs btn-default btn-delete" data-id="${id}" title="Xóa"><i class="fas fa-trash-alt text-danger"></i></button>
+                        </div>`;
+                }
+            }
+        ],
+        drawCallback: function () {
+            $('.inlinesparkline').each(function () {
+                var vals = $(this).data('values').split(',').map(Number);
+                $(this).sparkline(vals, { type: 'line', width: '60px', height: '20px', lineColor: '#4338ca', fillColor: '#eef2ff' });
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+        }
+    });
+
+    // ── 2. QUICK PREVIEW (AJAX) ───────────────────────────────────
+    $('#tbl-courses').on('click', '.btn-preview', function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        
+        // Open AdminLTE Control Sidebar
+        if (!$('body').hasClass('control-sidebar-open')) {
+            $('[data-widget="control-sidebar"]').ControlSidebar('show');
+        }
+
+        $('#preview-container').html('<div class="p-5 text-center mt-5"><i class="fas fa-spinner fa-spin fa-2x text-primary"></i></div>');
+        
+        $.get('/CourseManagement/GetDetails/' + id, function (html) {
+            $('#preview-container').html(html);
+        });
+    });
+
+    // ── 3. SELECT LOGIC & BULK ACTIONS ────────────────────────────
+    $('#check-all').on('click', function () {
+        if (this.checked) table.rows().select();
+        else table.rows().deselect();
+    });
+
+    table.on('select deselect', function () {
+        var count = table.rows({ selected: true }).count();
+        if (count > 0) {
+            $('#bulk-actions').removeClass('d-none');
+            $('#selected-count').text(count);
+        } else {
+            $('#bulk-actions').addClass('d-none');
+            $('#check-all').prop('checked', false);
+        }
+    });
+
+    // ── 4. HANDLERS ──────────────────────────────────────────────
+    window.handleBulk = function (status) {
+        var ids = table.rows({ selected: true }).data().toArray().map(r => r.courseId);
+        Swal.fire({
+            title: 'Chuyển đổi trạng thái?',
+            text: `Bạn sẽ cập nhật ${ids.length} khóa học sang '${status}'`,
+            icon: 'info', showCancelButton: true, confirmButtonText: 'Đồng ý'
+        }).then(res => {
+            if (!res.isConfirmed) return;
+            $.ajax({
+                url: '/CourseManagement/BulkToggleStatus?status=' + status,
+                type: 'POST', contentType: 'application/json',
+                data: JSON.stringify(ids),
+                success: function (data) {
+                    if (data.success) {
+                        table.ajax.reload();
+                        Swal.fire('Thành công!', data.message, 'success');
+                    }
+                }
+            });
+        });
+    };
+
+    window.handleBulkDelete = function () {
+        var ids = table.rows({ selected: true }).data().toArray().map(r => r.courseId);
+        Swal.fire({
+            title: 'Xóa hàng loạt?',
+            text: `Hành động này sẽ ẩn ${ids.length} khóa học khỏi danh sách.`,
+            icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Có, xóa ngay!'
+        }).then(res => {
+            if (!res.isConfirmed) return;
+            $.ajax({
+                url: '/CourseManagement/BulkDelete',
+                type: 'POST', contentType: 'application/json',
+                data: JSON.stringify(ids),
+                success: function (data) {
+                    if (data.success) {
+                        table.ajax.reload();
+                        Swal.fire('Đã xóa!', data.message, 'success');
+                    }
+                }
+            });
+        });
+    };
+
+    // Soft delete & manual Toggle single remains compatible...
+    $('#tbl-courses').on('change', '.toggle-status', function () {
+        var id = $(this).data('id');
+        var st = $(this).prop('checked') ? 'Published' : 'Draft';
+        $.post('/CourseManagement/ToggleStatus', { id: id, status: st }).done(() => table.ajax.reload(null, false));
+    });
+
+    $('#tbl-courses').on('click', '.btn-delete', function () {
+        var id = $(this).data('id');
+        Swal.fire({ title: 'Xóa khóa học?', text: 'Dữ liệu sẽ được ẩn đi.', icon: 'warning', showCancelButton: true }).then(res => {
+            if (res.isConfirmed) $.post('/CourseManagement/SoftDelete', { id: id }).done(() => table.ajax.reload(null, false));
+        });
+    });
+
+    $('#btn-export-csv').on('click', function () {
+        var rows = table.rows().data().toArray();
+        var csv = 'Title,Category,Instructor,Price\n';
+        rows.forEach(r => csv += `"${r.title}","${r.category}","${r.instructorName}","${r.priceFormatted}"\n`);
+        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = 'courses.csv'; link.click();
+    });
+});
+</script>
+}

@@ -59,6 +59,14 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)").HasDefaultValue(0m);
             entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.AI_BaseSalaryImpact)
+                .HasColumnName("AI_BaseSalaryImpact")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0m);
+
+            // Global query filter: always hide soft-deleted courses
+            entity.HasQueryFilter(e => !e.IsDeleted);
 
             entity.HasOne(d => d.Instructor).WithMany(p => p.Courses)
                 .HasForeignKey(d => d.InstructorId)

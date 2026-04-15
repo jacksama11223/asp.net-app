@@ -1,0 +1,200 @@
+@{
+    ViewData["Title"] = "Students AI Predictor";
+}
+
+<style>
+    .risk-high { color: #dc3545; font-weight: bold; background: #fff5f5; border-radius: 20px; padding: 2px 10px; border: 1px solid #feb2b2; }
+    .risk-medium { color: #d69e2e; font-weight: bold; background: #fffaf0; border-radius: 20px; padding: 2px 10px; border: 1px solid #fbd38d; }
+    .risk-low { color: #38a169; font-weight: bold; background: #f0fff4; border-radius: 20px; padding: 2px 10px; border: 1px solid #9ae6b4; }
+    .progress { height: 8px; border-radius: 10px; margin-top: 5px; }
+    .avatar-circle { width: 35px; height: 35px; border-radius: 50%; background: #edf2f7; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #4e73df; }
+    .card-stat { border-left: 4px solid #4e73df; }
+    .card-stat.at-risk { border-left-color: #e53e3e; }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <i class="fas fa-user-graduate text-primary mr-2"></i>Students AI Predictor 🚀
+                </h1>
+                <p class="text-muted small mt-1">Quản lý hiệu suất và dự báo rủi ro học tập cho 1,000+ sinh viên.</p>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button class="btn btn-outline-primary btn-sm rounded-pill shadow-sm">
+                    <i class="fas fa-file-export mr-1"></i> Xuất báo cáo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Summary Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card card-stat shadow-sm border-0">
+                    <div class="card-body py-3">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng sinh viên</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="stat-total">1,240</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stat at-risk shadow-sm border-0">
+                    <div class="card-body py-3">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Sinh viên rủi ro cao (AI)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="stat-risk">128</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stat shadow-sm border-0" style="border-left-color: #38a169;">
+                    <div class="card-body py-3">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Tiến độ TB</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">68%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stat shadow-sm border-0" style="border-left-color: #f6e05e;">
+                    <div class="card-body py-3">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Cần nhắc nhở</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">45</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Table Card -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive p-3">
+                    <table id="student-table" class="table table-hover align-middle border-0" style="width:100%">
+                        <thead class="bg-light text-muted small text-uppercase">
+                            <tr>
+                                <th width="40"></th>
+                                <th>Sinh viên</th>
+                                <th>Email</th>
+                                <th class="text-center">Số khóa</th>
+                                <th width="200">Tiến độ trung bình</th>
+                                <th class="text-center">Risk Level (AI)</th>
+                                <th class="text-center" width="100">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="skeleton-body">
+                            @for(int i=0; i<5; i++) {
+                            <tr>
+                                <td><div class="skeleton skeleton-circle"></div></td>
+                                <td><div class="skeleton skeleton-text"></div></td>
+                                <td><div class="skeleton skeleton-text"></div></td>
+                                <td><div class="skeleton skeleton-text" style="width: 30px; margin: 0 auto;"></div></td>
+                                <td><div class="skeleton skeleton-text"></div></td>
+                                <td><div class="skeleton skeleton-text" style="width: 80px; margin: 0 auto;"></div></td>
+                                <td><div class="skeleton skeleton-text" style="width: 60px; margin: 0 auto;"></div></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+$(document).ready(function () {
+    var table = $('#student-table').DataTable({
+        "ajax": {
+            "url": "/Students/GetStudents",
+            "dataSrc": function(json) {
+                $('#skeleton-body').remove(); // Xóa skeleton ngay khi có dữ liệu
+                return json.data;
+            }
+        },
+        "columns": [
+            { 
+                "data": "fullName",
+                "render": function(data) {
+                    return `<div class="avatar-circle">${data.charAt(0)}</div>`;
+                }
+            },
+            { 
+                "data": "fullName",
+                "render": function(data) {
+                    return `<span class="font-weight-600 text-dark">${data}</span>`;
+                }
+            },
+            { "data": "email" },
+            { 
+                "data": "courseCount",
+                "className": "text-center font-weight-bold"
+            },
+            { 
+                "data": "avgProgress",
+                "render": function(data) {
+                    let color = data < 30 ? 'bg-danger' : (data < 70 ? 'bg-warning' : 'bg-success');
+                    return `
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="small mr-2 font-weight-bold">${data}%</span>
+                            <div class="progress flex-grow-1">
+                                <div class="progress-bar ${color}" style="width: ${data}%"></div>
+                            </div>
+                        </div>`;
+                }
+            },
+            { 
+                "data": "riskLevel",
+                "className": "text-center",
+                "render": function(data) {
+                    let cls = data === 'High' ? 'risk-high' : (data === 'Medium' ? 'risk-medium' : 'risk-low');
+                    let icon = data === 'High' ? 'fa-exclamation-triangle' : (data === 'Medium' ? 'fa-info-circle' : 'fa-check-circle');
+                    return `<span class="${cls}"><i class="fas ${icon} mr-1"></i> ${data} Risk</span>`;
+                }
+            },
+            {
+                "data": "userId",
+                "className": "text-center",
+                "render": function(data, type, row) {
+                    return `
+                        <button class="btn btn-xs btn-outline-primary btn-nudge" data-id="${data}" title="Gửi nhắc nhở">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="btn btn-xs btn-outline-info ml-1" title="Xem chi tiết">
+                            <i class="fas fa-eye"></i>
+                        </button>`;
+                }
+            }
+        ],
+        "pageLength": 10,
+        "language": {
+            "search": "",
+            "searchPlaceholder": "Tìm kiếm sinh viên...",
+            "paginate": { "previous": "<", "next": ">" }
+        },
+        "dom": '<"d-flex justify-content-between align-items-center mb-3"f>t<"d-flex justify-content-between align-items-center mt-3"ip>',
+        "order": [[4, "asc"]] // Mặc định xếp theo tiến độ thấp nhất (Risk cao)
+    });
+
+    // Handle Nudge Action
+    $('#student-table').on('click', '.btn-nudge', function() {
+        var id = $(this).data('id');
+        $(this).find('i').removeClass('fa-paper-plane').addClass('fa-spinner fa-spin');
+        
+        $.post('/Students/Nudge', { id: id }, function(res) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sent!',
+                text: res.message,
+                timer: 1500,
+                showConfirmButton: false
+            });
+            table.ajax.reload(null, false);
+        });
+    });
+});
+</script>
+}
