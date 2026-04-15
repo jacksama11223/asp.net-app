@@ -141,7 +141,7 @@ namespace SmartLMS.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateHierarchy([FromBody] List<TreeUpdateDto> updates)
+        public IActionResult UpdateHierarchy([FromBody] List<TreeUpdateDto> updates)
         {
             // Logic đơn giản: cập nhật OrderIndex dựa trên vị trí mới
             // Trong thực tế cần logic phức tạp hơn (chuyển Lesson giữa các Module)

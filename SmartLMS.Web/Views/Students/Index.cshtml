@@ -84,7 +84,7 @@
                                 <th class="text-center" width="100">Thao tác</th>
                             </tr>
                         </thead>
-                        <tbody id="skeleton-body">
+                        <tbody>
                             @for(int i=0; i<5; i++) {
                             <tr>
                                 <td><div class="skeleton skeleton-circle"></div></td>
@@ -110,25 +110,23 @@ $(document).ready(function () {
     var table = $('#student-table').DataTable({
         "ajax": {
             "url": "/Students/GetStudents",
-            "dataSrc": function(json) {
-                $('#skeleton-body').remove(); // Xóa skeleton ngay khi có dữ liệu
-                return json.data;
-            }
+            "dataSrc": "data" // Sử dụng trực tiếp thuộc tính 'data' từ JSON
         },
         "columns": [
             { 
                 "data": "fullName",
                 "render": function(data) {
+                    if (!data) return '<div class="avatar-circle">?</div>';
                     return `<div class="avatar-circle">${data.charAt(0)}</div>`;
                 }
             },
             { 
                 "data": "fullName",
                 "render": function(data) {
-                    return `<span class="font-weight-600 text-dark">${data}</span>`;
+                    return `<span class="font-weight-600 text-dark">${data || 'Chưa cập nhật'}</span>`;
                 }
             },
-            { "data": "email" },
+            { "data": "email", "render": function(data) { return data || 'N/A'; } },
             { 
                 "data": "courseCount",
                 "className": "text-center font-weight-bold"
@@ -136,12 +134,13 @@ $(document).ready(function () {
             { 
                 "data": "avgProgress",
                 "render": function(data) {
-                    let color = data < 30 ? 'bg-danger' : (data < 70 ? 'bg-warning' : 'bg-success');
+                    var val = data || 0;
+                    let color = val < 30 ? 'bg-danger' : (val < 70 ? 'bg-warning' : 'bg-success');
                     return `
                         <div class="d-flex align-items-center justify-content-between">
-                            <span class="small mr-2 font-weight-bold">${data}%</span>
+                            <span class="small mr-2 font-weight-bold">${val}%</span>
                             <div class="progress flex-grow-1">
-                                <div class="progress-bar ${color}" style="width: ${data}%"></div>
+                                <div class="progress-bar ${color}" style="width: ${val}%"></div>
                             </div>
                         </div>`;
                 }
@@ -150,9 +149,10 @@ $(document).ready(function () {
                 "data": "riskLevel",
                 "className": "text-center",
                 "render": function(data) {
-                    let cls = data === 'High' ? 'risk-high' : (data === 'Medium' ? 'risk-medium' : 'risk-low');
-                    let icon = data === 'High' ? 'fa-exclamation-triangle' : (data === 'Medium' ? 'fa-info-circle' : 'fa-check-circle');
-                    return `<span class="${cls}"><i class="fas ${icon} mr-1"></i> ${data} Risk</span>`;
+                    var level = data || 'Low';
+                    let cls = level === 'High' ? 'risk-high' : (level === 'Medium' ? 'risk-medium' : 'risk-low');
+                    let icon = level === 'High' ? 'fa-exclamation-triangle' : (level === 'Medium' ? 'fa-info-circle' : 'fa-check-circle');
+                    return `<span class="${cls}"><i class="fas ${icon} mr-1"></i> ${level} Risk</span>`;
                 }
             },
             {

@@ -87,8 +87,10 @@ public class UserManagementController : Controller
     {
         var users = await _userService.GetAllUsersAsync();
         var results = users
-            .Where(u => u.Role == "Student" && (u.FullName.Contains(term, StringComparison.OrdinalIgnoreCase) || u.Username.Contains(term, StringComparison.OrdinalIgnoreCase)))
-            .Select(u => new { id = u.UserId, text = $"{u.FullName} ({u.Username})" })
+            .Where(u => u.Role == "Student" && 
+                       ((u.FullName != null && u.FullName.Contains(term, StringComparison.OrdinalIgnoreCase)) || 
+                        (u.Username != null && u.Username.Contains(term, StringComparison.OrdinalIgnoreCase))))
+            .Select(u => new { id = u.UserId, text = $"{(u.FullName ?? "N/A")} ({u.Username ?? "N/A"})" })
             .Take(10);
         return Json(results);
     }
