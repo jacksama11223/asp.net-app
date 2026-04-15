@@ -20,4 +20,6 @@ public partial class User
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
 
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+
+    public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
 }

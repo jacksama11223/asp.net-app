@@ -1,0 +1,79 @@
+@model SmartLMS.Models.Course
+@{
+    ViewData["Title"] = "Thêm Khóa Học Mới";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0 font-weight-bold"><i class="fas fa-plus-circle"></i> Thêm Khóa Học Mới</h3>
+                </div>
+                <div class="card-body p-5">
+                    <form asp-action="Create" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="form-group mb-4">
+                            <label asp-for="Title" class="form-label font-weight-bold">Tên khóa học</label>
+                            <input asp-for="Title" class="form-control form-control-lg rounded-pill" placeholder="Nhập tên khóa học..." />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Category" class="form-label font-weight-bold">Danh mục</label>
+                            <select asp-for="Category" class="form-select form-control-lg rounded-pill">
+                                <option value="Web">Lập trình Web</option>
+                                <option value="Mobile">Lập trình Mobile</option>
+                                <option value="AI">Trí tuệ nhân tạo (AI)</option>
+                                <option value="Database">Cơ sở dữ liệu</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Price" class="form-label font-weight-bold">Giá bán (VNĐ)</label>
+                            <input asp-for="Price" class="form-control form-control-lg rounded-pill" type="number" placeholder="Ví dụ: 1000000" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="ThumbnailUrl" class="form-label font-weight-bold">Đường dẫn Hình ảnh (URL)</label>
+                            <input asp-for="ThumbnailUrl" class="form-control form-control-lg rounded-pill" placeholder="https://..." />
+                            <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Status" class="form-label font-weight-bold">Trạng thái phát hành</label>
+                            <select asp-for="Status" class="form-select form-control-lg rounded-pill">
+                                <option value="Draft">Bản nháp (Draft)</option>
+                                <option selected value="Published">Xuất bản (Published)</option>
+                                <option value="Archived">Lưu trữ (Archived)</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label asp-for="Description" class="form-label font-weight-bold">Mô tả chi tiết</label>
+                            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Mô tả khóa học này dạy về..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-arrow-left"></i> Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-success rounded-pill px-5 shadow-sm">
+                                <i class="fas fa-save"></i> Hoàn tất & Lưu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -24,6 +24,9 @@ public partial class SmartLMSContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<CourseModule> CourseModules { get; set; }
+    public virtual DbSet<Lesson> Lessons { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -51,6 +54,45 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.BaseSalaryImpact).HasDefaultValue(0.0);
             entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(100);
+            entity.Property(e => e.ThumbnailUrl).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Published");
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)").HasDefaultValue(0m);
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Instructor).WithMany(p => p.Courses)
+                .HasForeignKey(d => d.InstructorId)
+                .HasConstraintName("FK_Courses_Users");
+        });
+
+        modelBuilder.Entity<CourseModule>(entity =>
+        {
+            entity.HasKey(e => e.ModuleId);
+            entity.ToTable("CourseModules");
+
+            entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
+            entity.Property(e => e.CourseId).HasColumnName("CourseID");
+            entity.Property(e => e.Title).HasMaxLength(150);
+            entity.Property(e => e.OrderIndex).HasDefaultValue(0);
+
+            entity.HasOne(d => d.Course).WithMany(p => p.CourseModules)
+                .HasForeignKey(d => d.CourseId)
+                .HasConstraintName("FK_CourseModules_Courses");
+        });
+
+        modelBuilder.Entity<Lesson>(entity =>
+        {
+            entity.HasKey(e => e.LessonId);
+            entity.ToTable("Lessons");
+
+            entity.Property(e => e.LessonId).HasColumnName("LessonID");
+            entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
+            entity.Property(e => e.Title).HasMaxLength(150);
+            entity.Property(e => e.OrderIndex).HasDefaultValue(0);
+
+            entity.HasOne(d => d.Module).WithMany(p => p.Lessons)
+                .HasForeignKey(d => d.ModuleId)
+                .HasConstraintName("FK_Lessons_CourseModules");
         });
 
         modelBuilder.Entity<Enrollment>(entity =>
