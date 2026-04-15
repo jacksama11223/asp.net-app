@@ -28,31 +28,40 @@
                         <div class="card-body">
                             <div class="dropdown float-right">
                                 <a class="text-muted" href="#" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#"><i class="fas fa-edit mr-2"></i>Chỉnh sửa</a>
-                                    <a class="dropdown-item text-danger" href="#"><i class="fas fa-trash mr-2"></i>Xóa lớp</a>
+                                <div class="dropdown-menu dropdown-menu-right shadow border-0">
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="editCohort(@cohort.CohortId, '@cohort.Name', '@cohort.Description')">
+                                        <i class="fas fa-edit mr-2 text-primary"></i>Chỉnh sửa
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="openImportModal(@cohort.CohortId, '@cohort.Name')">
+                                        <i class="fas fa-file-excel mr-2 text-success"></i>Import Học viên
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="deleteCohort(@cohort.CohortId)">
+                                        <i class="fas fa-trash mr-2"></i>Xóa lớp
+                                    </a>
                                 </div>
                             </div>
-                            <h5 class="font-weight-bold">@cohort.Name</h5>
-                            <p class="text-muted small">@cohort.Description</p>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-indigo-light p-2 rounded mr-3">
+                                    <i class="fas fa-users text-indigo"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-0">@cohort.Name</h5>
+                            </div>
+                            <p class="text-muted small text-truncate">@cohort.Description</p>
                             
                             <hr class="my-3 opacity-10">
                             
-                            <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-0">
                                 <div>
                                     <span class="text-xs text-uppercase text-muted d-block">Sĩ số lớp</span>
                                     <span class="font-weight-bold h4">@cohort.StudentCount</span> <span class="text-muted small">sinh viên</span>
                                 </div>
                                 <div class="text-right">
                                     <a href="/Cohort/Members/@cohort.CohortId" class="btn btn-sm btn-outline-indigo rounded-pill px-3">
-                                        Quản lý thành viên <i class="fas fa-arrow-right ml-1"></i>
+                                        Quản lý <i class="fas fa-arrow-right ml-1"></i>
                                     </a>
                                 </div>
                             </div>
-                            <div class="progress progress-xxs mb-1 rounded-pill">
-                                <div class="progress-bar bg-indigo" style="width: 70%"></div>
-                            </div>
-                            <span class="text-xs text-muted">70% hoàn thành khóa học</span>
                         </div>
                     </div>
                 </div>
@@ -61,28 +70,59 @@
     </div>
 </section>
 
-<!-- Modal Add Cohort -->
-<div class="modal fade" id="modalAddCohort" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<!-- Modal Add/Edit Cohort -->
+<div class="modal fade" id="modalCohort" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content border-0 rounded-lg shadow">
-            <div class="modal-header bg-indigo text-white">
-                <h5 class="modal-title font-weight-bold">Tạo Lớp học (Cohort) Mới</h5>
+            <div class="modal-header bg-indigo text-white border-0">
+                <h5 class="modal-title font-weight-bold" id="modalTitle">Lớp học (Cohort)</h5>
                 <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Tên lớp học</label>
-                    <input type="text" id="cohortName" class="form-control" placeholder="Ví dụ: K65-AI-Fundamentals">
+            <div class="modal-body p-4">
+                <input type="hidden" id="cohortId" />
+                <div class="form-group mb-3">
+                    <label class="small font-weight-bold text-muted">TÊN LỚP HỌC</label>
+                    <input type="text" id="cohortName" class="form-control form-control-lg border-0 bg-light" placeholder="Ví dụ: K65-AI-Fundamentals">
                 </div>
                 <div class="form-group">
-                    <label>Mô tả ngắn</label>
-                    <textarea id="cohortDesc" class="form-control" rows="3" placeholder="Mô tả về mục tiêu hoặc đối tượng của lớp học..."></textarea>
+                    <label class="small font-weight-bold text-muted">MÔ TẢ CHI TIẾT</label>
+                    <textarea id="cohortDesc" class="form-control border-0 bg-light" rows="3" placeholder="Mô tả về mục tiêu hoặc đối tượng của lớp học..."></textarea>
                 </div>
             </div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Hủy bỏ</button>
-                <button type="button" onclick="saveCohort()" class="btn btn-indigo px-4">Lưu Lớp Học</button>
+                <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" onclick="saveCohort()" class="btn btn-indigo rounded-pill px-4">Lưu Thông Tin</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Import Excel -->
+<div class="modal fade" id="modalImport" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 rounded-lg shadow">
+            <div class="modal-header bg-success text-white border-0">
+                <h5 class="modal-title font-weight-bold">Import Học viên từ Excel</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form id="importForm" enctype="multipart/form-data">
+                <div class="modal-body p-4 text-center">
+                    <input type="hidden" name="cohortId" id="importCohortId" />
+                    <div class="p-5 border-dashed rounded-lg mb-3" style="border: 2px dashed #e2e8f0;">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                        <p class="mb-0 text-muted">Kéo thả file Excel vào đây hoặc click để chọn</p>
+                        <input type="file" name="file" id="excelFile" class="d-none" accept=".xlsx, .xls" />
+                    </div>
+                    <button type="button" onclick="$('#excelFile').click()" class="btn btn-outline-success btn-sm mb-3">Chọn file Excel</button>
+                    <div class="text-left alert alert-info small py-2 mb-0">
+                        <i class="fas fa-info-circle mr-1"></i> Định dạng: Cột 1: Họ tên, Cột 2: Email, Cột 3: Mật khẩu, Cột 4: Ngày sinh, Cột 5: Quê quán.
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4">Bắt đầu Import</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -90,30 +130,87 @@
 <style>
     .btn-indigo { background-color: #312e81; color: white; }
     .btn-indigo:hover { background-color: #4338ca; color: white; }
+    .bg-indigo-light { background-color: #e0e7ff; }
     .text-indigo { color: #312e81; }
     .btn-outline-indigo { border-color: #312e81; color: #312e81; }
     .btn-outline-indigo:hover { background-color: #312e81; color: white; }
     .transition-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; transition: all 0.3s ease; }
+    .border-dashed { cursor: pointer; }
+    .border-dashed:hover { background-color: #f8fafc; border-color: #10b981 !important; }
 </style>
 
 @section Scripts {
     <script>
+        function openAddModal() {
+            $('#cohortId').val('');
+            $('#cohortName').val('');
+            $('#cohortDesc').val('');
+            $('#modalTitle').text('Tạo Lớp học (Cohort) Mới');
+            $('#modalCohort').modal('show');
+        }
+
+        function editCohort(id, name, desc) {
+            $('#cohortId').val(id);
+            $('#cohortName').val(name);
+            $('#cohortDesc').val(desc);
+            $('#modalTitle').text('Chỉnh sửa Lớp học');
+            $('#modalCohort').modal('show');
+        }
+
         function saveCohort() {
+            let id = $('#cohortId').val();
             let name = $('#cohortName').val();
             let desc = $('#cohortDesc').val();
             
-            if(!name) {
-                Swal.fire('Lỗi!', 'Vui lòng nhập tên lớp học.', 'error');
-                return;
-            }
+            if(!name) { Swal.fire('Lỗi!', 'Vui lòng nhập tên lớp học.', 'error'); return; }
 
-            $.post('/Cohort/Create', { name: name, description: desc }, function(res) {
+            let url = id ? '/Cohort/Update' : '/Cohort/Create';
+            let data = id ? { id: id, name: name, description: desc } : { name: name, description: desc };
+
+            $.post(url, data, function(res) {
                 if(res.success) {
-                    Swal.fire('Thành công!', 'Lớp học mới đã được tạo.', 'success').then(() => {
-                        location.reload();
+                    Swal.fire('Thành công!', 'Dữ liệu đã được lưu.', 'success').then(() => location.reload());
+                }
+            });
+        }
+
+        function deleteCohort(id) {
+            Swal.fire({
+                title: 'Xóa lớp học?',
+                text: "Dữ liệu sinh viên sẽ được giữ lại nhưng lớp sẽ bị ẩn.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý xóa'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Cohort/Delete', { id: id }, function(res) {
+                        if(res.success) Swal.fire('Đã xóa!', 'Lớp học đã được chuyển vào thùng rác.', 'success').then(() => location.reload());
                     });
                 }
             });
         }
+
+        function openImportModal(id, name) {
+            $('#importCohortId').val(id);
+            $('#modalImport').modal('show');
+        }
+
+        $('#importForm').submit(function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            Swal.fire({ title: 'Đang xử lý...', text: 'Vui lòng đợi trong giây lát', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            $.ajax({
+                url: '/Cohort/ImportExcel',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    Swal.fire('Xong!', res.message, 'success').then(() => location.reload());
+                }
+            });
+        });
     </script>
 }

@@ -45,6 +45,13 @@ public class UserService : IUserService
         return null;
     }
 
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        using var db = CreateConnection();
+        var sql = "SELECT * FROM Users WHERE Email = @Email";
+        return await db.QueryFirstOrDefaultAsync<User>(sql, new { Email = email });
+    }
+
     public async Task<bool> RegisterAsync(User user, string password)
     {
         using var db = CreateConnection();
@@ -52,8 +59,8 @@ public class UserService : IUserService
         user.CreatedDate = DateTime.Now;
         user.Status = 1; // Mặc định là Active
 
-        var sql = @"INSERT INTO Users (Username, FullName, Email, Role, PasswordHash, Status, CreatedDate) 
-                    VALUES (@Username, @FullName, @Email, @Role, @PasswordHash, @Status, @CreatedDate)";
+        var sql = @"INSERT INTO Users (Username, FullName, Email, Role, UserType, PasswordHash, Status, CreatedDate, DateOfBirth, Hometown) 
+                    VALUES (@Username, @FullName, @Email, @Role, @UserType, @PasswordHash, @Status, @CreatedDate, @DateOfBirth, @Hometown)";
         
         var affected = await db.ExecuteAsync(sql, user);
         return affected > 0;

@@ -245,6 +245,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\uploads\\courses\\d93bb468-1fbe-4b49-8f0e-a0118ea0c03c.png",
+      "PackagePath": "staticwebassets\\uploads\\courses\\d93bb468-1fbe-4b49-8f0e-a0118ea0c03c.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SmartLMS.Web.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

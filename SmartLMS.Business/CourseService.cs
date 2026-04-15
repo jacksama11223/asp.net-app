@@ -22,6 +22,7 @@ public interface ICourseService
     Task<bool> BulkToggleStatusAsync(int[] ids, string newStatus);
     Task<bool> BulkDeleteAsync(int[] ids);
     Task<CourseStatsDto> GetStatsAsync();
+    Task<int[]> GetTrendDataAsync(int courseId);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -118,6 +119,9 @@ public class CourseService : ICourseService
         var course = await _context.Courses.FindAsync(id);
         if (course == null) return false;
 
+        course.Status = newStatus;
+        course.UpdatedAt = DateTime.Now;
+
         await _context.SaveChangesAsync();
         return true;
     }
@@ -159,20 +163,35 @@ public class CourseService : ICourseService
         return true;
     }
 
-    /// <summary>Thống kê nhanh cho Stats Cards.</summary>
+    /// <summary>Thống kê nhanh cho Stats Cards (Đã tối ưu hóa).</summary>
     public async Task<CourseStatsDto> GetStatsAsync()
     {
-        var courses = await _context.Courses
-            .Include(c => c.Enrollments)
-            .ToListAsync();
-
         return new CourseStatsDto
         {
-            Total            = courses.Count,
-            Published        = courses.Count(c => c.Status == "Published"),
-            Draft            = courses.Count(c => c.Status == "Draft"),
-            Archived         = courses.Count(c => c.Status == "Archived"),
-            TotalEnrollments = courses.Sum(c => c.Enrollments.Count)
+            Total            = await _context.Courses.CountAsync(),
+            Published        = await _context.Courses.CountAsync(c => c.Status == "Published"),
+            Draft            = await _context.Courses.CountAsync(c => c.Status == "Draft"),
+            Archived         = await _context.Courses.CountAsync(c => c.Status == "Archived"),
+            TotalEnrollments = await _context.Enrollments.CountAsync()
         };
+    }
+
+    /// <summary>Lấy dữ liệu Trend thực tế từ ActivityLogs cho 7 ngày gần nhất.</summary>
+    public async Task<int[]> GetTrendDataAsync(int courseId)
+    {
+        // Giả lập logic: Đếm số ActionType='CourseView' liên quan đến CourseId này trong 7 ngày
+        // Lưu ý: bảng ActivityLogs hiện tại chưa có CourseID trực tiếp, 
+        // ta sẽ query theo ActionType và Timestamp để demo logic thực tế.
+        var today = DateTime.Today;
+        var trend = new int[7];
+
+        for (int i = 0; i < 7; i++)
+        {
+            var date = today.AddDays(-6 + i);
+            trend[i] = await _context.ActivityLogs
+                .CountAsync(a => a.Timestamp != null && a.Timestamp.Value.Date == date && a.ActionType == "CourseView");
+        }
+
+        return trend;
     }
 }

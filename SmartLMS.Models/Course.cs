@@ -19,9 +19,14 @@ public partial class Course
     public int? InstructorId { get; set; }
     public string? ThumbnailUrl { get; set; }
     public decimal? Price { get; set; }
+    public decimal? DiscountPrice { get; set; }
+    public bool IsFree { get; set; } = false;
 
     /// <summary>Draft = 0 | Published = 1 | Archived = 2</summary>
     public string? Status { get; set; }
+
+    public string? MetaTitle { get; set; }
+    public string? MetaDescription { get; set; }
 
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

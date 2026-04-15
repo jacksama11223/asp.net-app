@@ -1,0 +1,65 @@
+@model SmartLMS.Business.DropoutPrediction
+
+<div class="p-3">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h5 class="font-weight-bold mb-3">Phân tích rủi ro AI</h5>
+            <div class="mb-4">
+                <p class="mb-1 text-muted small">Khả năng bỏ học dự báo:</p>
+                <div class="d-flex align-items-end">
+                    <h2 class="mb-0 font-weight-bold @(Model.Prediction ? "text-danger" : "text-success")">
+                        @((Model.Probability * 100).ToString("N1"))%
+                    </h2>
+                    <span class="ml-2 mb-1 badge @(Model.Prediction ? "badge-danger" : "badge-success")">
+                        @(Model.Prediction ? "Rủi ro Cao" : "An toàn")
+                    </span>
+                </div>
+            </div>
+
+            <div class="alert bg-light border-0">
+                <h6 class="font-weight-bold small"><i class="fas fa-lightbulb text-warning mr-2"></i>Lời khuyên hệ thống:</h6>
+                <p class="small mb-0 text-muted">
+                    @if(Model.Prediction) {
+                         @:Sinh viên có tiến độ học tập và điểm số đáng báo động. Hãy cân nhắc gửi mail "Nudge" hoặc liên hệ trực tiếp để tư vấn.
+                    } else {
+                         @:Sinh viên đang học tập ổn định. Tiếp tục duy trì các hoạt động tương tác để giữ vững phong độ.
+                    }
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @* Radar Chart Container *@
+            <div id="risk-radar-chart"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        var options = {
+            series: [{
+                name: 'Mức trọng số rủi ro',
+                data: [
+                    @Model.ProgressContribution.ToString("N3").Replace(",", "."), 
+                    @Model.ScoreContribution.ToString("N3").Replace(",", "."), 
+                    @Model.ActivityContribution.ToString("N3").Replace(",", ".")
+                ]
+            }],
+            chart: {
+                height: 250,
+                type: 'radar',
+                toolbar: { show: false }
+            },
+            title: { text: 'Biểu đồ mạng nhện (XAI)', align: 'center', style: { fontSize: '12px' } },
+            xaxis: {
+                categories: ['Tiến độ chậm', 'Điểm số thấp', 'Ít hoạt động']
+            },
+            colors: ['#4338ca'],
+            fill: { opacity: 0.4 },
+            markers: { size: 4 }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#risk-radar-chart"), options);
+        chart.render();
+    })();
+</script>

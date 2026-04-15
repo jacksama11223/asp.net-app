@@ -2767,11 +2767,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
+      "projectUniqueName": "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
       "projectName": "SmartLMS.Data",
-      "projectPath": "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
+      "projectPath": "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "c:\\code\\asp.net\\SmartLMS.Data\\obj\\",
+      "outputPath": "C:\\code\\asp.net\\SmartLMS.Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"

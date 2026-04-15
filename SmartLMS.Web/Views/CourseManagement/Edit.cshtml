@@ -1,22 +1,27 @@
 @model SmartLMS.Models.Course
 @{
-    ViewData["Title"] = "Chỉnh Sửa Khóa Học";
+    ViewData["Title"] = "Chỉnh sửa Khóa Học";
     var instructors = ViewBag.Instructors as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
 }
+
+<style>
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .nav-tabs-wizard .nav-link { border: none; background: #f8f9fa; margin-right: 5px; color: #6c757d; font-weight: 600; padding: 12px 20px; border-radius: 8px; }
+    .nav-tabs-wizard .nav-link.active { background: #4338ca; color: white; }
+    .nav-tabs-wizard .nav-link.done { background: #dcfce7; color: #15803d; }
+</style>
 
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">
-                    <i class="fas fa-pencil-alt text-warning mr-2"></i>Chỉnh Sửa Khóa Học
-                </h1>
+                <h1 class="m-0"><i class="fas fa-edit text-warning mr-2"></i>Edit Course Wizard</h1>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 text-right">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="/CourseManagement">Courses</a></li>
-                    <li class="breadcrumb-item active">Chỉnh sửa</li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </div>
         </div>
@@ -26,185 +31,162 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-lg-9">
-
-                <div class="card shadow border-0 rounded-lg">
-                    <div class="card-header bg-gradient-warning text-white d-flex align-items-center py-3">
-                        <i class="fas fa-edit fa-lg mr-3"></i>
-                        <div>
-                            <h5 class="mb-0 font-weight-bold">Cập Nhật Thông Tin Khóa Học</h5>
-                            <small class="opacity-75">ID: #@Model.CourseId &nbsp;|&nbsp; Tạo lúc: @(Model.CreatedAt?.ToString("dd/MM/yyyy") ?? "N/A")</small>
-                        </div>
+            <div class="col-lg-10">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-white py-3">
+                        <ul class="nav nav-tabs nav-tabs-wizard border-0" id="wizard-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-step="1" href="javascript:void(0)">1. Cơ bản</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-step="2" href="javascript:void(0)">2. SEO & AI</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-step="3" href="javascript:void(0)">3. Giá & Ảnh</a>
+                            </li>
+                        </ul>
                     </div>
 
                     <div class="card-body p-4">
-                        <form asp-action="Edit" method="post" id="form-edit">
+                        <form asp-action="Edit" method="post" id="form-wizard" enctype="multipart/form-data">
                             <input type="hidden" asp-for="CourseId" />
-                            <input type="hidden" asp-for="CreatedAt" />
+                            <input type="hidden" asp-for="ThumbnailUrl" />
                             <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
 
-                            <div class="row">
-                                @* ── Tên khóa học ── *@
-                                <div class="col-md-8">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold text-dark">
-                                            <i class="fas fa-heading text-primary mr-1 fa-sm"></i>Tên khóa học <span class="text-danger">*</span>
-                                        </label>
-                                        <input asp-for="Title" class="form-control form-control-lg"
-                                               placeholder="Ví dụ: Lập trình C# nâng cao" />
-                                        <span asp-validation-for="Title" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                                @* ── Danh mục ── *@
-                                <div class="col-md-4">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold text-dark">
-                                            <i class="fas fa-tag text-info mr-1 fa-sm"></i>Danh mục
-                                        </label>
-                                        <select asp-for="Category" class="form-control form-control-lg">
-                                            <option value="Web">💻 Lập trình Web</option>
-                                            <option value="Mobile">📱 Lập trình Mobile</option>
-                                            <option value="AI">🤖 Trí tuệ nhân tạo (AI)</option>
-                                            <option value="Database">🗄️ Cơ sở dữ liệu</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                @* ── Giảng viên ── *@
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold text-dark">
-                                            <i class="fas fa-chalkboard-teacher text-success mr-1 fa-sm"></i>Giảng viên
-                                        </label>
-                                        <select asp-for="InstructorId" class="form-control form-control-lg" id="select-instructor">
-                                            <option value="">-- Chọn giảng viên --</option>
-                                            @foreach (var inst in instructors)
-                                            {
-                                                <option value="@inst.UserId">@inst.FullName</option>
-                                            }
-                                        </select>
-                                        <span asp-validation-for="InstructorId" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                                @* ── Trạng thái ── *@
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold text-dark">
-                                            <i class="fas fa-signal text-warning mr-1 fa-sm"></i>Trạng thái phát hành
-                                        </label>
-                                        <select asp-for="Status" class="form-control form-control-lg">
-                                            <option value="Draft">📝 Bản nháp (Draft)</option>
-                                            <option value="Published">🟢 Xuất bản (Published)</option>
-                                            <option value="Archived">📦 Lưu trữ (Archived)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                @* ── Giá ── *@
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold text-dark">
-                                            <i class="fas fa-tag text-danger mr-1 fa-sm"></i>Giá bán (VNĐ)
-                                        </label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text bg-light">₫</span>
-                                            </div>
-                                            <input asp-for="Price" class="form-control form-control-lg"
-                                                   type="number" min="0" placeholder="Ví dụ: 500000" />
+                            @* ── STEP 1: BASIC INFO ── *@
+                            <div class="wizard-step active" id="step-1">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Tên khóa học</label>
+                                            <input asp-for="Title" class="form-control form-control-lg" />
+                                            <span asp-validation-for="Title" class="text-danger small"></span>
                                         </div>
-                                        <span asp-validation-for="Price" class="text-danger small"></span>
                                     </div>
-                                </div>
-                                @* ── AI Salary Impact ── *@
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold text-dark">
-                                            <i class="fas fa-brain text-purple mr-1 fa-sm" style="color:#7c3aed"></i>AI – Lương dự báo (VNĐ)
-                                        </label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text bg-light" style="color:#7c3aed">AI</span>
-                                            </div>
-                                            <input asp-for="AI_BaseSalaryImpact" class="form-control form-control-lg"
-                                                   type="number" min="0" placeholder="Mức lương tăng kỳ vọng..." />
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Danh mục</label>
+                                            <select asp-for="Category" class="form-control form-control-lg">
+                                                <option value="Web">Web</option>
+                                                <option value="AI">AI</option>
+                                                <option value="Mobile">Mobile</option>
+                                            </select>
                                         </div>
-                                        <small class="text-muted">Dùng cho UC-07 Dự báo thu nhập</small>
                                     </div>
                                 </div>
-                            </div>
-
-                            @* ── URL Thumbnail ── *@
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold text-dark">
-                                    <i class="fas fa-image text-secondary mr-1 fa-sm"></i>URL Hình ảnh
-                                </label>
-                                <div class="input-group">
-                                    <input asp-for="ThumbnailUrl" class="form-control"
-                                           placeholder="https://example.com/image.jpg"
-                                           id="thumbnail-url-input" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-outline-secondary" id="btn-preview-img">
-                                            <i class="fas fa-eye"></i> Xem
-                                        </button>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Giảng viên</label>
+                                            <select asp-for="InstructorId" class="form-control form-control-lg">
+                                                @foreach (var inst in instructors) {
+                                                    <option value="@inst.UserId" selected="@(inst.UserId == Model.InstructorId)">@inst.FullName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Trạng thái</label>
+                                            <select asp-for="Status" class="form-control form-control-lg">
+                                                <option value="Draft">Draft</option>
+                                                <option value="Published">Published</option>
+                                                <option value="Archived">Archived</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div id="thumbnail-preview" class="mt-2 @(string.IsNullOrEmpty(Model.ThumbnailUrl) ? "d-none" : "")">
-                                    <img id="preview-img" src="@Model.ThumbnailUrl" class="img-thumbnail rounded shadow-sm"
-                                         style="max-height:120px;" alt="Preview" />
+                                <div class="form-group mb-4">
+                                    <label class="font-weight-bold">Mô tả</label>
+                                    <div id="quill-editor" style="height: 200px;">@Html.Raw(Model.Description)</div>
+                                    <textarea asp-for="Description" class="d-none" id="hidden-description"></textarea>
+                                </div>
+                                <div class="text-right">
+                                    <button type="button" class="btn btn-primary btn-next px-4" data-next="2">Tiếp theo</button>
                                 </div>
                             </div>
 
-                            @* ── Mô tả ── *@
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold text-dark">
-                                    <i class="fas fa-align-left text-secondary mr-1 fa-sm"></i>Mô tả chi tiết
-                                </label>
-                                <textarea asp-for="Description" class="form-control" rows="5"
-                                          placeholder="Mô tả nội dung, đối tượng học viên, kết quả đạt được..."></textarea>
+                            @* ── STEP 2: SEO & AI ── *@
+                            <div class="wizard-step" id="step-2">
+                                <div class="form-group mb-3">
+                                    <label class="font-weight-bold">SEO Title</label>
+                                    <input asp-for="MetaTitle" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="font-weight-bold">SEO Description</label>
+                                    <textarea asp-for="MetaDescription" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <label class="small font-weight-bold">AI Base Salary Impact (₫)</label>
+                                        <input asp-for="AI_BaseSalaryImpact" class="form-control" type="number" />
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="1">Quay lại</button>
+                                    <button type="button" class="btn btn-primary btn-next px-4" data-next="3">Tiếp theo</button>
+                                </div>
                             </div>
 
-                            @* ── Buttons ── *@
-                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                                    <i class="fas fa-arrow-left mr-1"></i> Quay lại
-                                </a>
-                                <div>
-                                    <button type="reset" class="btn btn-outline-warning mr-2">
-                                        <i class="fas fa-undo mr-1"></i> Reset
-                                    </button>
-                                    <button type="submit" class="btn btn-warning px-5 shadow-sm font-weight-bold" id="btn-save">
-                                        <i class="fas fa-save mr-1"></i> Lưu Thay Đổi
-                                    </button>
+                            @* ── STEP 3: PRICING & MEDIA ── *@
+                            <div class="wizard-step" id="step-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Giá bán</label>
+                                            <input asp-for="Price" class="form-control" type="number" id="input-price" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Giá khuyến mãi</label>
+                                            <input asp-for="DiscountPrice" class="form-control" type="number" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label class="font-weight-bold d-block">Thumbnail</label>
+                                    @if (!string.IsNullOrEmpty(Model.ThumbnailUrl)) {
+                                        <div class="mb-2"><img src="@Model.ThumbnailUrl" style="height: 60px;" class="rounded shadow-sm" /></div>
+                                    }
+                                    <input type="file" name="thumbnail" class="form-control-file border p-2 rounded w-100" accept="image/*" onchange="previewFiles(this)" />
+                                    <div id="thumb-preview-wrap" class="mt-2 text-center bg-light p-3 rounded d-none">
+                                        <img id="thumb-img" src="#" style="max-height: 150px;" class="img-fluid rounded shadow-sm" />
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                                    <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="2">Quay lại</button>
+                                    <button type="submit" class="btn btn-success px-5 font-weight-bold shadow">Lưu thay đổi</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // Preview thumbnail image
-        $('#btn-preview-img').on('click', function () {
-            var url = $('#thumbnail-url-input').val().trim();
-            if (!url) return;
-            $('#preview-img').attr('src', url);
-            $('#thumbnail-preview').removeClass('d-none');
+        $(document).ready(function() {
+            var quill = new Quill('#quill-editor', { theme: 'snow' });
+            $('.btn-next').on('click', function() { switchStep($(this).data('next')); });
+            $('.btn-prev').on('click', function() { switchStep($(this).data('prev')); });
+            function switchStep(step) {
+                $('.wizard-step').removeClass('active'); $(`#step-${step}`).addClass('active');
+                $('#wizard-tabs .nav-link').removeClass('active'); $(`#wizard-tabs .nav-link[data-step="${step}"]`).addClass('active');
+            }
+            $('#form-wizard').on('submit', function() { $('#hidden-description').val(quill.root.innerHTML); });
         });
-
-        // Loading state on submit
-        $('#form-edit').on('submit', function () {
-            $('#btn-save').html('<i class="fas fa-spinner fa-spin mr-1"></i> Đang lưu...').prop('disabled', true);
-        });
+        function previewFiles(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) { $('#thumb-img').attr('src', e.target.result); $('#thumb-preview-wrap').removeClass('d-none'); }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 }

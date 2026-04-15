@@ -14,6 +14,7 @@ public partial class User
     public string? Email { get; set; }
 
     public string? Role { get; set; }
+    public string? UserType { get; set; }
 
     public string? PasswordHash { get; set; }
 
@@ -27,9 +28,13 @@ public partial class User
 
     public DateTime? CreatedDate { get; set; }
 
+    public DateTime? DateOfBirth { get; set; }
+
+    public string? Hometown { get; set; }
+
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
 
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
-
+    public virtual ICollection<UserCohort> UserCohorts { get; set; } = new List<UserCohort>();
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
 }

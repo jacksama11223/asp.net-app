@@ -1,0 +1,63 @@
+@model SmartLMS.Models.Coupon
+@{
+    ViewData["Title"] = "Tạo Mã Giảm Giá";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"><i class="fas fa-plus text-success mr-2"></i>Thêm Coupon Mới</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <form asp-action="Create" method="post">
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">Mã Giảm Giá (Code) <span class="text-danger">*</span></label>
+                                <input asp-for="Code" class="form-control" placeholder="Ví dụ: GIAMGIA50K" required />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="font-weight-bold">Mức giảm</label>
+                                        <input asp-for="DiscountAmount" class="form-control" type="number" step="0.01" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="font-weight-bold">Loại giảm</label>
+                                        <select asp-for="DiscountType" class="form-control">
+                                            <option value="Fixed">Số tiền cố định (₫)</option>
+                                            <option value="Percentage">Phần trăm (%)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">Ngày hết hạn</label>
+                                <input asp-for="ExpiryDate" class="form-control" type="date" />
+                            </div>
+                            <div class="custom-control custom-checkbox mb-4">
+                                <input type="checkbox" class="custom-control-input" asp-for="IsActive" id="customCheck1" checked>
+                                <label class="custom-control-label" for="customCheck1">Kích hoạt ngay</label>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Index" class="btn btn-outline-secondary">Quay lại</a>
+                                <button type="submit" class="btn btn-success px-4 font-weight-bold">Lưu Coupon</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

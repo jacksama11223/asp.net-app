@@ -19,16 +19,34 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<ActivityLog> ActivityLogs { get; set; }
 
     public virtual DbSet<Course> Courses { get; set; }
+    public virtual DbSet<CourseModule> CourseModules { get; set; }
 
     public virtual DbSet<Enrollment> Enrollments { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<CourseModule> CourseModules { get; set; }
     public virtual DbSet<Lesson> Lessons { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Cohort> Cohorts { get; set; }
+    public virtual DbSet<UserCohort> UserCohorts { get; set; }
+    public virtual DbSet<Coupon> Coupons { get; set; }
+    public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Cohort>(entity => {
+            entity.HasKey(e => e.CohortId);
+            entity.Property(e => e.Name).HasMaxLength(150).IsRequired();
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+        });
+
+        modelBuilder.Entity<UserCohort>(entity => {
+            entity.HasKey(e => e.UserCohortId);
+            entity.HasOne(d => d.User).WithMany(p => p.UserCohorts).HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Cohort).WithMany(p => p.UserCohorts).HasForeignKey(d => d.CohortId);
+        });
+
+        modelBuilder.Entity<AuditLog>(entity => {
+            entity.HasKey(e => e.AuditId);
+            entity.Property(e => e.Timestamp).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+        });
         modelBuilder.Entity<ActivityLog>(entity =>
         {
             entity.HasKey(e => e.LogId).HasName("PK__Activity__5E5499A8AC2913CB");
@@ -60,6 +78,9 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.MetaTitle).HasMaxLength(200);
+            entity.Property(e => e.IsFree).HasDefaultValue(false);
+            entity.Property(e => e.DiscountPrice).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.AI_BaseSalaryImpact)
                 .HasColumnName("AI_BaseSalaryImpact")
                 .HasColumnType("decimal(18,2)")
@@ -71,6 +92,16 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Instructor).WithMany(p => p.Courses)
                 .HasForeignKey(d => d.InstructorId)
                 .HasConstraintName("FK_Courses_Users");
+        });
+
+        modelBuilder.Entity<Coupon>(entity =>
+        {
+            entity.HasKey(e => e.CouponId);
+            entity.ToTable("Coupons");
+            entity.Property(e => e.Code).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.DiscountAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.DiscountType).HasMaxLength(20).HasDefaultValue("Fixed");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<CourseModule>(entity =>
@@ -86,6 +117,9 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Course).WithMany(p => p.CourseModules)
                 .HasForeignKey(d => d.CourseId)
                 .HasConstraintName("FK_CourseModules_Courses");
+            
+            // Global query filter
+            entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
         modelBuilder.Entity<Lesson>(entity =>
@@ -101,6 +135,9 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Module).WithMany(p => p.Lessons)
                 .HasForeignKey(d => d.ModuleId)
                 .HasConstraintName("FK_Lessons_CourseModules");
+
+            // Global query filter
+            entity.HasQueryFilter(e => !e.Module.Course.IsDeleted);
         });
 
         modelBuilder.Entity<Enrollment>(entity =>

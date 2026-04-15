@@ -7,6 +7,7 @@ namespace SmartLMS.Business;
 public interface IStudentService
 {
     Task<IEnumerable<StudentViewModel>> GetAllStudentsAsync();
+    Task SendNudgeAsync(int userId);
 }
 
 public class StudentViewModel

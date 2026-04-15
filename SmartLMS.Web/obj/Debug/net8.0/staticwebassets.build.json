@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "EFOaJkGMyvf2koWvCs7N79h6XX828gF+RDPVJQT9SVg=",
+  "Hash": "aSTOB2F4fW13pr3wEGiDj2LaINhJZZfh1NrCdeiwdlM=",
   "Source": "SmartLMS.Web",
   "BasePath": "_content/SmartLMS.Web",
   "Mode": "Default",
@@ -1193,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\uploads\\courses\\d93bb468-1fbe-4b49-8f0e-a0118ea0c03c.png",
+      "SourceId": "SmartLMS.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\",
+      "BasePath": "_content/SmartLMS.Web",
+      "RelativePath": "uploads/courses/d93bb468-1fbe-4b49-8f0e-a0118ea0c03c.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\courses\\d93bb468-1fbe-4b49-8f0e-a0118ea0c03c.png"
     }
   ]
 }

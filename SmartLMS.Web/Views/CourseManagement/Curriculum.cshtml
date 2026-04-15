@@ -1,27 +1,27 @@
 @model SmartLMS.Models.Course
 @{
-    ViewData["Title"] = "Xây dựng Đề cương";
+    ViewData["Title"] = "Xây dựng Đề cương (Sortable)";
 }
 
 <style>
-    .jstree-default .jstree-clicked { background: #eef2ff; border-radius: 4px; box-shadow: none; }
-    .jstree-default .jstree-hovered { background: #f9fafb; border-radius: 4px; box-shadow: none; }
-    .tree-card { min-height: 500px; border-radius: 15px; }
+    .module-item { cursor: grab; background: #fff; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; transition: all 0.2s; }
+    .module-item:hover { transform: translateY(-2px); border-color: #4338ca; }
+    .lesson-item { cursor: grab; background: #f8fafc; padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: middle; }
+    .lesson-item:hover { background: #f1f5f9; border-color: #4338ca; }
+    .sortable-ghost { opacity: 0.4; background: #e0e7ff !important; border: 2px solid #4338ca !important; }
+    .handle { color: #94a3b8; cursor: grab; margin-right: 12px; }
 </style>
 
 <div class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row align-items-center mb-3">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">
-                    <i class="fas fa-sitemap text-info mr-2"></i>Thiết kế Đề cương
-                </h1>
-                <p class="text-muted small mt-1">@Model.Title</p>
+                <h1 class="m-0 font-weight-bold"><i class="fas fa-layer-group text-info mr-2"></i>Curriculum Studio</h1>
+                <p class="text-muted mb-0">Thiết kế cấu trúc chương học cho: <strong>@Model.Title</strong></p>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="/CourseManagement" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Quay lại danh sách
-                </a>
+                <button class="btn btn-primary shadow-sm mr-2" id="btn-add-module"><i class="fas fa-plus mr-1"></i> Thêm Chương</button>
+                <button class="btn btn-success shadow-sm" id="btn-save-all"><i class="fas fa-save mr-1"></i> Lưu thứ tự</button>
             </div>
         </div>
     </div>
@@ -29,119 +29,103 @@
 
 <section class="content">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card tree-card shadow-sm border-0">
-                    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 font-weight-bold">Cấu trúc nội dung</h6>
-                        <button class="btn btn-xs btn-primary" id="btn-add-module" title="Thêm chương">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div id="curriculum-tree">
-                            <div class="text-center p-5">
-                                <i class="fas fa-spinner fa-spin text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <button class="btn btn-success btn-sm btn-block shadow-sm" id="btn-save-tree">
-                            <i class="fas fa-save mr-1"></i> Lưu thay đổi thứ tự
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-8">
-                <div id="node-details" class="card shadow-sm border-0 tree-card">
-                    <div class="card-body d-flex align-items-center justify-content-center text-muted">
-                        <div class="text-center">
-                            <i class="fas fa-mouse-pointer fa-3x mb-3 opacity-25"></i>
-                            <p>Chọn một Chương hoặc Bài học để chỉnh sửa chi tiết</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="module-container" class="sortable-modules pb-5">
+            @* Ajax render modules here *@
+            <div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x text-muted"></i></div>
         </div>
     </div>
 </section>
 
 @section Scripts {
-<script>
-$(document).ready(function () {
-    var courseId = @Model.CourseId;
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var courseId = @Model.CourseId;
 
-    // ── 1. JSTREE INIT ──────────────────────────────────────────────
-    $('#curriculum-tree').jstree({
-        'core': {
-            'data': {
-                'url': '/CourseManagement/GetTreeData/' + courseId,
-                'dataType': 'json'
-            },
-            'check_callback': true, // Cho phép kéo thả và chỉnh sửa
-            'themes': { 'name': 'default', 'responsive': true }
-        },
-        'plugins': ['dnd', 'types', 'wholerow'],
-        'types': {
-            'module': { 'icon': 'fas fa-folder text-warning' },
-            'lesson': { 'icon': 'fas fa-file-video text-info' }
-        }
-    });
+            // Load Data
+            loadCurriculum();
 
-    // ── 2. SELECTION HANDLER ────────────────────────────────────────
-    $('#curriculum-tree').on("select_node.jstree", function (e, data) {
-        var node = data.node;
-        $('#node-details').html(`
-            <div class="card-header bg-white border-bottom py-3">
-                <h6 class="mb-0 font-weight-bold">
-                    <i class="${node.original.icon || 'fas fa-edit'} mr-2"></i> Chỉnh sửa: ${node.text}
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label>Tiêu đề</label>
-                    <input type="text" class="form-control" value="${node.text}">
-                </div>
-                ${node.original.type === 'lesson' ? `
-                <div class="form-group">
-                    <label>Video URL</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text"><i class="fab fa-youtube"></i></span></div>
-                        <input type="text" class="form-control" placeholder="https://youtube.com/...">
-                    </div>
-                </div>` : ''}
-                <button class="btn btn-primary btn-sm">Cập nhật tên</button>
-            </div>
-        `);
-    });
-
-    // ── 3. SAVE HANDLER ─────────────────────────────────────────────
-    $('#btn-save-tree').on('click', function() {
-        var v = $('#curriculum-tree').jstree(true).get_json('#', {flat:true});
-        console.log("Tree Data to Save:", v);
-        
-        Swal.fire({
-            icon: 'success',
-            title: 'Đã lưu cấu trúc!',
-            text: 'Thứ tự các chương và bài học đã được cập nhật thành công.',
-            timer: 2000,
-            showConfirmButton: false
-        });
-    });
-
-    $('#btn-add-module').click(function() {
-        Swal.fire({
-            title: 'Thêm chương mới',
-            input: 'text',
-            inputPlaceholder: 'Nhập tên chương...',
-            showCancelButton: true
-        }).then(res => {
-            if(res.value) {
-                $('#curriculum-tree').jstree('create_node', '#', { "text": res.value, "type": "module" }, 'last');
+            function loadCurriculum() {
+                $.get('/CourseManagement/GetTreeData/' + courseId, function(data) {
+                    var html = '';
+                    data.forEach(mod => {
+                        html += `
+                        <div class="module-item p-3" data-id="${mod.id}">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <i class="fas fa-bars handle"></i>
+                                    <span class="font-weight-bold text-dark h6 mb-0">${mod.text}</span>
+                                    <span class="badge badge-secondary ml-2">${mod.children.length} bài học</span>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-xs btn-outline-primary btn-add-lesson" data-mod-id="${mod.id}"><i class="fas fa-plus"></i> Bài học</button>
+                                    <button class="btn btn-xs btn-outline-danger btn-del-node" data-id="${mod.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="sortable-lessons ml-4" data-parent="${mod.id}">
+                                ${mod.children.map(les => `
+                                    <div class="lesson-item" data-id="${les.id}">
+                                        <i class="fas fa-grip-vertical handle"></i>
+                                        <i class="fas fa-file-video text-info mr-2"></i>
+                                        <span class="flex-grow-1">${les.text}</span>
+                                        <button class="btn btn-link btn-xs text-muted btn-preview-les" data-id="${les.id}"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                    });
+                    $('#module-container').html(html);
+                    initSortable();
+                });
             }
+
+            function initSortable() {
+                // Modules
+                new Sortable(document.querySelector('.sortable-modules'), {
+                    animation: 150, handle: '.handle', ghostClass: 'sortable-ghost',
+                    onEnd: function() { console.log("Modules reordered"); }
+                });
+
+                // Lessons in each module
+                document.querySelectorAll('.sortable-lessons').forEach(el => {
+                    new Sortable(el, {
+                        group: 'lessons', // Allow moving lessons between modules
+                        animation: 150, handle: '.handle', ghostClass: 'sortable-ghost'
+                    });
+                });
+            }
+
+            // Save All Logic
+            $('#btn-save-all').on('click', function() {
+                var updates = [];
+                $('.module-item').each(function(mIdx) {
+                    updates.push({ id: $(this).data('id'), order: mIdx });
+                    $(this).find('.lesson-item').each(function(lIdx) {
+                        var modId = $(this).closest('.sortable-lessons').data('parent');
+                        updates.push({ id: $(this).data('id'), order: lIdx, parentId: modId });
+                    });
+                });
+
+                Swal.fire({ title: 'Đang lưu...', didOpen: () => { Swal.showLoading(); } });
+                $.ajax({
+                    url: '/CourseManagement/UpdateHierarchy',
+                    type: 'POST', contentType: 'application/json',
+                    data: JSON.stringify(updates),
+                    success: function() {
+                        Swal.fire('Thành công', 'Thứ tự đề cương đã được cập nhật!', 'success');
+                    }
+                });
+            });
+
+            // Add/Edit node logic... (Placeholder for brevity, can expand easily)
+            $('#btn-add-module').on('click', function() {
+                Swal.fire({ title: 'Tên chương mới', input: 'text', showCancelButton: true }).then(res => {
+                    if(res.value) { 
+                        // Logic call API to Create Module... For demo, we just toast
+                        Swal.fire('Info', 'Vui lòng thực hiện tính năng lưu sau khi thêm Node mới (Mock logic)', 'info');
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 }

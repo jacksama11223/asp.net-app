@@ -27,6 +27,7 @@ namespace SmartLMS.Web.Controllers
         {
             var stats = await _courseService.GetStatsAsync();
             ViewBag.Stats = stats;
+            await PopulateInstructorsAsync();
             return View();
         }
 
@@ -41,7 +42,6 @@ namespace SmartLMS.Web.Controllers
         {
             var courses = await _context.Courses
                 .Include(c => c.Instructor)
-                .Include(c => c.Enrollments)
                 .Select(c => new {
                     courseId        = c.CourseId,
                     title           = c.Title ?? "(Chưa đặt tên)",
@@ -50,29 +50,92 @@ namespace SmartLMS.Web.Controllers
                     price           = c.Price ?? 0,
                     priceFormatted  = string.Format("{0:N0}", c.Price ?? 0) + " đ",
                     status          = c.Status ?? "Draft",
-                    enrollmentCount = c.Enrollments.Count,
-                    // Giả lập dữ liệu Sparkline: 7 ngày gần nhất
-                    enrollmentTrend = new int[] { 
-                        new Random().Next(0, 50), new Random().Next(0, 50), 
-                        new Random().Next(0, 50), new Random().Next(0, 50), 
-                        new Random().Next(0, 50), new Random().Next(0, 50), 
-                        new Random().Next(0, 50) 
-                    },
                     thumbnailUrl    = c.ThumbnailUrl ?? "",
-                    createdAt       = c.CreatedAt.HasValue
-                                        ? c.CreatedAt.Value.ToString("dd/MM/yyyy")
-                                        : ""
+                    createdAt       = c.CreatedAt.HasValue ? c.CreatedAt.Value.ToString("dd/MM/yyyy") : ""
                 })
                 .ToListAsync();
 
-            return Json(new { data = courses });
+            // Lấy Trend Data thực tế cho từng khóa học
+            var result = new List<object>();
+            foreach (var c in courses)
+            {
+                var trend = await _courseService.GetTrendDataAsync(c.courseId);
+                result.Add(new {
+                    c.courseId, c.title, c.category, c.instructorName, c.price, c.priceFormatted,
+                    c.status, c.thumbnailUrl, c.createdAt,
+                    enrollmentTrend = trend
+                });
+            }
+
+            return Json(new { data = result });
         }
 
-        // ... (Create/Edit actions remains same) ...
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await PopulateInstructorsAsync();
+            return View(new Course { Status = "Draft", Price = 0 });
+        }
 
-        // ─────────────────────────────────────────────────────────────
-        // GET: /CourseManagement/GetDetails/5 – AJAX cho Quick Preview
-        // ─────────────────────────────────────────────────────────────
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Course course, Microsoft.AspNetCore.Http.IFormFile? thumbnail)
+        {
+            if (ModelState.IsValid)
+            {
+                if (thumbnail != null && thumbnail.Length > 0)
+                {
+                    course.ThumbnailUrl = await HandleFileUpload(thumbnail);
+                }
+
+                await _courseService.CreateAsync(course);
+                return RedirectToAction(nameof(Index));
+            }
+            await PopulateInstructorsAsync(course.InstructorId);
+            return View(course);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var course = await _courseService.GetCourseByIdAsync(id);
+            if (course == null) return NotFound();
+
+            await PopulateInstructorsAsync(course.InstructorId);
+            return View(course);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Course course, Microsoft.AspNetCore.Http.IFormFile? thumbnail)
+        {
+            if (ModelState.IsValid)
+            {
+                if (thumbnail != null && thumbnail.Length > 0)
+                {
+                    course.ThumbnailUrl = await HandleFileUpload(thumbnail);
+                }
+
+                await _courseService.UpdateAsync(course);
+                return RedirectToAction(nameof(Index));
+            }
+            await PopulateInstructorsAsync(course.InstructorId);
+            return View(course);
+        }
+
+        private async Task<string> HandleFileUpload(Microsoft.AspNetCore.Http.IFormFile file)
+        {
+            var fileName = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(file.FileName);
+            var filePath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot", "uploads", "courses", fileName);
+
+            using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return "/uploads/courses/" + fileName;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetDetails(int id)
         {
@@ -86,9 +149,6 @@ namespace SmartLMS.Web.Controllers
             return PartialView("_CourseDetailPartial", course);
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // Bulk Actions
-        // ─────────────────────────────────────────────────────────────
         [HttpPost]
         public async Task<IActionResult> BulkToggleStatus([FromBody] int[] ids, string status)
         {
@@ -106,7 +166,7 @@ namespace SmartLMS.Web.Controllers
         }
 
         // ─────────────────────────────────────────────────────────────
-        // CURRICULUM TREE BUILDER
+        // CURRICULUM TREE BUILDER & UPDATE
         // ─────────────────────────────────────────────────────────────
         public async Task<IActionResult> Curriculum(int id)
         {
@@ -141,14 +201,41 @@ namespace SmartLMS.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateHierarchy([FromBody] List<TreeUpdateDto> updates)
+        public async Task<IActionResult> UpdateHierarchy([FromBody] List<TreeUpdateDto> updates)
         {
-            // Logic đơn giản: cập nhật OrderIndex dựa trên vị trí mới
-            // Trong thực tế cần logic phức tạp hơn (chuyển Lesson giữa các Module)
+            if (updates == null) return Json(new { success = false });
+
+            foreach (var update in updates)
+            {
+                if (update.Id == null) continue;
+
+                if (update.Id.StartsWith("mod_"))
+                {
+                    int id = int.Parse(update.Id.Replace("mod_", ""));
+                    var module = await _context.CourseModules.FindAsync(id);
+                    if (module != null) module.OrderIndex = update.Order;
+                }
+                else if (update.Id.StartsWith("les_"))
+                {
+                    int id = int.Parse(update.Id.Replace("les_", ""));
+                    var lesson = await _context.Lessons.FindAsync(id);
+                    if (lesson != null)
+                    {
+                        lesson.OrderIndex = update.Order;
+                        // Nếu có ParentId trong DTO, ta có thể cập nhật ModuleId của Lesson tại đây
+                        if (update.ParentId != null && update.ParentId.StartsWith("mod_"))
+                        {
+                            lesson.ModuleId = int.Parse(update.ParentId.Replace("mod_", ""));
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
             return Json(new { success = true });
         }
 
-        public class TreeUpdateDto { public string? Id { get; set; } public int Order { get; set; } }
+        public class TreeUpdateDto { public string? Id { get; set; } public string? ParentId { get; set; } public int Order { get; set; } }
 
         // ─────────────────────────────────────────────────────────────
         // POST: /CourseManagement/SoftDelete  – AJAX từ SweetAlert2

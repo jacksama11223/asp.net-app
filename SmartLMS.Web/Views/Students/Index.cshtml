@@ -163,8 +163,8 @@ $(document).ready(function () {
                         <button class="btn btn-xs btn-outline-primary btn-nudge" data-id="${data}" title="Gửi nhắc nhở">
                             <i class="fas fa-paper-plane"></i>
                         </button>
-                        <button class="btn btn-xs btn-outline-info ml-1" title="Xem chi tiết">
-                            <i class="fas fa-eye"></i>
+                        <button class="btn btn-xs btn-outline-info ml-1 btn-risk-analysis" data-id="${data}" title="Phân tích rủi ro">
+                            <i class="fas fa-chart-pie"></i>
                         </button>`;
                 }
             }
@@ -182,19 +182,48 @@ $(document).ready(function () {
     // Handle Nudge Action
     $('#student-table').on('click', '.btn-nudge', function() {
         var id = $(this).data('id');
-        $(this).find('i').removeClass('fa-paper-plane').addClass('fa-spinner fa-spin');
+        var $btn = $(this);
+        $btn.find('i').removeClass('fa-paper-plane').addClass('fa-spinner fa-spin');
         
         $.post('/Students/Nudge', { id: id }, function(res) {
             Swal.fire({
                 icon: 'success',
                 title: 'Sent!',
                 text: res.message,
-                timer: 1500,
+                timer: 2000,
                 showConfirmButton: false
             });
-            table.ajax.reload(null, false);
+            $btn.find('i').removeClass('fa-spinner fa-spin').addClass('fa-paper-plane');
+        });
+    });
+
+    // Handle Risk Analysis Action
+    $('#student-table').on('click', '.btn-risk-analysis', function() {
+        var id = $(this).data('id');
+        $('#analysis-modal-body').html('<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x text-primary"></i></div>');
+        $('#risk-analysis-modal').modal('show');
+
+        $.get('/Students/RiskAnalysis/' + id, function(html) {
+            $('#analysis-modal-body').html(html);
         });
     });
 });
+</script>
+
+<!-- Modal Phân tích Rủi ro -->
+<div class="modal fade" id="risk-analysis-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0" id="analysis-modal-body">
+                <!-- Content loaded via Ajax -->
+            </div>
+        </div>
+    </div>
+</div>
 </script>
 }

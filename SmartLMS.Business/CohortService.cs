@@ -28,11 +28,33 @@ public class CohortService : ICohortService
         return await db.QueryAsync(sql);
     }
 
+    public async Task<Cohort?> GetCohortByIdAsync(int id)
+    {
+        using var db = CreateConnection();
+        return await db.QueryFirstOrDefaultAsync<Cohort>("SELECT * FROM Cohorts WHERE CohortId = @Id AND IsDeleted = 0", new { Id = id });
+    }
+
     public async Task<bool> CreateCohortAsync(string name, string description)
     {
         using var db = CreateConnection();
-        var sql = "INSERT INTO Cohorts (Name, Description) VALUES (@Name, @Description)";
+        var sql = "INSERT INTO Cohorts (Name, Description, IsDeleted) VALUES (@Name, @Description, 0)";
         var affected = await db.ExecuteAsync(sql, new { Name = name, Description = description });
+        return affected > 0;
+    }
+
+    public async Task<bool> UpdateCohortAsync(int id, string name, string description)
+    {
+        using var db = CreateConnection();
+        var sql = "UPDATE Cohorts SET Name = @Name, Description = @Description WHERE CohortId = @Id";
+        var affected = await db.ExecuteAsync(sql, new { Id = id, Name = name, Description = description });
+        return affected > 0;
+    }
+
+    public async Task<bool> SoftDeleteCohortAsync(int id)
+    {
+        using var db = CreateConnection();
+        var sql = "UPDATE Cohorts SET IsDeleted = 1 WHERE CohortId = @Id";
+        var affected = await db.ExecuteAsync(sql, new { Id = id });
         return affected > 0;
     }
 

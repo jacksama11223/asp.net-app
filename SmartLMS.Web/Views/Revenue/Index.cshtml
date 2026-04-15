@@ -1,0 +1,105 @@
+@{
+    ViewData["Title"] = "Financial Monitoring";
+}
+
+<div class="content-header animate-fade">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold"><i data-lucide="line-chart" class="mr-2 text-success"></i>Báo cáo Doanh thu & Tăng trưởng</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <a href="/Revenue/ExportExcel" class="btn btn-success shadow-sm">
+                    <i data-lucide="download" class="mr-1" style="width:16px; height:16px;"></i> Xuất báo cáo Excel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Stats Cards -->
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="info-box shadow-sm border-0 transition-hover">
+                    <span class="info-box-icon bg-success-gradient elevation-1"><i data-lucide="trending-up" class="text-white"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Doanh thu Tích lũy (LTD)</span>
+                        <span class="info-box-number text-bold-xl">@string.Format("{0:N0}", ViewBag.TotalRevenue) đ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="info-box shadow-sm border-0 transition-hover">
+                    <span class="info-box-icon bg-info-gradient elevation-1"><i data-lucide="calendar" class="text-white"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Doanh thu Hôm nay</span>
+                        <span class="info-box-number text-bold-xl">@string.Format("{0:N0}", ViewBag.TodayRevenue) đ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h3 class="card-title font-weight-bold"><i class="fas fa-chart-bar mr-2 text-success"></i>Phân tích Biến động Doanh thu</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="revenue-main-chart" style="min-height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            lucide.createIcons();
+
+            $.get('/Revenue/GetRevenueJson', function(data) {
+                var options = {
+                    series: [{
+                        name: 'Doanh thu',
+                        data: data.map(x => x.total)
+                    }],
+                    chart: {
+                        height: 400,
+                        type: 'bar',
+                        toolbar: { show: false }
+                    },
+                    plotOptions: {
+                        bar: {
+                            borderRadius: 10,
+                            columnWidth: '50%',
+                        }
+                    },
+                    dataLabels: { enabled: false },
+                    stroke: { width: 2 },
+                    grid: { row: { colors: ['#fff', '#f2f2f2'] } },
+                    xaxis: {
+                        categories: data.map(x => x.date),
+                        tickPlacement: 'on'
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: { shade: 'light', type: "horizontal", shadeIntensity: 0.25, gradientToColors: undefined, inverseColors: true, opacityFrom: 0.85, opacityTo: 0.85, stops: [50, 0, 100] }
+                    },
+                    colors: ['#10b981']
+                };
+
+                var chart = new ApexCharts(document.querySelector("#revenue-main-chart"), options);
+                chart.render();
+            });
+        });
+    </script>
+    <style>
+        .bg-success-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .bg-info-gradient { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+    </style>
+}

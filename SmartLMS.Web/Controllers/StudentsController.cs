@@ -4,31 +4,38 @@ using System.Threading.Tasks;
 
 namespace SmartLMS.Web.Controllers;
 
-public class StudentsController : Controller
-{
-    private readonly IStudentService _studentService;
-
-    public StudentsController(IStudentService studentService)
+    public class StudentsController : Controller
     {
-        _studentService = studentService;
-    }
+        private readonly IStudentService _studentService;
+        private readonly IPredictionService _predictionService;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public StudentsController(IStudentService studentService, IPredictionService predictionService)
+        {
+            _studentService = studentService;
+            _predictionService = predictionService;
+        }
 
-    [HttpGet]
-    public async Task<IActionResult> GetStudents()
-    {
-        var students = await _studentService.GetAllStudentsAsync();
-        return Json(new { data = students });
-    }
+        public IActionResult Index() => View();
 
-    [HttpPost]
-    public IActionResult Nudge(int id)
-    {
-        // Giả lập gửi thông báo AI
-        return Json(new { success = true, message = $"Đã gửi thông báo nhắc nhở tới sinh viên ID: {id}" });
+        [HttpGet]
+        public async Task<IActionResult> GetStudents()
+        {
+            var students = await _studentService.GetAllStudentsAsync();
+            return Json(new { data = students });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Nudge(int id)
+        {
+            await _studentService.SendNudgeAsync(id);
+            return Json(new { success = true, message = "Đã đưa thông báo vào hàng đợi gửi mail (Hangfire)." });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RiskAnalysis(int id)
+        {
+            // CourseId = 0 đại diện cho tổng quát toàn bộ khóa học
+            var prediction = await _predictionService.PredictDropoutAsync(id, 0);
+            return PartialView("_RiskAnalysisPartial", prediction);
+        }
     }
-}

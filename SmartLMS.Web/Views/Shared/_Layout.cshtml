@@ -168,31 +168,55 @@
                                 <p>Courses Management</p>
                             </a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Revenue" class="nav-link @(_ctrl == "Revenue" ? "active" : "")">
+                                    <i class="nav-icon fas fa-wallet text-success"></i>
+                                    <p>Báo cáo Tài chính</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Coupon" class="nav-link @(_ctrl == "Coupon" ? "active" : "")">
+                                    <i class="nav-icon fas fa-ticket-alt text-purple"></i>
+                                    <p>Mã Giảm Giá (Coupon)</p>
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a href="/Students" class="nav-link @(_ctrl == "Students" ? "active" : "")">
                                 <i class="nav-icon fas fa-user-graduate text-info"></i>
                                 <p>Students AI Predictor</p>
                             </a>
                         </li>
-                        <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-2">Quản trị Hệ thống</li>
-                        <li class="nav-item">
-                            <a href="/UserManagement" class="nav-link @(_ctrl == "UserManagement" ? "active" : "")">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Quản lý Tài khoản</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/Cohort" class="nav-link @(_ctrl == "Cohort" ? "active" : "")">
-                                <i class="nav-icon fas fa-users-cog"></i>
-                                <p>Quản lý Lớp (Cohorts)</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/SqlManagement" class="nav-link @(_ctrl == "SqlManagement" ? "active" : "")">
-                                <i class="nav-icon fas fa-database"></i>
-                                <p>Master Console</p>
-                            </a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-2">Quản trị Hệ thống</li>
+                            <li class="nav-item">
+                                <a href="/UserManagement" class="nav-link @(_ctrl == "UserManagement" ? "active" : "")">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Quản lý Tài khoản</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Cohort" class="nav-link @(_ctrl == "Cohort" ? "active" : "")">
+                                    <i class="nav-icon fas fa-users-cog"></i>
+                                    <p>Quản lý Lớp (Cohorts)</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/SqlManagement" class="nav-link @(_ctrl == "SqlManagement" ? "active" : "")">
+                                    <i class="nav-icon fas fa-database"></i>
+                                    <p>Master Console</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/hangfire" class="nav-link" target="_blank">
+                                    <i class="nav-icon fas fa-tasks text-danger"></i>
+                                    <p>Background Jobs</p>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -248,6 +272,8 @@
     <!-- Quill (Rich Text Editor) -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <!-- Shepherd (Product Tour) -->
+    <!-- SignalR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.1.0/dist/js/shepherd.js"></script>
 
     <script>

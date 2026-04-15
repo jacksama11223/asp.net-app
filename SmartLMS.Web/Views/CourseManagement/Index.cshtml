@@ -78,6 +78,46 @@
             </div>
         </div>
 
+        @* ─── ADVANCED FILTERS ─── *@
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body py-3">
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold text-muted uppercase">Lọc theo Giảng viên</label>
+                        <select id="filter-instructor" class="form-control form-control-sm select2">
+                            <option value="">Tất cả giảng viên</option>
+                            @foreach (var ins in ViewBag.Instructors) {
+                                <option value="@ins.FullName">@ins.FullName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold text-muted uppercase">Danh mục</label>
+                        <select id="filter-category" class="form-control form-control-sm">
+                            <option value="">Tất cả danh mục</option>
+                            <option value="Web">Lập trình Web</option>
+                            <option value="AI">Trí tuệ nhân tạo (AI)</option>
+                            <option value="Mobile">Lập trình Di động</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold text-muted uppercase">Trạng thái</label>
+                        <select id="filter-status" class="form-control form-control-sm">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="Published">Đang xuất bản</option>
+                            <option value="Draft">Bản nháp</option>
+                            <option value="Archived">Đã lưu trữ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <button id="btn-reset-filter" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-undo mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @* ─── TABLE TOOLBAR ─── *@
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white border-bottom py-3">
@@ -256,6 +296,15 @@ $(document).ready(function () {
             });
             $('[data-toggle="tooltip"]').tooltip();
         }
+    });
+
+    // Custom Filters
+    $('#filter-instructor').on('change', function() { table.column(3).search(this.value).draw(); });
+    $('#filter-category').on('change', function() { table.column(4).search(this.value).draw(); });
+    $('#filter-status').on('change', function() { table.column(7).search(this.value).draw(); });
+    $('#btn-reset-filter').on('click', function() {
+        $('#filter-instructor, #filter-category, #filter-status').val('').trigger('change');
+        table.search('').columns().search('').draw();
     });
 
     // ── 2. QUICK PREVIEW (AJAX) ───────────────────────────────────
