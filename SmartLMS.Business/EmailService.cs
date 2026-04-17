@@ -1,7 +1,9 @@
-using System.Net;
-using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Options;
+using MimeKit;
+using SmartLMS.Models;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
 namespace SmartLMS.Business;
 
@@ -12,36 +14,32 @@ public interface IEmailService
 
 public class EmailService : IEmailService
 {
-    private readonly IConfiguration _configuration;
+    private readonly SmtpSettings _smtpSettings;
 
-    public EmailService(IConfiguration configuration)
+    public EmailService(IOptions<SmtpSettings> smtpSettings)
     {
-        _configuration = configuration;
+        _smtpSettings = smtpSettings.Value;
     }
 
     public async Task SendEmailAsync(string to, string subject, string body)
     {
-        var smtpData = _configuration.GetSection("Smtp");
-        var host = smtpData["Host"] ?? "smtp.gmail.com";
-        var port = int.Parse(smtpData["Port"] ?? "587");
-        var username = smtpData["Username"]; // Email của bạn
-        var password = smtpData["Password"]; // App Password của bạn
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_smtpSettings.SenderName, _smtpSettings.Username));
+        message.To.Add(new MailboxAddress("", to));
+        message.Subject = subject;
 
-        using var client = new SmtpClient(host, port)
+        var bodyBuilder = new BodyBuilder { HtmlBody = body };
+        message.Body = bodyBuilder.ToMessageBody();
+
+        using var client = new SmtpClient();
+        await client.ConnectAsync(_smtpSettings.Host, _smtpSettings.Port, _smtpSettings.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto);
+        
+        if (!string.IsNullOrEmpty(_smtpSettings.Username))
         {
-            Credentials = new NetworkCredential(username, password),
-            EnableSsl = true
-        };
+            await client.AuthenticateAsync(_smtpSettings.Username, _smtpSettings.Password);
+        }
 
-        var mailMessage = new MailMessage
-        {
-            From = new MailAddress(username ?? "noreply@smartlms.vn", "SmartLMS AI"),
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = true
-        };
-        mailMessage.To.Add(to);
-
-        await client.SendMailAsync(mailMessage);
+        await client.SendAsync(message);
+        await client.DisconnectAsync(true);
     }
 }

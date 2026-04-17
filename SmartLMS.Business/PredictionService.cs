@@ -1,6 +1,7 @@
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
+using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data.Repositories;
 using SmartLMS.Models;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ public class DropoutPrediction
 public interface IPredictionService
 {
     Task<DropoutPrediction> PredictDropoutAsync(int userId, int courseId);
+    Task<DropoutPrediction> PredictDropoutAsync(int userId, int courseId, bool includeXai);
+    Task TrainModelAsync();
 }
 
 public class PredictionService : IPredictionService
@@ -39,6 +42,7 @@ public class PredictionService : IPredictionService
     private readonly MLContext _mlContext;
     private static ITransformer? _model;
     private static object _lock = new object();
+    private static PredictionEngine<StudentDropoutData, DropoutPrediction>? _predictionEngine;
 
     public PredictionService(SmartLMS.Data.SmartLMSContext context)
     {
@@ -46,51 +50,88 @@ public class PredictionService : IPredictionService
         _mlContext = new MLContext(seed: 0);
     }
 
-    private void TrainModelIfNode()
+    public async Task TrainModelAsync()
+    {
+        // Tải dữ liệu thực tế từ Database
+        var data = _context.Enrollments
+            .Select(e => new StudentDropoutData 
+            { 
+                Progress = (float)(e.Progress ?? 0), 
+                AvgScore = (float)(e.AvgScore ?? 0), 
+                IsDropout = e.IsDropout ?? false 
+            }).ToList();
+
+        if (!data.Any()) return;
+
+        var dataView = _mlContext.Data.LoadFromEnumerable(data);
+        var pipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(StudentDropoutData.IsDropout))
+            .Append(_mlContext.Transforms.Concatenate("Features", nameof(StudentDropoutData.Progress), nameof(StudentDropoutData.AvgScore)))
+            .Append(_mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
+
+        var builtModel = pipeline.Fit(dataView);
+        
+        
+        lock (_lock)
+        {
+            _model = builtModel;
+            _predictionEngine = _mlContext.Model.CreatePredictionEngine<StudentDropoutData, DropoutPrediction>(_model);
+        }
+        
+        await Task.CompletedTask;
+    }
+
+    private void TrainModelIfNone()
     {
         lock (_lock)
         {
             if (_model != null) return;
-
-            // Mock Data cho việc training
-            var trainingData = new List<StudentDropoutData>
-            {
-                new() { Progress = 80, AvgScore = 8, IsDropout = false },
-                new() { Progress = 20, AvgScore = 3, IsDropout = true },
-                new() { Progress = 90, AvgScore = 9, IsDropout = false },
-                new() { Progress = 10, AvgScore = 2, IsDropout = true },
-                new() { Progress = 50, AvgScore = 5, IsDropout = false }
-            };
-
-            var dataView = _mlContext.Data.LoadFromEnumerable(trainingData);
-            var pipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(StudentDropoutData.IsDropout))
-                .Append(_mlContext.Transforms.Concatenate("Features", nameof(StudentDropoutData.Progress), nameof(StudentDropoutData.AvgScore)))
-                .Append(_mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
-
-            _model = pipeline.Fit(dataView);
         }
+        TrainModelAsync().GetAwaiter().GetResult();
     }
 
     public async Task<DropoutPrediction> PredictDropoutAsync(int userId, int courseId)
     {
-        TrainModelIfNode();
+        return await PredictDropoutAsync(userId, courseId, true);
+    }
+
+    public async Task<DropoutPrediction> PredictDropoutAsync(int userId, int courseId, bool includeXai)
+    {
+        TrainModelIfNone();
 
         // Lấy dữ liệu thực tế của sinh viên từ Database
-        var enrollment = _context.Enrollments.FirstOrDefault(e => e.UserId == userId && e.CourseId == courseId);
+        var enrollment = await _context.Enrollments.FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);
         var input = new StudentDropoutData 
         { 
             Progress = (float)(enrollment?.Progress ?? 0), 
             AvgScore = (float)(enrollment?.AvgScore ?? 0) 
         };
 
-        var predictionEngine = _mlContext.Model.CreatePredictionEngine<StudentDropoutData, DropoutPrediction>(_model);
-        var result = predictionEngine.Predict(input);
+        DropoutPrediction result;
+        lock (_lock)
+        {
+            result = _predictionEngine!.Predict(input);
+        }
+
+        if (!includeXai) return result;
 
         // XAI Logic: Sử dụng CalculateFeatureContribution
         var dataView = _mlContext.Data.LoadFromEnumerable(new List<StudentDropoutData> { input });
         
-        // Trích xuất predictor từ TransformerChain
-        var predictor = ((TransformerChain<ITransformer>)_model).LastOrDefault() as ISingleFeaturePredictionTransformer<ICalculateFeatureContribution>;
+        // Trích xuất predictor từ TransformerChain một cách an toàn
+        ITransformer? lastTransformer = null;
+        if (_model is System.Collections.IEnumerable chain)
+        {
+            foreach (var t in chain)
+            {
+                if (t is ITransformer transformer) lastTransformer = transformer;
+            }
+        }
+        else
+        {
+            lastTransformer = _model;
+        }
+
+        var predictor = lastTransformer as ISingleFeaturePredictionTransformer<ICalculateFeatureContribution>;
         
         if (predictor != null)
         {

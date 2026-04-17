@@ -8,9 +8,9 @@ C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.GeneratedMSBuildEdi
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.AssemblyInfoInputs.cache
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.AssemblyInfo.cs
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.csproj.CoreCompileInputs.cache
+C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.sourcelink.json
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.8090DA5D.Up2Date
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.dll
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\refint\SmartLMS.Data.dll
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.pdb
 C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\ref\SmartLMS.Data.dll
-C:\code\asp.net\SmartLMS.Data\obj\Debug\net8.0\SmartLMS.Data.sourcelink.json

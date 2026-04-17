@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
 using SmartLMS.Data;
 using SmartLMS.Models;
 
@@ -179,19 +180,12 @@ public class CourseService : ICourseService
     /// <summary>Lấy dữ liệu Trend thực tế từ ActivityLogs cho 7 ngày gần nhất.</summary>
     public async Task<int[]> GetTrendDataAsync(int courseId)
     {
-        // Giả lập logic: Đếm số ActionType='CourseView' liên quan đến CourseId này trong 7 ngày
-        // Lưu ý: bảng ActivityLogs hiện tại chưa có CourseID trực tiếp, 
-        // ta sẽ query theo ActionType và Timestamp để demo logic thực tế.
-        var today = DateTime.Today;
-        var trend = new int[7];
-
-        for (int i = 0; i < 7; i++)
-        {
-            var date = today.AddDays(-6 + i);
-            trend[i] = await _context.ActivityLogs
-                .CountAsync(a => a.Timestamp != null && a.Timestamp.Value.Date == date && a.ActionType == "CourseView");
-        }
-
-        return trend;
+        var connection = _context.Database.GetDbConnection();
+        var trendData = await connection.QueryAsync<dynamic>(
+            "sp_GetCourseTrend", 
+            new { CourseID = courseId }, 
+            commandType: System.Data.CommandType.StoredProcedure);
+            
+        return trendData.Select(x => (int)x.ViewCount).ToArray();
     }
 }

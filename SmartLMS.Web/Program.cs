@@ -63,7 +63,8 @@ builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.C
 // Real-time SignalR
 builder.Services.AddSignalR();
 
-// Email Service
+// Email Service Config
+builder.Services.Configure<SmartLMS.Models.SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<SmartLMS.Business.IEmailService, SmartLMS.Business.EmailService>();
 
 var app = builder.Build();
@@ -104,5 +105,11 @@ app.MapControllerRoute(
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapHub<SmartLMS.Web.Hubs.DashboardHub>("/dashboardHub");
+
+// Schedule Hangfire Recurring Job for ML retrain
+RecurringJob.AddOrUpdate<SmartLMS.Business.IPredictionService>(
+    "Weekly-Retrain-AI", 
+    service => service.TrainModelAsync(), 
+    Cron.Weekly(DayOfWeek.Sunday, 2));
 
 app.Run();

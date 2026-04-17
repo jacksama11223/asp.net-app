@@ -40,20 +40,31 @@ namespace SmartLMS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCoursesJson()
         {
-            var courses = await _context.Courses
+            var coursesFromDb = await _context.Courses
                 .Include(c => c.Instructor)
                 .Select(c => new {
-                    courseId        = c.CourseId,
-                    title           = c.Title ?? "(Chưa đặt tên)",
-                    category        = c.Category ?? "",
-                    instructorName  = c.Instructor != null ? c.Instructor.FullName : "N/A",
-                    price           = c.Price ?? 0,
-                    priceFormatted  = string.Format("{0:N0}", c.Price ?? 0) + " đ",
-                    status          = c.Status ?? "Draft",
-                    thumbnailUrl    = c.ThumbnailUrl ?? "",
-                    createdAt       = c.CreatedAt.HasValue ? c.CreatedAt.Value.ToString("dd/MM/yyyy") : ""
+                    c.CourseId,
+                    Title = c.Title ?? "(Chưa đặt tên)",
+                    Category = c.Category ?? "",
+                    InstructorName = c.Instructor != null ? c.Instructor.FullName : "N/A",
+                    Price = c.Price ?? 0,
+                    Status = c.Status ?? "Draft",
+                    ThumbnailUrl = c.ThumbnailUrl ?? "",
+                    CreatedAt = c.CreatedAt
                 })
                 .ToListAsync();
+
+            var courses = coursesFromDb.Select(c => new {
+                courseId        = c.CourseId,
+                title           = c.Title,
+                category        = c.Category,
+                instructorName  = c.InstructorName,
+                price           = c.Price,
+                priceFormatted  = string.Format("{0:N0}", c.Price) + " đ",
+                status          = c.Status,
+                thumbnailUrl    = c.ThumbnailUrl,
+                createdAt       = c.CreatedAt.HasValue ? c.CreatedAt.Value.ToString("dd/MM/yyyy") : ""
+            }).ToList();
 
             // Lấy Trend Data thực tế cho từng khóa học
             var result = new List<object>();

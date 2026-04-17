@@ -1,3 +1,9 @@
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.csproj.AssemblyReference.cache
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.AssemblyInfoInputs.cache
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.AssemblyInfo.cs
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.csproj.CoreCompileInputs.cache
+C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.sourcelink.json
 C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Business.deps.json
 C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Business.dll
 C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Business.pdb
@@ -5,14 +11,8 @@ C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Data.dll
 C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Models.dll
 C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Data.pdb
 C:\code\asp.net\SmartLMS.Business\bin\Debug\net8.0\SmartLMS.Models.pdb
-C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.csproj.AssemblyReference.cache
-C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.GeneratedMSBuildEditorConfig.editorconfig
-C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.AssemblyInfoInputs.cache
-C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.AssemblyInfo.cs
-C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.csproj.CoreCompileInputs.cache
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.81CB77CB.Up2Date
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.dll
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\refint\SmartLMS.Business.dll
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.pdb
 C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\ref\SmartLMS.Business.dll
-C:\code\asp.net\SmartLMS.Business\obj\Debug\net8.0\SmartLMS.Business.sourcelink.json

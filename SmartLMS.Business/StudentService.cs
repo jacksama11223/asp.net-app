@@ -34,17 +34,32 @@ namespace SmartLMS.Business;
                        ISNULL(AVG(e.Progress), 0) as AvgProgress
                 FROM Users u
                 LEFT JOIN Enrollments e ON u.UserId = e.UserId
-                WHERE u.UserType = 'Student'
+                WHERE u.Role = 'Student' OR u.UserType = 'Student'
                 GROUP BY u.UserId, u.FullName, u.Email";
 
             var students = await db.QueryAsync<StudentViewModel>(sql);
-            
+            var allEnrollments = await db.QueryAsync<dynamic>("SELECT UserId, CourseId FROM Enrollments");
+            var userEnrollments = allEnrollments.ToLookup(x => (int)x.UserId, x => (int)x.CourseId);
+
             foreach (var s in students)
             {
-                // Thực tế nên dùng Batch hoặc lưu kết quả Score vào DB để nhanh hơn
-                // Ở đây demo gọi trực tiếp cho danh sách nhỏ
-                var prediction = await _predictionService.PredictDropoutAsync(s.UserId, 0); // CourseId = 0 là trung bình
-                s.RiskLevel = prediction.Prediction ? "High" : (prediction.Probability > 0.3 ? "Medium" : "Low");
+                var courseIds = userEnrollments[s.UserId].ToList();
+                if (courseIds.Any())
+                {
+                    double totalProbability = 0;
+                    foreach(var c in courseIds)
+                    {
+                        // includeXai = false để tăng tốc độ lặp danh sách
+                        var prediction = await _predictionService.PredictDropoutAsync(s.UserId, c, false);
+                        totalProbability += prediction.Probability;
+                    }
+                    var avgProb = totalProbability / courseIds.Count;
+                    s.RiskLevel = avgProb > 0.5 ? "High" : (avgProb > 0.3 ? "Medium" : "Low");
+                }
+                else
+                {
+                    s.RiskLevel = "Low";
+                }
             }
 
             return students;
