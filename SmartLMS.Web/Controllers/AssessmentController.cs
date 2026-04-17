@@ -5,6 +5,7 @@ using SmartLMS.Business;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartLMS.Web.Controllers
 {
@@ -98,6 +99,15 @@ namespace SmartLMS.Web.Controllers
             var (level, deptId) = await GetUserScopeAsync();
             var stats = await _assessmentService.GetItemAnalysisAsync(deptId);
             return View(stats);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> QuizWizard(int id)
+        {
+            // Lấy thông tin bài thi để hiển thị tiêu đề
+            // Dữ liệu câu hỏi sẽ được load qua JS gọi API
+            ViewBag.ExamId = id;
+            return View();
         }
     }
 }

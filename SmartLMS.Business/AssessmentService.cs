@@ -9,6 +9,9 @@ using Microsoft.Extensions.Caching.Distributed;
 using Dapper;
 using SmartLMS.Business.Extensions;
 using SmartLMS.Models;
+using SmartLMS.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace SmartLMS.Business
 {
@@ -16,11 +19,19 @@ namespace SmartLMS.Business
     {
         private readonly string _connectionString;
         private readonly IDistributedCache _cache;
+        private readonly IScoringEngine _scoringEngine;
+        private readonly IWebhookService _webhookService;
+        private readonly SmartLMSContext _context;
 
-        public AssessmentService(IConfiguration configuration, IDistributedCache cache)
+        public AssessmentService(IConfiguration configuration, IDistributedCache cache, 
+                                 IScoringEngine scoringEngine, IWebhookService webhookService, 
+                                 SmartLMSContext context)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
             _cache = cache;
+            _scoringEngine = scoringEngine;
+            _webhookService = webhookService;
+            _context = context;
         }
 
         public async Task<IEnumerable<dynamic>> GetLeaderboardAsync(int? departmentId = null)
@@ -141,6 +152,89 @@ namespace SmartLMS.Business
 
             var rows = await db.ExecuteAsync(sql, question);
             return rows > 0;
+        }
+
+        public async Task<QuizResultDto> SubmitQuizAsync(int userId, int examId, Dictionary<int, string> answers)
+        {
+            // 1. Lấy đề thi và câu hỏi liên quan
+            var exam = await _context.Exams
+                .Include(e => e.ExamQuestions)
+                .ThenInclude(eq => eq.Question)
+                .FirstOrDefaultAsync(e => e.ExamId == examId);
+
+            if (exam == null) throw new Exception("Không tìm thấy bài thi.");
+
+            var questions = exam.ExamQuestions.Select(eq => eq.Question).ToList();
+
+            // 2. Chấm điểm và tính XP
+            var score = _scoringEngine.CalculateScore(questions, answers);
+            var xpEarned = _scoringEngine.CalculateTotalXP(questions, answers);
+
+            var result = new QuizResultDto
+            {
+                Score = score,
+                XPEarned = xpEarned
+            };
+
+            // 3. Sử dụng Transaction để đảm bảo tính toàn vẹn (XP + Logs + Badges)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // Lưu Attempt
+                var attempt = new QuizAttempt
+                {
+                    UserId = userId,
+                    ExamId = examId,
+                    Score = score,
+                    AnswersJson = JsonSerializer.Serialize(answers),
+                    FinishedAt = DateTime.Now
+                };
+                _context.QuizAttempts.Add(attempt);
+
+                // Cộng XP cho User
+                var user = await _context.Users.FindAsync(userId);
+                if (user != null)
+                {
+                    user.TotalXP += xpEarned;
+                }
+
+                // Check Badges (Game Logic đơn giản: Nếu thi > 90 điểm và chưa có huy hiệu 'Sáng tạo')
+                // Phần này có thể mở rộng Rule Engine sau này
+                if (score >= 90)
+                {
+                    var badge = await _context.Badges.FirstOrDefaultAsync(b => b.Name == "Siêu sao lập trình");
+                    if (badge != null)
+                    {
+                        var alreadyHas = await _context.UserBadges.AnyAsync(ub => ub.UserId == userId && ub.BadgeId == badge.BadgeId);
+                        if (!alreadyHas)
+                        {
+                            _context.UserBadges.Add(new UserBadge { UserId = userId, BadgeId = badge.BadgeId, EarnedDate = DateTime.Now });
+                            result.NewBadges.Add(badge.Name);
+
+                            // Gửi Webhook thông báo
+                            await _webhookService.NotifyAsync("BadgeEarned", new { 
+                                UserName = user?.Username, 
+                                BadgeName = badge.Name,
+                                Score = score
+                            });
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                // Xóa Cache Leaderboard để cập nhật thứ hạng mới ngay lập tức
+                var userDeptId = user?.DepartmentId;
+                await _cache.RemoveAsync($"leaderboard_{userDeptId ?? 0}");
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
+            return result;
         }
     }
 }

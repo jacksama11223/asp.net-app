@@ -13,5 +13,15 @@ namespace SmartLMS.Business
         Task<IEnumerable<Badge>> GetBadgesAsync();
         Task<IEnumerable<dynamic>> GetItemAnalysisAsync(int? departmentId = null);
         Task<bool> SaveQuestionAsync(Question question, int adminHierarchyLevel, int? adminDeptId);
+
+        // Nộp bài thi và xử lý Game hóa
+        Task<QuizResultDto> SubmitQuizAsync(int userId, int examId, Dictionary<int, string> answers);
+    }
+
+    public class QuizResultDto
+    {
+        public decimal Score { get; set; }
+        public int XPEarned { get; set; }
+        public List<string> NewBadges { get; set; } = new();
     }
 }

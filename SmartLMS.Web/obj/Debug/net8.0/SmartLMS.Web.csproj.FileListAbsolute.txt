@@ -245,3 +245,4 @@ C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Microsoft.Identity.Client.dll
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\System.ClientModel.dll
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\System.Memory.Data.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

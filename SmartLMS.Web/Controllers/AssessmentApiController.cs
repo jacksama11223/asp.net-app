@@ -2,13 +2,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
 using SmartLMS.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Web.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = $"{CookieAuthenticationDefaults.AuthenticationScheme},{JwtBearerDefaults.AuthenticationScheme}")]
     [Route("api/[controller]")]
     [ApiController]
     public class AssessmentApiController : ControllerBase
@@ -67,6 +70,30 @@ namespace SmartLMS.Web.Controllers
                 return StatusCode(500, new { message = ex.Message, stack = ex.StackTrace });
             }
         }
+
+        [HttpGet("leaderboard")]
+        public async Task<IActionResult> GetLeaderboard(int? departmentId = null)
+        {
+            var leaderboard = await _assessmentService.GetLeaderboardAsync(departmentId);
+            return Ok(leaderboard);
+        }
+
+        [HttpPost("submit")]
+        public async Task<IActionResult> SubmitQuiz([FromBody] QuizSubmissionRequest request)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out var userId)) 
+                return Unauthorized();
+
+            var result = await _assessmentService.SubmitQuizAsync(userId, request.ExamId, request.Answers);
+            return Ok(result);
+        }
+    }
+
+    public class QuizSubmissionRequest
+    {
+        public int ExamId { get; set; }
+        public Dictionary<int, string> Answers { get; set; } = new();
     }
 
     public class PagingRequest

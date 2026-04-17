@@ -14,6 +14,7 @@
           "Hangfire.AspNetCore": "1.8.23",
           "Hangfire.SqlServer": "1.8.23",
           "Microsoft.AspNetCore.Authentication.Google": "8.0.12",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.12",
           "Microsoft.Data.SqlClient": "6.0.2",
           "Microsoft.EntityFrameworkCore.Design": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -292,6 +293,17 @@
       "Microsoft.AspNetCore.Authentication.Google/8.0.12": {
         "runtime": {
           "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "8.0.12.0",
+            "fileVersion": "8.0.1224.60312"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.12": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.5.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
             "assemblyVersion": "8.0.12.0",
             "fileVersion": "8.0.1224.60312"
           }
@@ -2413,6 +2425,13 @@
       "sha512": "sha512-+ytq0YfuQ5K8YnvfglBvYxxchsPpedeYlg7gYZY6oFvPIWqA9BjIabexLKAYfL6MewKrOJbRIgWvfx0pONnmPQ==",
       "path": "microsoft.aspnetcore.authentication.google/8.0.12",
       "hashPath": "microsoft.aspnetcore.authentication.google.8.0.12.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Th1bIoe3lgQCtkZRzYpU3YruTIaa/C5jI6yJ7djXihtvHGc6WFl823Uh01P2ESbn2eIpgiEbwRw/szlPSPowDA==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.12",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.8.0.12.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/9.0.4": {
       "type": "package",

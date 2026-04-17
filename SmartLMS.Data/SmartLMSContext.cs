@@ -37,6 +37,7 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Exam> Exams { get; set; }
     public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
     public virtual DbSet<QuizAttempt> QuizAttempts { get; set; }
+    public virtual DbSet<Webhook> Webhooks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -252,6 +253,12 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Score).HasColumnType("decimal(18, 2)");
             entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
             entity.HasOne(d => d.Exam).WithMany(p => p.QuizAttempts).HasForeignKey(d => d.ExamId);
+        });
+
+        modelBuilder.Entity<Webhook>(entity => {
+            entity.HasKey(e => e.WebhookId);
+            entity.Property(e => e.TargetUrl).IsRequired();
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
         });
 
         OnModelCreatingPartial(modelBuilder);
