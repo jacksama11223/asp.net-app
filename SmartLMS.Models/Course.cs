@@ -34,10 +34,15 @@ public partial class Course
     /// <summary>Soft Delete – true = đã xóa, KHÔNG dùng DELETE thực sự.</summary>
     public bool IsDeleted { get; set; } = false;
 
+    /// <summary>Tọa độ in tên (X,Y) dạng JSON để in chứng chỉ.</summary>
+    public string? CertificateConfigJson { get; set; }
+    public string? CertificateTemplateUrl { get; set; }
+
     /// <summary>Mức lương dự kiến khóa học mang lại – dùng cho UC-07 Dự báo thu nhập.</summary>
     public decimal AI_BaseSalaryImpact { get; set; } = 0;
 
     public virtual User? Instructor { get; set; }
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     public virtual ICollection<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
+    public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
 }

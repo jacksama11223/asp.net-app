@@ -1,0 +1,97 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Bảng Xếp Hạng Tuyệt Đỉnh (Leaderboard)";
+}
+
+@section Styles {
+    <style>
+        .leaderboard-card { border-radius: 20px; border: none; overflow: hidden; }
+        .rank-badge { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .rank-1 { background: linear-gradient(45deg, #ffd700, #ffae00); color: #fff; box-shadow: 0 4px 15px rgba(255,174,0,0.4); }
+        .rank-2 { background: linear-gradient(45deg, #c0c0c0, #8e8e8e); color: #fff; }
+        .rank-3 { background: linear-gradient(45deg, #cd7f32, #a0522d); color: #fff; }
+        .xp-pill { background: rgba(67, 56, 202, 0.1); color: #4338ca; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+        .user-row { transition: all 0.2s; border-radius: 10px; margin-bottom: 8px; }
+        .user-row:hover { background: #f8fafc; transform: scale(1.01); }
+        .crown-icon { color: #ffae00; margin-left: 8px; }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <h1 class="m-0 text-bold-xl"><i class="fas fa-trophy text-warning mr-2"></i> @ViewData["Title"]</h1>
+        <p class="text-muted">Vinh danh Top 10 cá nhân tiêu biểu có thành tích học tập xuất sắc nhất tháng.</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card leaderboard-card shadow-lg">
+                    <div class="card-header bg-indigo p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="m-0 text-white font-weight-bold">TOP 10 SINH VIÊN</h4>
+                            <span class="badge badge-light p-2">Cập nhật: Real-time</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        @{
+                            int rank = 1;
+                        }
+                        @foreach (var user in Model)
+                        {
+                            <div class="d-flex align-items-center p-3 user-row border-bottom">
+                                <div class="rank-container mr-4">
+                                    <div class="rank-badge @(rank == 1 ? "rank-1" : rank == 2 ? "rank-2" : rank == 3 ? "rank-3" : "bg-light text-dark")">
+                                        @rank
+                                    </div>
+                                </div>
+                                <div class="avatar-container mr-3">
+                                    <div class="bg-indigo text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                        @(user.FullName != null ? user.FullName[0].ToString().ToUpper() : user.Username[0].ToString().ToUpper())
+                                    </div>
+                                </div>
+                                <div class="info-container flex-grow-1">
+                                    <div class="h5 m-0 font-weight-bold">
+                                        @(user.FullName ?? user.Username)
+                                        @if (rank == 1) { <i class="fas fa-crown crown-icon"></i> }
+                                    </div>
+                                    <div class="text-muted text-sm">@@@user.Username</div>
+                                </div>
+                                <div class="xp-container text-right">
+                                    <div class="xp-pill shadow-sm">
+                                        <i class="fas fa-bolt mr-1"></i> @user.TotalXP XP
+                                    </div>
+                                </div>
+                            </div>
+                            rank++;
+                        }
+
+                        @if (!Model.Any())
+                        {
+                            <div class="text-center p-5 text-muted">
+                                <i class="fas fa-ghost fa-3x mb-3 opacity-25"></i>
+                                <p>Chưa có dữ liệu xếp hạng.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Tự động bắn pháo hoa nhẹ khi mở trang bảng xếp hạng
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        });
+    </script>
+}

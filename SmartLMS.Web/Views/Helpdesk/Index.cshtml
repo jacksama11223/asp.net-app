@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Hệ thống Helpdesk (Kanban)";
+}
+
+@section Styles {
+    <!-- Thư viện jKanban CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jkanban/1.3.1/jkanban.min.css">
+    <style>
+        .kanban-board-header { font-weight: 600; font-size: 1.1rem; padding: 10px; border-radius: 5px 5px 0 0; }
+        .kanban-item { 
+            background: #fff; border-radius: 6px; padding: 15px; 
+            margin-bottom: 10px; border-left: 4px solid #4e73df;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+        }
+        .bg-new { background-color: #f1f5f9; border-top: 3px solid #3b82f6;}
+        .bg-progress { background-color: #fcf4cb; border-top: 3px solid #f59e0b;}
+        .bg-done { background-color: #dcfce7; border-top: 3px solid #10b981;}
+        .ticket-meta { font-size: 0.85rem; color: #64748b; margin-top: 8px; display:flex; justify-content: space-between; }
+        
+        .dark-mode .kanban-item { background: #1e293b; color: #f8fafc; border-left-color: #6366f1; }
+        .dark-mode .bg-new { background-color: #0f172a; }
+        .dark-mode .bg-progress { background-color: #332104; }
+        .dark-mode .bg-done { background-color: #022c22; }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <h1 class="m-0 text-bold-xl"><i class="fas fa-headset text-teal mr-2"></i> @ViewData["Title"]</h1>
+        <p class="text-muted mt-2">Kéo thả các yêu cầu (Tickets) để dời trạng thái xử lý.</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Vùng hiển thị jKanban -->
+        <div id="tk-kanban"></div>
+    </div>
+</section>
+
+@section Scripts {
+    <!-- Thư viện jKanban JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jkanban/1.3.1/jkanban.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var kanban = new jKanban({
+                element: '#tk-kanban', 
+                gutter: '15px', 
+                widthBoard: 'auto', 
+                boards: [
+                    {
+                        'id': '_new',
+                        'title': '<i class="fas fa-inbox text-primary mr-1"></i> Mới tiếp nhận',
+                        'class': 'bg-new',
+                        'item': [
+                            { 'title': 'Lỗi không tải được video khóa AI <div class="ticket-meta"><span>Hoàng Hữu</span><span>2 phút trước</span></div>' },
+                            { 'title': 'Thanh toán VNPay bị trừ tiền 2 lần <div class="ticket-meta"><span>Lê Thị B</span><span>30 phút trước</span></div>' }
+                        ]
+                    },
+                    {
+                        'id': '_progress',
+                        'title': '<i class="fas fa-spinner fa-spin text-warning mr-1"></i> Đang xử lý',
+                        'class': 'bg-progress',
+                        'item': [
+                            { 'title': 'Hỗ trợ thay đổi email tài khoản <div class="ticket-meta"><span>Trần Văn C</span><span>1 giờ trước</span></div>' }
+                        ]
+                    },
+                    {
+                        'id': '_done',
+                        'title': '<i class="fas fa-check-circle text-success mr-1"></i> Đã giải quyết',
+                        'class': 'bg-done',
+                        'item': [
+                            { 'title': 'Bài trắc nghiệm số 3 bị lỗi hiển thị font <div class="ticket-meta"><span>Nguyễn A</span><span>Hôm qua</span></div>' }
+                        ]
+                    }
+                ],
+                dropEl: function (el, target, source, sibling) {
+                    var targetId = $(target).parent().data("id");
+                    toastr.success('Trạng thái Ticket đã được cập nhật thành công!');
+                    
+                    // Trigger Logic ngầm (Ajax) cập nhật Database ở đây
+                    // $.post('/Helpdesk/UpdateStatus', { ... });
+                }
+            });
+        });
+    </script>
+}

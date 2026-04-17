@@ -44,6 +44,11 @@ builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.C
         options.LogoutPath = "/Account/Logout";
         options.AccessDeniedPath = "/Account/AccessDenied";
         options.Cookie.Name = "SmartLMS_Auth";
+    })
+    .AddGoogle(options => {
+        // Cấu hình SSO Google - Cần điền ClientId/Secret từ Google Cloud Console
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "YOUR_GOOGLE_CLIENT_ID";
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "YOUR_GOOGLE_CLIENT_SECRET";
     });
 
 builder.Services.AddAuthorization();
@@ -60,12 +65,23 @@ builder.Services.AddScoped<SmartLMS.Business.ISqlService, SmartLMS.Business.SqlS
 builder.Services.AddScoped<SmartLMS.Business.IUserService, SmartLMS.Business.UserService>();
 builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.CohortService>();
 
+// Enterprise SaaS Core Services
+builder.Services.AddSingleton(typeof(DinkToPdf.Contracts.IConverter), new DinkToPdf.SynchronizedConverter(new DinkToPdf.PdfTools()));
+builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
+builder.Services.AddScoped<SmartLMS.Business.ICertificateService, SmartLMS.Business.CertificateService>();
+builder.Services.AddScoped<SmartLMS.Business.IAffiliateService, SmartLMS.Business.AffiliateService>();
+builder.Services.AddSingleton<SmartLMS.Business.IModerationService, SmartLMS.Business.ModerationService>();
+
 // Real-time SignalR
 builder.Services.AddSignalR();
 
 // Email Service Config
 builder.Services.Configure<SmartLMS.Models.SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<SmartLMS.Business.IEmailService, SmartLMS.Business.EmailService>();
+
+// Zoom & Integration Config
+builder.Services.Configure<SmartLMS.Models.ZoomConfig>(builder.Configuration.GetSection("Zoom"));
+builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
 
 var app = builder.Build();
 

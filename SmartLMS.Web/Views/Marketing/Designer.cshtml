@@ -1,0 +1,146 @@
+@model SmartLMS.Models.Course
+@{
+    ViewData["Title"] = "Trình thiết kế Chứng chỉ (Interactive Designer)";
+    var config = Model.CertificateConfigJson ?? "{\"fullName\":{\"x\":350,\"y\":250},\"date\":{\"x\":500,\"y\":450}}";
+}
+
+@section Styles {
+    <style>
+        #cert-canvas {
+            width: 800px; height: 565px; /* Tỉ lệ A4 Landscape */
+            background-image: url('@(Model.CertificateTemplateUrl ?? "https://img.freepik.com/free-vector/elegant-certificate-template-vector-with-professional-design-blue-gold-tone_53876-116528.jpg")');
+            background-size: cover;
+            position: relative;
+            border: 2px solid #333;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .drag-element {
+            position: absolute;
+            padding: 10px;
+            background: rgba(67, 56, 202, 0.1);
+            border: 2px dashed #4338ca;
+            color: #4338ca;
+            font-weight: bold;
+            cursor: move;
+            user-select: none;
+            touch-action: none;
+            font-family: serif;
+            font-size: 24px;
+        }
+        .drag-element:after {
+            content: " ⇳"; font-size: 0.8em; opacity: 0.5;
+        }
+        .sidebar-config { background: #f8fafc; border-left: 1px solid #e2e8f0; height: 565px; }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <h1 class="m-0 text-bold-xl"><i class="fas fa-palette text-pink mr-2"></i> @ViewData["Title"]</h1>
+        <p class="text-muted">Kéo thả các trường dữ liệu vào vị trí mong muốn trên phôi chứng chỉ.</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div id="cert-canvas">
+                    <div id="drag-fullname" class="drag-element" data-key="fullName">NGUYỄN VĂN A</div>
+                    <div id="drag-date" class="drag-element" data-key="date">15/04/2026</div>
+                    <div id="drag-course" class="drag-element" data-key="courseName">@Model.Title</div>
+                </div>
+            </div>
+            <div class="col-md-3 sidebar-config p-4">
+                <h5><i class="fas fa-cog mr-2"></i> Cấu hình</h5>
+                <hr>
+                <div class="form-group">
+                    <label>Ảnh phôi (URL)</label>
+                    <input type="text" class="form-control" id="templateUrl" value="@Model.CertificateTemplateUrl">
+                </div>
+                <div id="coords-log" class="small text-monospace bg-dark text-success p-2 rounded mb-3">
+                    Đang chờ thay đổi...
+                </div>
+                <button class="btn btn-primary btn-block" id="btnSaveDesign">
+                    <i class="fas fa-save mr-2"></i> Lưu Tọa Độ
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <!-- Interact.js Core -->
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+
+    <script>
+        var currentConfig = @Html.Raw(config);
+
+        $(document).ready(function() {
+            // Khởi tạo vị trí ban đầu từ DB
+            applyConfig(currentConfig);
+
+            // Cấu hình Interact.js
+            interact('.drag-element').draggable({
+                inertia: true,
+                modifiers: [
+                    interact.modifiers.restrictRect({
+                        restriction: 'parent',
+                        endOnly: true
+                    })
+                ],
+                autoScroll: true,
+                listeners: {
+                    move: dragMoveListener,
+                    end: function(event) {
+                        updateLog();
+                    }
+                }
+            });
+
+            function dragMoveListener(event) {
+                var target = event.target;
+                var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+
+                // Cập nhật tọa độ vào Object
+                var key = target.getAttribute('data-key');
+                currentConfig[key] = { x: x, y: y };
+            }
+
+            function applyConfig(cfg) {
+                Object.keys(cfg).forEach(key => {
+                    var el = $('.drag-element[data-key="' + key + '"]')[0];
+                    if (el) {
+                        var x = cfg[key].x;
+                        var y = cfg[key].y;
+                        el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                        el.setAttribute('data-x', x);
+                        el.setAttribute('data-y', y);
+                    }
+                });
+                updateLog();
+            }
+
+            function updateLog() {
+                $('#coords-log').html(JSON.stringify(currentConfig, null, 2).replace(/\n/g, '<br>').replace(/ /g, '&nbsp;'));
+            }
+
+            $('#btnSaveDesign').click(function() {
+                var courseId = @Model.CourseId;
+                var json = JSON.stringify(currentConfig);
+
+                $.post('/Marketing/SaveDesign', { courseId: courseId, configJson: json }, function(res) {
+                    if (res.success) {
+                        Swal.fire('Thành công!', 'Đã lưu cấu hình tọa độ chứng chỉ.', 'success');
+                    }
+                });
+            });
+        });
+    </script>
+}

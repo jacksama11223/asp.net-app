@@ -28,6 +28,11 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<UserCohort> UserCohorts { get; set; }
     public virtual DbSet<Coupon> Coupons { get; set; }
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
+    public virtual DbSet<Permission> Permissions { get; set; }
+    public virtual DbSet<RolePermission> RolePermissions { get; set; }
+    public virtual DbSet<Question> Questions { get; set; }
+    public virtual DbSet<UserBadge> UserBadges { get; set; }
+    public virtual DbSet<CommissionRate> CommissionRates { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -176,6 +181,34 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.FullName).HasMaxLength(100);
             entity.Property(e => e.Role).HasMaxLength(20);
             entity.Property(e => e.Username).HasMaxLength(50);
+            entity.Property(e => e.TotalXP).HasDefaultValue(0);
+        });
+
+        modelBuilder.Entity<Permission>(entity => {
+            entity.HasKey(e => e.PermissionId);
+            entity.Property(e => e.Name).HasMaxLength(100).IsRequired();
+            entity.Property(e => e.Group).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<RolePermission>(entity => {
+            entity.HasKey(e => e.RolePermissionId);
+            entity.Property(e => e.RoleName).HasMaxLength(20).IsRequired();
+            entity.HasOne(d => d.Permission).WithMany(p => p.RolePermissions).HasForeignKey(d => d.PermissionId);
+        });
+
+        modelBuilder.Entity<Question>(entity => {
+            entity.HasKey(e => e.QuestionId);
+            entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId);
+        });
+
+        modelBuilder.Entity<UserBadge>(entity => {
+            entity.HasKey(e => e.UserBadgeId);
+            entity.HasOne(d => d.User).WithMany(p => p.UserBadges).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<CommissionRate>(entity => {
+            entity.HasKey(e => e.CommissionRateId);
+            entity.Property(e => e.Percentage).HasColumnType("decimal(18, 2)");
         });
 
         OnModelCreatingPartial(modelBuilder);

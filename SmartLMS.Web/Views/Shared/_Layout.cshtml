@@ -63,6 +63,10 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Shepherd (Product Tour) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.1.0/dist/css/shepherd.css">
+    <!-- OverlayScrollbars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.0/css/OverlayScrollbars.min.css">
+    <!-- Tippy.js -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
 
     <style>
         /* SKELETON LOADERS CSS */
@@ -93,6 +97,7 @@
         .transition-hover { transition: all 0.3s ease; }
         .transition-hover:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
     </style>
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -152,6 +157,7 @@
                 <!-- Sidebar Menu -->
 @{
                     var _ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+                    var _act = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
                 }
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -214,6 +220,50 @@
                                 <a href="/hangfire" class="nav-link" target="_blank">
                                     <i class="nav-icon fas fa-tasks text-danger"></i>
                                     <p>Background Jobs</p>
+                                </a>
+                            </li>
+                            <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-4">Hệ thống Mở rộng (SaaS)</li>
+                            <li class="nav-item">
+                                <a href="/Assessment" class="nav-link @(_ctrl == "Assessment" ? "active" : "")">
+                                    <i class="nav-icon fas fa-gamepad text-orange"></i>
+                                    <p>Khảo thí & Game hóa</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Marketing" class="nav-link @(_ctrl == "Marketing" ? "active" : "")">
+                                    <i class="nav-icon fas fa-bullhorn text-pink"></i>
+                                    <p>Marketing & Chứng chỉ</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Helpdesk" class="nav-link @(_ctrl == "Helpdesk" ? "active" : "")">
+                                    <i class="nav-icon fas fa-headset text-teal"></i>
+                                    <p>Hỗ trợ Học viên (HD)</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Affiliate" class="nav-link @(_ctrl == "Affiliate" ? "active" : "")">
+                                    <i class="nav-icon fas fa-handshake text-warning"></i>
+                                    <p>Tiếp thị (Affiliate)</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Integrations" class="nav-link @(_ctrl == "Integrations" ? "active" : "")">
+                                    <i class="nav-icon fas fa-plug text-primary"></i>
+                                    <p>Tích hợp API (Zoom)</p>
+                                </a>
+                            </li>
+                            <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-4">Quản trị Hệ thống (IAM)</li>
+                            <li class="nav-item">
+                                <a href="/IAM/Permissions" class="nav-link @(_ctrl == "IAM" && _act == "Permissions" ? "active" : "")">
+                                    <i class="nav-icon fas fa-user-shield text-indigo"></i>
+                                    <p>Ma trận Phân quyền</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/IAM/Index" class="nav-link @(_ctrl == "IAM" && _act == "Index" ? "active" : "")">
+                                    <i class="nav-icon fas fa-fingerprint text-secondary"></i>
+                                    <p>Nhật ký Vận hành</p>
                                 </a>
                             </li>
                         }
@@ -291,6 +341,15 @@
                 }
             });
 
+            // Global OverlayScrollbars for body
+            $('body').overlayScrollbars({ 
+                className: "os-theme-dark",
+                scrollbars: { autoHide: "leave" }
+            });
+
+            // Global Tippy tooltips
+            tippy('[data-tippy-content]');
+            
             // Initialize Lucide Icons
             lucide.createIcons();
         });

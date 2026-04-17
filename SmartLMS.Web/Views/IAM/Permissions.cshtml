@@ -1,0 +1,116 @@
+@model IEnumerable<SmartLMS.Models.Permission>
+@{
+    ViewData["Title"] = "Ma trận Phân quyền (IAM Role Matrix)";
+    var roles = ViewBag.Roles as List<string>;
+    var rolePermissions = ViewBag.RolePermissions as List<SmartLMS.Models.RolePermission>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.0/css/OverlayScrollbars.min.css">
+    <style>
+        .matrix-checkbox { transform: scale(1.5); cursor: pointer; }
+        .permission-group { background-color: #f8fafc; font-weight: bold; }
+        .DTFC_LeftBodyLiner { overflow-x: hidden !important; }
+        .card-header { position: sticky; top: 0; z-index: 1000; background: white; }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <h1 class="m-0 text-bold-xl"><i class="fas fa-shield-alt text-indigo mr-2"></i> @ViewData["Title"]</h1>
+        <p class="text-muted">Quản lý quyền hạn tập trung theo từng nhóm vai trò (Role-based Access Control).</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0" id="matrix-container">
+                <table id="permissionMatrix" class="table table-bordered table-hover mb-0 w-100">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="min-width: 250px;">Tính năng / Quyền hạn</th>
+                            @foreach (var role in roles!)
+                            {
+                                <th class="text-center">@role</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.GroupBy(x => x.Group))
+                        {
+                            <tr class="permission-group">
+                                <td colspan="@(roles.Count + 1)"><i class="fas fa-folder-open mr-2 text-primary"></i> @group.Key</td>
+                            </tr>
+                            @foreach (var p in group)
+                            {
+                                <tr>
+                                    <td class="pl-4">
+                                        <div class="text-bold">@p.Name</div>
+                                        <div class="text-xs text-muted">@p.Description</div>
+                                    </td>
+                                    @foreach (var role in roles)
+                                    {
+                                        var isChecked = rolePermissions!.Any(rp => rp.RoleName == role && rp.PermissionId == p.PermissionId);
+                                        <td class="text-center align-middle">
+                                            <input type="checkbox" class="matrix-checkbox permission-toggle" 
+                                                   data-role="@role" data-id="@p.PermissionId" 
+                                                   @(isChecked ? "checked" : "")>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.0/js/jquery.overlayScrollbars.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo OverlayScrollbars cho container
+            $("#matrix-container").overlayScrollbars({ 
+                className: "os-theme-dark",
+                scrollbars: { autoHide: "leave" }
+            });
+
+            // Khởi tạo DataTable với FixedColumns
+            var table = $('#permissionMatrix').DataTable({
+                paging: false,
+                searching: true,
+                info: false,
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                language: {
+                    search: "Tìm kiếm quyền:"
+                }
+            });
+
+            // Xử lý Toggle quyền qua AJAX
+            $('.permission-toggle').on('change', function() {
+                var $chk = $(this);
+                var role = $chk.data('role');
+                var pId = $chk.data('id');
+                var granted = $chk.is(':checked');
+
+                $.post('/IAM/UpdatePermission', { role: role, permissionId: pId, granted: granted }, function(res) {
+                    if(res.success) {
+                        toastr.success('Đã cập nhật quyền cho ' + role);
+                    } else {
+                        toastr.error('Lỗi khi cập nhật quyền');
+                        $chk.prop('checked', !granted);
+                    }
+                });
+            });
+        });
+    </script>
+}

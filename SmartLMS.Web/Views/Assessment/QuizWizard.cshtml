@@ -1,0 +1,131 @@
+@{
+    ViewData["Title"] = "Trình mô phỏng Bài thi (Quiz Wizard)";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.css">
+    <style>
+        /* Tùy chỉnh giao diện Wizard để chuẩn UI AdminLTE/Glassmorphism */
+        .wizard > .steps > ul > li { width: 33.333%; }
+        .wizard > .content {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            min-height: 250px;
+            padding: 20px;
+        }
+        .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active {
+            background: #4338ca;
+            border-radius: 5px;
+        }
+        .question-title { font-weight: 600; font-size: 1.2rem; color: #312e81; margin-bottom: 20px; }
+        .answer-option {
+            display: block; padding: 10px 15px; margin-bottom: 10px;
+            border: 1px solid #e2e8f0; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .answer-option:hover { background-color: #f1f5f9; border-color: #94a3b8; }
+        .answer-option input { margin-right: 10px; }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <h1 class="m-0 text-bold-xl"><i class="fas fa-magic text-orange mr-2"></i> @ViewData["Title"]</h1>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div id="quiz-wizard">
+                    <!-- Step 1 -->
+                    <h3>Câu hỏi 1</h3>
+                    <section>
+                        <div class="question-title">1. ASP.NET Core được phát hành lần đầu vào năm nào?</div>
+                        <label class="answer-option"><input type="radio" name="q1" value="A"> A. 2014</label>
+                        <label class="answer-option"><input type="radio" name="q1" value="B"> B. 2016</label>
+                        <label class="answer-option"><input type="radio" name="q1" value="C"> C. 2018</label>
+                        <label class="answer-option"><input type="radio" name="q1" value="D"> D. 2020</label>
+                    </section>
+
+                    <!-- Step 2 -->
+                    <h3>Câu hỏi 2</h3>
+                    <section>
+                        <div class="question-title">2. Entity Framework Core hỗ trợ cách tiếp cận nào?</div>
+                        <label class="answer-option"><input type="radio" name="q2" value="A"> A. Code-First</label>
+                        <label class="answer-option"><input type="radio" name="q2" value="B"> B. Database-First</label>
+                        <label class="answer-option"><input type="radio" name="q2" value="C"> C. Cả hai cách trên đều đúng</label>
+                        <label class="answer-option"><input type="radio" name="q2" value="D"> D. Không hỗ trợ cách nào</label>
+                    </section>
+
+                    <!-- Step 3 -->
+                    <h3>Khảo sát</h3>
+                    <section>
+                        <div class="question-title">3. Bạn đánh giá khóa học này thế nào?</div>
+                        <textarea class="form-control" rows="5" placeholder="Nhập cảm nhận của bạn..."></textarea>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <!-- Thư viện jQuery Steps -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+    <!-- Thư viện hiển thị hiệu ứng pháo giấy (Canvas Confetti) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo jQuery Steps
+            $("#quiz-wizard").steps({
+                headerTag: "h3",
+                bodyTag: "section",
+                transitionEffect: "slideLeft",
+                autoFocus: true,
+                labels: {
+                    finish: "Nộp bài",
+                    next: "Tiếp theo",
+                    previous: "Quay lại"
+                },
+                onFinished: function (event, currentIndex) {
+                    // Logic nộp bài thành công sẽ kích hoạt hiệu ứng pháo giấy!
+                    Swal.fire({
+                        title: 'Nộp bài thành công!',
+                        text: 'Bạn đã hoàn thành bài thi trắc nghiệm.',
+                        icon: 'success',
+                        confirmButtonText: 'Tuyệt vời!'
+                    }).then(() => {
+                        triggerConfetti();
+                    });
+                }
+            });
+        });
+
+        // Hàm kích hoạt hiệu ứng pháo giấy với Confetti
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+}

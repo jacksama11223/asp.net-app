@@ -1,0 +1,151 @@
+@{
+    ViewData["Title"] = "Bảng Điều Khiển Đối Tác (Affiliate Dashboard)";
+}
+
+@section Styles {
+    <style>
+        .stats-card { border-radius: 15px; border: none; transition: transform 0.3s; }
+        .stats-card:hover { transform: translateY(-5px); }
+        .qr-card { text-align: center; background: #fff; border-radius: 15px; padding: 20px; }
+        .qr-image { width: 180px; height: 180px; margin-bottom: 15px; border: 5px solid #f8fafc; border-radius: 10px; }
+        #revenueChart { min-height: 350px; }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <h1 class="m-0 text-bold-xl"><i class="fas fa-handshake text-warning mr-2"></i> @ViewData["Title"]</h1>
+        <p class="text-muted">Theo dõi lượt click, doanh thu và quản lý mã giới thiệu của bạn.</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Stats Row -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info stats-card shadow-sm">
+                    <div class="inner">
+                        <h3>1,250</h3>
+                        <p>Tổng lượt Click</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success stats-card shadow-sm">
+                    <div class="inner">
+                        <h3>42</h3>
+                        <p>Đơn hàng thành công</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning stats-card shadow-sm">
+                    <div class="inner">
+                        <h3>14.5M<sup style="font-size: 20px">đ</sup></h3>
+                        <p>Doanh thu tạm tính</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger stats-card shadow-sm">
+                    <div class="inner">
+                        <h3>3.4M<sup style="font-size: 20px">đ</sup></h3>
+                        <p>Hoa hồng (Commission)</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Revenue Chart -->
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-white">
+                        <h4 class="card-title font-weight-bold"><i class="fas fa-chart-line mr-2 text-primary"></i> Biểu đồ Tăng trưởng Doanh thu</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="revenueChart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Card -->
+            <div class="col-md-4">
+                <div class="card qr-card shadow-sm border-0">
+                    <h5 class="font-weight-bold mb-4">Mã Giới Thiệu Của Bạn</h5>
+                    <img src="data:image/png;base64,@ViewBag.QrCode" class="qr-image shadow-sm" alt="Affiliate QR">
+                    <div class="input-group mb-3">
+                        <input type="text" id="refLink" class="form-control" value="https://smartlms.ai/ref/admin" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary btn-copy" data-clipboard-target="#refLink">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-muted small">Chia sẻ liên kết này hoặc mã QR để nhận 15% hoa hồng trên mỗi đơn hàng.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // ApexCharts logic
+            var options = {
+                series: [{
+                    name: 'Doanh thu (VNĐ)',
+                    data: [3200000, 4500000, 4100000, 6500000, 5800000, 7200000, 8900000]
+                }, {
+                    name: 'Hoa hồng (VNĐ)',
+                    data: [480000, 675000, 615000, 975000, 870000, 1080000, 1335000]
+                }],
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    toolbar: { show: false }
+                },
+                colors: ['#4338ca', '#f59e0b'],
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 3 },
+                xaxis: {
+                    categories: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val.toLocaleString() + " đ";
+                        }
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#revenueChart"), options);
+            chart.render();
+
+            // Clipboard.js logic
+            var clipboard = new ClipboardJS('.btn-copy');
+            clipboard.on('success', function (e) {
+                toastr.success('Đã sao chép liên kết vào bộ nhớ tạm!');
+                e.clearSelection();
+            });
+        });
+    </script>
+}

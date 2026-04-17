@@ -32,9 +32,11 @@ public partial class User
 
     public string? Hometown { get; set; }
 
-    public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
+    public int TotalXP { get; set; }
 
+    public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     public virtual ICollection<UserCohort> UserCohorts { get; set; } = new List<UserCohort>();
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+    public virtual ICollection<UserBadge> UserBadges { get; set; } = new List<UserBadge>();
 }
