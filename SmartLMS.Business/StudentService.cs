@@ -18,7 +18,7 @@ namespace SmartLMS.Business;
 
         public StudentService(IConfiguration configuration, IPredictionService predictionService, IEmailService emailService)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
             _predictionService = predictionService;
             _emailService = emailService;
         }
@@ -65,11 +65,12 @@ namespace SmartLMS.Business;
             return students;
         }
 
-        public async Task SendNudgeAsync(int userId)
+        public Task SendNudgeAsync(int userId)
         {
             // Đẩy task gửi mail vào hàng đợi Hangfire
             // User.FullName và Email nên lấy từ DB trong Job để đảm bảo data mới nhất
             Hangfire.BackgroundJob.Enqueue(() => ProcessNudgeEmail(userId));
+            return Task.CompletedTask;
         }
 
         // Phương thức này sẽ được Hangfire gọi ngầm

@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "Luật Game hóa";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jQuery-QueryBuilder@2.5.2/dist/css/query-builder.default.min.css">
+<style>
+    .query-builder .rules-group-container { background: rgba(102, 16, 242, 0.05); border: 1px solid #6610f2; }
+    .btn-indigo { background-color: #6610f2; color: white; }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"><i class="fas fa-magic mr-2"></i>Gamification Rule Engine</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-indigo card-outline shadow-sm" data-step="1" data-intro="Đây là nơi bạn thiết lập các luật thưởng tự động cho học viên.">
+            <div class="card-header">
+                <h3 class="card-title">Thiết lập điều kiện thưởng tự động</h3>
+                <div class="card-tools">
+                    <button class="btn btn-sm btn-outline-indigo" onclick="startTour()"><i class="fas fa-question-circle mr-1"></i> Hướng dẫn</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="builder" data-step="2" data-intro="Bạn có thể thêm các điều kiện logic như: Điểm thi > 80% hoặc Hoàn thành khóa học tại đây."></div>
+                
+                <div class="mt-4 p-3 bg-light border-radius-sm" data-step="3" data-intro="Sau khi thỏa mãn điều kiện bên trên, học viên sẽ nhận được phần thưởng bạn thiết lập ở đây.">
+                    <h5 class="text-indigo"><i class="fas fa-gift mr-2"></i>Hành động khi thỏa mãn:</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Thưởng XP</label>
+                            <input type="number" class="form-control" placeholder="Ví dụ: 50">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Tặng Huy hiệu</label>
+                            <select class="form-control">
+                                <option>-- Chọn Huy hiệu --</option>
+                                <option>Huy hiệu Vàng</option>
+                                <option>Siêu sao lập trình</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Trạng thái</label>
+                            <div class="mt-2">
+                                <input type="checkbox" checked data-toggle="toggle" data-onstyle="indigo"> Kích hoạt ngay
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-indigo shadow" id="btn-get" data-step="4" data-intro="Đừng quên bấm Lưu để áp dụng luật mới vào hệ thống nhé!"><i class="fas fa-save mr-1"></i> Lưu cấu hình Rule</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jQuery-QueryBuilder@2.5.2/dist/js/query-builder.standalone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function startTour() {
+            playTing();
+            introJs().setOptions({
+                nextLabel: 'Tiếp tục',
+                prevLabel: 'Quay lại',
+                doneLabel: 'Hoàn tất'
+            }).start();
+        }
+
+        $('#builder').queryBuilder({
+            filters: [
+                { id: 'score', label: 'Điểm thi (%)', type: 'integer', operators: ['equal', 'not_equal', 'greater', 'less'] },
+                { id: 'video_watched', label: 'Tỷ lệ xem Video (%)', type: 'integer' },
+                { id: 'course_completed', label: 'Khóa học hoàn thành', type: 'integer' },
+                { id: 'days_active', label: 'Số ngày hoạt động liên tiếp', type: 'integer' }
+            ]
+        });
+
+        $('#btn-get').on('click', function() {
+            var result = $('#builder').queryBuilder('getRules');
+            if (!$.isEmptyObject(result)) {
+                playTing();
+                Swal.fire('Đã lưu!', 'Luật game hóa mới đã được áp dụng.', 'success');
+            }
+        });
+    </script>
+}

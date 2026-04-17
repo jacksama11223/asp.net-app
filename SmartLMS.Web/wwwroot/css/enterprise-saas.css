@@ -1,0 +1,81 @@
+/* 
+    Enterprise SaaS Design System - SmartLMS.AI
+    Style: Premium Glassmorphism & High-end Typography
+*/
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --primary-indigo: #6366f1;
+    --primary-violet: #8b5cf6;
+    --deep-slate: #0f172a;
+    --surface-glass: rgba(255, 255, 255, 0.05);
+}
+
+/* Glassmorphism Classes */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.glass-indigo {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* Typography Nâng cao */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.011em;
+}
+
+.text-gradient {
+    background: linear-gradient(to right, var(--primary-indigo), var(--primary-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Skeleton Loaders */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Podium Design for Leaderboard */
+.podium-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 40px 0;
+}
+
+.podium-item {
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.podium-item:hover { transform: translateY(-5px); }
+
+.podium-rank-2 { order: 1; height: 180px; width: 120px; background: #e2e8f0; }
+.podium-rank-1 { order: 2; height: 240px; width: 140px; background: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+.podium-rank-3 { order: 3; height: 150px; width: 120px; background: #fcd34d; }
+
+/* AG Grid Overrides */
+.ag-theme-alpine {
+    --ag-border-radius: 12px;
+    --ag-header-background-color: #f8fafc;
+    --ag-odd-row-background-color: #f1f5f9;
+}

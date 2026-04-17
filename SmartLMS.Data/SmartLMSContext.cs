@@ -33,6 +33,10 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Question> Questions { get; set; }
     public virtual DbSet<UserBadge> UserBadges { get; set; }
     public virtual DbSet<CommissionRate> CommissionRates { get; set; }
+    public virtual DbSet<Badge> Badges { get; set; }
+    public virtual DbSet<Exam> Exams { get; set; }
+    public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
+    public virtual DbSet<QuizAttempt> QuizAttempts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -51,10 +55,16 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<AuditLog>(entity => {
             entity.HasKey(e => e.AuditId);
             entity.Property(e => e.Timestamp).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            
+            // Index cho UserId và Timestamp để tăng tốc độ xem Audit Log
+            entity.HasIndex(e => new { e.UserId, e.Timestamp });
         });
         modelBuilder.Entity<ActivityLog>(entity =>
         {
             entity.HasKey(e => e.LogId).HasName("PK__Activity__5E5499A8AC2913CB");
+
+            // Index cho UserId và Timestamp để tăng tốc độ xem lịch sử hoạt động
+            entity.HasIndex(e => new { e.UserId, e.Timestamp });
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.ActionType).HasMaxLength(50);
@@ -158,6 +168,9 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Progress).HasDefaultValue(0.0);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
+            // Composite Index cho UserId và CourseId để tăng tốc độ check trạng thái enroll
+            entity.HasIndex(e => new { e.UserId, e.CourseId });
+
             entity.HasOne(d => d.Course).WithMany(p => p.Enrollments)
                 .HasForeignKey(d => d.CourseId)
                 .HasConstraintName("FK__Enrollmen__Cours__52593CB8");
@@ -182,6 +195,8 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Role).HasMaxLength(20);
             entity.Property(e => e.Username).HasMaxLength(50);
             entity.Property(e => e.TotalXP).HasDefaultValue(0);
+            entity.Property(e => e.HierarchyLevel).HasDefaultValue(3); // Default: Staff
+            entity.Property(e => e.DepartmentId).IsRequired(false);
         });
 
         modelBuilder.Entity<Permission>(entity => {
@@ -198,7 +213,10 @@ public partial class SmartLMSContext : DbContext
 
         modelBuilder.Entity<Question>(entity => {
             entity.HasKey(e => e.QuestionId);
-            entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId);
+            entity.Property(e => e.DepartmentId).IsRequired(false);
+            entity.HasOne(d => d.Course)
+                  .WithMany(p => p.Questions)
+                  .HasForeignKey(d => d.CourseId);
         });
 
         modelBuilder.Entity<UserBadge>(entity => {
@@ -209,6 +227,31 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<CommissionRate>(entity => {
             entity.HasKey(e => e.CommissionRateId);
             entity.Property(e => e.Percentage).HasColumnType("decimal(18, 2)");
+        });
+
+        modelBuilder.Entity<Badge>(entity => {
+            entity.HasKey(e => e.BadgeId);
+        });
+
+        modelBuilder.Entity<Exam>(entity => {
+            entity.HasKey(e => e.ExamId);
+            entity.Property(e => e.DepartmentId).IsRequired(false);
+            entity.HasOne(d => d.Course)
+                  .WithMany() // Nếu Course chưa có ICollection<Exam>, để trống hoặc thêm vào Course.cs
+                  .HasForeignKey(d => d.CourseId);
+        });
+
+        modelBuilder.Entity<ExamQuestion>(entity => {
+            entity.HasKey(e => new { e.ExamId, e.QuestionId });
+            entity.HasOne(e => e.Exam).WithMany(p => p.ExamQuestions).HasForeignKey(e => e.ExamId);
+            entity.HasOne(e => e.Question).WithMany().HasForeignKey(e => e.QuestionId);
+        });
+
+        modelBuilder.Entity<QuizAttempt>(entity => {
+            entity.HasKey(e => e.AttemptId);
+            entity.Property(e => e.Score).HasColumnType("decimal(18, 2)");
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Exam).WithMany(p => p.QuizAttempts).HasForeignKey(d => d.ExamId);
         });
 
         OnModelCreatingPartial(modelBuilder);

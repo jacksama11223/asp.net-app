@@ -16,7 +16,7 @@ public class UserService : IUserService
 
     public UserService(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
     }
 
     private IDbConnection CreateConnection() => new SqlConnection(_connectionString);

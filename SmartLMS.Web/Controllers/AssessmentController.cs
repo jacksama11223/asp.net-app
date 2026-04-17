@@ -1,38 +1,103 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Dapper;
-using Microsoft.Extensions.Configuration;
+using SmartLMS.Models;
+using SmartLMS.Business;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Linq;
 
-namespace SmartLMS.Web.Controllers;
-
-[Authorize(Roles = "Admin")]
-public class AssessmentController : Controller
+namespace SmartLMS.Web.Controllers
 {
-    private readonly IConfiguration _configuration;
-    private readonly string _connectionString;
-
-    public AssessmentController(IConfiguration configuration)
+    [Authorize]
+    public class AssessmentController : Controller
     {
-        _configuration = configuration;
-        _connectionString = _configuration.GetConnectionString("DefaultConnection") ?? "";
-    }
+        private readonly IAssessmentService _assessmentService;
+        private readonly IUserService _userService;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public AssessmentController(IAssessmentService assessmentService, IUserService userService)
+        {
+            _assessmentService = assessmentService;
+            _userService = userService;
+        }
 
-    public async Task<IActionResult> Leaderboard()
-    {
-        using var connection = new SqlConnection(_connectionString);
-        var sql = "SELECT TOP 10 FullName, Username, TotalXP FROM Users ORDER BY TotalXP DESC";
-        var topUsers = await connection.QueryAsync<dynamic>(sql);
-        return View(topUsers);
-    }
+        // Helper to get current user info with hierarchy
+        private async Task<(int Level, int? DeptId)> GetUserScopeAsync()
+        {
+            var username = User.Identity?.Name;
+            if (string.IsNullOrEmpty(username)) return (3, null);
 
-    public IActionResult QuizWizard()
-    {
-        return View();
+            var users = await _userService.GetAllUsersAsync();
+            var user = users.FirstOrDefault(u => u.Username == username);
+            
+            if (user == null) return (3, null);
+            return (user.HierarchyLevel, user.DepartmentId);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var (level, deptId) = await GetUserScopeAsync();
+            var leaderboard = await _assessmentService.GetLeaderboardAsync(deptId);
+            return View(leaderboard);
+        }
+
+        public async Task<IActionResult> Leaderboard()
+        {
+            var (level, deptId) = await GetUserScopeAsync();
+            var leaderboard = await _assessmentService.GetLeaderboardAsync(deptId);
+            return View(leaderboard);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> QuestionBuilder(int? id)
+        {
+            // Không load dữ liệu ở đây nữa, AG Grid sẽ tự gọi API để phân trang
+            ViewBag.Questions = new List<Question>();
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SaveQuestion(Question model)
+        {
+            var (level, deptId) = await GetUserScopeAsync();
+            await _assessmentService.SaveQuestionAsync(model, level, deptId);
+            return RedirectToAction(nameof(QuestionBuilder));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult BulkImport()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ExamAssembler(int? id)
+        {
+            var (level, deptId) = await GetUserScopeAsync();
+            var questions = await _assessmentService.GetQuestionsAsync(level, deptId);
+            ViewBag.Questions = questions;
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult RuleEngine()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BadgeStudio()
+        {
+            var badges = await _assessmentService.GetBadgesAsync();
+            return View(badges);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ItemAnalysis()
+        {
+            var (level, deptId) = await GetUserScopeAsync();
+            var stats = await _assessmentService.GetItemAnalysisAsync(deptId);
+            return View(stats);
+        }
     }
 }

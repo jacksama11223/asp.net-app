@@ -1,0 +1,151 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Ngân hàng câu hỏi Enterprise - Hệ thống Scalable";
+}
+
+@section Styles {
+    <style>
+        .glass-indigo { background: rgba(99, 102, 241, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(99, 102, 241, 0.2); }
+        .ag-theme-quartz { border-radius: 15px; overflow: hidden; height: 650px; --ag-background-color: rgba(255,255,255,0.05); }
+        .search-container { position: relative; max-width: 500px; }
+        .search-container i { position: absolute; left: 15px; top: 12px; color: #6366f1; }
+        .search-input { padding-left: 45px; border-radius: 30px; border: 1px solid #e2e8f0; height: 45px; transition: all 0.3s; }
+        .search-input:focus { box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); border-color: #6366f1; }
+    </style>
+}
+
+<div class="content-header pt-5">
+    <div class="container-fluid">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6">
+                <h1 class="m-0 text-gradient text-bold-xl"><i class="fas fa-database mr-2"></i> Ngân hàng câu hỏi Enterprise</h1>
+                <p class="text-muted">Đang quản trị hệ thống dữ liệu lớn với kiến trúc Server-side Pagination.</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <button class="btn btn-indigo shadow-lg px-4 py-2" onclick="location.href='/Assessment/CreateQuestion'">
+                    <i class="fas fa-plus mr-2"></i> Thêm câu hỏi mới
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Bar & Tools -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="search-container flex-grow-1">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchTerm" class="form-control search-input" placeholder="Tìm kiếm nội dung (Full-text Search)..." onkeyup="onSearchChange()">
+            </div>
+            <div class="ml-3">
+                <span class="badge badge-light-glass p-2"><i class="fas fa-bolt text-warning mr-1"></i> Tốc độ: Tối ưu (20 dòng/trang)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- AG Grid Container -->
+        <div class="glass-card p-0 shadow-xl overflow-hidden">
+            <div id="questionGrid" class="ag-theme-quartz w-100"></div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <script>
+        let gridOptions;
+        let searchTimer;
+
+        const columnDefs = [
+            { field: "questionId", headerName: "ID", width: 80 },
+            { field: "content", headerName: "Nội dung câu hỏi", flex: 2, sortable: false },
+            { field: "xpValue", headerName: "XP", width: 100 },
+            { field: "departmentId", headerName: "Phòng ban", width: 120 },
+            { 
+                headerName: "Thao tác", 
+                width: 140,
+                cellRenderer: function(params) {
+                    if (!params.data) return '<div class="skeleton w-75 h-75"></div>';
+                    return `
+                        <button class='btn btn-xs btn-outline-indigo mr-1' onclick='edit(${params.data.questionId})'><i class='fas fa-edit'></i></button>
+                        <button class='btn btn-xs btn-outline-danger' onclick='del(${params.data.questionId})'><i class='fas fa-trash'></i></button>
+                    `;
+                }
+            }
+        ];
+
+        const dataSource = {
+            getRows: function (params) {
+                const searchTerm = document.getElementById('searchTerm').value;
+                const requestData = {
+                    startRow: params.startRow,
+                    endRow: params.endRow,
+                    pageSize: 20,
+                    searchTerm: searchTerm
+                };
+
+                console.log('[AG Grid] Đang gọi API với params:', requestData);
+
+                fetch('/api/assessmentapi/questions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw err; });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('[AG Grid] Dữ liệu nhận được:', data);
+                    params.successCallback(data.rows, data.lastRow);
+                    
+                    if (gridApi) {
+                        if (data.rows.length === 0 && params.startRow === 0) {
+                            gridApi.showNoRowsOverlay();
+                        } else {
+                            gridApi.hideOverlay();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('[AG Grid] Lỗi tải dữ liệu:', error);
+                    let errMsg = error.message || 'Lỗi không xác định';
+                    if (gridApi) gridApi.hideOverlay();
+                    Swal.fire('Lỗi API', 'Không thể tải dữ liệu: ' + errMsg, 'error');
+                    params.failCallback();
+                });
+            }
+        };
+
+        gridOptions = {
+            columnDefs: columnDefs,
+            rowModelType: 'infinite',
+            cacheBlockSize: 20,
+            paginationPageSize: 20,
+            animateRows: true,
+            overlayLoadingTemplate: '<span class="ag-overlay-loading-center"><i class="fas fa-spinner fa-spin mr-2"></i> Đang tải dữ liệu từ Server...</span>',
+            overlayNoRowsTemplate: '<span class="ag-overlay-no-rows-center text-muted">Không tìm thấy câu hỏi nào phù hợp.</span>'
+        };
+
+        $(function() {
+            const gridDiv = document.querySelector('#questionGrid');
+            gridApi = agGrid.createGrid(gridDiv, gridOptions);
+            
+            gridApi.setGridOption('datasource', dataSource);
+        });
+
+        function onSearchChange() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                gridApi.setGridOption('datasource', dataSource);
+            }, 500);
+        }
+
+        function edit(id) { location.href = '/Assessment/QuestionBuilder/' + id; }
+        function del(id) { 
+            Swal.fire({ title: 'Xóa câu hỏi?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Đồng ý' });
+        }
+    </script>
+}

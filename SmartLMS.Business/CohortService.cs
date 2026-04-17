@@ -14,7 +14,7 @@ public class CohortService : ICohortService
 
     public CohortService(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
     }
 
     private IDbConnection CreateConnection() => new SqlConnection(_connectionString);

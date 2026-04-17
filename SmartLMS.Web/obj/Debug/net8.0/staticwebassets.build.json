@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "aSTOB2F4fW13pr3wEGiDj2LaINhJZZfh1NrCdeiwdlM=",
+  "Hash": "dmwASPnLlJehHhO2rmqN/WSqeqG4jBA5qHWesPjJ/LY=",
   "Source": "SmartLMS.Web",
   "BasePath": "_content/SmartLMS.Web",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\code\\asp.net\\SmartLMS.Web\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\SmartLMS.Web.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\css\\enterprise-saas.css",
+      "SourceId": "SmartLMS.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\",
+      "BasePath": "_content/SmartLMS.Web",
+      "RelativePath": "css/enterprise-saas.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\enterprise-saas.css"
     },
     {
       "Identity": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\css\\site.css",

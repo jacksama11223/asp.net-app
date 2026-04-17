@@ -1,0 +1,113 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Phân tích câu hỏi";
+}
+
+<div class="content-header pt-5">
+    <div class="container-fluid">
+        <h1 class="m-0 text-gradient text-bold-xl"><i class="fas fa-microscope mr-2"></i> Hệ thống Phân tích Chuyên sâu (Item Analysis)</h1>
+        <p class="text-muted">Phân tích hành vi chọn đáp án và đánh giá chất lượng câu hỏi tự động.</p>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Summary Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="glass-card p-3 text-center border-left-indigo">
+                    <h6 class="text-muted text-xs text-uppercase">Độ khó Trung bình</h6>
+                    <h2 class="text-indigo font-weight-bold">68%</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card p-3 text-center border-left-violet">
+                    <h6 class="text-muted text-xs text-uppercase">Cần chỉnh sửa</h6>
+                    <h2 class="text-violet font-weight-bold">12</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="glass-card p-4 shadow-lg mb-4">
+                    <h5 class="font-weight-bold mb-4">Tỷ lệ Phối hợp Đáp án (Response Distribution)</h5>
+                    <div id="itemChart" style="min-height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card shadow-lg p-0 overflow-hidden">
+            <table class="table table-hover mb-0">
+                <thead class="bg-indigo text-white">
+                    <tr>
+                        <th class="pl-4">Mã câu hỏi</th>
+                        <th>Nội dung</th>
+                        <th>Lượt làm</th>
+                        <th>Độ đúng</th>
+                        <th class="pr-4">Trạng thái AI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr class="user-row">
+                            <td class="pl-4 font-weight-bold">#@item.QuestionId</td>
+                            <td>Câu hỏi mã @item.QuestionId - Nội dung soạn thảo chuyên nghiệp...</td>
+                            <td><span class="badge badge-light">@item.TotalAttempts</span></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1" style="height: 6px; border-radius: 10px;">
+                                        <div class="progress-bar bg-gradient-indigo" style="width: 65%"></div>
+                                    </div>
+                                    <span class="ml-2 text-xs font-weight-bold">65%</span>
+                                </div>
+                            </td>
+                            <td class="pr-4">
+                                <span class="badge badge-success-glass p-2">Đạt chuẩn</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        var options = {
+            series: [{
+                name: 'Tỷ lệ chọn A',
+                data: [44, 55, 41, 67, 22]
+            }, {
+                name: 'Tỷ lệ chọn B',
+                data: [13, 23, 20, 8, 13]
+            }, {
+                name: 'Tỷ lệ chọn C (Đúng)',
+                data: [76, 85, 101, 98, 87]
+            }, {
+                name: 'Tỷ lệ chọn D',
+                data: [35, 41, 36, 26, 45]
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+                toolbar: { show: false }
+            },
+            colors: ['#adb5bd', '#6c757d', '#6610f2', '#343a40'],
+            plotOptions: {
+                bar: { horizontal: false, columnWidth: '55%' }
+            },
+            xaxis: {
+                categories: ['Câu 1', 'Câu 2', 'Câu 3', 'Câu 4', 'Câu 5'],
+            },
+            legend: { position: 'top' },
+            fill: { opacity: 1 }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#itemChart"), options);
+        chart.render();
+    </script>
+}

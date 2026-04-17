@@ -13,6 +13,8 @@ builder.Services.AddControllersWithViews(options => {
         options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
         // Đảm bảo thuộc tính trả về dạng camelCase chuẩn cho DataTables
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+        // Chống lỗi vòng lặp tham chiếu cho EF Core Entities
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
 // Configure Hangfire
@@ -64,6 +66,9 @@ builder.Services.AddScoped<SmartLMS.Business.IStudentService, SmartLMS.Business.
 builder.Services.AddScoped<SmartLMS.Business.ISqlService, SmartLMS.Business.SqlService>();
 builder.Services.AddScoped<SmartLMS.Business.IUserService, SmartLMS.Business.UserService>();
 builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.CohortService>();
+builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
+builder.Services.AddDistributedMemoryCache(); // Sẵn sàng để chuyển sang .AddStackExchangeRedisCache khi có Redis
+builder.Services.AddMemoryCache(); // Vẫn giữ lại cho các library phụ trợ nếu cần
 
 // Enterprise SaaS Core Services
 builder.Services.AddSingleton(typeof(DinkToPdf.Contracts.IConverter), new DinkToPdf.SynchronizedConverter(new DinkToPdf.PdfTools()));
@@ -121,6 +126,7 @@ app.MapControllerRoute(
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapHub<SmartLMS.Web.Hubs.DashboardHub>("/dashboardHub");
+app.MapHub<SmartLMS.Web.Hubs.GamificationHub>("/gamificationHub");
 
 // Schedule Hangfire Recurring Job for ML retrain
 RecurringJob.AddOrUpdate<SmartLMS.Business.IPredictionService>(

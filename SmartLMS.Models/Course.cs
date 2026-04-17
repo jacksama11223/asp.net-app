@@ -41,6 +41,8 @@ public partial class Course
     /// <summary>Mức lương dự kiến khóa học mang lại – dùng cho UC-07 Dự báo thu nhập.</summary>
     public decimal AI_BaseSalaryImpact { get; set; } = 0;
 
+    public int? DepartmentId { get; set; }
+
     public virtual User? Instructor { get; set; }
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     public virtual ICollection<CourseModule> CourseModules { get; set; } = new List<CourseModule>();

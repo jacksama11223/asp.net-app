@@ -1,0 +1,117 @@
+@model IEnumerable<SmartLMS.Models.Badge>
+@{
+    ViewData["Title"] = "Kho Huy hiệu";
+}
+
+<style>
+    .badge-card { transition: all 0.3s; border: none; border-radius: 12px; }
+    .badge-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(102, 16, 242, 0.15) !important; }
+    .badge-icon-box { height: 120px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 12px; margin-bottom: 15px; }
+    .rarity-legendary { color: #ff0000; font-weight: bold; border: 1px solid #ff0000; padding: 2px 8px; border-radius: 4px; }
+    .rarity-epic { color: #6610f2; font-weight: bold; border: 1px solid #6610f2; padding: 2px 8px; border-radius: 4px; }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"><i class="fas fa-medal mr-2"></i>Badge Studio</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button class="btn btn-indigo shadow-sm" data-toggle="modal" data-target="#addBadgeModal">
+                    <i class="fas fa-plus-circle mr-1"></i> Tạo Huy hiệu mới
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var badge in Model) {
+                <div class="col-md-3">
+                    <div class="card badge-card shadow-sm h-100" onclick="playTing()">
+                        <div class="card-body text-center">
+                            <div class="badge-icon-box" id="lottie-@badge.BadgeId" style="height: 120px;">
+                                <!-- Lottie container -->
+                            </div>
+                            <h5 class="font-weight-bold">@badge.Name</h5>
+                            <p class="text-muted text-sm">@badge.Description</p>
+                            <span class="rarity-@badge.Rarity.ToLower()">@badge.Rarity</span>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <button class="btn btn-sm btn-outline-indigo btn-block">Chỉnh sửa</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(function() {
+            // Danh sách Lottie mẫu cho các cấp độ
+            const lottiePaths = {
+                'common': 'https://lottie.host/7e0c4e13-2d2c-47a3-8288-51834241e3d3/zQWqR6K8Xh.json',
+                'rare': 'https://lottie.host/bd70e3ed-9769-450f-90e8-07e5e967a549/nEosHAtV6E.json',
+                'epic': 'https://lottie.host/80eeb87d-8153-41e7-9a67-674514781745/6hY2X5b8V9.json',
+                'legendary': 'https://lottie.host/f8e9e6e4-4d8b-4b1a-8c1a-6e5e4d3c2b1a/abcd.json' // Example
+            };
+
+            @foreach (var badge in Model) {
+                <text>
+                lottie.loadAnimation({
+                    container: document.getElementById('lottie-@badge.BadgeId'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: lottiePaths['@badge.Rarity.ToLower()'] || lottiePaths['common']
+                });
+                </text>
+            }
+        });
+    </script>
+}
+
+<!-- Modal Add -->
+<div class="modal fade" id="addBadgeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-indigo text-white">
+                <h5 class="modal-title">Tạo Huy hiệu mới</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Tên huy hiệu</label>
+                    <input type="text" class="form-control" placeholder="Ví dụ: Cú đêm">
+                </div>
+                <div class="form-group">
+                    <label>Tải lên Icon (PNG/SVG)</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="badgeFile">
+                        <label class="custom-file-label" for="badgeFile">Chọn file...</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Độ hiếm</label>
+                        <select class="form-control">
+                            <option>Common</option>
+                            <option>Rare</option>
+                            <option>Epic</option>
+                            <option>Legendary</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-indigo">Lưu huy hiệu</button>
+            </div>
+        </div>
+    </div>
+</div>

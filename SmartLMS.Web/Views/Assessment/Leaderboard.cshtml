@@ -1,97 +1,154 @@
 @model IEnumerable<dynamic>
 @{
     ViewData["Title"] = "Bảng Xếp Hạng Tuyệt Đỉnh (Leaderboard)";
+    var top3 = Model.Take(3).ToList();
+    var others = Model.Skip(3).ToList();
 }
 
 @section Styles {
     <style>
-        .leaderboard-card { border-radius: 20px; border: none; overflow: hidden; }
-        .rank-badge { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .rank-1 { background: linear-gradient(45deg, #ffd700, #ffae00); color: #fff; box-shadow: 0 4px 15px rgba(255,174,0,0.4); }
-        .rank-2 { background: linear-gradient(45deg, #c0c0c0, #8e8e8e); color: #fff; }
-        .rank-3 { background: linear-gradient(45deg, #cd7f32, #a0522d); color: #fff; }
-        .xp-pill { background: rgba(67, 56, 202, 0.1); color: #4338ca; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
-        .user-row { transition: all 0.2s; border-radius: 10px; margin-bottom: 8px; }
-        .user-row:hover { background: #f8fafc; transform: scale(1.01); }
-        .crown-icon { color: #ffae00; margin-left: 8px; }
+        .leaderboard-container { min-height: 80vh; padding-bottom: 50px; }
+        .podium-section { padding: 40px 0; display: flex; justify-content: center; align-items: flex-end; gap: 15px; }
+        .podium-item { position: relative; display: flex; flex-direction: column; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .podium-item:hover { transform: translateY(-10px); }
+        
+        .podium-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fff; margin-bottom: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .podium-base { width: 140px; border-radius: 15px 15px 5px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
+        
+        .rank-2 { height: 160px; background: linear-gradient(180deg, #94a3b8, #64748b); order: 1; opacity: 0.9; }
+        .rank-1 { height: 220px; background: linear-gradient(180deg, #fbbf24, #d97706); order: 2; z-index: 2; width: 160px; }
+        .rank-3 { height: 130px; background: linear-gradient(180deg, #d97706, #92400e); order: 3; opacity: 0.8; }
+        
+        .crown-master { position: absolute; top: -35px; font-size: 2rem; color: #fbbf24; filter: drop-shadow(0 0 10px rgba(251,191,36,0.6)); }
+        
+        .list-glass { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; overflow: hidden; }
+        .user-row { transition: all 0.2s; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .user-row:hover { background: rgba(99, 102, 241, 0.05) !important; }
+        
+        .avatar-small { width: 40px; height: 40px; border-radius: 50%; background: #6366f1; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     </style>
 }
 
-<div class="content-header">
-    <div class="container-fluid">
-        <h1 class="m-0 text-bold-xl"><i class="fas fa-trophy text-warning mr-2"></i> @ViewData["Title"]</h1>
-        <p class="text-muted">Vinh danh Top 10 cá nhân tiêu biểu có thành tích học tập xuất sắc nhất tháng.</p>
+<div class="leaderboard-container">
+    <div class="content-header text-center pt-5">
+        <h1 class="display-4 text-gradient font-weight-bold">Bảng Vinh Danh Enterprise</h1>
+        <p class="text-muted">Dữ liệu thời gian thực được đồng bộ trên toàn bộ hệ thống</p>
     </div>
-</div>
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8 mx-auto">
-                <div class="card leaderboard-card shadow-lg">
-                    <div class="card-header bg-indigo p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="m-0 text-white font-weight-bold">TOP 10 SINH VIÊN</h4>
-                            <span class="badge badge-light p-2">Cập nhật: Real-time</span>
-                        </div>
+    <div class="container">
+        <!-- Podium Top 3 -->
+        <div class="podium-section">
+            @if(top3.Count > 1) {
+                var p2 = top3[1];
+                <div class="podium-item">
+                    <div class="podium-avatar bg-secondary d-flex align-items-center justify-content-center text-white font-weight-bold">@p2.Username[0]</div>
+                    <div class="podium-base rank-2 shadow">
+                        <span class="h3 m-0">2</span>
+                        <span class="text-sm">@p2.Username</span>
+                        <span class="badge badge-light mt-1">@p2.TotalXP XP</span>
                     </div>
-                    <div class="card-body p-4">
-                        @{
-                            int rank = 1;
-                        }
-                        @foreach (var user in Model)
-                        {
-                            <div class="d-flex align-items-center p-3 user-row border-bottom">
-                                <div class="rank-container mr-4">
-                                    <div class="rank-badge @(rank == 1 ? "rank-1" : rank == 2 ? "rank-2" : rank == 3 ? "rank-3" : "bg-light text-dark")">
-                                        @rank
-                                    </div>
-                                </div>
-                                <div class="avatar-container mr-3">
-                                    <div class="bg-indigo text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">
-                                        @(user.FullName != null ? user.FullName[0].ToString().ToUpper() : user.Username[0].ToString().ToUpper())
-                                    </div>
-                                </div>
-                                <div class="info-container flex-grow-1">
-                                    <div class="h5 m-0 font-weight-bold">
-                                        @(user.FullName ?? user.Username)
-                                        @if (rank == 1) { <i class="fas fa-crown crown-icon"></i> }
-                                    </div>
-                                    <div class="text-muted text-sm">@@@user.Username</div>
-                                </div>
-                                <div class="xp-container text-right">
-                                    <div class="xp-pill shadow-sm">
-                                        <i class="fas fa-bolt mr-1"></i> @user.TotalXP XP
-                                    </div>
-                                </div>
-                            </div>
-                            rank++;
-                        }
+                </div>
+            }
 
-                        @if (!Model.Any())
-                        {
-                            <div class="text-center p-5 text-muted">
-                                <i class="fas fa-ghost fa-3x mb-3 opacity-25"></i>
-                                <p>Chưa có dữ liệu xếp hạng.</p>
-                            </div>
-                        }
+            @if(top3.Count > 0) {
+                var p1 = top3[0];
+                <div class="podium-item">
+                    <i class="fas fa-crown crown-master"></i>
+                    <div class="podium-avatar bg-warning d-flex align-items-center justify-content-center text-white font-weight-bold" style="border-color: #fbbf24;">@p1.Username[0]</div>
+                    <div class="podium-base rank-1 shadow-lg">
+                        <span class="h1 m-0">1</span>
+                        <span class="h5">@p1.Username</span>
+                        <span class="badge badge-light mt-1 font-weight-bold" style="color: #d97706">@p1.TotalXP XP</span>
                     </div>
+                </div>
+            }
+
+            @if(top3.Count > 2) {
+                var p3 = top3[2];
+                <div class="podium-item">
+                    <div class="podium-avatar bg-dark d-flex align-items-center justify-content-center text-white font-weight-bold">@p3.Username[0]</div>
+                    <div class="podium-base rank-3 shadow">
+                        <span class="h3 m-0">3</span>
+                        <span class="text-sm">@p3.Username</span>
+                        <span class="badge badge-light mt-1">@p3.TotalXP XP</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Others List -->
+        <div class="row mt-5">
+            <div class="col-md-10 mx-auto">
+                <div class="list-glass shadow-xl">
+                    <table class="table table-borderless mb-0">
+                        <thead>
+                            <tr class="text-muted text-sm">
+                                <th class="pl-4">Hạng</th>
+                                <th>Học viên</th>
+                                <th class="text-right pr-4">Tổng XP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int rank = 4; }
+                            @foreach (var user in others) {
+                                <tr class="user-row">
+                                    <td class="pl-4 align-middle">
+                                        <span class="font-weight-bold text-muted">#@rank</span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-small mr-3">@user.Username[0]</div>
+                                            <div>
+                                                <div class="font-weight-bold">@(user.FullName ?? user.Username)</div>
+                                                <div class="text-xs text-muted">@@@user.Username</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right pr-4 align-middle">
+                                        <span class="xp-pill xp-value" data-value="@user.TotalXP">0</span>
+                                    </td>
+                                </tr>
+                                rank++;
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Tự động bắn pháo hoa nhẹ khi mở trang bảng xếp hạng
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
+        $(function() {
+            $('.xp-value').each(function() {
+                var target = $(this).data('value');
+                var countUpAnim = new countUp.CountUp(this, target, { duration: 2 });
+                countUpAnim.start();
             });
+
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/gamificationHub")
+                .build();
+
+            connection.on("ReceiveXPUpdate", function (username, xpGained, totalXP) {
+                if (typeof playTing === "function") playTing(); 
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    icon: 'success',
+                    title: username + ' vùa nhận +' + xpGained + ' XP!'
+                });
+                setTimeout(() => { location.reload(); }, 2000);
+            });
+
+            connection.start().catch(err => console.error(err.toString()));
+
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
         });
     </script>
 }

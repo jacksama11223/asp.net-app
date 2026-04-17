@@ -11,6 +11,7 @@ public class Question
     public string Options { get; set; } = string.Empty; // Store as JSON or comma separated
     public string CorrectAnswer { get; set; } = string.Empty;
     public int XPValue { get; set; } = 10;
+    public int? DepartmentId { get; set; }
     
     public virtual Course Course { get; set; } = null!;
 }

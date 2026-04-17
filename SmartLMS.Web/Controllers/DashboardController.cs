@@ -105,9 +105,11 @@ public class DashboardController : Controller
     public async Task<IActionResult> SendNudge(string message, string? email)
     {
         if (!string.IsNullOrEmpty(email)) {
-            await _emailService.SendEmailAsync(email, "Nhắc nhở từ Giảng viên (SmartLMS AI)", message);
+            // Đẩy vào Hangfire để gửi email ở background
+            Hangfire.BackgroundJob.Enqueue<IEmailService>(service => 
+                service.SendEmailAsync(email, "Nhắc nhở từ Giảng viên (SmartLMS AI)", message));
         }
-        await _hubContext.Clients.All.SendAsync("ReceiveNotification", "System", "Đã gửi email nhắc nhở thành công.");
+        await _hubContext.Clients.All.SendAsync("ReceiveNotification", "System", "Đã ghi nhận yêu cầu nhắc nhở. Email đang được gửi ở background.");
         return Ok(new { success = true });
     }
 }

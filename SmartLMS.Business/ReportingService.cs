@@ -22,7 +22,7 @@ public class ReportingService : IReportingService
 
     public ReportingService(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
     }
 
     private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
@@ -30,7 +30,7 @@ public class ReportingService : IReportingService
     public async Task<DashboardStats> GetDashboardStatsAsync()
     {
         using var db = CreateConnection();
-        return await db.QueryFirstOrDefaultAsync<DashboardStats>("sp_GetDashboardStats", commandType: CommandType.StoredProcedure);
+        return await db.QueryFirstOrDefaultAsync<DashboardStats>("sp_GetDashboardStats", commandType: CommandType.StoredProcedure) ?? new DashboardStats();
     }
 
     public async Task<IEnumerable<RecentActivityViewModel>> GetRecentActivitiesAsync(int top = 5)

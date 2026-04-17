@@ -30,16 +30,40 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWZmaWxpYXRlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/BadgeStudio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxCYWRnZVN0dWRpby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/BulkImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxCdWxrSW1wb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/ExamAssembler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxFeGFtQXNzZW1ibGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/Assessment/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/ItemAnalysis.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxJdGVtQW5hbHlzaXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/code/asp.net/SmartLMS.Web/Views/Assessment/Leaderboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxMZWFkZXJib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/QuestionBuilder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxRdWVzdGlvbkJ1aWxkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/Assessment/QuizWizard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxRdWl6V2l6YXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/RuleEngine.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxSdWxlRW5naW5lLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/code/asp.net/SmartLMS.Web/Views/Cohort/Index.cshtml]

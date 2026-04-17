@@ -33,6 +33,8 @@ public partial class User
     public string? Hometown { get; set; }
 
     public int TotalXP { get; set; }
+    public int HierarchyLevel { get; set; } = 3; // 1: SuperAdmin, 2: DeptAdmin, 3: Staff/Student
+    public int? DepartmentId { get; set; }
 
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();

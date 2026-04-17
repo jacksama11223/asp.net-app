@@ -1,0 +1,79 @@
+@{
+    ViewData["Title"] = "Import Ngân hàng câu hỏi";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+<style>
+    .dropzone { border: 2px dashed #6610f2; border-radius: 10px; background: #f8f9fa; }
+    .dropzone .dz-message { font-weight: 400; font-size: 1.2rem; }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"><i class="fas fa-file-excel mr-2"></i>Bulk Import Center</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card card-outline card-indigo shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title">Tải lên file Excel (.xlsx)</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="/Assessment/ProcessImport" class="dropzone" id="excelDropzone">
+                            <div class="dz-message needsclick">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-indigo mb-3"></i><br>
+                                Kéo thả file Excel vào đây hoặc click để chọn file.<br>
+                                <small class="text-muted">(Hỗ trợ tệp cấu trúc chuẩn của SmartLMS)</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Hướng dẫn & Tải mẫu</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Vui lòng sử dụng file mẫu bên dưới để đảm bảo dữ liệu được nhập chính xác.</p>
+                        <a href="#" class="btn btn-outline-info btn-block shadow-sm">
+                            <i class="fas fa-download mr-1"></i> Tải file Excel mẫu
+                        </a>
+                        <hr>
+                        <ul class="text-sm">
+                            <li>Cột A: Nội dung câu hỏi</li>
+                            <li>Cột B, C, D, E: Các lựa chọn</li>
+                            <li>Cột F: Đáp án đúng (A/B/C/D)</li>
+                            <li>Cột G: Điểm XP</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Dropzone.options.excelDropzone = {
+            maxFiles: 1,
+            acceptedFiles: ".xlsx, .xls",
+            success: function(file, response) {
+                Swal.fire('Thành công!', 'Hệ thống đã nạp dữ liệu câu hỏi thành công.', 'success');
+            },
+            error: function(file, message) {
+                Swal.fire('Lỗi!', 'Định dạng file không hợp lệ hoặc quá trình xử lý thất bại.', 'error');
+            }
+        };
+    </script>
+}

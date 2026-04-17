@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\SmartLMS.Web.bundle.scp.css"
     },
     {
+      "Id": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\css\\enterprise-saas.css",
+      "PackagePath": "staticwebassets\\css\\enterprise-saas.css"
+    },
+    {
       "Id": "C:\\code\\asp.net\\SmartLMS.Web\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
