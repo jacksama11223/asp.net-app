@@ -246,3 +246,8 @@ C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Microsoft.Identity.Client.Extensio
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\System.ClientModel.dll
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\System.Memory.Data.dll
 C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\code\asp.net\SmartLMS.Web\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\code\asp.net\SmartLMS.Web\obj\Debug\net8.0\SmartLMS.Web.MvcApplicationPartsAssemblyInfo.cs
