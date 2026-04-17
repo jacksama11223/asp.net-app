@@ -12,6 +12,7 @@ using SmartLMS.Models;
 using SmartLMS.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using SmartLMS.Business.MessageBus;
 
 namespace SmartLMS.Business
 {
@@ -20,17 +21,17 @@ namespace SmartLMS.Business
         private readonly string _connectionString;
         private readonly IDistributedCache _cache;
         private readonly IScoringEngine _scoringEngine;
-        private readonly IWebhookService _webhookService;
+        private readonly IMessageBus _messageBus;
         private readonly SmartLMSContext _context;
 
         public AssessmentService(IConfiguration configuration, IDistributedCache cache, 
-                                 IScoringEngine scoringEngine, IWebhookService webhookService, 
+                                 IScoringEngine scoringEngine, IMessageBus messageBus, 
                                  SmartLMSContext context)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
             _cache = cache;
             _scoringEngine = scoringEngine;
-            _webhookService = webhookService;
+            _messageBus = messageBus;
             _context = context;
         }
 
@@ -198,28 +199,16 @@ namespace SmartLMS.Business
                     user.TotalXP += xpEarned;
                 }
 
-                // Check Badges (Game Logic đơn giản: Nếu thi > 90 điểm và chưa có huy hiệu 'Sáng tạo')
-                // Phần này có thể mở rộng Rule Engine sau này
-                if (score >= 90)
+                // [EVENT-DRIVEN] Thay vì Server tự xử lý (Cấp Badge, Phóng Webhook), ta ném sự kiện này vào Background/Microservices khác làm việc.
+                // Điều này giúp hệ thống Assessment trả kết quả về cho Học sinh trong vòng 0.001s
+                await _messageBus.PublishAsync("Assessment.QuizSubmitted", new
                 {
-                    var badge = await _context.Badges.FirstOrDefaultAsync(b => b.Name == "Siêu sao lập trình");
-                    if (badge != null)
-                    {
-                        var alreadyHas = await _context.UserBadges.AnyAsync(ub => ub.UserId == userId && ub.BadgeId == badge.BadgeId);
-                        if (!alreadyHas)
-                        {
-                            _context.UserBadges.Add(new UserBadge { UserId = userId, BadgeId = badge.BadgeId, EarnedDate = DateTime.Now });
-                            result.NewBadges.Add(badge.Name);
-
-                            // Gửi Webhook thông báo
-                            await _webhookService.NotifyAsync("BadgeEarned", new { 
-                                UserName = user?.Username, 
-                                BadgeName = badge.Name,
-                                Score = score
-                            });
-                        }
-                    }
-                }
+                    UserId = userId,
+                    ExamId = examId,
+                    Score = score,
+                    XPEarned = xpEarned,
+                    SubmittedAt = DateTime.Now
+                });
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();

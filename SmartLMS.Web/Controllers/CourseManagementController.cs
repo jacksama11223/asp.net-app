@@ -13,11 +13,13 @@ namespace SmartLMS.Web.Controllers
     {
         private readonly SmartLMSContext _context;
         private readonly ICourseService  _courseService;
+        private readonly IStorageService _storageService;
 
-        public CourseManagementController(SmartLMSContext context, ICourseService courseService)
+        public CourseManagementController(SmartLMSContext context, ICourseService courseService, IStorageService storageService)
         {
             _context       = context;
             _courseService = courseService;
+            _storageService = storageService;
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -136,15 +138,11 @@ namespace SmartLMS.Web.Controllers
 
         private async Task<string> HandleFileUpload(Microsoft.AspNetCore.Http.IFormFile file)
         {
-            var fileName = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(file.FileName);
-            var filePath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot", "uploads", "courses", fileName);
-
-            using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return "/uploads/courses/" + fileName;
+            // Bơm Stream trực tiếp thay vì ghi ra vùng nhớ tạm
+            using var stream = file.OpenReadStream();
+            var cloudUrl = await _storageService.UploadFileAsync(stream, file.FileName, file.ContentType);
+            
+            return cloudUrl;
         }
 
         [HttpGet]

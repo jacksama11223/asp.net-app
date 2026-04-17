@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using System.Text;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -143,6 +144,11 @@ builder.Services.AddScoped<SmartLMS.Business.IAffiliateService, SmartLMS.Busines
 builder.Services.AddSingleton<SmartLMS.Business.IModerationService, SmartLMS.Business.ModerationService>();
 builder.Services.AddSingleton<SmartLMS.Business.IScoringEngine, SmartLMS.Business.ScoringEngine>();
 builder.Services.AddScoped<SmartLMS.Business.IWebhookService, SmartLMS.Business.WebhookService>();
+builder.Services.AddScoped<SmartLMS.Business.IStorageService, SmartLMS.Business.S3StorageService>();
+builder.Services.AddScoped<SmartLMS.Business.IPaymentGateway, SmartLMS.Business.VNPayGateway>();
+builder.Services.AddScoped<SmartLMS.Business.IVideoTranscoderService, SmartLMS.Business.MockVideoTranscoderService>();
+builder.Services.AddScoped<SmartLMS.Business.ISearchEngineService, SmartLMS.Business.MockElasticsearchService>();
+builder.Services.AddScoped<SmartLMS.Business.MessageBus.IMessageBus, SmartLMS.Business.MessageBus.MockRabbitMQBus>();
 
 // Real-time SignalR
 builder.Services.AddSignalR();
@@ -189,6 +195,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseHttpMetrics(); // Đếm tổng Request, đếm Thời gian phản hồi, phân tích nút thắt cổ chai
 
 app.UseCors("AllowAll");
 app.UseRateLimiter();
@@ -202,6 +209,8 @@ app.UseHangfireDashboard("/hangfire");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+
+app.MapMetrics(); // Mở cổng để Grafana hút dữ liệu
 
 app.MapHub<SmartLMS.Web.Hubs.DashboardHub>("/dashboardHub");
 app.MapHub<SmartLMS.Web.Hubs.GamificationHub>("/gamificationHub");

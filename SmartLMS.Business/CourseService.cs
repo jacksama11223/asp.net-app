@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Dapper;
 using SmartLMS.Data;
 using SmartLMS.Models;
+using Microsoft.Extensions.Caching.Distributed;
+using SmartLMS.Business.Extensions;
 
 namespace SmartLMS.Business;
 
@@ -44,10 +46,12 @@ public class CourseStatsDto
 public class CourseService : ICourseService
 {
     private readonly SmartLMSContext _context;
+    private readonly IDistributedCache _cache;
 
-    public CourseService(SmartLMSContext context)
+    public CourseService(SmartLMSContext context, IDistributedCache cache)
     {
         _context = context;
+        _cache = cache;
     }
 
     /// <summary>Lấy tất cả khóa học chưa bị xóa mềm (HasQueryFilter tự động lọc IsDeleted=1).</summary>
@@ -164,10 +168,20 @@ public class CourseService : ICourseService
         return true;
     }
 
-    /// <summary>Thống kê nhanh cho Stats Cards (Đã tối ưu hóa).</summary>
+    /// <summary>Thống kê nhanh cho Stats Cards (Đã tối ưu hóa qua Distributed Cache/Redis).</summary>
     public async Task<CourseStatsDto> GetStatsAsync()
     {
-        return new CourseStatsDto
+        var cacheKey = "CourseAdminDashboardStats";
+        
+        // 1. Tìm trong Redis / In-Memory Cache trước
+        var cachedStats = await _cache.GetRecordAsync<CourseStatsDto>(cacheKey);
+        if (cachedStats != null)
+        {
+            return cachedStats; // Trả về siêu tốc 1ms
+        }
+
+        // 2. Không có thì mới Query SQL Server (Heavy Operation)
+        var freshStats = new CourseStatsDto
         {
             Total            = await _context.Courses.CountAsync(),
             Published        = await _context.Courses.CountAsync(c => c.Status == "Published"),
@@ -175,6 +189,11 @@ public class CourseService : ICourseService
             Archived         = await _context.Courses.CountAsync(c => c.Status == "Archived"),
             TotalEnrollments = await _context.Enrollments.CountAsync()
         };
+
+        // 3. Nạp lại vào Redis (Sống được 5 phút trước khi bay hơi)
+        await _cache.SetRecordAsync(cacheKey, freshStats, TimeSpan.FromMinutes(5));
+
+        return freshStats;
     }
 
     /// <summary>Lấy dữ liệu Trend thực tế từ ActivityLogs cho 7 ngày gần nhất.</summary>
