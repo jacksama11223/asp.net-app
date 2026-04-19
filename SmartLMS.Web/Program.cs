@@ -167,6 +167,22 @@ builder.Services.AddSignalR();
 builder.Services.Configure<SmartLMS.Models.SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<SmartLMS.Business.IEmailService, SmartLMS.Business.EmailService>();
 
+// 4. Tối ưu hóa hiệu năng (High-Concurrency Support)
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProvider>();
+    options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProvider>();
+});
+
+builder.Services.AddOutputCache(options =>
+{
+    options.AddBasePolicy(builder => builder.Cache().Expire(TimeSpan.FromSeconds(60)));
+    options.AddPolicy("CourseCache", builder => builder.Expire(TimeSpan.FromSeconds(120)).Tag("Courses"));
+});
+
+// Cấu hình Forwarded Headers để xử lý SSL/HTTPS từ Cloudflare/Proxy
+
 // Cấu hình Forwarded Headers để xử lý SSL/HTTPS từ Cloudflare/Proxy
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
@@ -228,9 +244,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseResponseCompression();
+app.UseOutputCache();
 app.UseStaticFiles();
 
-app.UseSerilogRequestLogging(); // Ghi log chi tiết từng request
+app.UseSerilogRequestLogging(); 
 
 app.UseRouting();
 app.UseHttpMetrics();

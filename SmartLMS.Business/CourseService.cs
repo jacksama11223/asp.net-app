@@ -54,13 +54,21 @@ public class CourseService : ICourseService
         _cache = cache;
     }
 
-    /// <summary>Lấy tất cả khóa học chưa bị xóa mềm (HasQueryFilter tự động lọc IsDeleted=1).</summary>
+    /// <summary>Lấy tất cả khóa học chưa bị xóa mềm (Đã tối ưu hóa Cache).</summary>
     public async Task<IEnumerable<Course>> GetAllCoursesAsync()
     {
-        return await _context.Courses
+        var cacheKey = "AllActiveCoursesList";
+        var cachedData = await _cache.GetRecordAsync<IEnumerable<Course>>(cacheKey);
+        
+        if (cachedData != null) return cachedData;
+
+        var freshData = await _context.Courses
             .Include(c => c.Instructor)
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
+
+        await _cache.SetRecordAsync(cacheKey, freshData, TimeSpan.FromMinutes(10));
+        return freshData;
     }
 
     public async Task<Course?> GetCourseByIdAsync(int id)
