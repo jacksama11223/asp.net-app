@@ -38,6 +38,7 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
     public virtual DbSet<QuizAttempt> QuizAttempts { get; set; }
     public virtual DbSet<Webhook> Webhooks { get; set; }
+    public virtual DbSet<Invoice> Invoices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -179,6 +180,9 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Enrollments)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Enrollmen__UserI__5165187F");
+
+            // Global query filter for Course soft delete
+            entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -218,6 +222,9 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Course)
                   .WithMany(p => p.Questions)
                   .HasForeignKey(d => d.CourseId);
+
+            // Global query filter for Course soft delete
+            entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
         modelBuilder.Entity<UserBadge>(entity => {
@@ -240,6 +247,9 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Course)
                   .WithMany() // Nếu Course chưa có ICollection<Exam>, để trống hoặc thêm vào Course.cs
                   .HasForeignKey(d => d.CourseId);
+
+            // Global query filter for Course soft delete
+            entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
         modelBuilder.Entity<ExamQuestion>(entity => {
@@ -253,6 +263,22 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Score).HasColumnType("decimal(18, 2)");
             entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
             entity.HasOne(d => d.Exam).WithMany(p => p.QuizAttempts).HasForeignKey(d => d.ExamId);
+        });
+
+        modelBuilder.Entity<Invoice>(entity => {
+            entity.HasKey(e => e.InvoiceId);
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.TransactionReference).HasMaxLength(100);
+            entity.Property(e => e.Status).HasMaxLength(20);
+            
+            // Index giúp tìm hóa đơn cực nhanh khi VNPay Webhook gọi về
+            entity.HasIndex(e => e.TransactionReference).IsUnique();
+            
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId);
+
+            // Global query filter for Course soft delete
+            entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
         modelBuilder.Entity<Webhook>(entity => {

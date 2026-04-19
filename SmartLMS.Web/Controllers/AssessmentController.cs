@@ -109,5 +109,17 @@ namespace SmartLMS.Web.Controllers
             ViewBag.ExamId = id;
             return View();
         }
+
+        [Authorize]
+        public async Task<IActionResult> AchievementHub()
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdStr, out int userId))
+            {
+                var achievements = await _assessmentService.GetMyAchievementsAsync(userId);
+                return View(achievements);
+            }
+            return RedirectToAction("Index", "Dashboard");
+        }
     }
 }

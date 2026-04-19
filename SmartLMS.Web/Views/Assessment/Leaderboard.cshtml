@@ -1,154 +1,158 @@
 @model IEnumerable<dynamic>
 @{
-    ViewData["Title"] = "Bảng Xếp Hạng Tuyệt Đỉnh (Leaderboard)";
+    ViewData["Title"] = "Đỉnh Cao Vinh Quang (Leaderboard)";
     var top3 = Model.Take(3).ToList();
     var others = Model.Skip(3).ToList();
 }
 
 @section Styles {
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        .leaderboard-container { min-height: 80vh; padding-bottom: 50px; }
-        .podium-section { padding: 40px 0; display: flex; justify-content: center; align-items: flex-end; gap: 15px; }
-        .podium-item { position: relative; display: flex; flex-direction: column; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        :root {
+            --indigo-primary: #4338ca;
+            --indigo-dark: #1e1b4b;
+            --gold-accent: #fbbf24;
+            --gold-deep: #d97706;
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+
+        .leaderboard-header { 
+            padding: 60px 0; background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-primary) 100%);
+            color: white; border-radius: 0 0 50px 50px; text-align: center;
+        }
+
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 20px; margin-top: -60px; padding-bottom: 40px; }
+        
+        .podium-item { display: flex; flex-direction: column; align-items: center; transition: transform 0.3s; width: 150px; }
         .podium-item:hover { transform: translateY(-10px); }
+
+        .podium-avatar { 
+            width: 90px; height: 90px; border-radius: 50%; border: 5px solid white; 
+            margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center; font-size: 2rem;
+        }
         
-        .podium-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fff; margin-bottom: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .podium-base { width: 140px; border-radius: 15px 15px 5px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
-        
-        .rank-2 { height: 160px; background: linear-gradient(180deg, #94a3b8, #64748b); order: 1; opacity: 0.9; }
-        .rank-1 { height: 220px; background: linear-gradient(180deg, #fbbf24, #d97706); order: 2; z-index: 2; width: 160px; }
-        .rank-3 { height: 130px; background: linear-gradient(180deg, #d97706, #92400e); order: 3; opacity: 0.8; }
-        
-        .crown-master { position: absolute; top: -35px; font-size: 2rem; color: #fbbf24; filter: drop-shadow(0 0 10px rgba(251,191,36,0.6)); }
-        
-        .list-glass { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; overflow: hidden; }
-        .user-row { transition: all 0.2s; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .user-row:hover { background: rgba(99, 102, 241, 0.05) !important; }
-        
-        .avatar-small { width: 40px; height: 40px; border-radius: 50%; background: #6366f1; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .rank-box { 
+            width: 100%; border-radius: 20px 20px 10px 10px; color: white; 
+            font-weight: 800; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .rank-2 { height: 160px; background: #94a3b8; order: 1; opacity: 0.9; }
+        .rank-1 { height: 220px; background: linear-gradient(180deg, var(--gold-accent), var(--gold-deep)); order: 2; width: 180px; z-index: 2; border: 3px solid var(--gold-accent); }
+        .rank-3 { height: 130px; background: #cd7f32; order: 3; opacity: 0.8; }
+
+        .crown-icon { font-size: 2.5rem; color: var(--gold-accent); margin-bottom: -15px; z-index: 3; filter: drop-shadow(0 0 10px rgba(251,191,36,0.6)); }
+
+        .list-container { 
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08); overflow: hidden;
+            margin-top: 40px;
+        }
+
+        .user-row { transition: all 0.2s; border-bottom: 1px solid #f1f5f9; }
+        .user-row:hover { background: rgba(67, 56, 202, 0.05) !important; }
+
+        .xp-badge-mini { background: #fef3c7; color: var(--gold-deep); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
     </style>
 }
 
-<div class="leaderboard-container">
-    <div class="content-header text-center pt-5">
-        <h1 class="display-4 text-gradient font-weight-bold">Bảng Vinh Danh Enterprise</h1>
-        <p class="text-muted">Dữ liệu thời gian thực được đồng bộ trên toàn bộ hệ thống</p>
+<div class="leaderboard-header">
+    <div class="container">
+        <h1 class="display-4 font-weight-bold">Bảng Vinh Danh Anh Tài</h1>
+        <p class="h5 opacity-75">Nơi những học viên xuất sắc nhất được xướng tên</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Podium -->
+    <div class="podium-container">
+        @if(top3.Count > 1) {
+            var p2 = top3[1];
+            <div class="podium-item">
+                <div class="podium-avatar bg-secondary text-white">@p2.Username[0]</div>
+                <div class="rank-box rank-2">
+                    <span class="h2 m-0">2</span>
+                    <span class="text-sm">@p2.Username</span>
+                    <span class="badge badge-light mt-2">@p2.TotalXP XP</span>
+                </div>
+            </div>
+        }
+
+        @if(top3.Count > 0) {
+            var p1 = top3[0];
+            <div class="podium-item" style="width: 180px;">
+                <i class="fas fa-crown crown-icon"></i>
+                <div class="podium-avatar bg-warning text-white" style="border-color: var(--gold-accent);">@p1.Username[0]</div>
+                <div class="rank-box rank-1">
+                    <span class="h1 m-0">1</span>
+                    <span class="h5">@p1.Username</span>
+                    <span class="badge badge-light mt-2" style="color: var(--gold-deep)">@p1.TotalXP XP</span>
+                </div>
+            </div>
+        }
+
+        @if(top3.Count > 2) {
+            var p3 = top3[2];
+            <div class="podium-item">
+                <div class="podium-avatar bg-dark text-white" style="background: #92400e !important;">@p3.Username[0]</div>
+                <div class="rank-box rank-3">
+                    <span class="h2 m-0">3</span>
+                    <span class="text-sm">@p3.Username</span>
+                    <span class="badge badge-light mt-2">@p3.TotalXP XP</span>
+                </div>
+            </div>
+        }
     </div>
 
-    <div class="container">
-        <!-- Podium Top 3 -->
-        <div class="podium-section">
-            @if(top3.Count > 1) {
-                var p2 = top3[1];
-                <div class="podium-item">
-                    <div class="podium-avatar bg-secondary d-flex align-items-center justify-content-center text-white font-weight-bold">@p2.Username[0]</div>
-                    <div class="podium-base rank-2 shadow">
-                        <span class="h3 m-0">2</span>
-                        <span class="text-sm">@p2.Username</span>
-                        <span class="badge badge-light mt-1">@p2.TotalXP XP</span>
-                    </div>
-                </div>
-            }
-
-            @if(top3.Count > 0) {
-                var p1 = top3[0];
-                <div class="podium-item">
-                    <i class="fas fa-crown crown-master"></i>
-                    <div class="podium-avatar bg-warning d-flex align-items-center justify-content-center text-white font-weight-bold" style="border-color: #fbbf24;">@p1.Username[0]</div>
-                    <div class="podium-base rank-1 shadow-lg">
-                        <span class="h1 m-0">1</span>
-                        <span class="h5">@p1.Username</span>
-                        <span class="badge badge-light mt-1 font-weight-bold" style="color: #d97706">@p1.TotalXP XP</span>
-                    </div>
-                </div>
-            }
-
-            @if(top3.Count > 2) {
-                var p3 = top3[2];
-                <div class="podium-item">
-                    <div class="podium-avatar bg-dark d-flex align-items-center justify-content-center text-white font-weight-bold">@p3.Username[0]</div>
-                    <div class="podium-base rank-3 shadow">
-                        <span class="h3 m-0">3</span>
-                        <span class="text-sm">@p3.Username</span>
-                        <span class="badge badge-light mt-1">@p3.TotalXP XP</span>
-                    </div>
-                </div>
-            }
-        </div>
-
-        <!-- Others List -->
-        <div class="row mt-5">
-            <div class="col-md-10 mx-auto">
-                <div class="list-glass shadow-xl">
-                    <table class="table table-borderless mb-0">
-                        <thead>
-                            <tr class="text-muted text-sm">
-                                <th class="pl-4">Hạng</th>
-                                <th>Học viên</th>
-                                <th class="text-right pr-4">Tổng XP</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{ int rank = 4; }
-                            @foreach (var user in others) {
-                                <tr class="user-row">
-                                    <td class="pl-4 align-middle">
-                                        <span class="font-weight-bold text-muted">#@rank</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-small mr-3">@user.Username[0]</div>
-                                            <div>
-                                                <div class="font-weight-bold">@(user.FullName ?? user.Username)</div>
-                                                <div class="text-xs text-muted">@@@user.Username</div>
-                                            </div>
+    <!-- Others List -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="list-container">
+                <table class="table table-borderless mb-0">
+                    <thead class="bg-light">
+                        <tr class="text-muted small uppercase font-weight-bold">
+                            <th class="pl-4">Hạng</th>
+                            <th>Học viên</th>
+                            <th class="text-right pr-4">Thành tích</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int rank = 4; }
+                        @foreach (var user in others) {
+                            <tr class="user-row">
+                                <td class="pl-4 align-middle">
+                                    <span class="h5 text-muted">#@rank</span>
+                                </td>
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm rounded-circle bg-indigo text-white d-flex align-items-center justify-content-center mr-3" style="width: 40px; height: 40px; background: var(--indigo-primary);">@user.Username[0]</div>
+                                        <div>
+                                            <div class="font-weight-bold text-indigo">@(user.FullName ?? user.Username)</div>
+                                            <div class="text-xs text-muted">@@@user.Username</div>
                                         </div>
-                                    </td>
-                                    <td class="text-right pr-4 align-middle">
-                                        <span class="xp-pill xp-value" data-value="@user.TotalXP">0</span>
-                                    </td>
-                                </tr>
-                                rank++;
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                    </div>
+                                </td>
+                                <td class="text-right pr-4 align-middle">
+                                    <span class="xp-badge-mini">@user.TotalXP XP</span>
+                                </td>
+                            </tr>
+                            rank++;
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         $(function() {
-            $('.xp-value').each(function() {
-                var target = $(this).data('value');
-                var countUpAnim = new countUp.CountUp(this, target, { duration: 2 });
-                countUpAnim.start();
-            });
-
-            const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/gamificationHub")
-                .build();
-
-            connection.on("ReceiveXPUpdate", function (username, xpGained, totalXP) {
-                if (typeof playTing === "function") playTing(); 
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    icon: 'success',
-                    title: username + ' vùa nhận +' + xpGained + ' XP!'
-                });
-                setTimeout(() => { location.reload(); }, 2000);
-            });
-
-            connection.start().catch(err => console.error(err.toString()));
-
-            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#4338ca', '#fbbf24'] });
         });
     </script>
 }

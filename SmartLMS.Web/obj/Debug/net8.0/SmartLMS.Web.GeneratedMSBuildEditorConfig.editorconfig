@@ -30,6 +30,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWZmaWxpYXRlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/AchievementHub.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxBY2hpZXZlbWVudEh1Yi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/Assessment/BadgeStudio.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxCYWRnZVN0dWRpby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -106,6 +110,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/Dashboard/Pulse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFB1bHNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/Helpdesk/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -126,12 +134,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW50ZWdyYXRpb25zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/code/asp.net/SmartLMS.Web/Views/Marketing/CertificateManager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFya2V0aW5nXENlcnRpZmljYXRlTWFuYWdlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/code/asp.net/SmartLMS.Web/Views/Marketing/Designer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFya2V0aW5nXERlc2lnbmVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/code/asp.net/SmartLMS.Web/Views/Marketing/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFya2V0aW5nXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Revenue/Audit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2ZW51ZVxBdWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/code/asp.net/SmartLMS.Web/Views/Revenue/Index.cshtml]

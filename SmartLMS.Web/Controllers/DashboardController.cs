@@ -6,6 +6,10 @@ using Microsoft.Data.SqlClient;
 using Dapper;
 using System;
 using Microsoft.AspNetCore.SignalR;
+using SmartLMS.Data;
+using SmartLMS.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace SmartLMS.Web.Controllers;
 
@@ -16,18 +20,21 @@ public class DashboardController : Controller
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
     private readonly IHubContext<SmartLMS.Web.Hubs.DashboardHub> _hubContext;
+    private readonly SmartLMSContext _context;
 
     public DashboardController(IReportingService reportingService, 
                                ISqlService sqlService, 
                                IConfiguration configuration,
                                IEmailService emailService,
-                               IHubContext<SmartLMS.Web.Hubs.DashboardHub> hubContext)
+                               IHubContext<SmartLMS.Web.Hubs.DashboardHub> hubContext,
+                               SmartLMSContext context)
     {
         _reportingService = reportingService;
         _sqlService = sqlService;
         _configuration = configuration;
         _emailService = emailService;
         _hubContext = hubContext;
+        _context = context;
     }
 
     [HttpGet]
@@ -90,8 +97,23 @@ public class DashboardController : Controller
     [HttpGet]
     public async Task<IActionResult> GetStats()
     {
-        var stats = await _reportingService.GetDashboardStatsAsync();
-        return Json(stats);
+        var users = await _context.Users.ToListAsync();
+        var enrollments = await _context.Enrollments.ToListAsync();
+        
+        // Doanh thu thực tế từ hệ thống VNPay mới
+        var totalRevenueSaas = await _context.Set<Invoice>()
+            .Where(i => i.Status == "Success")
+            .SumAsync(i => i.Amount);
+
+        var avgProgress = enrollments.Any() ? enrollments.Average(e => e.Progress) : 0;
+        var dropoutRiskCount = enrollments.Count(e => e.Progress < 20); // Giả lập AI logic đơn giản
+        
+        return Json(new {
+            totalStudents = users.Count(u => u.Role == "Student"),
+            avgCompletionRate = Math.Round(avgProgress ?? 0, 1),
+            dropoutRiskRate = enrollments.Any() ? Math.Round((double)dropoutRiskCount / enrollments.Count() * 100, 1) : 0,
+            totalRevenueSaas = totalRevenueSaas
+        });
     }
 
     [HttpGet]

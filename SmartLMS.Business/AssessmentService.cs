@@ -225,5 +225,29 @@ namespace SmartLMS.Business
 
             return result;
         }
+        public async Task<dynamic> GetMyAchievementsAsync(int userId)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+            
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return null!;
+
+            var badges = await (from ub in _context.UserBadges
+                               join b in _context.Badges on ub.BadgeId equals b.BadgeId
+                               where ub.UserId == userId
+                               select b).ToListAsync();
+
+            var totalXP = user.TotalXP;
+            var level = (totalXP / 1000) + 1; // Công thức level đơn giản
+            var xpToNext = 1000 - (totalXP % 1000);
+
+            return new {
+                User = user,
+                Badges = badges,
+                Level = level,
+                ProgressToNextLevel = (totalXP % 1000) / 10.0, // Tỉ lệ %
+                XPNeeded = xpToNext
+            };
+        }
     }
 }

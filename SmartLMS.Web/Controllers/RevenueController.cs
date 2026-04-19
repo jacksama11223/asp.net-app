@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
+using SmartLMS.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using OfficeOpenXml;
@@ -32,6 +34,43 @@ public class RevenueController : Controller
         ViewBag.TodayRevenue = todayRevenue;
 
         return View();
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Audit()
+    {
+        var invoices = await _context.Set<Invoice>()
+            .Include(i => i.User)
+            .OrderByDescending(i => i.CreatedAt)
+            .ToListAsync();
+        
+        return View(invoices);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ManualConfirm(int invoiceId)
+    {
+        var invoice = await _context.Set<Invoice>().FindAsync(invoiceId);
+        if (invoice == null || invoice.Status == "Success") return BadRequest();
+
+        // Giả lập logic ghi danh thủ công từ admin
+        invoice.Status = "Success";
+        invoice.PaidAt = DateTime.Now;
+
+        // Nếu chưa có enrollment, tạo mới
+        var hasEnroll = await _context.Enrollments.AnyAsync(e => e.UserId == invoice.UserId && e.CourseId == invoice.CourseId);
+        if (!hasEnroll)
+        {
+            _context.Enrollments.Add(new Enrollment {
+                UserId = invoice.UserId,
+                CourseId = invoice.CourseId,
+                LastAccessDate = DateTime.Now
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return Json(new { success = true, message = "Đã xác nhận thủ công và ghi danh học viên." });
     }
 
     [HttpGet]

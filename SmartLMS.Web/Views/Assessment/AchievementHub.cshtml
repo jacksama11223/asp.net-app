@@ -1,0 +1,156 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Trung Tâm Vinh Danh (Achievement Hub)";
+    var user = Model.User;
+    var badges = Model.Badges;
+}
+
+@section Styles {
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --indigo-primary: #4338ca;
+            --indigo-dark: #1e1b4b;
+            --gold-accent: #fbbf24;
+            --gold-deep: #d97706;
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: #f3f4f6; }
+
+        .hub-header {
+            background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-primary) 100%);
+            padding: 60px 0; color: white; border-radius: 0 0 50px 50px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            position: relative; overflow: hidden;
+        }
+
+        .hub-header::after {
+            content: ''; position: absolute; top: -50%; right: -10%; 
+            width: 400px; height: 400px; background: rgba(251, 191, 36, 0.1);
+            border-radius: 50%; filter: blur(80px);
+        }
+
+        .profile-card {
+            background: white; border-radius: 30px; padding: 40px;
+            margin-top: -80px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .level-badge {
+            width: 100px; height: 100px; background: var(--gold-accent);
+            border-radius: 25px; transform: rotate(15deg);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+            margin: 0 auto 20px;
+        }
+        .level-number { 
+            transform: rotate(-15deg); font-size: 3rem; font-weight: 800; 
+            color: var(--indigo-dark); 
+        }
+
+        .progress-container { height: 12px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .progress-bar-custom { 
+            height: 100%; background: linear-gradient(90deg, var(--indigo-primary), var(--gold-accent));
+            border-radius: 10px; transition: width 1.5s ease-in-out; 
+        }
+
+        .badge-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+        .badge-item {
+            background: white; border-radius: 20px; padding: 20px; text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #f1f5f9;
+        }
+        .badge-item:hover { transform: scale(1.1); box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: var(--gold-accent); }
+        .badge-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+        .badge-name { font-weight: 700; font-size: 0.9rem; color: var(--indigo-dark); }
+
+        .stat-card {
+            background: #fff; border-radius: 20px; padding: 25px;
+            border-left: 5px solid var(--indigo-primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+}
+
+<div class="hub-header">
+    <div class="container text-center">
+        <h1 class="display-4 font-weight-bold mb-3">Vinh Quang Của Bạn</h1>
+        <p class="h5 opacity-75">Chào mừng quay trở lại, <span class="text-warning">@user.FullName</span>. Hãy xem những gì bạn đã đạt được!</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Main Stats Card -->
+        <div class="col-lg-5">
+            <div class="profile-card text-center mb-4">
+                <div class="level-badge">
+                    <span class="level-number">@Model.Level</span>
+                </div>
+                <h2 class="font-weight-bold text-indigo">Cấp Độ Hiện Tại</h2>
+                <div class="mt-4 px-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="font-weight-bold">@user.TotalXP XP</span>
+                        <span class="text-muted">Còn @Model.XPNeeded XP tới Level @(Model.Level + 1)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar-custom" style="width: 0%" id="levelProgress"></div>
+                    </div>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <div class="stat-card">
+                            <div class="h3 font-weight-bold text-indigo">@(badges.Count)</div>
+                            <div class="text-xs text-muted">HUY HIỆU</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card" style="border-left-color: var(--gold-accent)">
+                            <div class="h3 font-weight-bold" style="color: var(--gold-deep)">Top 10%</div>
+                            <div class="text-xs text-muted">XẾP HẠNG</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Gallery -->
+        <div class="col-lg-7">
+            <div class="profile-card" style="margin-top: 0; min-height: 480px;">
+                <h3 class="font-weight-bold mb-4 text-indigo"><i class="fas fa-award mr-2"></i> Bộ Sưu Tập Huy Hiệu</h3>
+                
+                @if (badges.Count == 0)
+                {
+                    <div class="text-center p-5 text-muted">
+                        <i class="fas fa-lock fa-4x mb-3 opacity-25"></i>
+                        <p>Bạn chưa có huy hiệu nào. Hãy tham gia thi cử để bắt đầu bộ sưu tập!</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="badge-gallery">
+                        @foreach (var badge in badges)
+                        {
+                            <div class="badge-item">
+                                <span class="badge-icon">@badge.Icon</span>
+                                <div class="badge-name">@badge.Name</div>
+                                <div class="text-xs text-muted mt-1">Đã nhận</div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            setTimeout(() => {
+                $("#levelProgress").css("width", "@Model.ProgressToNextLevel%");
+            }, 300);
+        });
+    </script>
+}

@@ -1,0 +1,101 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Quản lý Bằng cấp (Certificate Vault)";
+}
+
+@section Styles {
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --indigo-primary: #4338ca;
+            --gold-accent: #fbbf24;
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+
+        .vault-header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+            padding: 40px 0; color: white; border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .cert-card {
+            background: white; border-radius: 15px; border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        .cert-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+        .status-pill {
+            padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+        }
+        .bg-issued { background: #d1fae5; color: #065f46; }
+        .bg-pending { background: #fef3c7; color: #92400e; }
+    </style>
+}
+
+<div class="vault-header mb-4">
+    <div class="container-fluid px-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 font-weight-bold"><i class="fas fa-certificate mr-3 text-warning"></i> @ViewData["Title"]</h1>
+                <p class="opacity-75">Kho lưu trữ và phân phối chứng chỉ bảo mật cho toàn bộ Web Services.</p>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-outline-light"><i class="fas fa-cog mr-2"></i> Cấu hình Phôi bằng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="row">
+        @foreach (var cert in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="cert-card p-3 h-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="status-pill @(cert.IsIssued ? "bg-issued" : "bg-pending")">
+                            @(cert.IsIssued ? "ĐÃ CẤP" : "CHỜ DUYỆT")
+                        </span>
+                        <span class="text-muted small"><i class="far fa-calendar-alt mr-1"></i> @cert.EnrolledDate.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    
+                    <h5 class="font-weight-bold text-dark mb-1">@cert.Title</h5>
+                    <div class="text-indigo small mb-3">@cert.FullName (@@@cert.Username)</div>
+                    
+                    <div class="mt-auto pt-3 border-top d-flex justify-content-between">
+                        <button class="btn btn-sm btn-link text-primary p-0" onclick="previewCert(@cert.UserId, @cert.CourseId)">
+                            <i class="fas fa-eye mr-1"></i> Xem trước
+                        </button>
+                        <button class="btn btn-sm btn-outline-success px-3">
+                            <i class="fas fa-paper-plane mr-1"></i> Gửi Mail
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewCert(uId, cId) {
+            Swal.fire({
+                title: 'Đang khởi tạo bản xem trước...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            $.get('/Marketing/PreviewPdf', { userId: uId, courseId: cId }, function(res) {
+                if(res.success) {
+                    Swal.fire({
+                        title: 'Bản xem trước Chứng chỉ',
+                        html: `<iframe src="${res.url}" style="width:100%; height:450px;" frameborder="0"></iframe>`,
+                        width: '80%',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
+            });
+        }
+    </script>
+}

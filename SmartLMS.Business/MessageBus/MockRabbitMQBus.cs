@@ -1,26 +1,36 @@
+using System;
 using System.Text.Json;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace SmartLMS.Business.MessageBus
 {
     public class MockRabbitMQBus : IMessageBus
     {
         private readonly ILogger<MockRabbitMQBus> _logger;
+        // Sử dụng Channel để giả lập hàng đợi (Queue) thực tế
+        private static readonly Channel<(string Event, object Data)> _queue = Channel.CreateUnbounded<(string, object)>();
 
         public MockRabbitMQBus(ILogger<MockRabbitMQBus> logger)
         {
             _logger = logger;
         }
 
-        public Task PublishAsync<T>(string eventName, T message)
+        public async Task PublishAsync<T>(string eventName, T message)
         {
             var payload = JsonSerializer.Serialize(message);
-            // GIẢ LẬP: Nếu có RabbitMQ, đoạn này sẽ là: _channel.BasicPublish(exchange, routingKey, basicProperties, body);
-            
-            _logger.LogWarning($"[RABBIT-MQ MOCK] Đã phát sự kiện [{eventName}] vào Hàng đợi. Máy chủ Gửi Email / Gắn Huy hiệu sẽ tự động bắt lấy. Payload: {payload}");
+            _logger.LogWarning($"[RABBIT-MQ BUS] PUSH: [{eventName}] -> {payload}");
 
-            return Task.CompletedTask;
+            // Đẩy vào hàng đợi ngầm
+            await _queue.Writer.WriteAsync((eventName, message!));
+        }
+
+        // Phương thức cho các Background Worker (Consumers) sử dụng để hóng tin nhắn
+        public IAsyncEnumerable<(string Event, object Data)> ReceiveMessagesAsync(System.Threading.CancellationToken ct)
+        {
+            return _queue.Reader.ReadAllAsync(ct);
         }
     }
 }

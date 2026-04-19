@@ -24,28 +24,28 @@
         <!-- 1. 3 Cột Stats (Sử dụng Info-Box) -->
         <div class="row">
             <div class="col-md-4 col-sm-6 col-12">
-                <div class="info-box shadow-sm border">
-                    <span class="info-box-icon bg-info elevation-1"><i data-lucide="users"></i></span>
+                <div class="info-box shadow-sm border bg-gradient-indigo text-white">
+                    <span class="info-box-icon"><i data-lucide="wallet"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Tổng số Sinh viên</span>
-                        <span id="total-students" class="info-box-number text-bold-xl">--</span>
+                        <span class="info-box-text">Doanh thu SaaS (VNPay)</span>
+                        <span id="total-revenue-saas" class="info-box-number text-bold-xl">-- đ</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 col-12">
-                <div class="info-box shadow-sm border">
-                    <span class="info-box-icon bg-success elevation-1"><i data-lucide="check-circle"></i></span>
+                <div class="info-box shadow-sm border bg-white">
+                    <span class="info-box-icon bg-warning elevation-1"><i data-lucide="award"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Tỉ lệ Hoàn thành</span>
+                        <span class="info-box-text">Tỉ lệ Cấp Chứng chỉ</span>
                         <span id="avg-progress" class="info-box-number text-bold-xl">--%</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 col-12">
-                <div class="info-box shadow-sm border">
-                    <span class="info-box-icon bg-danger elevation-1"><i data-lucide="alert-circle"></i></span>
+                <div class="info-box shadow-sm border bg-white">
+                    <span class="info-box-icon bg-danger elevation-1"><i data-lucide="activity"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Rủi ro Bỏ học (AI)</span>
+                        <span class="info-box-text">Rủi ro Bỏ học (AI Prediction)</span>
                         <span id="dropout-risk" class="info-box-number text-bold-xl">--%</span>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
             function loadDashboardData(withAlert = false) {
                 // KPI Stats
                 $.get('/Dashboard/GetStats', function(data) {
-                    $('#total-students').text(data.totalStudents);
+                    $('#total-revenue-saas').text(data.totalRevenueSaas.toLocaleString() + ' đ');
                     $('#avg-progress').text(data.avgCompletionRate + '%');
                     $('#dropout-risk').text(data.dropoutRiskRate + '%');
                 });

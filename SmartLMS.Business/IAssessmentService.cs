@@ -16,6 +16,9 @@ namespace SmartLMS.Business
 
         // Nộp bài thi và xử lý Game hóa
         Task<QuizResultDto> SubmitQuizAsync(int userId, int examId, Dictionary<int, string> answers);
+
+        // Lấy thành tích cá nhân
+        Task<dynamic> GetMyAchievementsAsync(int userId);
     }
 
     public class QuizResultDto

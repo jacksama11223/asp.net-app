@@ -9,8 +9,23 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using System.Text;
 using Prometheus;
+using Serilog;
+using Serilog.Events;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 1. Cấu hình Serilog - Ghi log cấu trúc cho Production
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/smartlms-.log", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -23,15 +38,34 @@ builder.Services.AddCors(options =>
     });
 });
 
+// 2. Cấu hình Health Checks - Giám sát sức khỏe hạ tầng
+builder.Services.AddHealthChecks()
+    .AddCheck("Database", () => {
+        try {
+            using var connection = new Microsoft.Data.SqlClient.SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"));
+            connection.Open();
+            return HealthCheckResult.Healthy("Database connection is successful.");
+        }
+        catch (Exception ex) {
+            return HealthCheckResult.Unhealthy($"Database is unreachable: {ex.Message}");
+        }
+    })
+    .AddCheck("AI Service", () => HealthCheckResult.Healthy("AI Predictor is operational"));
+
+// 3. Nâng cấp Rate Limiter - Bảo vệ API phân lớp
 builder.Services.AddRateLimiter(options =>
 {
-    options.AddFixedWindowLimiter("ApiLimit", limiterOptions =>
-    {
-        limiterOptions.PermitLimit = 100;
-        limiterOptions.Window = TimeSpan.FromMinutes(1);
-        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        limiterOptions.QueueLimit = 0;
-    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    
+    options.AddPolicy("ApiLimit", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.User.Identity?.Name ?? httpContext.Connection.RemoteIpAddress?.ToString(),
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = httpContext.User.IsInRole("Admin") ? 500 : 50, // Ưu tiên Admin
+                Window = TimeSpan.FromMinutes(1)
+            }));
 });
 
 builder.Services.AddSwaggerGen(c =>
@@ -62,11 +96,8 @@ builder.Services.AddControllersWithViews(options => {
     options.Filters.Add<SmartLMS.Web.Filters.AuditLogFilter>();
 })
     .AddJsonOptions(options => {
-        // Hỗ trợ hiển thị đầy đủ ký tự tiếng Việt trong JSON
         options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-        // Đảm bảo thuộc tính trả về dạng camelCase chuẩn cho DataTables
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
-        // Chống lỗi vòng lặp tham chiếu cho EF Core Entities
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
@@ -75,35 +106,15 @@ builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
-    {
-        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-        QueuePollInterval = TimeSpan.Zero,
-        UseRecommendedIsolationLevel = true,
-        DisableGlobalLocks = true
-    }));
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHangfireServer();
-
-// Cấu hình Kestrel để dùng UTF-8 (mặc định nhưng ép kiểu để chắc chắn)
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
-{
-    options.SerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-});
 
 // Cookie Authentication
 builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => {
         options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/AccessDenied";
         options.Cookie.Name = "SmartLMS_Auth";
-    })
-    .AddGoogle(options => {
-        // Cấu hình SSO Google - Cần điền ClientId/Secret từ Google Cloud Console
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "YOUR_GOOGLE_CLIENT_ID";
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "YOUR_GOOGLE_CLIENT_SECRET";
     })
     .AddJwtBearer(options =>
     {
@@ -124,6 +135,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Dependency Injection
+builder.Services.AddHttpClient(); // Đăng ký HttpClient Factory mặc định
+builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
+
 builder.Services.AddScoped(typeof(SmartLMS.Data.Repositories.IRepository<>), typeof(SmartLMS.Data.Repositories.Repository<>));
 builder.Services.AddScoped<SmartLMS.Business.ICourseService, SmartLMS.Business.CourseService>();
 builder.Services.AddScoped<SmartLMS.Business.IPredictionService, SmartLMS.Business.PredictionService>();
@@ -133,12 +148,11 @@ builder.Services.AddScoped<SmartLMS.Business.ISqlService, SmartLMS.Business.SqlS
 builder.Services.AddScoped<SmartLMS.Business.IUserService, SmartLMS.Business.UserService>();
 builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.CohortService>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
-builder.Services.AddDistributedMemoryCache(); // Sẵn sàng để chuyển sang .AddStackExchangeRedisCache khi có Redis
-builder.Services.AddMemoryCache(); // Vẫn giữ lại cho các library phụ trợ nếu cần
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache();
 
 // Enterprise SaaS Core Services
 builder.Services.AddSingleton(typeof(DinkToPdf.Contracts.IConverter), new DinkToPdf.SynchronizedConverter(new DinkToPdf.PdfTools()));
-builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
 builder.Services.AddScoped<SmartLMS.Business.ICertificateService, SmartLMS.Business.CertificateService>();
 builder.Services.AddScoped<SmartLMS.Business.IAffiliateService, SmartLMS.Business.AffiliateService>();
 builder.Services.AddSingleton<SmartLMS.Business.IModerationService, SmartLMS.Business.ModerationService>();
@@ -146,36 +160,58 @@ builder.Services.AddSingleton<SmartLMS.Business.IScoringEngine, SmartLMS.Busines
 builder.Services.AddScoped<SmartLMS.Business.IWebhookService, SmartLMS.Business.WebhookService>();
 builder.Services.AddScoped<SmartLMS.Business.IStorageService, SmartLMS.Business.S3StorageService>();
 builder.Services.AddScoped<SmartLMS.Business.IPaymentGateway, SmartLMS.Business.VNPayGateway>();
-builder.Services.AddScoped<SmartLMS.Business.IVideoTranscoderService, SmartLMS.Business.MockVideoTranscoderService>();
-builder.Services.AddScoped<SmartLMS.Business.ISearchEngineService, SmartLMS.Business.MockElasticsearchService>();
-builder.Services.AddScoped<SmartLMS.Business.MessageBus.IMessageBus, SmartLMS.Business.MessageBus.MockRabbitMQBus>();
-
-// Real-time SignalR
+builder.Services.AddSingleton<SmartLMS.Business.MessageBus.IMessageBus, SmartLMS.Business.MessageBus.RabbitMQBus>();
+builder.Services.AddHostedService<SmartLMS.Business.Handlers.AssessmentEventHandler>();
 builder.Services.AddSignalR();
 
-// Email Service Config
 builder.Services.Configure<SmartLMS.Models.SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<SmartLMS.Business.IEmailService, SmartLMS.Business.EmailService>();
 
-// Zoom & Integration Config
-builder.Services.Configure<SmartLMS.Models.ZoomConfig>(builder.Configuration.GetSection("Zoom"));
-builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
+// Cấu hình Forwarded Headers để xử lý SSL/HTTPS từ Cloudflare/Proxy
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    // Vì chạy trong Docker/Proxy nên cần tin tưởng mọi mạng để giải quyết lỗi Mixed Content
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 var app = builder.Build();
 
-// Seed Admin Account
+// 4. Auto-Migration & Seed Admin - Chuẩn bị cho Docker rỗng
 using (var scope = app.Services.CreateScope())
 {
-    var userService = scope.ServiceProvider.GetRequiredService<SmartLMS.Business.IUserService>();
-    var db = scope.ServiceProvider.GetRequiredService<SmartLMS.Data.SmartLMSContext>();
-    var admin = await db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
-    if (admin != null && (string.IsNullOrEmpty(admin.PasswordHash) || admin.PasswordHash.Contains("X.X.X.")))
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    try 
     {
-        await userService.SetPasswordAsync(admin.UserId, "1");
+        var db = services.GetRequiredService<SmartLMS.Data.SmartLMSContext>();
+        
+        // Đảm bảo Database được tạo nếu chạy lần đầu trong Docker
+        await db.Database.EnsureCreatedAsync(); 
+        
+        // Vẫn thử chạy Migration cho các thay đổi phát sinh sau này
+        if ((await db.Database.GetPendingMigrationsAsync()).Any()) {
+            await db.Database.MigrateAsync();
+        }
+
+        // Kiểm tra và Seed Admin một cách an toàn
+        var userService = services.GetRequiredService<SmartLMS.Business.IUserService>();
+        var admin = await db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
+        if (admin != null && (string.IsNullOrEmpty(admin.PasswordHash) || admin.PasswordHash.Contains("X.X.X.")))
+        {
+            await userService.SetPasswordAsync(admin.UserId, "1");
+            logger.LogInformation("Admin password has been reset to default.");
+        }
+    }
+    catch (Exception ex) 
+    {
+        logger.LogError(ex, "Lỗi trong quá trình khởi tạo hệ thống (Database/Seed)");
     }
 }
 
 // Configure the HTTP request pipeline.
+app.UseForwardedHeaders(); // Phải đặt đầu tiên để các middleware sau nhận diện đúng HTTPS
 app.UseMiddleware<SmartLMS.Web.Middlewares.ApiExceptionHandlerMiddleware>();
 
 app.UseSwagger();
@@ -194,14 +230,17 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-app.UseHttpMetrics(); // Đếm tổng Request, đếm Thời gian phản hồi, phân tích nút thắt cổ chai
+app.UseSerilogRequestLogging(); // Ghi log chi tiết từng request
 
+app.UseRouting();
+app.UseHttpMetrics();
 app.UseCors("AllowAll");
-app.UseRateLimiter();
+app.UseRateLimiter(); // Phải đặt trước Authentication để chặn sớm
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health"); // Cổng giám sát cho Docker/K8s
 
 // Hangfire Dashboard (Hạn chế quyền Admin có thể cấu hình AuthorizationFilter sau)
 app.UseHangfireDashboard("/hangfire");

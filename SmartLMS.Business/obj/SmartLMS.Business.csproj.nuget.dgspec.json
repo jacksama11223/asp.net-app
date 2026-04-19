@@ -74,6 +74,10 @@
               "target": "Package",
               "version": "[6.0.2, )"
             },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.ML": {
               "target": "Package",
               "version": "[5.0.0, )"
@@ -81,6 +85,10 @@
             "QRCoder": {
               "target": "Package",
               "version": "[1.8.0, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.8.1, )"
             }
           },
           "imports": [

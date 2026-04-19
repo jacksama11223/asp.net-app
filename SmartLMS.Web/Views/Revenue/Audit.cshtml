@@ -1,0 +1,149 @@
+@model IEnumerable<SmartLMS.Models.Invoice>
+@{
+    ViewData["Title"] = "Đối soát Tài chính (Financial Audit)";
+}
+
+@section Styles {
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --indigo-primary: #4338ca;
+            --indigo-dark: #1e1b4b;
+            --gold-accent: #fbbf24;
+            --success-glass: rgba(16, 185, 129, 0.1);
+            --danger-glass: rgba(239, 68, 68, 0.1);
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+
+        .audit-header {
+            background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-primary) 100%);
+            padding: 40px 0; color: white; border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .data-card {
+            background: white; border-radius: 20px; border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .status-badge {
+            padding: 6px 12px; border-radius: 30px; font-weight: 700; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .status-Success { background: #d1fae5; color: #065f46; }
+        .status-Pending { background: #fef3c7; color: #92400e; }
+        .status-Failed { background: #fee2e2; color: #991b1b; }
+
+        .btn-action { 
+            border-radius: 10px; transition: all 0.2s; font-weight: 600;
+        }
+        .btn-action:hover { transform: translateY(-2px); }
+    </style>
+}
+
+<div class="audit-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-6 pl-4">
+                <h1 class="display-5 font-weight-bold mb-0"><i class="fas fa-file-invoice-dollar mr-3"></i> @ViewData["Title"]</h1>
+                <p class="opacity-75">Quản lý và đối soát dữ liệu giao dịch Webhook từ VNPay.</p>
+            </div>
+            <div class="col-md-6 text-right pr-4">
+                <div class="btn-group">
+                    <button class="btn btn-light btn-action mr-2" onclick="window.location.reload()"><i class="fas fa-sync-alt mr-1"></i> Làm mới</button>
+                    <a href="/Revenue/ExportExcel" class="btn btn-warning btn-action"><i class="fas fa-download mr-1"></i> Xuất Báo Cáo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <div class="data-card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="audit-table">
+                <thead class="bg-light">
+                    <tr class="text-muted small uppercase">
+                        <th>Mã HĐ</th>
+                        <th>Học viên</th>
+                        <th>Khóa học</th>
+                        <th class="text-right">Số tiền</th>
+                        <th>Phương thức</th>
+                        <th>Ngày tạo</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Vận hành</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inv in Model)
+                    {
+                        <tr>
+                            <td class="font-weight-bold">#@(inv.TransactionReference ?? inv.InvoiceId.ToString())</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm rounded-circle bg-indigo-primary text-white d-flex align-items-center justify-content-center mr-2" style="width:30px;height:30px;background:var(--indigo-primary)">@(inv.User?.Username?[0] ?? 'U')</div>
+                                    <div>
+                                        <div class="font-weight-bold">@(inv.User?.FullName ?? "Unknown")</div>
+                                        <small class="text-muted">@@@inv.User?.Username</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>ID: @inv.CourseId</td>
+                            <td class="text-right font-weight-bold text-indigo">@inv.Amount.ToString("N0") đ</td>
+                            <td><span class="badge badge-outline-secondary">@inv.VnpayBankCode</span></td>
+                            <td class="small">@inv.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><span class="status-badge status-@inv.Status">@inv.Status</span></td>
+                            <td class="text-center">
+                                @if (inv.Status == "Pending")
+                                {
+                                    <button class="btn btn-xs btn-success btn-action px-3" onclick="manualConfirm(@inv.InvoiceId)">
+                                        <i class="fas fa-check mr-1"></i> Confirm
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-xs btn-outline-info btn-action px-3" disabled>
+                                        <i class="fas fa-check-double mr-1"></i> Verified
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#audit-table').DataTable({
+                "order": [[ 5, "desc" ]],
+                "pageLength": 25
+            });
+        });
+
+        function manualConfirm(id) {
+            Swal.fire({
+                title: 'Xác nhận hóa đơn thủ công?',
+                text: 'Hệ thống sẽ ép trạng thái sang Success và tự động ghi danh học viên này.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                confirmButtonText: 'Có, tôi đã nhận được tiền'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Revenue/ManualConfirm', { invoiceId: id }, function(res) {
+                        if(res.success) {
+                            Swal.fire('Thành công', res.message, 'success').then(() => location.reload());
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

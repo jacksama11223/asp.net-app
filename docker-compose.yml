@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    image: smartlms-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,1433;Database=SmartLMS;User Id=sa;Password=AnhLongPro123!;TrustServerCertificate=True
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      - rabbitmq
+    networks:
+      - lms-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - lms-network
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --url http://web:8080
+    depends_on:
+      - web
+    networks:
+      - lms-network
+
+networks:
+  lms-network:
+    driver: bridge

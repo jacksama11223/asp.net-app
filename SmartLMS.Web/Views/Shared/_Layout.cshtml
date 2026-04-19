@@ -114,24 +114,35 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <!-- User Profile Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-user-circle mr-1"></i>
-                        <span class="d-none d-md-inline">@User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right shadow border-0">
-                        <span class="dropdown-header">Hệ thống SmartLMS</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-user mr-2 text-primary"></i> Hồ sơ cá nhân
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <!-- User Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="fas fa-user-circle mr-1"></i>
+                            <span class="d-none d-md-inline">@User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value</span>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="/Account/Logout" class="dropdown-item dropdown-footer text-danger font-weight-bold">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right shadow border-0">
+                            <span class="dropdown-header">Hệ thống SmartLMS</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user mr-2 text-primary"></i> Hồ sơ cá nhân
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/Account/Logout" class="dropdown-item dropdown-footer text-danger font-weight-bold">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                            </a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a href="/Account/Login" class="btn btn-primary btn-sm mt-1 px-3">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Đăng nhập
                         </a>
-                    </div>
-                </li>
+                    </li>
+                }
                 <li class="nav-item">
                     <a class="nav-link" id="dark-mode-toggle" href="#" role="button">
                         <i class="fas fa-moon"></i>
@@ -223,7 +234,31 @@
                                     <p>Background Jobs</p>
                                 </a>
                             </li>
-                            <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-4">Hệ thống Mở rộng (SaaS)</li>
+                            <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-4">Vận hành Enterprise</li>
+                            <li class="nav-item">
+                                <a href="/Dashboard/Pulse" class="nav-link @(_ctrl == "Dashboard" && _act == "Pulse" ? "active" : "")">
+                                    <i class="nav-icon fas fa-heartbeat text-danger animate__animated animate__pulse animate__infinite"></i>
+                                    <p>System Pulse (Giám sát)</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/swagger" target="_blank" class="nav-link">
+                                    <i class="nav-icon fas fa-code text-info"></i>
+                                    <p>Developer Hub (API)</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Revenue/Audit" class="nav-link @(_ctrl == "Revenue" && _act == "Audit" ? "active" : "")">
+                                    <i class="nav-icon fas fa-file-invoice-dollar text-success"></i>
+                                    <p>Đối soát VNPay</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Marketing/CertificateManager" class="nav-link @(_ctrl == "Marketing" && _act == "CertificateManager" ? "active" : "")">
+                                    <i class="nav-icon fas fa-certificate text-warning"></i>
+                                    <p>Kho Chứng chỉ</p>
+                                </a>
+                            </li>
                             <li class="nav-item has-treeview @(_ctrl == "Assessment" ? "menu-open" : "")">
                                 <a href="#" class="nav-link @(_ctrl == "Assessment" ? "active" : "")">
                                     <i class="nav-icon fas fa-trophy text-orange"></i>

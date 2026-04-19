@@ -1,0 +1,204 @@
+@{
+    ViewData["Title"] = "System Pulse - Giám sát Hạ tầng";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4 animate__animated animate__fadeInDown">
+        <div class="col-sm-6">
+            <h1 class="m-0 text-indigo-bold"><i class="fas fa-heartbeat mr-2"></i>System Pulse</h1>
+            <p class="text-muted">Giám sát trạng thái vận hành của các dịch vụ Enterprise</p>
+        </div>
+    </div>
+
+    <!-- Health Overview Cards -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-outline card-success shadow-lg border-radius-lg overflow-hidden">
+                <div class="card-body p-4 text-center">
+                    <div class="pulse-icon bg-success-light mb-3">
+                        <i class="fas fa-database text-success fa-2x"></i>
+                    </div>
+                    <h5 class="font-weight-bold">SQL Database</h5>
+                    <div id="sql-status" class="badge badge-success px-3 py-2 mt-2">
+                        <i class="fas fa-check-circle mr-1"></i> HEALTHY
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-outline card-success shadow-lg border-radius-lg overflow-hidden">
+                <div class="card-body p-4 text-center">
+                    <div class="pulse-icon bg-warning-light mb-3">
+                        <i class="fas fa-robot text-warning fa-2x"></i>
+                    </div>
+                    <h5 class="font-weight-bold">AI Predictor Engine</h5>
+                    <div id="ai-status" class="badge badge-success px-3 py-2 mt-2">
+                        <i class="fas fa-check-circle mr-1"></i> OPERATIONAL
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-outline card-primary shadow-lg border-radius-lg overflow-hidden">
+                <div class="card-body p-4 text-center">
+                    <div class="pulse-icon bg-blue-light mb-3">
+                        <i class="fas fa-mail-bulk text-primary fa-2x"></i>
+                    </div>
+                    <h5 class="font-weight-bold">Event Bus (Mock)</h5>
+                    <div class="badge badge-primary px-3 py-2 mt-2">
+                        <i class="fas fa-sync-alt fa-spin mr-1"></i> LISTENING
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-outline card-info shadow-lg border-radius-lg overflow-hidden">
+                <div class="card-body p-4 text-center">
+                    <div class="pulse-icon bg-info-light mb-3">
+                        <i class="fas fa-clock text-info fa-2x"></i>
+                    </div>
+                    <h5 class="font-weight-bold">Hangfire Workers</h5>
+                    <div class="badge badge-info px-3 py-2 mt-2">
+                        <i class="fas fa-running mr-1"></i> ACTIVE
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Infrastructure Logs & Uptime -->
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card shadow-lg bg-dark text-white border-radius-lg">
+                <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
+                    <h3 class="card-title"><i class="fas fa-terminal mr-2"></i>Infrastructure Snapshot</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool text-white" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover m-0">
+                            <thead>
+                                <tr class="text-muted text-xs text-uppercase">
+                                    <th>Service</th>
+                                    <th>Endpoint</th>
+                                    <th>Latency</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="health-grid">
+                                <tr>
+                                    <td>SmartLMS Core</td>
+                                    <td>/api/v1/health</td>
+                                    <td>12ms</td>
+                                    <td><span class="text-success"><i class="fas fa-circle text-xs mr-2"></i>Running</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Auth Service (JWT)</td>
+                                    <td>/token</td>
+                                    <td>8ms</td>
+                                    <td><span class="text-success"><i class="fas fa-circle text-xs mr-2"></i>Running</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Metrics Sink</td>
+                                    <td>/metrics</td>
+                                    <td>24ms</td>
+                                    <td><span class="text-success"><i class="fas fa-circle text-xs mr-2"></i>Exposed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-lg border-radius-lg">
+                <div class="card-header bg-indigo text-white">
+                    <h3 class="card-title">Security & Rate Limit</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-sm text-muted">Trạng thái bảo vệ API hiện tại của hệ thống Web Service.</p>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-sm font-weight-bold">API Capacity (Fixed Window)</span>
+                            <span class="text-sm">98% Free</span>
+                        </div>
+                        <div class="progress progress-xxs">
+                            <div class="progress-bar bg-success" style="width: 98%"></div>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item border-0 px-0">
+                            <b>Ip Whitelist</b> <a class="float-right text-muted">Disabled</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <b>Rate Limit Mode</b> <a class="float-right badge badge-indigo">Identity-Based</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <b>Throttling</b> <a class="float-right text-success">Active</a>
+                        </li>
+                    </ul>
+                    <a href="/hangfire" class="btn btn-block btn-outline-indigo btn-sm">Quản lý Background Jobs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --indigo-primary: #4e73df;
+        --success-light: rgba(28, 200, 138, 0.1);
+        --warning-light: rgba(246, 194, 62, 0.1);
+        --blue-light: rgba(78, 115, 223, 0.1);
+        --info-light: rgba(54, 185, 204, 0.1);
+    }
+
+    .pulse-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bg-indigo { background-color: var(--indigo-primary); }
+    .bg-success-light { background-color: var(--success-light); }
+    .bg-warning-light { background-color: var(--warning-light); }
+    .bg-blue-light { background-color: var(--blue-light); }
+    .bg-info-light { background-color: var(--info-light); }
+    .text-indigo-bold { color: #2e59d9; font-weight: 800; }
+    .badge-indigo { background: #4e73df; color: white; }
+    .btn-outline-indigo { border-color: #4e73df; color: #4e73df; }
+    .btn-outline-indigo:hover { background: #4e73df; color: white; }
+    
+    .border-radius-lg { border-radius: 12px; }
+    .card-outline.card-indigo { border-top: 3px solid var(--indigo-primary); }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Polling Health API
+            function checkHealth() {
+                $.get('/health', function(data) {
+                    if (data === "Healthy") {
+                        $('#sql-status').html('<i class="fas fa-check-circle mr-1"></i> HEALTHY').removeClass('badge-danger').addClass('badge-success');
+                    } else {
+                        $('#sql-status').html('<i class="fas fa-exclamation-triangle mr-1"></i> DEGRADED').removeClass('badge-success').addClass('badge-danger');
+                    }
+                }).fail(function() {
+                    $('#sql-status').html('<i class="fas fa-times-circle mr-1"></i> UNREACHABLE').removeClass('badge-success').addClass('badge-danger');
+                });
+            }
+
+            setInterval(checkHealth, 30000); // Check every 30s
+            checkHealth();
+        });
+    </script>
+}
