@@ -2,43 +2,58 @@ version: '3.8'
 
 services:
   web:
-    image: smartlms-web
+    image: smartlms-web:latest
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
+    deploy:
+      replicas: 3 # Tự động chạy 3 bản sao để gánh tải và dự phòng
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
-      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,1433;Database=SmartLMS;User Id=sa;Password=AnhLongPro123!;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=db-server;Database=SmartLMS;User Id=sa;Password=YourSecurePassword;
+      - ConnectionStrings__ReadOnlyConnection=Server=db-replica;Database=SmartLMS;User Id=sa;Password=YourSecurePassword;
+      - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
-      - RabbitMQ__UserName=guest
-      - RabbitMQ__Password=guest
-    depends_on:
-      - rabbitmq
+    networks:
+      - lms-network
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass YourRedisPass
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     networks:
       - lms-network
 
   rabbitmq:
     image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     networks:
       - lms-network
 
   tunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel --url http://web:8080
-    depends_on:
-      - web
+    deploy:
+      replicas: 1
     networks:
       - lms-network
 
 networks:
   lms-network:
-    driver: bridge
+    driver: overlay # Dùng overlay để các container trên nhiều node có thể nói chuyện với nhau

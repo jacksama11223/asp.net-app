@@ -1,0 +1,59 @@
+name: SmartLMS Enterprise CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  deploy-to-cloud:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/smartlms-web:latest
+
+    - name: Set up SSH to Oracle Cloud
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.ORACLE_CLOUD_IP }}
+        username: opc
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /home/opc/smartlms
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/smartlms-web:latest
+          docker stack deploy -c docker-compose.yml smartlms_stack --with-registry-auth
+          echo "Deployment successful for version: $(date)"

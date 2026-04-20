@@ -240,3 +240,4 @@ C:\code\asp.net\SmartLMS.Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.Eve
 C:\code\asp.net\SmartLMS.Tests\bin\Debug\net8.0\Microsoft.Extensions.Logging.EventSource.dll
 C:\code\asp.net\SmartLMS.Tests\bin\Debug\net8.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 C:\code\asp.net\SmartLMS.Tests\bin\Debug\net8.0\RabbitMQ.Client.dll
+C:\code\asp.net\SmartLMS.Tests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll

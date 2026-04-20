@@ -34,7 +34,7 @@ namespace SmartLMS.Web.Controllers
             var user = users.FirstOrDefault(u => u.Username == username);
             
             if (user == null) return (3, null);
-            return (user.HierarchyLevel, user.DepartmentId);
+            return (user.HierarchyLevel ?? 3, user.DepartmentId);
         }
 
         [HttpPost("questions")]

@@ -1,26 +1,117 @@
+using SmartLMS.Models.Security;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using SmartLMS.Models;
 
 namespace SmartLMS.Data;
 
 public partial class SmartLMSContext : DbContext
 {
+    private readonly IEncryptionService _encryptionService;
+
     public SmartLMSContext()
     {
     }
 
-    public SmartLMSContext(DbContextOptions<SmartLMSContext> options)
+    public SmartLMSContext(DbContextOptions<SmartLMSContext> options, IEncryptionService encryptionService = null)
         : base(options)
     {
+        _encryptionService = encryptionService;
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var auditEntries = OnBeforeSaveChanges();
+        
+        // Logic tạo EmailHash (Blind Index) cho User để hỗ trợ tìm kiếm
+        foreach (var entry in ChangeTracker.Entries<User>().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
+        {
+            if (entry.Property(u => u.Email).IsModified || entry.State == EntityState.Added)
+            {
+                var email = entry.Entity.Email;
+                if (!string.IsNullOrEmpty(email))
+                {
+                    entry.Entity.EmailHash = _encryptionService?.CreateHash(email);
+                }
+            }
+        }
+
+        var result = await base.SaveChangesAsync(cancellationToken);
+        await OnAfterSaveChanges(auditEntries);
+        return result;
+    }
+
+    private List<AuditEntry> OnBeforeSaveChanges()
+    {
+        ChangeTracker.DetectChanges();
+        var auditEntries = new List<AuditEntry>();
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.Entity is AuditLog || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                continue;
+
+            var auditEntry = new AuditEntry(entry)
+            {
+                TableName = entry.Entity.GetType().Name,
+                UserId = null // Có thể tích hợp ICurrentUserService để lấy Id người dùng hiện tại
+            };
+            auditEntries.Add(auditEntry);
+
+            foreach (var property in entry.Properties)
+            {
+                string propertyName = property.Metadata.Name;
+                if (property.Metadata.IsPrimaryKey())
+                {
+                    auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                    continue;
+                }
+
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        break;
+
+                    case EntityState.Deleted:
+                        auditEntry.OldValues[propertyName] = property.OriginalValue;
+                        break;
+
+                    case EntityState.Modified:
+                        if (property.IsModified)
+                        {
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        }
+                        break;
+                }
+            }
+        }
+
+        return auditEntries;
+    }
+
+    private Task OnAfterSaveChanges(List<AuditEntry> auditEntries)
+    {
+        if (auditEntries == null || auditEntries.Count == 0)
+            return Task.CompletedTask;
+
+        foreach (var auditEntry in auditEntries)
+        {
+            AuditLogs.Add(auditEntry.ToAuditLog());
+        }
+
+        return base.SaveChangesAsync();
     }
 
     public virtual DbSet<ActivityLog> ActivityLogs { get; set; }
-
     public virtual DbSet<Course> Courses { get; set; }
     public virtual DbSet<CourseModule> CourseModules { get; set; }
-
     public virtual DbSet<Enrollment> Enrollments { get; set; }
     public virtual DbSet<Lesson> Lessons { get; set; }
     public virtual DbSet<User> Users { get; set; }
@@ -30,6 +121,8 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
     public virtual DbSet<Permission> Permissions { get; set; }
     public virtual DbSet<RolePermission> RolePermissions { get; set; }
+    public virtual DbSet<Organization> Organizations { get; set; }
+    public virtual DbSet<ApiKey> ApiKeys { get; set; }
     public virtual DbSet<Question> Questions { get; set; }
     public virtual DbSet<UserBadge> UserBadges { get; set; }
     public virtual DbSet<CommissionRate> CommissionRates { get; set; }
@@ -42,6 +135,33 @@ public partial class SmartLMSContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Value Converters for Encryption
+        var encryptionConverter = new ValueConverter<string, string>(
+            v => _encryptionService != null ? _encryptionService.Encrypt(v) : v,
+            v => _encryptionService != null ? _encryptionService.Decrypt(v) : v);
+
+        var dobConverter = new ValueConverter<DateTime?, string>(
+            v => (v.HasValue && _encryptionService != null) ? _encryptionService.Encrypt(v.Value.ToString("yyyy-MM-dd")) : null,
+            v => (!string.IsNullOrEmpty(v) && _encryptionService != null) ? DateTime.Parse(_encryptionService.Decrypt(v)) : null);
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.Email).HasConversion(encryptionConverter);
+            entity.Property(e => e.KYCDocUrl).HasConversion(encryptionConverter);
+            entity.Property(e => e.Hometown).HasConversion(encryptionConverter);
+            entity.Property(e => e.DateOfBirth).HasConversion(dobConverter);
+
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACC0BF0FD7");
+            entity.HasIndex(e => e.Username, "UQ__Users__536C85E429ECC54B").IsUnique();
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Role).HasMaxLength(20);
+            entity.Property(e => e.Username).HasMaxLength(50);
+            entity.Property(e => e.TotalXP).HasDefaultValue(0);
+            entity.Property(e => e.HierarchyLevel).HasDefaultValue(3);
+        });
+
         modelBuilder.Entity<Cohort>(entity => {
             entity.HasKey(e => e.CohortId);
             entity.Property(e => e.Name).HasMaxLength(150).IsRequired();
@@ -57,34 +177,24 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<AuditLog>(entity => {
             entity.HasKey(e => e.AuditId);
             entity.Property(e => e.Timestamp).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
-            
-            // Index cho UserId và Timestamp để tăng tốc độ xem Audit Log
             entity.HasIndex(e => new { e.UserId, e.Timestamp });
         });
+
         modelBuilder.Entity<ActivityLog>(entity =>
         {
             entity.HasKey(e => e.LogId).HasName("PK__Activity__5E5499A8AC2913CB");
-
-            // Index cho UserId và Timestamp để tăng tốc độ xem lịch sử hoạt động
             entity.HasIndex(e => new { e.UserId, e.Timestamp });
-
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.ActionType).HasMaxLength(50);
             entity.Property(e => e.DurationSeconds).HasDefaultValue(0);
-            entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.User).WithMany(p => p.ActivityLogs)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ActivityL__UserI__59063A47");
+            entity.HasOne(d => d.User).WithMany(p => p.ActivityLogs).HasForeignKey(d => d.UserId).HasConstraintName("FK__ActivityL__UserI__59063A47");
         });
 
         modelBuilder.Entity<Course>(entity =>
         {
             entity.HasKey(e => e.CourseId).HasName("PK__Courses__C92D718770778267");
-
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
             entity.Property(e => e.BaseSalaryImpact).HasDefaultValue(0.0);
             entity.Property(e => e.Category).HasMaxLength(50);
@@ -95,20 +205,8 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
-            entity.Property(e => e.MetaTitle).HasMaxLength(200);
-            entity.Property(e => e.IsFree).HasDefaultValue(false);
-            entity.Property(e => e.DiscountPrice).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.AI_BaseSalaryImpact)
-                .HasColumnName("AI_BaseSalaryImpact")
-                .HasColumnType("decimal(18,2)")
-                .HasDefaultValue(0m);
-
-            // Global query filter: always hide soft-deleted courses
             entity.HasQueryFilter(e => !e.IsDeleted);
-
-            entity.HasOne(d => d.Instructor).WithMany(p => p.Courses)
-                .HasForeignKey(d => d.InstructorId)
-                .HasConstraintName("FK_Courses_Users");
+            entity.HasOne(d => d.Instructor).WithMany(p => p.Courses).HasForeignKey(d => d.InstructorId).HasConstraintName("FK_Courses_Users");
         });
 
         modelBuilder.Entity<Coupon>(entity =>
@@ -125,17 +223,11 @@ public partial class SmartLMSContext : DbContext
         {
             entity.HasKey(e => e.ModuleId);
             entity.ToTable("CourseModules");
-
             entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
             entity.Property(e => e.Title).HasMaxLength(150);
             entity.Property(e => e.OrderIndex).HasDefaultValue(0);
-
-            entity.HasOne(d => d.Course).WithMany(p => p.CourseModules)
-                .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK_CourseModules_Courses");
-            
-            // Global query filter
+            entity.HasOne(d => d.Course).WithMany(p => p.CourseModules).HasForeignKey(d => d.CourseId).HasConstraintName("FK_CourseModules_Courses");
             entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
@@ -143,24 +235,17 @@ public partial class SmartLMSContext : DbContext
         {
             entity.HasKey(e => e.LessonId);
             entity.ToTable("Lessons");
-
             entity.Property(e => e.LessonId).HasColumnName("LessonID");
             entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
             entity.Property(e => e.Title).HasMaxLength(150);
             entity.Property(e => e.OrderIndex).HasDefaultValue(0);
-
-            entity.HasOne(d => d.Module).WithMany(p => p.Lessons)
-                .HasForeignKey(d => d.ModuleId)
-                .HasConstraintName("FK_Lessons_CourseModules");
-
-            // Global query filter
+            entity.HasOne(d => d.Module).WithMany(p => p.Lessons).HasForeignKey(d => d.ModuleId).HasConstraintName("FK_Lessons_CourseModules");
             entity.HasQueryFilter(e => !e.Module.Course.IsDeleted);
         });
 
         modelBuilder.Entity<Enrollment>(entity =>
         {
             entity.HasKey(e => e.EnrollmentId).HasName("PK__Enrollme__7F6877FB34CFF1B9");
-
             entity.Property(e => e.EnrollmentId).HasColumnName("EnrollmentID");
             entity.Property(e => e.AvgScore).HasDefaultValue(0.0);
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
@@ -169,39 +254,10 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.LastAccessDate).HasColumnType("datetime");
             entity.Property(e => e.Progress).HasDefaultValue(0.0);
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            // Composite Index cho UserId và CourseId để tăng tốc độ check trạng thái enroll
             entity.HasIndex(e => new { e.UserId, e.CourseId });
-
-            entity.HasOne(d => d.Course).WithMany(p => p.Enrollments)
-                .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK__Enrollmen__Cours__52593CB8");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Enrollments)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Enrollmen__UserI__5165187F");
-
-            // Global query filter for Course soft delete
+            entity.HasOne(d => d.Course).WithMany(p => p.Enrollments).HasForeignKey(d => d.CourseId).HasConstraintName("FK__Enrollmen__Cours__52593CB8");
+            entity.HasOne(d => d.User).WithMany(p => p.Enrollments).HasForeignKey(d => d.UserId).HasConstraintName("FK__Enrollmen__UserI__5165187F");
             entity.HasQueryFilter(e => !e.Course.IsDeleted);
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACC0BF0FD7");
-
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E429ECC54B").IsUnique();
-
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.FullName).HasMaxLength(100);
-            entity.Property(e => e.Role).HasMaxLength(20);
-            entity.Property(e => e.Username).HasMaxLength(50);
-            entity.Property(e => e.TotalXP).HasDefaultValue(0);
-            entity.Property(e => e.HierarchyLevel).HasDefaultValue(3); // Default: Staff
-            entity.Property(e => e.DepartmentId).IsRequired(false);
         });
 
         modelBuilder.Entity<Permission>(entity => {
@@ -218,12 +274,7 @@ public partial class SmartLMSContext : DbContext
 
         modelBuilder.Entity<Question>(entity => {
             entity.HasKey(e => e.QuestionId);
-            entity.Property(e => e.DepartmentId).IsRequired(false);
-            entity.HasOne(d => d.Course)
-                  .WithMany(p => p.Questions)
-                  .HasForeignKey(d => d.CourseId);
-
-            // Global query filter for Course soft delete
+            entity.HasOne(d => d.Course).WithMany(p => p.Questions).HasForeignKey(d => d.CourseId);
             entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
@@ -243,12 +294,7 @@ public partial class SmartLMSContext : DbContext
 
         modelBuilder.Entity<Exam>(entity => {
             entity.HasKey(e => e.ExamId);
-            entity.Property(e => e.DepartmentId).IsRequired(false);
-            entity.HasOne(d => d.Course)
-                  .WithMany() // Nếu Course chưa có ICollection<Exam>, để trống hoặc thêm vào Course.cs
-                  .HasForeignKey(d => d.CourseId);
-
-            // Global query filter for Course soft delete
+            entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId);
             entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 
@@ -270,14 +316,9 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TransactionReference).HasMaxLength(100);
             entity.Property(e => e.Status).HasMaxLength(20);
-            
-            // Index giúp tìm hóa đơn cực nhanh khi VNPay Webhook gọi về
             entity.HasIndex(e => e.TransactionReference).IsUnique();
-            
             entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
             entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId);
-
-            // Global query filter for Course soft delete
             entity.HasQueryFilter(e => !e.Course.IsDeleted);
         });
 

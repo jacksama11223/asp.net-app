@@ -29,10 +29,10 @@ public class MarketingController : Controller
             .Where(e => e.Progress >= 80)
             .Select(e => new {
                 e.UserId,
-                e.User.FullName,
-                e.User.Username,
+                FullName = e.User != null ? e.User.FullName : "Unknown",
+                Username = e.User != null ? e.User.Username : "Unknown",
                 e.CourseId,
-                e.Course.Title,
+                Title = e.Course != null ? e.Course.Title : "Unknown",
                 EnrolledDate = e.LastAccessDate,
                 IsIssued = e.Progress == 100 // Tạm thời giả lập trạng thái đã cấp
             })

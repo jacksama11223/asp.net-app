@@ -31,7 +31,7 @@ namespace SmartLMS.Web.Controllers
             var user = users.FirstOrDefault(u => u.Username == username);
             
             if (user == null) return (3, null);
-            return (user.HierarchyLevel, user.DepartmentId);
+            return (user.HierarchyLevel ?? 3, user.DepartmentId);
         }
 
         public async Task<IActionResult> Index()
@@ -49,7 +49,7 @@ namespace SmartLMS.Web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> QuestionBuilder(int? id)
+        public IActionResult QuestionBuilder(int? id)
         {
             // Không load dữ liệu ở đây nữa, AG Grid sẽ tự gọi API để phân trang
             ViewBag.Questions = new List<Question>();
@@ -102,7 +102,7 @@ namespace SmartLMS.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> QuizWizard(int id)
+        public IActionResult QuizWizard(int id)
         {
             // Lấy thông tin bài thi để hiển thị tiêu đề
             // Dữ liệu câu hỏi sẽ được load qua JS gọi API

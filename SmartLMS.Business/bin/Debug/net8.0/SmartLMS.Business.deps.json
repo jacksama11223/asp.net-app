@@ -1830,6 +1830,7 @@
         "dependencies": {
           "Dapper": "2.1.72",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
+          "Newtonsoft.Json": "13.0.3",
           "SmartLMS.Models": "1.0.0"
         },
         "runtime": {

@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  sql-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=AnhLongPro123!
+    ports:
+      - "1433:1433"
+    deploy:
+      resources:
+        limits:
+          memory: 1536M # Giới hạn 1.5GB RAM cho SQL (Rất quan trọng cho máy 8GB)
+    networks:
+      - lms-local
+
+  web-app:
+    image: smartlms-web:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sql-db;Database=SmartLMS;User Id=sa;Password=AnhLongPro123!;TrustServerCertificate=True;
+      - ConnectionStrings__ReadOnlyConnection=Server=sql-db;Database=SmartLMS;User Id=sa;Password=AnhLongPro123!;TrustServerCertificate=True;
+      - Security__MasterKey=this_is_a_master_key_32_chars_long!!
+      - Security__Salt=this_is_a_salt_16
+    depends_on:
+      - sql-db
+    networks:
+      - lms-local
+
+networks:
+  lms-local:
+    driver: bridge

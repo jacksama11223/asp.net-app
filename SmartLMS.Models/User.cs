@@ -12,15 +12,16 @@ public partial class User
     public string? FullName { get; set; }
 
     public string? Email { get; set; }
+    public string? EmailHash { get; set; } // Blind Index cho việc tìm kiếm
 
     public string? Role { get; set; }
     public string? UserType { get; set; }
 
     public string? PasswordHash { get; set; }
 
-    public int Status { get; set; } // 1: Active, 2: Banned, 0: Pending
+    public int? Status { get; set; } // 1: Active, 2: Banned, 0: Pending
 
-    public int LecturerStatus { get; set; } // 0: None, 1: Pending, 2: Approved
+    public int? LecturerStatus { get; set; } // 0: None, 1: Pending, 2: Approved
 
     public string? Bio { get; set; }
 
@@ -32,9 +33,11 @@ public partial class User
 
     public string? Hometown { get; set; }
 
-    public int TotalXP { get; set; }
-    public int HierarchyLevel { get; set; } = 3; // 1: SuperAdmin, 2: DeptAdmin, 3: Staff/Student
+    public int? TotalXP { get; set; }
+    public int? HierarchyLevel { get; set; } = 3; // 1: SuperAdmin, 2: DeptAdmin, 3: Staff/Student
     public int? DepartmentId { get; set; }
+    public int? OrganizationId { get; set; }
+    public virtual Organization? Organization { get; set; }
 
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();

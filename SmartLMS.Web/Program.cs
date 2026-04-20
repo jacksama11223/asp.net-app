@@ -52,25 +52,37 @@ builder.Services.AddHealthChecks()
     })
     .AddCheck("AI Service", () => HealthCheckResult.Healthy("AI Predictor is operational"));
 
-// 3. Nâng cấp Rate Limiter - Bảo vệ API phân lớp
+// 3. Nâng cấp Rate Limiter - Bảo vệ API phân lớp (Hợp nhất từ Phase 2 & 4)
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     
+    // Policy cho Dashboard/Internal
     options.AddPolicy("ApiLimit", httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: httpContext.User.Identity?.Name ?? httpContext.Connection.RemoteIpAddress?.ToString(),
             factory: partition => new FixedWindowRateLimiterOptions
             {
                 AutoReplenishment = true,
-                PermitLimit = httpContext.User.IsInRole("Admin") ? 500 : 50, // Ưu tiên Admin
+                PermitLimit = httpContext.User.IsInRole("Admin") ? 500 : 50,
                 Window = TimeSpan.FromMinutes(1)
             }));
+
+    // Policy cho Public API (Phase 4)
+    options.AddFixedWindowLimiter("PublicApiPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 60; 
+        opt.QueueLimit = 0;
+    });
 });
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SmartLMS API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SmartLMS Enterprise API", Version = "v1" });
+    
+    // 1. Cấu hình Bearer Token
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -78,15 +90,29 @@ builder.Services.AddSwaggerGen(c =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
+
+    // 2. Cấu hình X-API-KEY (Phase 4)
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "Nhập API Key Enterprise của bạn (Header: X-API-KEY)",
+        In = ParameterLocation.Header,
+        Name = "X-API-KEY",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "ApiKey"
+    });
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement {
     {
         new OpenApiSecurityScheme
         {
-            Reference = new OpenApiReference
-            {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-            }
+            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+        },
+        new string[] { }
+    },
+    {
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "ApiKey" }
         },
         new string[] { }
     }});
@@ -128,16 +154,37 @@ builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.C
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"] ?? "Default_Secret_Key_For_SmartLMS_AI_2026"))
         };
+    })
+    .AddGoogle(options => {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "DUMMY_CLIENT_ID";
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "DUMMY_CLIENT_SECRET";
+    })
+    .AddScheme<SmartLMS.Web.Security.ApiKeyAuthOptions, SmartLMS.Web.Security.ApiKeyAuthHandler>(
+        SmartLMS.Web.Security.ApiKeyAuthOptions.DefaultScheme, null);
+
+builder.Services.AddAuthorization(options => {
+    // Policy kết hợp: Có thể dùng Cookie HOẶC API Key
+    options.AddPolicy("EnterprisePolicy", policy => {
+        policy.AddAuthenticationSchemes(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, SmartLMS.Web.Security.ApiKeyAuthOptions.DefaultScheme);
+        policy.RequireAuthenticatedUser();
     });
+});
 
-builder.Services.AddAuthorization();
-
-builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    
+    // Thêm Interceptor để tách biệt Read/Write
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    options.AddInterceptors(new SmartLMS.Data.ReadOnlyInterceptor(config));
+});
 
 // Dependency Injection
 builder.Services.AddHttpClient(); // Đăng ký HttpClient Factory mặc định
 builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
+
+// Security & Encryption
+builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS.Business.Security.AesEncryptionService>();
 
 builder.Services.AddScoped(typeof(SmartLMS.Data.Repositories.IRepository<>), typeof(SmartLMS.Data.Repositories.Repository<>));
 builder.Services.AddScoped<SmartLMS.Business.ICourseService, SmartLMS.Business.CourseService>();
@@ -146,10 +193,25 @@ builder.Services.AddScoped<SmartLMS.Business.IReportingService, SmartLMS.Busines
 builder.Services.AddScoped<SmartLMS.Business.IStudentService, SmartLMS.Business.StudentService>();
 builder.Services.AddScoped<SmartLMS.Business.ISqlService, SmartLMS.Business.SqlService>();
 builder.Services.AddScoped<SmartLMS.Business.IUserService, SmartLMS.Business.UserService>();
+builder.Services.AddScoped<SmartLMS.Business.IApiKeyService, SmartLMS.Business.ApiKeyService>();
 builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.CohortService>();
+builder.Services.AddScoped<SmartLMS.Business.Jobs.IAuditCleanupJob, SmartLMS.Business.Jobs.AuditCleanupJob>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddMemoryCache();
+if (builder.Environment.IsDevelopment())
+{
+    // Lite Mode: Dùng RAM host làm Cache, không cần cài Redis
+    builder.Services.AddDistributedMemoryCache();
+    builder.Services.AddMemoryCache();
+}
+else
+{
+    // Production: Dùng Redis Cluster để đảm bảo tính sẵn sàng cao
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration["Redis:ConnectionString"] ?? "localhost:6379";
+        options.InstanceName = "SmartLMS_";
+    });
+}
 
 // Enterprise SaaS Core Services
 builder.Services.AddSingleton(typeof(DinkToPdf.Contracts.IConverter), new DinkToPdf.SynchronizedConverter(new DinkToPdf.PdfTools()));
@@ -160,7 +222,16 @@ builder.Services.AddSingleton<SmartLMS.Business.IScoringEngine, SmartLMS.Busines
 builder.Services.AddScoped<SmartLMS.Business.IWebhookService, SmartLMS.Business.WebhookService>();
 builder.Services.AddScoped<SmartLMS.Business.IStorageService, SmartLMS.Business.S3StorageService>();
 builder.Services.AddScoped<SmartLMS.Business.IPaymentGateway, SmartLMS.Business.VNPayGateway>();
-builder.Services.AddSingleton<SmartLMS.Business.MessageBus.IMessageBus, SmartLMS.Business.MessageBus.RabbitMQBus>();
+if (builder.Environment.IsDevelopment())
+{
+    // Lite Mode: Giả lập Message Bus để không tốn RAM chạy RabbitMQ Docker
+    builder.Services.AddSingleton<SmartLMS.Business.MessageBus.IMessageBus, SmartLMS.Business.MessageBus.MockRabbitMQBus>();
+}
+else
+{
+    // Production: Kết nối tới RabbitMQ Cluster thực tế
+    builder.Services.AddSingleton<SmartLMS.Business.MessageBus.IMessageBus, SmartLMS.Business.MessageBus.RabbitMQBus>();
+}
 builder.Services.AddHostedService<SmartLMS.Business.Handlers.AssessmentEventHandler>();
 builder.Services.AddSignalR();
 
@@ -180,6 +251,8 @@ builder.Services.AddOutputCache(options =>
     options.AddBasePolicy(builder => builder.Cache().Expire(TimeSpan.FromSeconds(60)));
     options.AddPolicy("CourseCache", builder => builder.Expire(TimeSpan.FromSeconds(120)).Tag("Courses"));
 });
+
+// 5. Public API Protection (Đã hợp nhất lên phần trên)
 
 // Cấu hình Forwarded Headers để xử lý SSL/HTTPS từ Cloudflare/Proxy
 
@@ -239,21 +312,18 @@ app.UseSwaggerUI(c =>
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseResponseCompression();
-app.UseOutputCache();
 app.UseStaticFiles();
 
-app.UseSerilogRequestLogging(); 
-
 app.UseRouting();
+app.UseCors("AllowAll"); // Đặt ngay sau UseRouting
+
 app.UseHttpMetrics();
-app.UseCors("AllowAll");
-app.UseRateLimiter(); // Phải đặt trước Authentication để chặn sớm
+app.UseRateLimiter(); // Một lần duy nhất
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -277,5 +347,10 @@ RecurringJob.AddOrUpdate<SmartLMS.Business.IPredictionService>(
     "Weekly-Retrain-AI", 
     service => service.TrainModelAsync(), 
     Cron.Weekly(DayOfWeek.Sunday, 2));
+
+RecurringJob.AddOrUpdate<SmartLMS.Business.Jobs.IAuditCleanupJob>(
+    "Weekly-Audit-Log-Cleanup", 
+    service => service.CleanupOldLogsAsync(), 
+    Cron.Weekly(DayOfWeek.Sunday, 3)); // Chạy lúc 3h sáng
 
 app.Run();

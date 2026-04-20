@@ -282,6 +282,7 @@ $(document).ready(function () {
                 render: function (id) {
                     return `
                         <div class="btn-group">
+                            <a href="/Payment/Checkout?courseId=${id}" class="btn btn-xs btn-default" title="Thanh toán VNPay"><i class="fas fa-credit-card text-warning"></i></a>
                             <a href="/CourseManagement/Edit/${id}" class="btn btn-xs btn-default" title="Sửa"><i class="fas fa-edit text-primary"></i></a>
                             <a href="/CourseManagement/Curriculum/${id}" class="btn btn-xs btn-default" title="Đề cương"><i class="fas fa-sitemap text-info"></i></a>
                             <button class="btn btn-xs btn-default btn-delete" data-id="${id}" title="Xóa"><i class="fas fa-trash-alt text-danger"></i></button>

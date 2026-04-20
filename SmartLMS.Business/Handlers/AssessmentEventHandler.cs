@@ -23,7 +23,9 @@ namespace SmartLMS.Business.Handlers
         private readonly IServiceProvider _serviceProvider;
         private readonly IMessageBus _messageBus;
 
-        public AssessmentEventHandler(ILogger<AssessmentEventHandler> logger, IServiceProvider serviceProvider, IMessageBus messageBus)
+        public AssessmentEventHandler(ILogger<AssessmentEventHandler> logger, 
+                                     IServiceProvider serviceProvider, 
+                                     IMessageBus messageBus)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
@@ -89,12 +91,34 @@ namespace SmartLMS.Business.Handlers
 
             // 2. Tự động Sinh Chứng Chỉ (Nếu là Final Exam và đạt tỉ lệ đỗ)
             var exam = await context.Exams.FindAsync(examId);
+            var user = await context.Users.FindAsync(userId);
+            
             if (exam != null && score >= 80) // Ngưỡng đỗ Enterprise là 80%
             {
                 var certService = sp.GetRequiredService<ICertificateService>();
+                var webhookService = sp.GetRequiredService<IWebhookService>();
+                
                 var certUrl = await certService.GenerateCertificateAsync(userId, exam.CourseId, DateTime.Now);
                 _logger.LogWarning($"[Worker] Đã tự động sinh Chứng chỉ PDF cho User {userId}. URL: {certUrl}");
+
+                // TRIGGER WEBHOOK: Certificate.Issued
+                await webhookService.NotifyAsync("Certificate.Issued", new {
+                    UserId = userId,
+                    FullName = user?.FullName,
+                    CourseId = exam.CourseId,
+                    CertificateUrl = certUrl,
+                    IssuedAt = DateTime.Now
+                }, user?.DepartmentId); // Dùng DepartmentId tạm thời làm OrganizationId
             }
+
+            // TRIGGER WEBHOOK: Course.Completed (Giả định SubmitQuiz thành công là xong chặng đường)
+            var webhookServiceForCourse = sp.GetRequiredService<IWebhookService>();
+            await webhookServiceForCourse.NotifyAsync("Course.Completed", new {
+                UserId = userId,
+                CourseId = exam?.CourseId,
+                FinalScore = score,
+                CompletedAt = DateTime.Now
+            }, user?.DepartmentId);
 
             // 3. AI Warning: Kiểm tra rủi ro (Predict Dropout)
             var predictionService = sp.GetRequiredService<IPredictionService>();

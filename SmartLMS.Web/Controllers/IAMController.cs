@@ -6,6 +6,7 @@ using SmartLMS.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartLMS.Business;
 
 namespace SmartLMS.Web.Controllers;
 
@@ -14,9 +15,11 @@ public class IAMController : Controller
 {
     private readonly SmartLMSContext _context;
 
-    public IAMController(SmartLMSContext context)
+    // Constructor duy nhất cho Enterprise IAM
+    public IAMController(SmartLMSContext context, IApiKeyService apiKeyService)
     {
         _context = context;
+        _apiKeyService = apiKeyService;
     }
 
     public async Task<IActionResult> Index()
@@ -57,5 +60,39 @@ public class IAMController : Controller
 
         await _context.SaveChangesAsync();
         return Json(new { success = true });
+    }
+
+    // --- API KEY MANAGEMENT (PHASE 4) ---
+    private readonly IApiKeyService _apiKeyService;
+
+    public async Task<IActionResult> ApiKeys()
+    {
+        // Giả sử OrganizationId của System Root là 1, lấy từ User hiện tại sau này
+        string currentUserName = User.Identity?.Name ?? "";
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == currentUserName);
+        int orgId = user?.OrganizationId ?? 1;
+
+        var keys = await _apiKeyService.GetOrganizationKeysAsync(orgId);
+        return View(keys);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GenerateApiKey(string name)
+    {
+        string currentUserName = User.Identity?.Name ?? "";
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == currentUserName);
+        int orgId = user?.OrganizationId ?? 1;
+
+        var (rawKey, _) = await _apiKeyService.GenerateKeyAsync(orgId, name);
+        
+        TempData["NewRawKey"] = rawKey; // Chỉ hiển thị 1 lần duy nhất
+        return RedirectToAction(nameof(ApiKeys));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RevokeApiKey(int id)
+    {
+        await _apiKeyService.RevokeKeyAsync(id);
+        return RedirectToAction(nameof(ApiKeys));
     }
 }
