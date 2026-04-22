@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createApiClient, getCourses } from '../api';
 import { 
   Paper, 
-  Grid, 
   SimpleGrid, 
   Title, 
   Text, 
@@ -11,171 +9,189 @@ import {
   Group, 
   Image, 
   Badge, 
-  ActionIcon, 
   Box, 
   Stack,
   Loader,
   Alert,
-  Card,
-  Menu
+  Avatar
 } from '@mantine/core';
 import { 
-  LuPlus, 
   LuSearch, 
   LuFilter, 
-  LuEllipsisVertical, 
   LuBookOpen, 
-  LuClock, 
   LuStar,
-  LuUsers,
-  LuCircleAlert
+  LuCircleAlert,
+  LuUser
 } from 'react-icons/lu';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import axios from 'axios';
+
+const CardWrapper = ({ children, index }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4, delay: index * 0.05 }}
+  >
+    <Paper 
+      radius="xl" 
+      className="glass bg-white/5 border-white/10 overflow-hidden shadow-2xl hover:border-brand-500/50 transition-all duration-300 group"
+    >
+      {children}
+    </Paper>
+  </motion.div>
+);
 
 export const Courses = () => {
-  const [apiKey] = useState(localStorage.getItem('slms_api_key') || '');
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [search, setSearch] = useState('');
   const [parent] = useAutoAnimate();
 
   const handleFetch = async () => {
     setLoading(true);
     setError(null);
     try {
-      const client = createApiClient(apiKey);
-      const data = await getCourses(client);
-      setCourses(data);
+      // Fetching from real backend
+      const response = await axios.get('http://localhost:5181/api/public/courses');
+      setCourses(response.data);
     } catch (err) {
-      setError('Connection failed. Please check your API Key and Backend status.');
+      setError('Failed to load courses. Please ensure the backend is running.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (apiKey) handleFetch();
-  }, [apiKey]);
+    handleFetch();
+  }, []);
+
+  const filteredCourses = courses.filter(c => 
+    c.courseName.toLowerCase().includes(search.toLowerCase()) ||
+    c.instructorName.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <Stack gap="xl" p="md">
-      <Group justify="space-between" align="flex-end">
-        <Box>
-          <Title order={1} fw={900}>Courses</Title>
-          <Text c="dimmed" size="sm">Manage your curriculum and content delivery.</Text>
-        </Box>
-        <Button 
-          leftSection={<LuPlus size={20} />} 
-          size="md" 
-          radius="md" 
-          boxShadow="var(--mantine-shadow-md)"
-        >
-          Create New Course
-        </Button>
-      </Group>
+    <Stack gap="xl">
+      <Box>
+        <Group justify="space-between" align="flex-end">
+          <Box>
+            <Title order={1} fw={900} className="tracking-tighter text-4xl">
+              Course <Text span variant="gradient" gradient={{ from: 'brand', to: 'cyan' }} inherit>Marketplace</Text> 📚
+            </Title>
+            <Text c="dimmed" size="sm" mt={4}>Choose from 150+ expert-led courses to boost your career.</Text>
+          </Box>
+          <Group gap="sm">
+            <Button variant="default" radius="md">My Learning</Button>
+            <Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md">Browse Categories</Button>
+          </Group>
+        </Group>
+      </Box>
 
-      <Group grow>
+      <Group grow className="glass p-2 rounded-2xl bg-white/5 backdrop-blur-md">
         <TextInput
-          placeholder="Search by title, instructor..."
-          leftSection={<LuSearch size={18} />}
-          radius="md"
+          placeholder="Search by title, instructor, or category..."
+          leftSection={<LuSearch size={18} className="text-brand-400" />}
+          radius="xl"
           size="md"
+          variant="unstyled"
+          className="px-4"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <Button 
-          variant="default" 
+          variant="light" 
           leftSection={<LuFilter size={18} />} 
           size="md" 
-          radius="md"
+          radius="xl"
           style={{ flexGrow: 0 }}
+          className="mr-2"
         >
           Filters
         </Button>
       </Group>
 
       {error && (
-        <Alert icon={<LuCircleAlert size={16} />} title="Error" color="red" radius="md">
+        <Alert icon={<LuCircleAlert size={16} />} title="Connection Error" color="red" radius="xl" variant="light">
           {error}
         </Alert>
       )}
 
       {loading ? (
-        <Group justify="center" py="xl">
-          <Loader color="brand" size="xl" type="dots" />
-        </Group>
+        <Stack align="center" py={100} gap="md">
+          <Loader color="brand" size="xl" type="bars" />
+          <Text c="dimmed" fw={500}>Curating your learning experience...</Text>
+        </Stack>
       ) : (
-        <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="lg" ref={parent}>
-          {courses.map((course) => (
-            <Card 
-              key={course.courseId} 
-              shadow="sm" 
-              padding="lg" 
-              radius="lg" 
-              withBorder
-              style={{ transition: 'transform 0.2s ease', cursor: 'pointer' }}
-              onClick={() => {}}
-            >
-              <Card.Section>
-                <Image
-                  src={course.thumbnailUrl || `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop`}
-                  height={160}
-                  alt={course.courseName}
-                />
-              </Card.Section>
+        <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="xl" ref={parent}>
+          <AnimatePresence>
+            {filteredCourses.map((course, index) => (
+              <CardWrapper key={course.courseId} index={index}>
+                <Box className="relative">
+                  <Image
+                    src={course.thumbnailUrl || `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop`}
+                    height={200}
+                    alt={course.courseName}
+                    className="group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <Badge color="brand.6" variant="filled" size="xs" radius="sm">
+                      {course.category || 'Professional'}
+                    </Badge>
+                  </div>
+                </Box>
 
-              <Group justify="space-between" mt="md" mb="xs">
-                <Badge color="brand" variant="light">ID {course.courseId}</Badge>
-                <Menu position="bottom-end" shadow="md">
-                  <Menu.Target>
-                    <ActionIcon variant="subtle" color="gray">
-                      <LuEllipsisVertical size={18} />
-                    </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item>Edit Course</Menu.Item>
-                    <Menu.Item>View Analytics</Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item color="red">Delete</Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </Group>
+                <Stack p="xl" gap="md">
+                  <Title order={3} className="tracking-tight leading-tight group-hover:text-brand-400 transition-colors">
+                    {course.courseName}
+                  </Title>
 
-              <Title order={4} mb="xs" lineClamp={1}>{course.courseName}</Title>
-
-              <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
-                {course.summary || 'Expertly designed curriculum to master industry standards and practical skills.'}
-              </Text>
-
-              <Grid mb="lg">
-                <Grid.Col span={6}>
-                  <Group gap={4}>
-                    <LuBookOpen size={14} color="var(--mantine-color-brand-filled)" />
-                    <Text size="10px" fw={700} tt="uppercase">{course.lessonCount || 0} Lessons</Text>
-                  </Group>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <Group gap={4}>
-                    <LuUsers size={14} color="var(--mantine-color-brand-filled)" />
-                    <Text size="10px" fw={700} tt="uppercase">{course.instructorName}</Text>
-                  </Group>
-                </Grid.Col>
-              </Grid>
-
-              <Card.Section inheritPadding py="md" style={{ borderTop: '1px solid var(--mantine-color-dark-4)' }}>
-                <Group justify="space-between">
-                  <Box>
-                    <Text size="10px" fw={700} tt="uppercase" c="dimmed">Price</Text>
-                    <Text fw={900} size="lg">
-                      {course.price === 0 ? 'FREE' : `$${course.price}`}
+                  <Group gap="sm">
+                    <Avatar radius="xl" size="sm" src={null} color="brand">
+                      <LuUser size={14} />
+                    </Avatar>
+                    <Text size="sm" fw={600} className="text-slate-300">
+                      {course.instructorName}
                     </Text>
-                  </Box>
-                  <Button variant="light" color="brand" radius="md" size="xs">
-                    Register Now
-                  </Button>
-                </Group>
-              </Card.Section>
-            </Card>
-          ))}
+                  </Group>
+
+                  <Text size="sm" c="dimmed" lineClamp={2} className="leading-relaxed">
+                    {course.summary || 'Expert-designed curriculum to master high-demand industry skills through practical applications.'}
+                  </Text>
+
+                  <Group justify="space-between" mt="md" align="center">
+                    <Stack gap={0}>
+                      <Text size="18px" fw={900}>
+                        {course.price === 0 ? 'FREE' : `$${course.price}`}
+                      </Text>
+                      <Group gap={4}>
+                        <LuStar size={10} className="text-yellow-500 fill-yellow-500" />
+                        <Text size="10px" fw={700} c="dimmed">4.9 (2k+)</Text>
+                      </Group>
+                    </Stack>
+                    <Button 
+                      variant="light" 
+                      color="brand" 
+                      radius="md" 
+                      rightSection={<LuBookOpen size={16} />}
+                      className="hover:bg-brand-500 hover:text-white transition-colors"
+                    >
+                      View Details
+                    </Button>
+                  </Group>
+                </Stack>
+              </CardWrapper>
+            ))}
+          </AnimatePresence>
         </SimpleGrid>
+      )}
+
+      {!loading && filteredCourses.length === 0 && (
+        <Stack align="center" py={100}>
+          <Text c="dimmed" size="lg">No courses found matching "{search}"</Text>
+          <Button variant="subtle" color="brand" onClick={() => setSearch('')}>Clear Search</Button>
+        </Stack>
       )}
     </Stack>
   );

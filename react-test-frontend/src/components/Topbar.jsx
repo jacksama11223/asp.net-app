@@ -9,94 +9,93 @@ import {
   Box, 
   Menu,
   UnstyledButton,
-  useMantineColorScheme
+  Badge
 } from '@mantine/core';
 import { 
   LuSearch, 
   LuBell, 
-  LuMoon, 
-  LuSun, 
   LuChevronDown,
   LuSettings,
-  LuUsers
+  LuUsers,
+  LuLogOut,
+  LuSparkles
 } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 
 export const Topbar = () => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
+
+  const handleLogout = () => {
+    localStorage.removeItem('slms_token');
+    localStorage.removeItem('slms_user');
+    navigate('/');
+  };
 
   return (
-    <Box 
-      component="header" 
-      h={80} 
-      px="xl" 
-      style={(theme) => ({ 
-        borderBottom: `1px solid ${theme.colors.dark[4]}`,
-        backgroundColor: dark ? theme.colors.dark[7] : theme.white,
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      })}
-    >
-      <TextInput
-        placeholder="Search courses, students, analytics..."
-        leftSection={<LuSearch size={18} />}
-        w={400}
-        radius="xl"
-        variant="filled"
-        styles={(theme) => ({
-          input: { backgroundColor: theme.colors.dark[6] }
-        })}
-      />
+    <Group justify="space-between" h="100%" px="xl" className="bg-transparent">
+      <Group gap="xl">
+        <TextInput
+          placeholder="Search courses, lessons, notes..."
+          leftSection={<LuSearch size={18} className="text-brand-400" />}
+          w={400}
+          radius="xl"
+          variant="unstyled"
+          className="glass bg-white/5 border-white/10 px-4"
+          styles={{ 
+            input: { color: '#fff' } 
+          }}
+        />
+        
+        <Badge variant="dot" color="brand" size="lg" className="bg-brand-500/5 px-4 h-9 font-bold border-brand-500/20">
+          PRO STUDENT
+        </Badge>
+      </Group>
 
       <Group gap="lg">
-        <ActionIcon 
-          onClick={() => toggleColorScheme()}
-          variant="default"
-          size="lg"
-          radius="md"
-        >
-          {dark ? <LuSun size={20} color="yellow" /> : <LuMoon size={20} />}
-        </ActionIcon>
-
-        <Indicator color="brand" offset={2} size={8} withBorder processing>
-          <ActionIcon variant="default" size="lg" radius="md">
+        <Indicator color="brand" offset={4} size={8} withBorder processing>
+          <ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-white/5">
             <LuBell size={20} />
           </ActionIcon>
         </Indicator>
 
-        <Box w={1} h={30} bg="dark.4" />
-
-        <Menu shadow="md" width={200} position="bottom-end">
+        <Menu shadow="xl" width={220} position="bottom-end" radius="lg">
           <Menu.Target>
-            <UnstyledButton>
-              <Group gap="xs">
+            <UnstyledButton className="hover:bg-white/5 p-1.5 rounded-2xl transition-all">
+              <Group gap="sm">
                 <Box visibleFrom="md" style={{ textAlign: 'right' }}>
-                  <Text size="sm" fw={700}>Admin User</Text>
-                  <Text size="10px" tt="uppercase" fw={900} c="dimmed">Premium Plan</Text>
+                  <Text size="sm" fw={700} className="text-white leading-none mb-1">{user.fullName || 'Student'}</Text>
+                  <Text size="10px" tt="uppercase" fw={900} c="dimmed">{user.role || 'Member'}</Text>
                 </Box>
                 <Avatar 
                   size="md" 
-                  radius="md" 
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
-                />
-                <LuChevronDown size={14} />
+                  radius="lg" 
+                  src={null}
+                  color="brand"
+                  className="shadow-lg shadow-brand-500/20"
+                >
+                  <LuSparkles size={18} />
+                </Avatar>
+                <LuChevronDown size={14} className="text-slate-400" />
               </Group>
             </UnstyledButton>
           </Menu.Target>
 
-          <Menu.Dropdown>
-            <Menu.Label>Application</Menu.Label>
-            <Menu.Item leftSection={<LuSettings size={14} />}>Settings</Menu.Item>
-            <Menu.Item leftSection={<LuUsers size={14} />}>Profile</Menu.Item>
-            <Menu.Divider />
-            <Menu.Item color="red">Logout</Menu.Item>
+          <Menu.Dropdown className="glass border-white/10 p-2">
+            <Menu.Label>Personal Space</Menu.Label>
+            <Menu.Item leftSection={<LuUsers size={16} />}>My Profile</Menu.Item>
+            <Menu.Item leftSection={<LuSettings size={16} />}>Preferences</Menu.Item>
+            <Menu.Divider className="border-white/5" />
+            <Menu.Item 
+              color="red" 
+              leftSection={<LuLogOut size={16} />}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Group>
-    </Box>
+    </Group>
   );
 };

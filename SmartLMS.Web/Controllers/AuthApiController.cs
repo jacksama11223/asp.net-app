@@ -44,8 +44,36 @@ public class AuthApiController : ControllerBase
         });
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    {
+        var existingUser = await _userService.GetUserByEmailAsync(request.Email);
+        if (existingUser != null)
+        {
+            return BadRequest(new { message = "Email đã được sử dụng." });
+        }
+
+        var user = new User
+        {
+            Username = request.Username,
+            Email = request.Email,
+            FullName = request.FullName,
+            Role = "Student",
+            Status = 1 // Active
+        };
+
+        var success = await _userService.RegisterAsync(user, request.Password);
+        if (!success)
+        {
+            return StatusCode(500, new { message = "Đã xảy ra lỗi khi đăng ký tài khoản." });
+        }
+
+        return Ok(new { message = "Đăng ký thành công!" });
+    }
+
     private string CreateToken(User user)
     {
+        // ... (existing code remains same)
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Username ?? ""),
@@ -75,4 +103,12 @@ public class LoginRequest
 {
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+}
+
+public class RegisterRequest
+{
+    public string Username { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
 }

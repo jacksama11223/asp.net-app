@@ -1,14 +1,12 @@
 import React from 'react';
 import { 
-  LineChart, 
-  Line, 
+  AreaChart, 
+  Area, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  AreaChart,
-  Area
+  ResponsiveContainer 
 } from 'recharts';
 import { 
   Paper, 
@@ -22,73 +20,103 @@ import {
   ThemeIcon, 
   Box,
   Stack,
-  Button,
-  ActionIcon
+  Button
 } from '@mantine/core';
-import { COURSE_TRENDS, AI_RISK_DATA, RECENT_ACTIVITY } from '../utils/mockData';
 import { 
-  LuTriangleAlert, 
   LuTrendingUp, 
-  LuTrendingDown, 
   LuCircleCheck, 
   LuClock,
-  LuEllipsisVertical,
-  LuLayoutDashboard,
-  LuHistory,
-  LuCircleAlert,
   LuZap,
   LuBookOpen,
   LuUsers,
-  LuDownload
+  LuDownload,
+  LuTriangleAlert
 } from 'react-icons/lu';
+import { motion } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { COURSE_TRENDS, AI_RISK_DATA, RECENT_ACTIVITY } from '../utils/mockData';
 
-const StatCard = ({ label, value, change, color }) => (
-  <Paper p="xl" radius="lg" withBorder>
-    <Text size="xs" fw={900} tt="uppercase" tracking="widest" c="dimmed" mb="xs">
-      {label}
-    </Text>
-    <Group justify="space-between" align="flex-end">
-      <Title order={2} fw={900}>{value}</Title>
+const CardWrapper = ({ children, p = "xl" }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4 }}
+  >
+    <Paper 
+      p={p} 
+      radius="xl" 
+      className="glass bg-white/5 border-white/10 shadow-2xl hover:border-brand-500/50 transition-colors"
+    >
+      {children}
+    </Paper>
+  </motion.div>
+);
+
+const StatCard = ({ label, value, change, color, icon: Icon }) => (
+  <CardWrapper p="lg">
+    <Group justify="space-between" mb="xs">
+      <ThemeIcon size="lg" radius="md" variant="light" color={color}>
+        <Icon size={20} />
+      </ThemeIcon>
       <Badge color="green" variant="light" size="sm">
         {change}
       </Badge>
     </Group>
-  </Paper>
+    <Box>
+      <Text size="xs" fw={700} tt="uppercase" tracking="widest" c="dimmed">
+        {label}
+      </Text>
+      <Title order={2} fw={900} className="tracking-tight">{value}</Title>
+    </Box>
+  </CardWrapper>
 );
 
 export const Dashboard = () => {
   const [parent] = useAutoAnimate();
+  const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
 
   return (
-    <Stack gap="xl" p="md">
-      <Box>
-        <Title order={1} fw={900} tracking="tight">
-          Welcome back, <Text span c="brand" inherit>Admin</Text> 👋
-        </Title>
-        <Text c="dimmed" size="sm">Here is what's happening with your students today.</Text>
+    <Stack gap="xl">
+      <Box mb="md">
+        <Group justify="space-between" align="flex-end">
+          <Box>
+            <Title order={1} fw={900} className="tracking-tighter text-4xl">
+              Morning, <Text span variant="gradient" gradient={{ from: 'brand', to: 'cyan' }} inherit>{user.fullName || 'Student'}</Text> ✨
+            </Title>
+            <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green" fw={700}>92.4%</Text>. Keep it up!</Text>
+          </Box>
+          <Button 
+            variant="gradient" 
+            gradient={{ from: 'brand', to: 'indigo' }} 
+            radius="md" 
+            leftSection={<LuZap size={18} />}
+            className="shadow-lg shadow-brand-500/20"
+          >
+            Start Learning
+          </Button>
+        </Group>
       </Box>
 
       <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} gap="lg">
-        <StatCard label="Total Students" value="12,450" change="+12%" color="brand" />
-        <StatCard label="Avg. Progress" value="78%" change="+5%" color="blue" />
-        <StatCard label="Active Courses" value="156" change="+8" color="cyan" />
-        <StatCard label="AI Accuracy" value="94.2%" change="+1.5%" color="teal" />
+        <StatCard label="Courses Active" value="12" change="+2" color="brand" icon={LuBookOpen} />
+        <StatCard label="Hours Studied" value="124h" change="+14%" color="blue" icon={LuClock} />
+        <StatCard label="Completed Tasks" value="48" change="+5" color="teal" icon={LuCircleCheck} />
+        <StatCard label="Class Ranking" value="#4" change="UP" color="orange" icon={LuTrendingUp} />
       </SimpleGrid>
 
       <Grid gutter="xl">
         <Grid.Col span={{ base: 12, lg: 8 }}>
-          <Paper p="xl" radius="lg" withBorder h="100%">
+          <CardWrapper>
             <Group justify="space-between" mb="xl">
               <Box>
                 <Group gap="xs" mb={4}>
-                  <LuTrendingUp size={20} color="var(--mantine-color-brand-filled)" />
-                  <Title order={3}>Enrollment Trends</Title>
+                  <LuTrendingUp size={20} color="var(--mantine-color-brand-500)" />
+                  <Title order={3} className="tracking-tight">Learning Momentum</Title>
                 </Group>
-                <Text size="xs" c="dimmed">Growth analysis over the last 6 months</Text>
+                <Text size="xs" c="dimmed">Your engagement data over the last 30 days</Text>
               </Box>
-              <Button variant="default" size="xs" rightSection={<LuDownload size={14} />}>
-                Export Report
+              <Button variant="subtle" size="xs" rightSection={<LuDownload size={14} />}>
+                Export Analytics
               </Button>
             </Group>
 
@@ -96,12 +124,12 @@ export const Dashboard = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={COURSE_TRENDS}>
                   <defs>
-                    <linearGradient id="colorEnroll" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
                       <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#33415520" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
                   <XAxis 
                     dataKey="month" 
                     axisLine={false} 
@@ -111,124 +139,54 @@ export const Dashboard = () => {
                   <YAxis hide />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1e293b', 
-                      border: 'none', 
-                      borderRadius: '12px',
-                      color: '#fff' 
+                      backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                      border: '1px solid rgba(255, 255, 255, 0.1)', 
+                      borderRadius: '16px',
+                      backdropBlur: '12px'
                     }} 
                   />
                   <Area 
                     type="monotone" 
                     dataKey="enrollments" 
                     stroke="#6366f1" 
-                    strokeWidth={3} 
+                    strokeWidth={4} 
                     fillOpacity={1} 
-                    fill="url(#colorEnroll)" 
+                    fill="url(#colorValue)" 
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </Box>
-          </Paper>
+          </CardWrapper>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, lg: 4 }}>
-          <Paper p="xl" radius="lg" withBorder h="100%">
+          <CardWrapper>
             <Group gap="xs" mb="xl">
               <LuZap size={20} color="orange" />
-              <Title order={3}>AI Risk Analysis</Title>
+              <Title order={3} className="tracking-tight">AI Success Insights</Title>
             </Group>
 
-            <Stack gap="lg">
+            <Stack gap="xl">
               {AI_RISK_DATA.map((item) => (
                 <Box key={item.name}>
                   <Group justify="space-between" mb="xs">
                     <Text size="xs" fw={700} c="dimmed">{item.name}</Text>
-                    <Text size="xs" fw={900}>{item.value}%</Text>
+                    <Badge variant="dot" color={item.color}>{item.value}% Probability</Badge>
                   </Group>
-                  <Progress value={item.value} color={item.color} size="lg" radius="xl" />
+                  <Progress value={item.value} color={item.color} size="xl" radius="xl" className="bg-white/5" />
                 </Box>
               ))}
             </Stack>
 
-            <Paper mt="xl" p="md" radius="md" bg="orange.9" style={{ border: '1px solid var(--mantine-color-orange-8)' }}>
+            <Box mt="xl" p="md" radius="md" className="bg-brand-500/10 border border-brand-500/20">
               <Group gap="sm" align="flex-start" wrap="nowrap">
-                <LuTriangleAlert className="text-amber-500 shrink-0" size={18} />
-                <Text size="xs" fw={500} c="white">
-                  AI has detected 12 students with declining engagement patterns. Consider sending a nudge.
+                <LuTriangleAlert className="text-brand-400 shrink-0" size={18} />
+                <Text size="xs" fw={500} c="brand.1">
+                  AI detected a drop in your Quiz engagement. Recalibrating your path for next week.
                 </Text>
               </Group>
-            </Paper>
-          </Paper>
-        </Grid.Col>
-      </Grid>
-
-      <Grid gutter="xl">
-        <Grid.Col span={{ base: 12, lg: 7 }}>
-          <Paper p="xl" radius="lg" withBorder>
-            <Title order={3} mb="xl" flex="1" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <LuClock size={20} color="var(--mantine-color-brand-filled)" />
-              Recent Activity
-            </Title>
-            <Stack gap="md" ref={parent}>
-              {RECENT_ACTIVITY.map((activity) => (
-                <Group key={activity.id} justify="space-between" wrap="nowrap" pb="sm" style={{ borderBottom: '1px dashed var(--mantine-color-dark-4)' }}>
-                  <Group gap="md">
-                    <ThemeIcon 
-                      radius="md" 
-                      variant="light" 
-                      color={activity.type === 'achievement' ? 'teal' : activity.type === 'ai_alert' ? 'orange' : 'brand'}
-                    >
-                      {activity.type === 'achievement' ? <LuCircleCheck size={16} /> :
-                       activity.type === 'ai_alert' ? <LuCircleAlert size={16} /> :
-                       <LuTrendingUp size={16} />}
-                    </ThemeIcon>
-                    <Box>
-                      <Text size="sm">
-                        <Text span fw={700}>{activity.user}</Text> {activity.action}
-                      </Text>
-                      <Text size="xs" c="dimmed">{activity.time}</Text>
-                    </Box>
-                  </Group>
-                </Group>
-              ))}
-            </Stack>
-            <Button variant="subtle" fullWidth mt="md" size="xs">View All Logs</Button>
-          </Paper>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, lg: 5 }}>
-          <SimpleGrid cols={2} spacing="lg">
-            {[
-              { label: 'Create Course', icon: LuBookOpen, desc: 'Add new content', color: 'brand' },
-              { label: 'Invite Student', icon: LuUsers, desc: 'Bulk or individual', color: 'indigo' },
-              { label: 'AI Prediction', icon: LuZap, desc: 'Run latest model', color: 'orange' },
-              { label: 'Export Data', icon: LuTrendingUp, desc: 'CSV or JSON', color: 'teal' },
-            ].map((action, i) => (
-              <Paper 
-                key={i} 
-                component="button"
-                p="lg" 
-                radius="lg" 
-                withBorder 
-                style={(theme) => ({
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  backgroundColor: theme.colors.dark[7],
-                  '&:hover': {
-                    borderColor: theme.colors.brand[5],
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.2s ease'
-                })}
-              >
-                <ThemeIcon size="lg" radius="md" color={action.color} mb="md">
-                  <action.icon size={20} />
-                </ThemeIcon>
-                <Text size="sm" fw={700}>{action.label}</Text>
-                <Text size="10px" c="dimmed" mt={4}>{action.desc}</Text>
-              </Paper>
-            ))}
-          </SimpleGrid>
+            </Box>
+          </CardWrapper>
         </Grid.Col>
       </Grid>
     </Stack>

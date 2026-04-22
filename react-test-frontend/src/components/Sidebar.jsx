@@ -1,95 +1,94 @@
 import React from 'react';
-import { NavLink, Stack, Box, Text, ThemeIcon, Group } from '@mantine/core';
+import { 
+  Box, 
+  NavLink, 
+  Stack, 
+  Text, 
+  ThemeIcon, 
+  Group,
+  Button
+} from '@mantine/core';
 import { 
   LuLayoutDashboard, 
   LuBookOpen, 
   LuUsers, 
   LuZap, 
   LuSettings, 
-  LuCircleHelp 
+  LuLogOut
 } from 'react-icons/lu';
-import { Link, useLocation } from 'react-router-dom';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const MENU_ITEMS = [
-  { icon: LuLayoutDashboard, label: 'Dashboard', path: '/' },
-  { icon: LuBookOpen, label: 'Courses', path: '/courses' },
-  { icon: LuUsers, label: 'Students', path: '/students' },
-  { icon: LuZap, label: 'AI Predictor', path: '/ai' },
-  { icon: LuSettings, label: 'Settings', path: '/settings' },
+const navData = [
+  { label: 'Dashboard', icon: LuLayoutDashboard, path: '/dashboard', color: 'brand' },
+  { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
+  { label: 'Community', icon: LuUsers, path: '/students', color: 'blue' },
+  { label: 'Success Engine', icon: LuZap, path: '/ai', color: 'orange' },
 ];
 
 export const Sidebar = () => {
   const location = useLocation();
-  const [parent] = useAutoAnimate();
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
+
+  const handleLogout = () => {
+    localStorage.removeItem('slms_token');
+    localStorage.removeItem('slms_user');
+    navigate('/');
+  };
 
   return (
-    <Box 
-      component="aside" 
-      w={260} 
-      h="100vh" 
-      p="md" 
-      style={(theme) => ({
-        borderRight: `1px solid ${theme.colors.dark[4]}`,
-        backgroundColor: theme.colors.dark[7],
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'sticky',
-        top: 0
-      })}
-    >
-      <Group p="md" mb="xl">
-        <ThemeIcon size="xl" radius="md" variant="filled" color="brand">
-          <LuZap size={24} />
-        </ThemeIcon>
-        <Text size="xl" fw={900} tracking="tight">
-          SmartLMS<Text span c="brand" inherit>.AI</Text>
-        </Text>
-      </Group>
+    <Box className="h-full flex flex-col glass border-r-0 rounded-r-[2rem] shadow-none overflow-hidden">
+      <Stack p="xl" gap="xl" className="flex-1">
+        <Group justify="center" mb="xl">
+          <ThemeIcon size="xl" radius="md" variant="gradient" gradient={{ from: 'brand', to: 'indigo' }}>
+            <LuZap size={24} />
+          </ThemeIcon>
+          <Text size="xl" fw={900} tracking="tighter">SmartLMS</Text>
+        </Group>
 
-      <Stack gap="xs" ref={parent}>
-        {MENU_ITEMS.map((item) => (
-          <NavLink
-            key={item.path}
-            component={Link}
-            to={item.path}
-            label={item.label}
-            leftSection={<item.icon size={20} />}
-            active={location.pathname === item.path}
-            color="brand"
-            variant="light"
-            styles={{
-              root: { borderRadius: 'var(--mantine-radius-md)' }
-            }}
-          />
-        ))}
+        <Stack gap="xs" className="flex-1">
+          {navData.map((item) => (
+            <NavLink
+              key={item.path}
+              component={Link}
+              to={item.path}
+              label={item.label}
+              leftSection={
+                <ThemeIcon size="md" radius="md" variant={location.pathname === item.path ? 'filled' : 'light'} color={item.color}>
+                  <item.icon size={16} />
+                </ThemeIcon>
+              }
+              active={location.pathname === item.path}
+              variant="filled"
+              className={`rounded-xl transition-all duration-200 py-3 ${
+                location.pathname === item.path 
+                  ? 'bg-white/10 text-white' 
+                  : 'hover:bg-white/5 text-slate-400'
+              }`}
+              styles={{
+                label: { fontWeight: 600, fontSize: '0.95rem' }
+              }}
+            />
+          ))}
+        </Stack>
       </Stack>
 
-      <Box mt="auto" p="md">
-        <Box 
-          p="md" 
-          style={(theme) => ({ 
-            backgroundColor: theme.colors.dark[6], 
-            borderRadius: theme.radius.lg,
-            border: `1px solid ${theme.colors.dark[4]}`
-          })}
-        >
-          <Group mb="xs">
-            <ThemeIcon size="sm" radius="xl" variant="light" color="brand">
-              <LuCircleHelp size={14} />
-            </ThemeIcon>
-            <Text size="xs" fw={700} tt="uppercase" c="dimmed">AI Support</Text>
-          </Group>
-          <Text size="xs" c="dimmed" mb="md">
-            Learn how to maximize student engagement with AI insights.
-          </Text>
+      <Box p="xl" className="border-t border-white/5 bg-white/5">
+        <Stack gap="xs">
           <NavLink
-            label="View Tutorials"
-            variant="filled"
-            bg="dark.4"
-            styles={{ root: { borderRadius: 'var(--mantine-radius-sm)', textAlign: 'center' } }}
+            component={Link}
+            to="/settings"
+            label="Settings"
+            leftSection={<LuSettings size={18} />}
+            className="rounded-xl text-slate-400 hover:bg-white/5"
           />
-        </Box>
+          <NavLink
+            onClick={handleLogout}
+            label="Logout"
+            leftSection={<LuLogOut size={18} />}
+            className="rounded-xl text-red-400 hover:bg-red-500/5 transition-colors"
+          />
+        </Stack>
       </Box>
     </Box>
   );
