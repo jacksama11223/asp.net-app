@@ -1,27 +1,31 @@
 import React from 'react';
+import { AppShell, Box } from '@mantine/core';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 export const Layout = ({ children }) => {
+  const [parent] = useAutoAnimate();
+
   return (
-    <div className="flex min-h-screen bg-bg-base">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+    <AppShell
+      navbar={{ width: 260, breakpoint: 'sm' }}
+      header={{ height: 80 }}
+      padding="md"
+    >
+      <AppShell.Header>
         <Topbar />
-        <main className="flex-1 overflow-x-hidden">
-          <AnimatePresence mode="wait">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </div>
-    </div>
+      </AppShell.Header>
+
+      <AppShell.Navbar>
+        <Sidebar />
+      </AppShell.Navbar>
+
+      <AppShell.Main bg="dark.8">
+        <Box ref={parent} style={{ maxWidth: 1200, margin: '0 auto', paddingBottom: 40 }}>
+          {children}
+        </Box>
+      </AppShell.Main>
+    </AppShell>
   );
 };

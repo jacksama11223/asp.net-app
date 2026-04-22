@@ -2,3 +2,38 @@
 2026-04-22 13:23:25.911 +07:00 [WRN] Entity 'Exam' has a global query filter defined and is the required end of a relationship with the entity 'QuizAttempt'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
 2026-04-22 13:23:26.077 +07:00 [WRN] No store type was specified for the decimal property 'AI_BaseSalaryImpact' on entity type 'Course'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
 2026-04-22 13:23:26.082 +07:00 [WRN] No store type was specified for the decimal property 'DiscountPrice' on entity type 'Course'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-04-22 13:23:28.560 +07:00 [INF] Start installing Hangfire SQL objects...
+2026-04-22 13:23:29.381 +07:00 [INF] Hangfire SQL objects installed.
+2026-04-22 13:23:30.163 +07:00 [INF] Assessment Event Handler is starting...
+2026-04-22 13:23:30.801 +07:00 [INF] Starting Hangfire Server using job storage: 'SQL Server: localhost@SmartLMS'
+2026-04-22 13:23:30.803 +07:00 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2026-04-22 13:23:30.805 +07:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2026-04-22 13:23:31.149 +07:00 [INF] Server desktop-36u3ca2:15700:0f6794ce successfully announced in 324.2681 ms
+2026-04-22 13:23:31.159 +07:00 [INF] Server desktop-36u3ca2:15700:0f6794ce is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, SqlServerHeartbeatProcess, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2026-04-22 13:23:31.169 +07:00 [INF] Server desktop-36u3ca2:15700:0f6794ce all the dispatchers started
+2026-04-22 13:23:31.213 +07:00 [INF] 1 servers were removed due to timeout
+2026-04-22 15:23:36.101 +07:00 [WRN] Entity 'Exam' has a global query filter defined and is the required end of a relationship with the entity 'ExamQuestion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-04-22 15:23:36.157 +07:00 [WRN] Entity 'Exam' has a global query filter defined and is the required end of a relationship with the entity 'QuizAttempt'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-04-22 15:23:36.234 +07:00 [WRN] No store type was specified for the decimal property 'AI_BaseSalaryImpact' on entity type 'Course'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-04-22 15:23:36.236 +07:00 [WRN] No store type was specified for the decimal property 'DiscountPrice' on entity type 'Course'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-04-22 15:23:37.979 +07:00 [INF] Start installing Hangfire SQL objects...
+2026-04-22 15:23:38.649 +07:00 [INF] Hangfire SQL objects installed.
+2026-04-22 15:23:39.071 +07:00 [INF] Assessment Event Handler is starting...
+2026-04-22 15:23:39.168 +07:00 [INF] Starting Hangfire Server using job storage: 'SQL Server: localhost@SmartLMS'
+2026-04-22 15:23:39.169 +07:00 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2026-04-22 15:23:39.170 +07:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2026-04-22 15:23:39.211 +07:00 [INF] Server desktop-36u3ca2:23744:55329a51 successfully announced in 27.0065 ms
+2026-04-22 15:23:39.215 +07:00 [INF] Server desktop-36u3ca2:23744:55329a51 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, SqlServerHeartbeatProcess, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2026-04-22 15:23:39.226 +07:00 [INF] Server desktop-36u3ca2:23744:55329a51 all the dispatchers started
+2026-04-22 15:23:39.228 +07:00 [INF] 1 servers were removed due to timeout
+2026-04-22 15:32:40.811 +07:00 [INF] 🛡️ [IAM AUDIT TRAIL] User 'System Administrator' executed POST on /CourseManagement/UpdateHierarchy. Context: SmartLMS.Web.Controllers.CourseManagementController.UpdateHierarchy (SmartLMS.Web)
+2026-04-22 15:32:55.249 +07:00 [INF] Redirecting User 1004 to VNPay for Course 1. TxnRef: 639124687749164331
+2026-04-22 15:33:10.633 +07:00 [INF] Redirecting User 1004 to VNPay for Course 1. TxnRef: 639124687906256133

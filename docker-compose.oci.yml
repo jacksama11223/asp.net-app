@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  web:
+    image: smartlms-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
+      - ConnectionStrings__DefaultConnection=Server=db;Database=SmartLMS;User Id=sa;Password=YourCloudPassword123!;TrustServerCertificate=True;
+      - Redis__ConnectionString=redis:6379,password=YourCloudRedisPass
+      - RabbitMQ__HostName=rabbitmq
+    depends_on:
+      - db
+      - redis
+    networks:
+      - lms-cloud-net
+
+  db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: smartlms-db-cloud
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourCloudPassword123!
+    ports:
+      - "1433:1433" # Mở port nếu muốn dev từ xa, không thì bỏ đi cho bảo mật
+    networks:
+      - lms-cloud-net
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass YourCloudRedisPass
+    networks:
+      - lms-cloud-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    networks:
+      - lms-cloud-net
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --url http://web:8080
+    restart: always
+    networks:
+      - lms-cloud-net
+
+networks:
+  lms-cloud-net:
+    driver: bridge

@@ -1,82 +1,96 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { NavLink, Stack, Box, Text, ThemeIcon, Group } from '@mantine/core';
 import { 
-  LayoutDashboard, 
-  BookOpen, 
-  Users, 
-  Zap, 
-  Settings, 
-  HelpCircle,
-  ChevronRight
-} from 'lucide-react';
+  LuLayoutDashboard, 
+  LuBookOpen, 
+  LuUsers, 
+  LuZap, 
+  LuSettings, 
+  LuCircleHelp 
+} from 'react-icons/lu';
 import { Link, useLocation } from 'react-router-dom';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const MENU_ITEMS = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-  { icon: BookOpen, label: 'Courses', path: '/courses' },
-  { icon: Users, label: 'Students', path: '/students' },
-  { icon: Zap, label: 'AI Predictor', path: '/ai' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+  { icon: LuLayoutDashboard, label: 'Dashboard', path: '/' },
+  { icon: LuBookOpen, label: 'Courses', path: '/courses' },
+  { icon: LuUsers, label: 'Students', path: '/students' },
+  { icon: LuZap, label: 'AI Predictor', path: '/ai' },
+  { icon: LuSettings, label: 'Settings', path: '/settings' },
 ];
 
 export const Sidebar = () => {
   const location = useLocation();
+  const [parent] = useAutoAnimate();
 
   return (
-    <aside className="w-64 h-screen border-r border-border-base bg-card-base flex flex-col sticky top-0">
-      <div className="p-6 flex items-center gap-3">
-        <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center shadow-lg shadow-brand-primary/20">
-          <Zap className="text-white fill-white" size={24} />
-        </div>
-        <span className="font-bold text-xl tracking-tight text-text-primary">SmartLMS<span className="text-brand-primary">.AI</span></span>
-      </div>
+    <Box 
+      component="aside" 
+      w={260} 
+      h="100vh" 
+      p="md" 
+      style={(theme) => ({
+        borderRight: `1px solid ${theme.colors.dark[4]}`,
+        backgroundColor: theme.colors.dark[7],
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'sticky',
+        top: 0
+      })}
+    >
+      <Group p="md" mb="xl">
+        <ThemeIcon size="xl" radius="md" variant="filled" color="brand">
+          <LuZap size={24} />
+        </ThemeIcon>
+        <Text size="xl" fw={900} tracking="tight">
+          SmartLMS<Text span c="brand" inherit>.AI</Text>
+        </Text>
+      </Group>
 
-      <nav className="flex-1 px-4 py-6 space-y-2">
-        {MENU_ITEMS.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
-                "flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group",
-                isActive 
-                  ? "bg-brand-primary/10 text-brand-primary" 
-                  : "text-text-secondary hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-text-primary"
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <item.icon size={20} className={cn(isActive && "animate-pulse")} />
-                <span className="font-medium">{item.label}</span>
-              </div>
-              {isActive && (
-                <motion.div layoutId="active" className="w-1.5 h-1.5 bg-brand-primary rounded-full" />
-              )}
-            </Link>
-          );
-        })}
-      </nav>
+      <Stack gap="xs" ref={parent}>
+        {MENU_ITEMS.map((item) => (
+          <NavLink
+            key={item.path}
+            component={Link}
+            to={item.path}
+            label={item.label}
+            leftSection={<item.icon size={20} />}
+            active={location.pathname === item.path}
+            color="brand"
+            variant="light"
+            styles={{
+              root: { borderRadius: 'var(--mantine-radius-md)' }
+            }}
+          />
+        ))}
+      </Stack>
 
-      <div className="p-4 mt-auto">
-        <div className="bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-border-base">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-full bg-brand-secondary/20 flex items-center justify-center text-brand-secondary">
-              <HelpCircle size={16} />
-            </div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">AI Support</span>
-          </div>
-          <p className="text-[11px] text-text-secondary mb-3">Learn how to maximize student engagement with AI insights.</p>
-          <button className="w-full py-2 bg-card-base border border-border-base rounded-lg text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-            View Tutorials
-          </button>
-        </div>
-      </div>
-    </aside>
+      <Box mt="auto" p="md">
+        <Box 
+          p="md" 
+          style={(theme) => ({ 
+            backgroundColor: theme.colors.dark[6], 
+            borderRadius: theme.radius.lg,
+            border: `1px solid ${theme.colors.dark[4]}`
+          })}
+        >
+          <Group mb="xs">
+            <ThemeIcon size="sm" radius="xl" variant="light" color="brand">
+              <LuCircleHelp size={14} />
+            </ThemeIcon>
+            <Text size="xs" fw={700} tt="uppercase" c="dimmed">AI Support</Text>
+          </Group>
+          <Text size="xs" c="dimmed" mb="md">
+            Learn how to maximize student engagement with AI insights.
+          </Text>
+          <NavLink
+            label="View Tutorials"
+            variant="filled"
+            bg="dark.4"
+            styles={{ root: { borderRadius: 'var(--mantine-radius-sm)', textAlign: 'center' } }}
+          />
+        </Box>
+      </Box>
+    </Box>
   );
 };
