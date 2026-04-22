@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace SmartLMS.Web.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/auth")]
 [ApiController]
 public class AuthApiController : ControllerBase
 {
@@ -47,10 +47,19 @@ public class AuthApiController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var existingUser = await _userService.GetUserByEmailAsync(request.Email);
-        if (existingUser != null)
+        // Check Email
+        var existingEmail = await _userService.GetUserByEmailAsync(request.Email);
+        if (existingEmail != null)
         {
-            return BadRequest(new { message = "Email đã được sử dụng." });
+            return BadRequest(new { message = "Email đã được sử dụng bởi tài khoản khác." });
+        }
+
+        // Check Username
+        var allUsers = await _userService.GetAllUsersAsync();
+        var existingUsername = allUsers.FirstOrDefault(u => u.Username?.ToLower() == request.Username.ToLower());
+        if (existingUsername != null)
+        {
+            return BadRequest(new { message = "Tên đăng nhập này đã tồn tại. Vui lòng chọn tên khác." });
         }
 
         var user = new User
@@ -65,7 +74,10 @@ public class AuthApiController : ControllerBase
         var success = await _userService.RegisterAsync(user, request.Password);
         if (!success)
         {
-            return StatusCode(500, new { message = "Đã xảy ra lỗi khi đăng ký tài khoản." });
+            return StatusCode(500, new { 
+                message = "Đã xảy ra lỗi hệ thống khi đăng ký.",
+                detail = "Không thể lưu thông tin người dùng vào cơ sở dữ liệu."
+            });
         }
 
         return Ok(new { message = "Đăng ký thành công!" });

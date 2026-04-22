@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppShell, Box } from '@mantine/core';
+import { AppShell, Container } from '@mantine/core';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { motion } from 'framer-motion';
@@ -7,31 +7,31 @@ import { motion } from 'framer-motion';
 export const Layout = ({ children }) => {
   return (
     <AppShell
-      navbar={{ width: 280, breakpoint: 'sm' }}
       header={{ height: 80 }}
+      navbar={{ width: 280, breakpoint: 'sm' }}
       padding="xl"
-      className="bg-slate-950 min-h-screen"
+      className="bg-slate-50 relative overflow-hidden"
     >
-      <AppShell.Header className="glass border-b border-white/5 h-20">
+      <div className="absolute inset-0 bg-mesh-gradient opacity-40 pointer-events-none" />
+      
+      <AppShell.Header className="bg-white/40 backdrop-blur-xl border-b border-black/5">
         <Topbar />
       </AppShell.Header>
 
-      <AppShell.Navbar className="bg-transparent border-r-0 pt-4 px-4 overflow-visible">
+      <AppShell.Navbar className="bg-transparent border-none">
         <Sidebar />
       </AppShell.Navbar>
 
-      <AppShell.Main className="relative">
-        {/* Subtle background glow */}
-        <div className="fixed inset-0 bg-mesh-gradient opacity-10 pointer-events-none" />
-        
-        <motion.div
-           initial={{ opacity: 0, x: 20 }}
-           animate={{ opacity: 1, x: 0 }}
-           transition={{ duration: 0.5 }}
-           className="relative z-10 max-w-7xl mx-auto"
-        >
-          {children}
-        </motion.div>
+      <AppShell.Main className="relative z-10">
+        <Container size="xl" p={0}>
+          <motion.div
+             initial={{ opacity: 0, x: 20 }}
+             animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.5 }}
+          >
+            {children}
+          </motion.div>
+        </Container>
       </AppShell.Main>
     </AppShell>
   );

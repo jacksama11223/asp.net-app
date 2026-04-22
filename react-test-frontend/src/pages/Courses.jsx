@@ -53,7 +53,6 @@ export const Courses = () => {
     setLoading(true);
     setError(null);
     try {
-      // Fetching from real backend
       const response = await axios.get('http://localhost:5181/api/public/courses');
       setCourses(response.data);
     } catch (err) {
@@ -77,31 +76,32 @@ export const Courses = () => {
       <Box>
         <Group justify="space-between" align="flex-end">
           <Box>
-            <Title order={1} fw={900} className="tracking-tighter text-4xl">
-              Course <Text span variant="gradient" gradient={{ from: 'brand', to: 'cyan' }} inherit>Marketplace</Text> 📚
+            <Title order={1} fw={900} className="tracking-tighter text-4xl text-slate-900">
+              Course <Text span variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} inherit>Marketplace</Text> 📚
             </Title>
             <Text c="dimmed" size="sm" mt={4}>Choose from 150+ expert-led courses to boost your career.</Text>
           </Box>
           <Group gap="sm">
             <Button variant="default" radius="md">My Learning</Button>
-            <Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md">Browse Categories</Button>
+            <Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" className="shadow-lg shadow-brand-500/20">Browse Categories</Button>
           </Group>
         </Group>
       </Box>
 
-      <Group grow className="glass p-2 rounded-2xl bg-white/5 backdrop-blur-md">
+      <Group grow className="glass p-2 rounded-2xl bg-white/60 backdrop-blur-md border border-black/5">
         <TextInput
           placeholder="Search by title, instructor, or category..."
-          leftSection={<LuSearch size={18} className="text-brand-400" />}
+          leftSection={<LuSearch size={18} className="text-brand-600" />}
           radius="xl"
           size="md"
           variant="unstyled"
-          className="px-4"
+          className="px-4 text-slate-900"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Button 
           variant="light" 
+          color="gray"
           leftSection={<LuFilter size={18} />} 
           size="md" 
           radius="xl"
@@ -121,7 +121,7 @@ export const Courses = () => {
       {loading ? (
         <Stack align="center" py={100} gap="md">
           <Loader color="brand" size="xl" type="bars" />
-          <Text c="dimmed" fw={500}>Curating your learning experience...</Text>
+          <Text c="dimmed" fw={600}>Curating your learning experience...</Text>
         </Stack>
       ) : (
         <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="xl" ref={parent}>
@@ -136,14 +136,14 @@ export const Courses = () => {
                     className="group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge color="brand.6" variant="filled" size="xs" radius="sm">
+                    <Badge color="brand" variant="filled" size="xs" radius="sm">
                       {course.category || 'Professional'}
                     </Badge>
                   </div>
                 </Box>
 
                 <Stack p="xl" gap="md">
-                  <Title order={3} className="tracking-tight leading-tight group-hover:text-brand-400 transition-colors">
+                  <Title order={3} className="tracking-tight leading-tight group-hover:text-brand-600 transition-colors text-slate-900">
                     {course.courseName}
                   </Title>
 
@@ -151,7 +151,7 @@ export const Courses = () => {
                     <Avatar radius="xl" size="sm" src={null} color="brand">
                       <LuUser size={14} />
                     </Avatar>
-                    <Text size="sm" fw={600} className="text-slate-300">
+                    <Text size="sm" fw={700} className="text-slate-700">
                       {course.instructorName}
                     </Text>
                   </Group>
@@ -162,7 +162,7 @@ export const Courses = () => {
 
                   <Group justify="space-between" mt="md" align="center">
                     <Stack gap={0}>
-                      <Text size="18px" fw={900}>
+                      <Text size="18px" fw={900} className="text-slate-900">
                         {course.price === 0 ? 'FREE' : `$${course.price}`}
                       </Text>
                       <Group gap={4}>
@@ -175,7 +175,7 @@ export const Courses = () => {
                       color="brand" 
                       radius="md" 
                       rightSection={<LuBookOpen size={16} />}
-                      className="hover:bg-brand-500 hover:text-white transition-colors"
+                      className="hover:bg-brand-600 hover:text-white transition-all shadow-md shadow-brand-500/10"
                     >
                       View Details
                     </Button>

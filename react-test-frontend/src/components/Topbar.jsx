@@ -37,34 +37,34 @@ export const Topbar = () => {
       <Group gap="xl">
         <TextInput
           placeholder="Search courses, lessons, notes..."
-          leftSection={<LuSearch size={18} className="text-brand-400" />}
+          leftSection={<LuSearch size={18} className="text-brand-500" />}
           w={400}
           radius="xl"
           variant="unstyled"
-          className="glass bg-white/5 border-white/10 px-4"
+          className="glass border-black/5 px-4 bg-white/40"
           styles={{ 
-            input: { color: '#fff' } 
+            input: { color: '#0f172a' } 
           }}
         />
         
-        <Badge variant="dot" color="brand" size="lg" className="bg-brand-500/5 px-4 h-9 font-bold border-brand-500/20">
+        <Badge variant="dot" color="brand" size="lg" className="bg-brand-500/5 px-4 h-9 font-bold border-brand-500/10 text-brand-600">
           PRO STUDENT
         </Badge>
       </Group>
 
       <Group gap="lg">
         <Indicator color="brand" offset={4} size={8} withBorder processing>
-          <ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-white/5">
-            <LuBell size={20} />
+          <ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5">
+            <LuBell size={20} className="text-slate-600" />
           </ActionIcon>
         </Indicator>
 
         <Menu shadow="xl" width={220} position="bottom-end" radius="lg">
           <Menu.Target>
-            <UnstyledButton className="hover:bg-white/5 p-1.5 rounded-2xl transition-all">
+            <UnstyledButton className="hover:bg-black/5 p-1.5 rounded-2xl transition-all">
               <Group gap="sm">
                 <Box visibleFrom="md" style={{ textAlign: 'right' }}>
-                  <Text size="sm" fw={700} className="text-white leading-none mb-1">{user.fullName || 'Student'}</Text>
+                  <Text size="sm" fw={700} className="text-slate-900 leading-none mb-1">{user.fullName || 'Student'}</Text>
                   <Text size="10px" tt="uppercase" fw={900} c="dimmed">{user.role || 'Member'}</Text>
                 </Box>
                 <Avatar 
@@ -81,11 +81,11 @@ export const Topbar = () => {
             </UnstyledButton>
           </Menu.Target>
 
-          <Menu.Dropdown className="glass border-white/10 p-2">
+          <Menu.Dropdown className="glass border-black/5 p-2 bg-white/90">
             <Menu.Label>Personal Space</Menu.Label>
             <Menu.Item leftSection={<LuUsers size={16} />}>My Profile</Menu.Item>
             <Menu.Item leftSection={<LuSettings size={16} />}>Preferences</Menu.Item>
-            <Menu.Divider className="border-white/5" />
+            <Menu.Divider className="border-black/5" />
             <Menu.Item 
               color="red" 
               leftSection={<LuLogOut size={16} />}

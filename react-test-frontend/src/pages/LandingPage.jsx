@@ -38,7 +38,7 @@ const Feature = ({ icon: Icon, title, description }) => (
 
 export const LandingPage = () => {
   return (
-    <Box className="min-h-screen bg-slate-950 text-white overflow-hidden selection:bg-brand-500/30">
+    <Box className="min-h-screen bg-slate-50 text-slate-900 overflow-hidden selection:bg-brand-500/30">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-mesh-gradient opacity-30 pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-brand-500/10 blur-[120px] rounded-full pointer-events-none" />
@@ -129,7 +129,7 @@ export const LandingPage = () => {
                 size="xl" 
                 radius="md" 
                 color="gray"
-                className="px-8 border-white/10 hover:bg-white/5"
+                className="px-8 border-black/10 hover:bg-black/5"
               >
                 Watch Demo
               </Button>
@@ -160,7 +160,7 @@ export const LandingPage = () => {
       </Container>
 
       {/* Stats Section */}
-      <Box className="bg-white/5 py-24 border-y border-white/5" id="stats">
+      <Box className="bg-white/40 py-24 border-y border-black/5" id="stats">
         <Container size="xl">
           <SimpleGrid cols={{ base: 2, md: 4 }} className="text-center">
             <Stack gap={0}>

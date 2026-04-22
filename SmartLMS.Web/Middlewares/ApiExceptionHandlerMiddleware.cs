@@ -41,6 +41,7 @@ public class ApiExceptionHandlerMiddleware
             var response = new
             {
                 status = context.Response.StatusCode,
+                message = "Đã xảy ra lỗi hệ thống. Vui lòng liên hệ Admin.", // Added for Frontend consistency
                 title = "Lỗi Server Internal Error",
                 detail = "Đã xảy ra lỗi không mong muốn trên hệ thống. Vui lòng liên hệ Admin.",
                 type = "https://datatracker.ietf.org/doc/html/rfc7807",

@@ -80,17 +80,17 @@ export const Dashboard = () => {
       <Box mb="md">
         <Group justify="space-between" align="flex-end">
           <Box>
-            <Title order={1} fw={900} className="tracking-tighter text-4xl">
-              Morning, <Text span variant="gradient" gradient={{ from: 'brand', to: 'cyan' }} inherit>{user.fullName || 'Student'}</Text> ✨
+            <Title order={1} fw={900} className="tracking-tighter text-4xl text-slate-900">
+              Morning, <Text span variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} inherit>{user.fullName || 'Student'}</Text> ✨
             </Title>
-            <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green" fw={700}>92.4%</Text>. Keep it up!</Text>
+            <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green.7" fw={700}>92.4%</Text>. Keep it up!</Text>
           </Box>
           <Button 
             variant="gradient" 
             gradient={{ from: 'brand', to: 'indigo' }} 
             radius="md" 
             leftSection={<LuZap size={18} />}
-            className="shadow-lg shadow-brand-500/20"
+            className="shadow-xl shadow-brand-500/30"
           >
             Start Learning
           </Button>
@@ -110,8 +110,8 @@ export const Dashboard = () => {
             <Group justify="space-between" mb="xl">
               <Box>
                 <Group gap="xs" mb={4}>
-                  <LuTrendingUp size={20} color="var(--mantine-color-brand-500)" />
-                  <Title order={3} className="tracking-tight">Learning Momentum</Title>
+                  <LuTrendingUp size={20} color="var(--mantine-color-brand-600)" />
+                  <Title order={3} className="tracking-tight text-slate-800">Learning Momentum</Title>
                 </Group>
                 <Text size="xs" c="dimmed">Your engagement data over the last 30 days</Text>
               </Box>
@@ -134,7 +134,7 @@ export const Dashboard = () => {
                     dataKey="month" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fill: '#94a3b8', fontSize: 12 }} 
+                    tick={{ fill: '#64748b', fontSize: 12 }} 
                   />
                   <YAxis hide />
                   <Tooltip 
@@ -163,7 +163,7 @@ export const Dashboard = () => {
           <CardWrapper>
             <Group gap="xs" mb="xl">
               <LuZap size={20} color="orange" />
-              <Title order={3} className="tracking-tight">AI Success Insights</Title>
+              <Title order={3} className="tracking-tight text-slate-800">AI Success Insights</Title>
             </Group>
 
             <Stack gap="xl">
@@ -171,17 +171,17 @@ export const Dashboard = () => {
                 <Box key={item.name}>
                   <Group justify="space-between" mb="xs">
                     <Text size="xs" fw={700} c="dimmed">{item.name}</Text>
-                    <Badge variant="dot" color={item.color}>{item.value}% Probability</Badge>
+                    <Badge variant="light" color={item.color}>{item.value}% Probability</Badge>
                   </Group>
-                  <Progress value={item.value} color={item.color} size="xl" radius="xl" className="bg-white/5" />
+                  <Progress value={item.value} color={item.color} size="xl" radius="xl" className="bg-slate-100" />
                 </Box>
               ))}
             </Stack>
 
-            <Box mt="xl" p="md" radius="md" className="bg-brand-500/10 border border-brand-500/20">
+            <Box mt="xl" p="md" radius="md" className="bg-brand-50 border border-brand-200">
               <Group gap="sm" align="flex-start" wrap="nowrap">
-                <LuTriangleAlert className="text-brand-400 shrink-0" size={18} />
-                <Text size="xs" fw={500} c="brand.1">
+                <LuTriangleAlert className="text-brand-600 shrink-0" size={18} />
+                <Text size="xs" fw={500} c="brand.9">
                   AI detected a drop in your Quiz engagement. Recalibrating your path for next week.
                 </Text>
               </Group>

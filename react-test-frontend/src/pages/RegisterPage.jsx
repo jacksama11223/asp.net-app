@@ -37,7 +37,7 @@ export const RegisterPage = () => {
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Mật khẩu nhập lại không khớp.');
       setLoading(false);
       return;
     }
@@ -50,39 +50,44 @@ export const RegisterPage = () => {
         password: formData.password
       });
       setSuccess(true);
-      toast.success('Registration successful! Please log in.');
+      toast.success('Đăng ký thành công! Đang chuyển hướng...');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      // Improved error detection for RFC 7807 and custom messages
+      const errorMsg = err.response?.data?.message || err.response?.data?.detail || 'Đăng ký thất bại. Vui lòng thử lại sau.';
+      setError(errorMsg);
+      console.error('Registration Error:', err.response?.data);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box className="min-h-screen bg-slate-950 flex items-center justify-center relative overflow-hidden p-6">
-      <div className="absolute inset-0 bg-mesh-gradient opacity-20 pointer-events-none" />
-      
-      <Container size={420} p="xl" className="relative z-10">
+    <Box className="min-h-screen bg-slate-50 flex items-center justify-center relative overflow-hidden p-6">
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 bg-mesh-gradient opacity-50 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-500/5 blur-[120px] rounded-full" />
+
+      <Container size={420} p="xl" className="relative z-10 w-full">
         <Stack align="center" mb={30}>
-          <ThemeIcon size={64} radius="xl" variant="gradient" gradient={{ from: 'brand', to: 'cyan' }} className="shadow-2xl">
+          <ThemeIcon size={64} radius="xl" variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} className="shadow-2xl shadow-brand-500/20 scale-110">
             <LuZap size={32} />
           </ThemeIcon>
           <div className="text-center">
-            <Title fw={900} className="text-white tracking-tight">Create Account</Title>
-            <Text c="dimmed" size="sm" mt={5}>Join our AI-powered learning community today</Text>
+            <Title fw={900} size={32} className="text-slate-900 tracking-tight">Create Account</Title>
+            <Text c="dimmed" size="sm" mt={5}>Join our friendly learning community today</Text>
           </div>
         </Stack>
 
-        <Paper radius="xl" p={35} className="bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl">
+        <Paper radius={24} p={40} className="bg-white/90 backdrop-blur-2xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]">
           {error && (
-            <Alert icon={<LuCircleAlert size={16} />} color="red" radius="md" mb="xl">
+            <Alert icon={<LuCircleAlert size={16} />} color="red" radius="md" mb="xl" variant="light">
               {error}
             </Alert>
           )}
           {success && (
-            <Alert icon={<LuCircleCheck size={16} />} color="teal" radius="md" mb="xl">
-              Registration successful! Redirecting to login...
+            <Alert icon={<LuCircleCheck size={16} />} color="teal" radius="md" mb="xl" variant="light">
+              Đăng ký thành công! Đang chuyển hướng tới đăng nhập...
             </Alert>
           )}
 
@@ -93,53 +98,53 @@ export const RegisterPage = () => {
                 placeholder="John Doe" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuUser size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuUser size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                className="transition-all focus:scale-[1.01]"
               />
               <TextInput 
                 label="Username" 
                 placeholder="johndoe" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuUser size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuUser size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, username: e.target.value})}
+                className="transition-all focus:scale-[1.01]"
               />
               <TextInput 
                 label="Email" 
                 placeholder="email@example.com" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuMail size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuMail size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
+                className="transition-all focus:scale-[1.01]"
               />
               <PasswordInput 
                 label="Password" 
                 placeholder="Enter password" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuLock size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuLock size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
+                className="transition-all focus:scale-[1.01]"
               />
               <PasswordInput 
                 label="Confirm Password" 
                 placeholder="Repeat password" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuLock size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuLock size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                className="transition-all focus:scale-[1.01]"
               />
 
-              <Button type="submit" fullWidth size="lg" radius="lg" color="brand" loading={loading} className="mt-4">
+              <Button type="submit" fullWidth size="lg" radius="md" color="brand" loading={loading} className="mt-4 h-14 text-md shadow-xl shadow-brand-500/30 active:scale-95 transition-all">
                 Register Now
               </Button>
             </Stack>
@@ -161,6 +166,7 @@ export const RegisterPage = () => {
             color="gray" 
             leftSection={<LuArrowLeft size={16} />}
             size="xs"
+            className="hover:bg-brand-50 hover:text-brand-600 rounded-full"
           >
             Back to landing
           </Button>

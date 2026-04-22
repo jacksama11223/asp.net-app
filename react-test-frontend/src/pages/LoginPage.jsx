@@ -32,7 +32,7 @@ export const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post('http://localhost:5181/api/AuthApi/token', {
+      const response = await axios.post('http://localhost:5181/api/auth/token', {
         username,
         password
       });
@@ -41,33 +41,33 @@ export const LoginPage = () => {
       toast.success('Login successful! Welcome back.');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials or connection error.');
+      setError(err.response?.data?.message || err.response?.data?.detail || 'Invalid credentials or connection error.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box className="min-h-screen bg-slate-950 flex items-center justify-center relative overflow-hidden p-6">
-      {/* Background Decor */}
-      <div className="absolute inset-0 bg-mesh-gradient opacity-20 pointer-events-none" />
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-brand-500/10 blur-[100px] rounded-full" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 blur-[100px] rounded-full" />
+    <Box className="min-h-screen bg-slate-50 flex items-center justify-center relative overflow-hidden p-6">
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 bg-mesh-gradient opacity-50 pointer-events-none" />
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-brand-500/5 blur-[100px] rounded-full" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/5 blur-[100px] rounded-full" />
 
-      <Container size={420} p="xl" className="relative z-10">
+      <Container size={420} p="xl" className="relative z-10 w-full">
         <Stack align="center" mb={40}>
-          <ThemeIcon size={64} radius="xl" variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} className="shadow-2xl shadow-brand-500/50">
+          <ThemeIcon size={64} radius="xl" variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} className="shadow-2xl shadow-brand-500/20 scale-110">
             <LuZap size={32} />
           </ThemeIcon>
           <div className="text-center">
-            <Title fw={900} className="text-white tracking-tight">Welcome Back</Title>
+            <Title fw={900} size={32} className="text-slate-900 tracking-tight">Welcome Back</Title>
             <Text c="dimmed" size="sm" mt={5}>Enter your credentials to access your workspace</Text>
           </div>
         </Stack>
 
-        <Paper radius="xl" p={35} className="bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl">
+        <Paper radius={24} p={40} className="bg-white/90 backdrop-blur-2xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]">
           {error && (
-            <Alert icon={<LuCircleAlert size={16} />} color="red" radius="md" mb="xl">
+            <Alert icon={<LuCircleAlert size={16} />} color="red" radius="md" mb="xl" variant="light">
               {error}
             </Alert>
           )}
@@ -79,22 +79,22 @@ export const LoginPage = () => {
                 placeholder="admin@smartlms.ai" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuMail size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuMail size={16} className="text-brand-500" />}
                 value={username}
                 onChange={(e) => setUsername(e.currentTarget.value)}
+                className="transition-all focus:scale-[1.01]"
               />
               <PasswordInput 
                 label="Password" 
                 placeholder="Your secret password" 
                 required 
                 size="md"
-                radius="lg"
-                leftSection={<LuLock size={16} />}
-                styles={{ input: { backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff' } }}
+                radius="md"
+                leftSection={<LuLock size={16} className="text-brand-500" />}
                 value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
+                className="transition-all focus:scale-[1.01]"
               />
 
               <Group justify="space-between" mt="xs">
@@ -102,7 +102,7 @@ export const LoginPage = () => {
                 <Anchor component="button" size="xs" color="brand" fw={700}>Forgot password?</Anchor>
               </Group>
 
-              <Button type="submit" fullWidth size="lg" radius="lg" color="brand" loading={loading} className="mt-4 shadow-lg shadow-brand-500/20">
+              <Button type="submit" fullWidth size="lg" radius="md" color="brand" loading={loading} className="mt-4 h-14 text-md shadow-xl shadow-brand-500/30 active:scale-95 transition-all">
                 Log In
               </Button>
             </Stack>
@@ -124,6 +124,7 @@ export const LoginPage = () => {
             color="gray" 
             leftSection={<LuArrowLeft size={16} />}
             size="xs"
+            className="hover:bg-brand-50 hover:text-brand-600 rounded-full"
           >
             Back to landing
           </Button>
