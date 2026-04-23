@@ -37,3 +37,4 @@
 2026-04-22 15:32:40.811 +07:00 [INF] 🛡️ [IAM AUDIT TRAIL] User 'System Administrator' executed POST on /CourseManagement/UpdateHierarchy. Context: SmartLMS.Web.Controllers.CourseManagementController.UpdateHierarchy (SmartLMS.Web)
 2026-04-22 15:32:55.249 +07:00 [INF] Redirecting User 1004 to VNPay for Course 1. TxnRef: 639124687749164331
 2026-04-22 15:33:10.633 +07:00 [INF] Redirecting User 1004 to VNPay for Course 1. TxnRef: 639124687906256133
+2026-04-22 17:29:51.277 +07:00 [WRN] Stopping the server due to DomainUnload or ProcessExit event...

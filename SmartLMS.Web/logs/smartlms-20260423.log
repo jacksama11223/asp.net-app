@@ -1,0 +1,18 @@
+2026-04-23 13:42:41.044 +07:00 [WRN] Entity 'Exam' has a global query filter defined and is the required end of a relationship with the entity 'ExamQuestion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-04-23 13:42:41.089 +07:00 [WRN] Entity 'Exam' has a global query filter defined and is the required end of a relationship with the entity 'QuizAttempt'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-04-23 13:42:41.168 +07:00 [WRN] No store type was specified for the decimal property 'AI_BaseSalaryImpact' on entity type 'Course'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-04-23 13:42:41.168 +07:00 [WRN] No store type was specified for the decimal property 'DiscountPrice' on entity type 'Course'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-04-23 13:42:44.393 +07:00 [INF] Start installing Hangfire SQL objects...
+2026-04-23 13:42:45.042 +07:00 [INF] Hangfire SQL objects installed.
+2026-04-23 13:42:46.002 +07:00 [INF] Assessment Event Handler is starting...
+2026-04-23 13:42:46.209 +07:00 [INF] Starting Hangfire Server using job storage: 'SQL Server: localhost@SmartLMS'
+2026-04-23 13:42:46.210 +07:00 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2026-04-23 13:42:46.210 +07:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2026-04-23 13:42:46.297 +07:00 [INF] Server desktop-36u3ca2:11012:569c588d successfully announced in 67.6473 ms
+2026-04-23 13:42:46.301 +07:00 [INF] Server desktop-36u3ca2:11012:569c588d is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, SqlServerHeartbeatProcess, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2026-04-23 13:42:46.315 +07:00 [INF] Server desktop-36u3ca2:11012:569c588d all the dispatchers started
+2026-04-23 13:42:46.323 +07:00 [INF] 1 servers were removed due to timeout

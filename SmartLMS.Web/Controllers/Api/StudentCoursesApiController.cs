@@ -30,10 +30,10 @@ namespace SmartLMS.Web.Controllers.Api
                 .Where(e => e.UserId == userId)
                 .Select(e => new {
                     e.CourseId,
-                    e.Course.Title,
-                    e.Course.ThumbnailUrl,
+                    Title = e.Course != null ? e.Course.Title : "Unknown",
+                    ThumbnailUrl = e.Course != null ? e.Course.ThumbnailUrl : "",
                     e.Progress,
-                    e.EnrollmentDate
+                    EnrollmentDate = e.LastAccessDate // Using LastAccessDate as fallback
                 })
                 .ToListAsync();
 
@@ -50,7 +50,7 @@ namespace SmartLMS.Web.Controllers.Api
             var enrollment = await _context.Enrollments
                 .AnyAsync(e => e.UserId == userId && e.CourseId == courseId);
             
-            if (!enrollment) return Forbid("You are not enrolled in this course.");
+            if (!enrollment) return Forbid(); // Changed from string message to standard Forbid
 
             var course = await _context.Courses
                 .Include(c => c.CourseModules)
@@ -68,8 +68,8 @@ namespace SmartLMS.Web.Controllers.Api
                     Lessons = m.Lessons.Select(l => new {
                         l.LessonId,
                         l.Title,
-                        l.ContentType,
-                        l.ContentBody // In a real app, you might not send full body yet
+                        ContentType = !string.IsNullOrEmpty(l.VideoUrl) ? "Video" : "Text",
+                        ContentBody = l.Content
                     })
                 })
             });

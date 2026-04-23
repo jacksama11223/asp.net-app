@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: smartlms-db-prod
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrongPassword123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+    networks:
+      - smartlms-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartlms-backend-prod
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db;Database=SmartLMS;User Id=sa;Password=YourStrongPassword123!;TrustServerCertificate=True;
+      - Redis__ConnectionString=redis:6379,password=YourRedisPass
+      - RabbitMQ__HostName=rabbitmq
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+    ports:
+      - "5181:8080" # Mapping to 5181 for external consistency
+    networks:
+      - smartlms-net
+
+  frontend:
+    build:
+      context: ./react-test-frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:5181 # This should be your server's Public IP/Domain in prod
+    container_name: smartlms-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - smartlms-net
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass YourRedisPass
+    networks:
+      - smartlms-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    networks:
+      - smartlms-net
+
+volumes:
+  sql-data:
+
+networks:
+  smartlms-net:
+    driver: bridge
