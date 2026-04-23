@@ -2529,13 +2529,14 @@
       "SmartLMS.Business/1.0.0": {
         "dependencies": {
           "BCrypt.Net-Next": "4.1.0",
+          "Dapper": "2.1.72",
           "DinkToPdf": "1.0.8",
           "EPPlus": "8.5.1",
           "Hangfire.Core": "1.8.23",
           "MailKit": "4.16.0",
-          "Microsoft.Data.SqlClient": "6.0.2",
           "Microsoft.Extensions.Hosting": "8.0.0",
           "Microsoft.ML": "5.0.0",
+          "MySqlConnector": "2.4.0",
           "QRCoder": "1.8.0",
           "RabbitMQ.Client": "6.8.1",
           "SmartLMS.Data": "1.0.0",

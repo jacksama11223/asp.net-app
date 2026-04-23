@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[4.1.0, )"
             },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.72, )"
+            },
             "DinkToPdf": {
               "target": "Package",
               "version": "[1.0.8, )"
@@ -70,10 +74,6 @@
               "target": "Package",
               "version": "[4.16.0, )"
             },
-            "Microsoft.Data.SqlClient": {
-              "target": "Package",
-              "version": "[6.0.2, )"
-            },
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -81,6 +81,10 @@
             "Microsoft.ML": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.3.7, )"
             },
             "QRCoder": {
               "target": "Package",
