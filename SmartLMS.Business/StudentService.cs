@@ -1,5 +1,5 @@
 using Dapper;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using Microsoft.Extensions.Configuration;
 using SmartLMS.Models;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace SmartLMS.Business;
             _emailService = emailService;
         }
 
-        private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
+        private IDbConnection CreateConnection() => new MySqlConnection(_connectionString);
 
         public async Task<IEnumerable<StudentViewModel>> GetAllStudentsAsync()
         {

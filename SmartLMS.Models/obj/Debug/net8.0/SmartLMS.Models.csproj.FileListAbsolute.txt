@@ -1,0 +1,12 @@
+C:\code\asp.net\SmartLMS.Models\bin\Debug\net8.0\SmartLMS.Models.deps.json
+C:\code\asp.net\SmartLMS.Models\bin\Debug\net8.0\SmartLMS.Models.dll
+C:\code\asp.net\SmartLMS.Models\bin\Debug\net8.0\SmartLMS.Models.pdb
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.AssemblyInfoInputs.cache
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.AssemblyInfo.cs
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.csproj.CoreCompileInputs.cache
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.sourcelink.json
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.dll
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\refint\SmartLMS.Models.dll
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\SmartLMS.Models.pdb
+C:\code\asp.net\SmartLMS.Models\obj\Debug\net8.0\ref\SmartLMS.Models.dll

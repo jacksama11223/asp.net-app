@@ -1,0 +1,207 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = SmartLMS.Web
+build_property.RootNamespace = SmartLMS.Web
+build_property.ProjectDir = C:\code\asp.net\SmartLMS.Web\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\code\asp.net\SmartLMS.Web
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Affiliate/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWZmaWxpYXRlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/AchievementHub.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxBY2hpZXZlbWVudEh1Yi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/BadgeStudio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxCYWRnZVN0dWRpby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/BulkImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxCdWxrSW1wb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/ExamAssembler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxFeGFtQXNzZW1ibGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/ItemAnalysis.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxJdGVtQW5hbHlzaXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/Leaderboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxMZWFkZXJib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/QuestionBuilder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxRdWVzdGlvbkJ1aWxkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/QuizWizard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxRdWl6V2l6YXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Assessment/RuleEngine.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXNzbWVudFxSdWxlRW5naW5lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Cohort/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29ob3J0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Cohort/Members.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29ob3J0XE1lbWJlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Coupon/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cG9uXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Coupon/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cG9uXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Curriculum.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxDdXJyaWN1bHVtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/_CourseDetailPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlTWFuYWdlbWVudFxfQ291cnNlRGV0YWlsUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Dashboard/Pulse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFB1bHNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Helpdesk/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/IAM/ApiKeys.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSUFNXEFwaUtleXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/IAM/Permissions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSUFNXFBlcm1pc3Npb25zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Integrations/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW50ZWdyYXRpb25zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Marketing/CertificateManager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFya2V0aW5nXENlcnRpZmljYXRlTWFuYWdlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Marketing/Designer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFya2V0aW5nXERlc2lnbmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Marketing/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFya2V0aW5nXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Payment/Failure.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxGYWlsdXJlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Payment/PaymentResults.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxQYXltZW50UmVzdWx0cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Payment/Success.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxTdWNjZXNzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Revenue/Audit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2ZW51ZVxBdWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Revenue/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2ZW51ZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/SqlManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3FsTWFuYWdlbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Students/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Students/_RiskAnalysisPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudHNcX1Jpc2tBbmFseXNpc1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/UserManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hbmFnZW1lbnRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/code/asp.net/SmartLMS.Web/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-w39wc9or33

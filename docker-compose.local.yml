@@ -1,17 +1,16 @@
-version: '3.8'
-
 services:
-  sql-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  db:
+    image: mariadb:latest
+    container_name: smartlms-db-local
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=AnhLongPro123!
+      - MYSQL_ROOT_PASSWORD=AnhLongPro123!
+      - MYSQL_DATABASE=SmartLMS
     ports:
-      - "1433:1433"
+      - "3306:3306"
     deploy:
       resources:
         limits:
-          memory: 1536M # Giới hạn 1.5GB RAM cho SQL (Rất quan trọng cho máy 8GB)
+          memory: 512M
     networks:
       - lms-local
 
@@ -21,15 +20,13 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "5181:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sql-db;Database=SmartLMS;User Id=sa;Password=AnhLongPro123!;TrustServerCertificate=True;
-      - ConnectionStrings__ReadOnlyConnection=Server=sql-db;Database=SmartLMS;User Id=sa;Password=AnhLongPro123!;TrustServerCertificate=True;
-      - Security__MasterKey=this_is_a_master_key_32_chars_long!!
-      - Security__Salt=this_is_a_salt_16
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=AnhLongPro123!;
+      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=AnhLongPro123!;
     depends_on:
-      - sql-db
+      - db
     networks:
       - lms-local
 

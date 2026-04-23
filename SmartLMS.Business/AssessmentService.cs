@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Distributed;
 using Dapper;
@@ -42,11 +42,11 @@ namespace SmartLMS.Business
 
             if (leaderboard == null)
             {
-                using IDbConnection db = new SqlConnection(_connectionString);
-                var sql = "SELECT TOP 10 FullName, Username, TotalXP FROM Users ";
+                using IDbConnection db = new MySqlConnection(_connectionString);
+                var sql = "SELECT FullName, Username, TotalXP FROM Users ";
                 if (departmentId.HasValue) 
                     sql += "WHERE DepartmentId = @DeptId ";
-                sql += "ORDER BY TotalXP DESC";
+                sql += "ORDER BY TotalXP DESC LIMIT 10";
 
                 var result = await db.QueryAsync<dynamic>(sql, new { DeptId = departmentId });
                 leaderboard = result.ToList();
@@ -59,7 +59,7 @@ namespace SmartLMS.Business
 
         public async Task<IEnumerable<Question>> GetQuestionsAsync(int hierarchyLevel, int? departmentId)
         {
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             var sql = "SELECT * FROM Questions ";
             if (hierarchyLevel > 1 && departmentId.HasValue) // Not SuperAdmin
                 sql += "WHERE (DepartmentId = @DeptId OR DepartmentId IS NULL)";
@@ -69,7 +69,7 @@ namespace SmartLMS.Business
 
         public async Task<(IEnumerable<QuestionDto> Items, int TotalCount)> GetQuestionsPagedAsync(int hierarchyLevel, int? departmentId, int pageIndex, int pageSize, string? search = null)
         {
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             var sqlBase = "FROM Questions WHERE 1=1 ";
             var parameters = new DynamicParameters();
 
@@ -87,7 +87,7 @@ namespace SmartLMS.Business
             }
 
             var countSql = "SELECT COUNT(*) " + sqlBase;
-            var dataSql = "SELECT * " + sqlBase + " ORDER BY QuestionId DESC OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
+            var dataSql = "SELECT * " + sqlBase + " ORDER BY QuestionId DESC LIMIT @Limit OFFSET @Offset";
 
             parameters.Add("Offset", pageIndex * pageSize);
             parameters.Add("Limit", pageSize);
@@ -100,7 +100,7 @@ namespace SmartLMS.Business
 
         public async Task<IEnumerable<Exam>> GetExamsAsync(int hierarchyLevel, int? departmentId)
         {
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             var sql = "SELECT * FROM Exams ";
             if (hierarchyLevel > 1 && departmentId.HasValue)
                 sql += "WHERE DepartmentId = @DeptId";
@@ -110,13 +110,13 @@ namespace SmartLMS.Business
 
         public async Task<IEnumerable<Badge>> GetBadgesAsync()
         {
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             return await db.QueryAsync<Badge>("SELECT * FROM Badges");
         }
 
         public async Task<IEnumerable<dynamic>> GetItemAnalysisAsync(int? departmentId = null)
         {
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             var sql = @"
                 SELECT Q.QuestionId, 
                        COUNT(QA.AttemptId) as TotalAttempts,
@@ -140,7 +140,7 @@ namespace SmartLMS.Business
                 question.DepartmentId = adminDeptId;
             }
 
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             var sql = "";
             if (question.QuestionId == 0)
             {
@@ -227,7 +227,7 @@ namespace SmartLMS.Business
         }
         public async Task<dynamic> GetMyAchievementsAsync(int userId)
         {
-            using IDbConnection db = new SqlConnection(_connectionString);
+            using IDbConnection db = new MySqlConnection(_connectionString);
             
             var user = await _context.Users.FindAsync(userId);
             if (user == null) return null!;

@@ -39,7 +39,7 @@ services:
       redis:
         condition: service_started
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "5181:8080" # Mapping to 5181 for external consistency
     networks:
@@ -68,6 +68,11 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - smartlms-net
 

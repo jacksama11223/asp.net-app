@@ -24,14 +24,22 @@ string CleanConnectionString(string connectionString)
     if (string.IsNullOrEmpty(connectionString)) return "";
     var parts = connectionString.Split(';', StringSplitOptions.RemoveEmptyEntries);
     var cleanParts = new List<string>();
-    var validKeys = new[] { "server", "host", "port", "database", "uid", "pwd", "user", "password", "ssl mode", "charset", "allowuservariables", "convertzerodatetime", "data source", "datasource", "initial catalog" };
+    var validKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase) 
+    { 
+        "server", "host", "port", "database", "uid", "pwd", "user", "password", 
+        "ssl mode", "charset", "allowuservariables", "convertzerodatetime", 
+        "data source", "datasource", "initial catalog", "user id", "userid"
+    };
     
+    var rawConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+    Console.WriteLine($"🔍 [DEBUG] RAW Connection from config: {rawConn}");
+
     foreach (var part in parts)
     {
         var keyValue = part.Split('=', 2);
         if (keyValue.Length == 2)
         {
-            var key = keyValue[0].Trim().ToLower();
+            var key = keyValue[0].Trim();
             if (validKeys.Contains(key))
             {
                 cleanParts.Add(part.Trim());
@@ -41,12 +49,12 @@ string CleanConnectionString(string connectionString)
     return string.Join(";", cleanParts) + ";";
 }
 
-var defaultConn = CleanConnectionString(builder.Configuration.GetConnectionString("DefaultConnection"));
+var defaultConn = CleanConnectionString(builder.Configuration.GetConnectionString("DefaultConnection") ?? "");
 var readOnlyConn = CleanConnectionString(builder.Configuration.GetConnectionString("ReadOnlyConnection") ?? defaultConn);
 
 if (string.IsNullOrEmpty(readOnlyConn)) readOnlyConn = defaultConn;
 
-Console.WriteLine($"🔍 [MARIADB SAFE-MODE] Connection: {defaultConn}");
+Log.Information("🚀 [MARIADB SAFE-MODE] Database connection sanitized and ready.");
 // =============================================================
 
 // 1. Cấu hình Serilog - Ghi log cấu trúc cho Production
@@ -176,8 +184,7 @@ try
                 QueuePollInterval = TimeSpan.FromSeconds(15),
                 JobExpirationCheckInterval = TimeSpan.FromHours(1),
                 CountersAggregateInterval = TimeSpan.FromMinutes(5),
-                PrepareSchemaIfNecessary = true, // Tự động tạo bảng cho Hangfire
-                DashboardJobIncrementalCount = true
+                PrepareSchemaIfNecessary = true // Tự động tạo bảng cho Hangfire
             })));
 
     builder.Services.AddHangfireServer();
@@ -351,7 +358,7 @@ using (var scope = app.Services.CreateScope())
                 PasswordHash = "1", // In real production, use BCrypt or Identity
                 Role = "Admin",
                 CreatedDate = DateTime.Now,
-                IsActive = true
+                Status = 1
             };
             db.Users.Add(admin);
             await db.SaveChangesAsync();

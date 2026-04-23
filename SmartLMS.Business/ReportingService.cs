@@ -1,5 +1,5 @@
 using Dapper;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using Microsoft.Extensions.Configuration;
 using SmartLMS.Models;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ public class ReportingService : IReportingService
         _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
     }
 
-    private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
+    private IDbConnection CreateConnection() => new MySqlConnection(_connectionString);
 
     public async Task<DashboardStats> GetDashboardStatsAsync()
     {
