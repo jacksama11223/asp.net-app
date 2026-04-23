@@ -12,6 +12,11 @@ services:
       - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - smartlms-net
 
@@ -29,9 +34,12 @@ services:
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
     depends_on:
-      - db
-      - redis
-      - rabbitmq
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     ports:
       - "5181:8080" # Mapping to 5181 for external consistency
     networks:
