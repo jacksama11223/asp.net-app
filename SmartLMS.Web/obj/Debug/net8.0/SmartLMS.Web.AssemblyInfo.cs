@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartLMS.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+893acad9e8730f0b0d759fac802862555ce66045")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b9cd9e23abda5ea2c15e4801732e43f559ac5fe")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartLMS.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartLMS.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

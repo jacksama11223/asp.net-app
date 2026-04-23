@@ -13,6 +13,8 @@ using Serilog;
 using Serilog.Events;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
+using MySqlConnector;
+using Hangfire.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,12 +129,24 @@ builder.Services.AddControllersWithViews(options => {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-// Configure Hangfire
+// Configure Hangfire to use MySql/MariaDB
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+    .UseStorage(new MySqlStorage(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlStorageOptions
+        {
+            TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted,
+            QueuePollInterval = TimeSpan.FromSeconds(15),
+            JobExpirationCheckInterval = TimeSpan.FromHours(1),
+            CountersAggregateInterval = TimeSpan.FromMinutes(5),
+            PrepareSchemaIfNecessary = true,
+            DashboardJobListLimit = 50000,
+            TransactionTimeout = TimeSpan.FromMinutes(1),
+            TablesPrefix = "Hangfire"
+        })));
 
 builder.Services.AddHangfireServer();
 
@@ -172,7 +186,9 @@ builder.Services.AddAuthorization(options => {
 
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var serverVersion = ServerVersion.AutoDetect(connectionString);
+    options.UseMySql(connectionString, serverVersion);
     
     // Thêm Interceptor để tách biệt Read/Write
     var config = serviceProvider.GetRequiredService<IConfiguration>();

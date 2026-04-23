@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
   db:
-    image: mcr.microsoft.com/azure-sql-edge:latest
+    image: mariadb:latest
     container_name: smartlms-db-prod
     restart: always
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=YourStrongPassword123!
+      - MYSQL_ROOT_PASSWORD=YourStrongPassword123!
+      - MYSQL_DATABASE=SmartLMS
     ports:
-      - "1433:1433"
+      - "3306:3306"
     volumes:
-      - sql-data:/var/opt/mssql
+      - mariadb-data:/var/lib/mysql
     networks:
       - smartlms-net
 
@@ -24,7 +24,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=db;Database=SmartLMS;User Id=sa;Password=YourStrongPassword123!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
     depends_on:
@@ -63,7 +63,7 @@ services:
       - smartlms-net
 
 volumes:
-  sql-data:
+  mariadb-data:
 
 networks:
   smartlms-net:
