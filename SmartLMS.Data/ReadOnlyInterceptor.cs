@@ -20,7 +20,8 @@ public class ReadOnlyInterceptor : DbCommandInterceptor
         CommandEventData eventData, 
         InterceptionResult<DbDataReader> result)
     {
-        // Nếu là lệnh SELECT, chuyển hướng sang replica
+        // Tạm dừng logic chuyển hướng kết nối để ổn định MariaDB
+        /*
         if (command.CommandText.StartsWith("SELECT", System.StringComparison.OrdinalIgnoreCase))
         {
             if (command.Connection.ConnectionString != _readOnlyConnectionString)
@@ -30,6 +31,7 @@ public class ReadOnlyInterceptor : DbCommandInterceptor
                 command.Connection.Open();
             }
         }
+        */
         return result;
     }
 
@@ -39,6 +41,7 @@ public class ReadOnlyInterceptor : DbCommandInterceptor
         InterceptionResult<DbDataReader> result, 
         CancellationToken cancellationToken = default)
     {
+        /*
         if (command.CommandText.StartsWith("SELECT", System.StringComparison.OrdinalIgnoreCase))
         {
             if (command.Connection.ConnectionString != _readOnlyConnectionString)
@@ -48,6 +51,7 @@ public class ReadOnlyInterceptor : DbCommandInterceptor
                 command.Connection.Open();
             }
         }
+        */
         return new ValueTask<InterceptionResult<DbDataReader>>(result);
     }
 }

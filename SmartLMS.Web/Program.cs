@@ -190,9 +190,9 @@ builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, o
     var serverVersion = ServerVersion.AutoDetect(connectionString);
     options.UseMySql(connectionString, serverVersion);
     
-    // Thêm Interceptor để tách biệt Read/Write
-    var config = serviceProvider.GetRequiredService<IConfiguration>();
-    options.AddInterceptors(new SmartLMS.Data.ReadOnlyInterceptor(config));
+    // Tạm thời tắt Interceptor để tránh lỗi chuỗi kết nối SQL Server cũ
+    // var config = serviceProvider.GetRequiredService<IConfiguration>();
+    // options.AddInterceptors(new SmartLMS.Data.ReadOnlyInterceptor(config));
 });
 
 // Dependency Injection
