@@ -130,12 +130,23 @@ builder.Services.AddControllersWithViews(options => {
     });
 
 // Lấy và làm sạch chuỗi kết nối ngay từ đầu để dùng cho toàn bộ hệ thống
-var defaultConn = builder.Configuration.GetConnectionString("DefaultConnection")?
+var rawDefaultConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+var defaultConn = rawDefaultConn
     .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=True", "", StringComparison.OrdinalIgnoreCase)
     .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase);
+    .Replace("Integrated Security=SSPI", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Trusted_Connection=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Trusted_Connection=True", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("MultipleActiveResultSets=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("MultipleActiveResultSets=True", "", StringComparison.OrdinalIgnoreCase);
 
-var readOnlyConn = builder.Configuration.GetConnectionString("ReadOnlyConnection")?
+Console.WriteLine($"🔍 DEBUG: Connection String being used: {defaultConn}");
+
+var rawReadOnlyConn = builder.Configuration.GetConnectionString("ReadOnlyConnection") ?? rawDefaultConn;
+var readOnlyConn = rawReadOnlyConn
     .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
     .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
     .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase) 
