@@ -24,14 +24,18 @@ string CleanConnectionString(string connectionString)
     if (string.IsNullOrEmpty(connectionString)) return "";
     var parts = connectionString.Split(';', StringSplitOptions.RemoveEmptyEntries);
     var cleanParts = new List<string>();
-    var validKeys = new[] { "server", "port", "database", "uid", "pwd", "user", "password", "ssl mode", "charset", "allowuservariables", "convertzerodatetime" };
+    var validKeys = new[] { "server", "host", "port", "database", "uid", "pwd", "user", "password", "ssl mode", "charset", "allowuservariables", "convertzerodatetime", "data source", "datasource", "initial catalog" };
     
     foreach (var part in parts)
     {
         var keyValue = part.Split('=', 2);
-        if (keyValue.Length == 2 && validKeys.Contains(keyValue[0].Trim().ToLower()))
+        if (keyValue.Length == 2)
         {
-            cleanParts.Add(part.Trim());
+            var key = keyValue[0].Trim().ToLower();
+            if (validKeys.Contains(key))
+            {
+                cleanParts.Add(part.Trim());
+            }
         }
     }
     return string.Join(";", cleanParts) + ";";
@@ -157,26 +161,31 @@ builder.Services.AddControllersWithViews(options => {
     });
 
 
-// Configure Hangfire to use MySql/MariaDB
-builder.Services.AddHangfire(configuration => configuration
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseStorage(new MySqlStorage(
-        defaultConn,
-        new MySqlStorageOptions
-        {
-            TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted,
-            QueuePollInterval = TimeSpan.FromSeconds(15),
-            JobExpirationCheckInterval = TimeSpan.FromHours(1),
-            CountersAggregateInterval = TimeSpan.FromMinutes(5),
-            PrepareSchemaIfNecessary = true,
-            DashboardJobListLimit = 50000,
-            TransactionTimeout = TimeSpan.FromMinutes(1),
-            TablesPrefix = "Hangfire"
-        })));
+// Configure Hangfire to use MySql/MariaDB with resilience
+try 
+{
+    builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseStorage(new MySqlStorage(
+            defaultConn,
+            new MySqlStorageOptions
+            {
+                TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted,
+                QueuePollInterval = TimeSpan.FromSeconds(15),
+                JobExpirationCheckInterval = TimeSpan.FromHours(1),
+                CountersAggregateInterval = TimeSpan.FromMinutes(5),
+                PrepareSchemaIfNecessary = true, // Tự động tạo bảng cho Hangfire
+                DashboardJobIncrementalCount = true
+            })));
 
-builder.Services.AddHangfireServer();
+    builder.Services.AddHangfireServer();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"⚠️ Warning: Hangfire initialization delayed or failed: {ex.Message}");
+}
 
 // Cookie Authentication
 builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
