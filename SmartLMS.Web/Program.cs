@@ -129,13 +129,25 @@ builder.Services.AddControllersWithViews(options => {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
+// Lấy và làm sạch chuỗi kết nối ngay từ đầu để dùng cho toàn bộ hệ thống
+var defaultConn = builder.Configuration.GetConnectionString("DefaultConnection")?
+    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase);
+
+var readOnlyConn = builder.Configuration.GetConnectionString("ReadOnlyConnection")?
+    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase) 
+    ?? defaultConn;
+
 // Configure Hangfire to use MySql/MariaDB
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
     .UseStorage(new MySqlStorage(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
+        defaultConn,
         new MySqlStorageOptions
         {
             TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted,
@@ -196,18 +208,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    
-    // Nuclear Fix: Đảm bảo không còn bất kỳ chữ "Integrated Security" nào trong chuỗi kết nối MariaDB
-    if (!string.IsNullOrEmpty(connectionString))
-    {
-        connectionString = connectionString.Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
-                                          .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
-                                          .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase);
-    }
-    
-    var serverVersion = ServerVersion.AutoDetect(connectionString);
-    options.UseMySql(connectionString, serverVersion);
+    var serverVersion = ServerVersion.AutoDetect(defaultConn);
+    options.UseMySql(defaultConn, serverVersion);
     
     // Tạm thời tắt Interceptor để tránh lỗi chuỗi kết nối SQL Server cũ
     // var config = serviceProvider.GetRequiredService<IConfiguration>();
