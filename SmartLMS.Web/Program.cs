@@ -183,6 +183,16 @@ builder.Services.AddAuthorization(options => {
         policy.RequireAuthenticatedUser();
     });
 });
+// Configure CORS for Frontend access
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
 {
@@ -290,23 +300,31 @@ using (var scope = app.Services.CreateScope())
     var logger = services.GetRequiredService<ILogger<Program>>();
     try 
     {
-        var db = services.GetRequiredService<SmartLMS.Data.SmartLMSContext>();
-        
-        // Đảm bảo Database được tạo nếu chạy lần đầu trong Docker
-        await db.Database.EnsureCreatedAsync(); 
+        var db = scope.ServiceProvider.GetRequiredService<SmartLMS.Data.SmartLMSContext>();
+            
+        // Ensure Database is created
+        await db.Database.EnsureCreatedAsync();
+
+        // Seed Admin User if not exists
+        if (!db.Users.Any(u => u.Username == "admin"))
+        {
+            var admin = new SmartLMS.Models.User
+            {
+                Username = "admin",
+                FullName = "System Administrator",
+                PasswordHash = "1", // In real production, use BCrypt or Identity
+                Role = "Admin",
+                CreatedDate = DateTime.Now,
+                IsActive = true
+            };
+            db.Users.Add(admin);
+            await db.SaveChangesAsync();
+            Console.WriteLine("✅ Seeded Admin User: admin / 1");
+        }
         
         // Vẫn thử chạy Migration cho các thay đổi phát sinh sau này
         if ((await db.Database.GetPendingMigrationsAsync()).Any()) {
             await db.Database.MigrateAsync();
-        }
-
-        // Kiểm tra và Seed Admin một cách an toàn
-        var userService = services.GetRequiredService<SmartLMS.Business.IUserService>();
-        var admin = await db.Users.FirstOrDefaultAsync(u => u.Username == "admin");
-        if (admin != null && (string.IsNullOrEmpty(admin.PasswordHash) || admin.PasswordHash.Contains("X.X.X.")))
-        {
-            await userService.SetPasswordAsync(admin.UserId, "1");
-            logger.LogInformation("Admin password has been reset to default.");
         }
     }
     catch (Exception ex) 
@@ -336,7 +354,9 @@ app.UseResponseCompression();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCors("AllowAll"); // Đặt ngay sau UseRouting
+
+// Enable CORS
+app.UseCors("AllowAll");
 
 app.UseHttpMetrics();
 app.UseRateLimiter(); // Một lần duy nhất
