@@ -197,6 +197,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    
+    // Nuclear Fix: Đảm bảo không còn bất kỳ chữ "Integrated Security" nào trong chuỗi kết nối MariaDB
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        connectionString = connectionString.Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
+                                          .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
+                                          .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase);
+    }
+    
     var serverVersion = ServerVersion.AutoDetect(connectionString);
     options.UseMySql(connectionString, serverVersion);
     
