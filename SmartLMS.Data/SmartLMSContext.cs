@@ -154,7 +154,7 @@ public partial class SmartLMSContext : DbContext
             entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACC0BF0FD7");
             entity.HasIndex(e => e.Username, "UQ__Users__536C85E429ECC54B").IsUnique();
             entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnType("datetime");
             entity.Property(e => e.FullName).HasMaxLength(100);
             entity.Property(e => e.Role).HasMaxLength(20);
             entity.Property(e => e.Username).HasMaxLength(50);
@@ -165,7 +165,7 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<Cohort>(entity => {
             entity.HasKey(e => e.CohortId);
             entity.Property(e => e.Name).HasMaxLength(150).IsRequired();
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         modelBuilder.Entity<UserCohort>(entity => {
@@ -176,7 +176,7 @@ public partial class SmartLMSContext : DbContext
 
         modelBuilder.Entity<AuditLog>(entity => {
             entity.HasKey(e => e.AuditId);
-            entity.Property(e => e.Timestamp).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.Timestamp).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.HasIndex(e => new { e.UserId, e.Timestamp });
         });
 
@@ -187,7 +187,7 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.ActionType).HasMaxLength(50);
             entity.Property(e => e.DurationSeconds).HasDefaultValue(0);
-            entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnType("datetime");
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.HasOne(d => d.User).WithMany(p => p.ActivityLogs).HasForeignKey(d => d.UserId).HasConstraintName("FK__ActivityL__UserI__59063A47");
         });
@@ -202,8 +202,8 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.ThumbnailUrl).HasMaxLength(255);
             entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Published");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)").HasDefaultValue(0m);
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.HasQueryFilter(e => !e.IsDeleted);
             entity.HasOne(d => d.Instructor).WithMany(p => p.Courses).HasForeignKey(d => d.InstructorId).HasConstraintName("FK_Courses_Users");
@@ -216,7 +216,7 @@ public partial class SmartLMSContext : DbContext
             entity.Property(e => e.Code).HasMaxLength(50).IsRequired();
             entity.Property(e => e.DiscountAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.DiscountType).HasMaxLength(20).HasDefaultValue("Fixed");
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         modelBuilder.Entity<CourseModule>(entity =>
@@ -325,7 +325,7 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<Webhook>(entity => {
             entity.HasKey(e => e.WebhookId);
             entity.Property(e => e.TargetUrl).IsRequired();
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         OnModelCreatingPartial(modelBuilder);
