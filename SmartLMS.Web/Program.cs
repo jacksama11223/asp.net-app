@@ -18,6 +18,30 @@ using Hangfire.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// === CHẶN VÀ GIẢI ĐỘC CHUỖI KẾT NỐI NGAY LẬP TỨC ===
+var rawDefaultConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+var defaultConn = rawDefaultConn
+    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=True", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=SSPI", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Trusted_Connection=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Trusted_Connection=True", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("MultipleActiveResultSets=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("MultipleActiveResultSets=True", "", StringComparison.OrdinalIgnoreCase);
+
+var rawReadOnlyConn = builder.Configuration.GetConnectionString("ReadOnlyConnection") ?? rawDefaultConn;
+var readOnlyConn = rawReadOnlyConn
+    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
+    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase) 
+    ?? defaultConn;
+
+Console.WriteLine($"🔍 [MARIADB FIX] Sanitized Connection: {defaultConn}");
+// =================================================
+
 // 1. Cấu hình Serilog - Ghi log cấu trúc cho Production
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -44,12 +68,12 @@ builder.Services.AddCors(options =>
 builder.Services.AddHealthChecks()
     .AddCheck("Database", () => {
         try {
-            using var connection = new Microsoft.Data.SqlClient.SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"));
+            using var connection = new MySqlConnector.MySqlConnection(defaultConn);
             connection.Open();
-            return HealthCheckResult.Healthy("Database connection is successful.");
+            return HealthCheckResult.Healthy("MariaDB connection is successful.");
         }
         catch (Exception ex) {
-            return HealthCheckResult.Unhealthy($"Database is unreachable: {ex.Message}");
+            return HealthCheckResult.Unhealthy($"MariaDB is unreachable: {ex.Message}");
         }
     })
     .AddCheck("AI Service", () => HealthCheckResult.Healthy("AI Predictor is operational"));
@@ -129,28 +153,6 @@ builder.Services.AddControllersWithViews(options => {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-// Lấy và làm sạch chuỗi kết nối ngay từ đầu để dùng cho toàn bộ hệ thống
-var rawDefaultConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
-var defaultConn = rawDefaultConn
-    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=True", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=SSPI", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Trusted_Connection=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Trusted_Connection=True", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("MultipleActiveResultSets=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("MultipleActiveResultSets=True", "", StringComparison.OrdinalIgnoreCase);
-
-Console.WriteLine($"🔍 DEBUG: Connection String being used: {defaultConn}");
-
-var rawReadOnlyConn = builder.Configuration.GetConnectionString("ReadOnlyConnection") ?? rawDefaultConn;
-var readOnlyConn = rawReadOnlyConn
-    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase) 
-    ?? defaultConn;
 
 // Configure Hangfire to use MySql/MariaDB
 builder.Services.AddHangfire(configuration => configuration
