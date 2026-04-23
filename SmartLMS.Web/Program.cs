@@ -18,29 +18,32 @@ using Hangfire.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// === CHẶN VÀ GIẢI ĐỘC CHUỖI KẾT NỐI NGAY LẬP TỨC ===
-var rawDefaultConn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
-var defaultConn = rawDefaultConn
-    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=True", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=SSPI", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Trusted_Connection=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Trusted_Connection=True", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("MultipleActiveResultSets=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("MultipleActiveResultSets=True", "", StringComparison.OrdinalIgnoreCase);
+// === BỘ LỌC CHUỖI KẾT NỐI SIÊU CẤP (XÓA SẠCH SQL SERVER FLAGS) ===
+string CleanConnectionString(string connectionString)
+{
+    if (string.IsNullOrEmpty(connectionString)) return "";
+    var parts = connectionString.Split(';', StringSplitOptions.RemoveEmptyEntries);
+    var cleanParts = new List<string>();
+    var validKeys = new[] { "server", "port", "database", "uid", "pwd", "user", "password", "ssl mode", "charset", "allowuservariables", "convertzerodatetime" };
+    
+    foreach (var part in parts)
+    {
+        var keyValue = part.Split('=', 2);
+        if (keyValue.Length == 2 && validKeys.Contains(keyValue[0].Trim().ToLower()))
+        {
+            cleanParts.Add(part.Trim());
+        }
+    }
+    return string.Join(";", cleanParts) + ";";
+}
 
-var rawReadOnlyConn = builder.Configuration.GetConnectionString("ReadOnlyConnection") ?? rawDefaultConn;
-var readOnlyConn = rawReadOnlyConn
-    .Replace("Integrated Security=True;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("Integrated Security=SSPI;", "", StringComparison.OrdinalIgnoreCase)
-    .Replace("TrustServerCertificate=True;", "", StringComparison.OrdinalIgnoreCase) 
-    ?? defaultConn;
+var defaultConn = CleanConnectionString(builder.Configuration.GetConnectionString("DefaultConnection"));
+var readOnlyConn = CleanConnectionString(builder.Configuration.GetConnectionString("ReadOnlyConnection") ?? defaultConn);
 
-Console.WriteLine($"🔍 [MARIADB FIX] Sanitized Connection: {defaultConn}");
-// =================================================
+if (string.IsNullOrEmpty(readOnlyConn)) readOnlyConn = defaultConn;
+
+Console.WriteLine($"🔍 [MARIADB SAFE-MODE] Connection: {defaultConn}");
+// =============================================================
 
 // 1. Cấu hình Serilog - Ghi log cấu trúc cho Production
 Log.Logger = new LoggerConfiguration()
