@@ -355,14 +355,26 @@ using (var scope = app.Services.CreateScope())
             {
                 Username = "admin",
                 FullName = "System Administrator",
-                PasswordHash = "1", // In real production, use BCrypt or Identity
+                Email = "admin@smartlms.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123456"),
                 Role = "Admin",
                 CreatedDate = DateTime.Now,
                 Status = 1
             };
             db.Users.Add(admin);
             await db.SaveChangesAsync();
-            Console.WriteLine("✅ Seeded Admin User: admin / 1");
+            logger.LogInformation("✅ Seeded Admin User: admin / Admin@123456");
+        }
+        else
+        {
+            // Nếu admin đã tồn tại nhưng mật khẩu không phải BCrypt, reset lại
+            var existingAdmin = db.Users.First(u => u.Username == "admin");
+            if (!existingAdmin.PasswordHash.StartsWith("$2"))
+            {
+                existingAdmin.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123456");
+                await db.SaveChangesAsync();
+                logger.LogInformation("🔄 Reset Admin password to BCrypt format: Admin@123456");
+            }
         }
         
         // Vẫn thử chạy Migration cho các thay đổi phát sinh sau này
