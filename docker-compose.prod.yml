@@ -76,6 +76,14 @@ services:
     networks:
       - smartlms-net
 
+  tunnel:
+    container_name: smartlms-tunnel
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel --no-autoupdate run --token $CF_TUNNEL_TOKEN
+    networks:
+      - smartlms-net
+
 volumes:
   mariadb-data:
 
