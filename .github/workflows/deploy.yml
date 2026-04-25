@@ -26,8 +26,43 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
-  deploy-to-cloud:
+  build-and-push-image:
     needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tags }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract Docker metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ghcr.io/${{ github.repository }}/smartlms-backend
+        tags: |
+          type=sha,prefix=sha-
+          type=raw,value=latest
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+
+  deploy-to-cloud:
+    needs: build-and-push-image
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -41,5 +76,8 @@ jobs:
           cd /home/opc/asp.net-app
           git fetch origin
           git reset --hard origin/main
-          docker compose -f docker-compose.prod.yml up --build -d
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker compose -f docker-compose.prod.yml pull backend
+          docker compose -f docker-compose.prod.yml up -d --no-build
+          docker image prune -f
           echo "✅ Deployed successfully at $(date)"
