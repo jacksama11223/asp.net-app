@@ -29,9 +29,7 @@ services:
       - smartlms-net
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
     container_name: smartlms-backend-prod
     restart: always
     # ✅ Giới hạn RAM cho .NET Backend: giảm GC pressure
