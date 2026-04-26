@@ -204,15 +204,26 @@ public class CourseService : ICourseService
         return freshStats;
     }
 
-    /// <summary>Lấy dữ liệu Trend thực tế từ ActivityLogs cho 7 ngày gần nhất.</summary>
+    /// <summary>Lấy dữ liệu Trend thực tế từ Enrollments cho 7 ngày gần nhất.</summary>
     public async Task<int[]> GetTrendDataAsync(int courseId)
     {
-        var connection = _context.Database.GetDbConnection();
-        var trendData = await connection.QueryAsync<dynamic>(
-            "sp_GetCourseTrend", 
-            new { CourseID = courseId }, 
-            commandType: System.Data.CommandType.StoredProcedure);
-            
-        return trendData.Select(x => (int)x.ViewCount).ToArray();
+        // Tạo mảng 7 ngày gần nhất
+        var days = Enumerable.Range(0, 7)
+            .Select(i => DateTime.Today.AddDays(-6 + i))
+            .ToList();
+
+        // Lấy enrollments 7 ngày gần nhất cho khóa học này
+        var since = DateTime.Today.AddDays(-6);
+        var enrollments = await _context.Enrollments
+            .Where(e => e.CourseId == courseId && e.LastAccessDate >= since)
+            .Select(e => e.LastAccessDate!.Value.Date)
+            .ToListAsync();
+
+        // Đếm số lượt truy cập mỗi ngày
+        var trend = days
+            .Select(d => enrollments.Count(e => e == d))
+            .ToArray();
+
+        return trend;
     }
 }
