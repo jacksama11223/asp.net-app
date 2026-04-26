@@ -39,8 +39,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;
-      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
+      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
       # ✅ Tối ưu .NET GC cho server ít RAM
