@@ -21,7 +21,9 @@ services:
       - smartlms-net
 
   backend:
-    image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: smartlms-backend-prod
     restart: always
     environment:
