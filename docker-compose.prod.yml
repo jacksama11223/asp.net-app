@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: mariadb:latest
@@ -12,9 +10,17 @@ services:
       - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
+    # ✅ Giới hạn RAM cho MariaDB: tiết kiệm ~150MB
+    mem_limit: 150m
+    command: >
+      --innodb-buffer-pool-size=64M
+      --innodb-log-file-size=32M
+      --max-connections=30
+      --tmp-table-size=16M
+      --query-cache-size=0
     healthcheck:
       test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 10
     networks:
@@ -26,6 +32,8 @@ services:
       dockerfile: Dockerfile
     container_name: smartlms-backend-prod
     restart: always
+    # ✅ Giới hạn RAM cho .NET Backend: giảm GC pressure
+    mem_limit: 200m
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
@@ -33,15 +41,17 @@ services:
       - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
+      # ✅ Tối ưu .NET GC cho server ít RAM
+      - DOTNET_GCConserveMemory=9
+      - DOTNET_GCHeapHardLimit=150000000
+      - COMPlus_GCConserveMemory=9
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_started
-      rabbitmq:
-        condition: service_healthy
     ports:
-      - "5181:8080" # Mapping to 5181 for external consistency
+      - "5181:8080"
     networks:
       - smartlms-net
 
@@ -50,9 +60,10 @@ services:
       context: ./react-test-frontend
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=http://localhost:5181 # This should be your server's Public IP/Domain in prod
+        - VITE_API_URL=http://localhost:5181
     container_name: smartlms-frontend-prod
     restart: always
+    mem_limit: 30m
     ports:
       - "80:80"
     depends_on:
@@ -60,27 +71,23 @@ services:
     networks:
       - smartlms-net
 
+  # ✅ Dùng Redis nhẹ nhàng hơn với giới hạn bộ nhớ
   redis:
     image: redis:7-alpine
-    command: redis-server --requirepass YourRedisPass
+    command: redis-server --requirepass YourRedisPass --maxmemory 32mb --maxmemory-policy allkeys-lru
+    mem_limit: 40m
     networks:
       - smartlms-net
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-      interval: 10s
-      timeout: 10s
-      retries: 15
-    networks:
-      - smartlms-net
+  # ✅ RabbitMQ bị loại bỏ để tiết kiệm ~200MB RAM
+  # Backend đang dùng MockBus (Development mode) nên không cần RabbitMQ
 
   tunnel:
     container_name: smartlms-tunnel
     image: cloudflare/cloudflared:latest
     restart: always
     command: tunnel --no-autoupdate run --token $CF_TUNNEL_TOKEN
+    mem_limit: 30m
     networks:
       - smartlms-net
 
