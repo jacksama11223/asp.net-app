@@ -20,6 +20,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 
+import { BASE_URL } from '../api';
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +33,7 @@ export const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post('http://localhost:5181/api/auth/token', {
+      const response = await axios.post(`${BASE_URL}/api/auth/token`, {
         username,
         password
       });

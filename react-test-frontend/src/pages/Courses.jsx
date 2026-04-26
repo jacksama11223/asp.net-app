@@ -42,6 +42,8 @@ const CardWrapper = ({ children, index }) => (
   </motion.div>
 );
 
+import { BASE_URL } from '../api';
+
 export const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,7 @@ export const Courses = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:5181/api/public/courses');
+      const response = await axios.get(`${BASE_URL}/api/public/courses`);
       setCourses(response.data);
     } catch (err) {
       setError('Failed to load courses. Please ensure the backend is running.');

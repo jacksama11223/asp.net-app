@@ -1,6 +1,15 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5181';
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    // If we are on the production server IP, use it. Otherwise default to localhost.
+    const hostname = window.location.hostname;
+    return `http://${hostname}:5181`;
+  }
+  return 'http://localhost:5181';
+};
+
+export const BASE_URL = getBaseUrl();
 
 export const createApiClient = (apiKey) => {
   return axios.create({

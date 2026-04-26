@@ -18,6 +18,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 
+import { BASE_URL } from '../api';
+
 export const RegisterPage = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -43,7 +45,7 @@ export const RegisterPage = () => {
     }
 
     try {
-      await axios.post('http://localhost:5181/api/AuthApi/register', {
+      await axios.post(`${BASE_URL}/api/AuthApi/register`, {
         username: formData.username,
         email: formData.email,
         fullName: formData.fullName,
