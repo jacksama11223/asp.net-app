@@ -1,4 +1,5 @@
-services:
+# Optimized for Oracle Cloud Free Tier (503MB RAM)
+
   db:
     image: mariadb:latest
     container_name: smartlms-db-prod
@@ -45,6 +46,11 @@ services:
       - DOTNET_GCConserveMemory=9
       - DOTNET_GCHeapHardLimit=150000000
       - COMPlus_GCConserveMemory=9
+      # ✅ Giảm logging để giảm tải I/O
+      - Logging__LogLevel__Default=Warning
+      - Logging__LogLevel__Microsoft=Error
+      - Logging__LogLevel__Microsoft.Hosting.Lifetime=Information
+      - Logging__LogLevel__Hangfire=Error
     depends_on:
       db:
         condition: service_healthy
