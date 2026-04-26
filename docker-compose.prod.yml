@@ -1,5 +1,6 @@
 # Optimized for Oracle Cloud Free Tier (503MB RAM)
 
+services:
   db:
     image: mariadb:latest
     container_name: smartlms-db-prod
