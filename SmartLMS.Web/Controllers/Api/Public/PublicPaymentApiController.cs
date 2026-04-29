@@ -131,13 +131,13 @@ namespace SmartLMS.Web.Controllers.Api.Public
         [HttpPost("sepay-webhook")]
         public async Task<IActionResult> SePayWebhook([FromBody] SePayWebhookPayload payload)
         {
-            if (payload == null || string.IsNullOrEmpty(payload.transactionContent))
+            if (payload == null || string.IsNullOrEmpty(payload.content))
             {
                 return BadRequest(new { success = false, message = "Invalid payload" });
             }
 
             // Tìm mã đơn hàng (18 chữ số) trong nội dung chuyển khoản
-            var match = System.Text.RegularExpressions.Regex.Match(payload.transactionContent, @"\d{15,20}");
+            var match = System.Text.RegularExpressions.Regex.Match(payload.content, @"\d{15,20}");
             if (!match.Success)
             {
                 return Ok(new { success = true, message = "No invoice reference found, ignoring." });
@@ -157,7 +157,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
             }
 
             // Kiểm tra số tiền chuyển có đủ không (Chấp nhận lớn hơn hoặc bằng)
-            if (payload.amountIn >= invoice.Amount)
+            if (payload.transferAmount >= invoice.Amount)
             {
                 invoice.Status = "Paid";
                 invoice.PaidAt = DateTime.Now;
@@ -187,13 +187,16 @@ namespace SmartLMS.Web.Controllers.Api.Public
     public class SePayWebhookPayload
     {
         public long id { get; set; }
-        public string gateway { get; set; }
-        public string transactionDate { get; set; }
-        public string accountNumber { get; set; }
-        public decimal amountIn { get; set; }
-        public decimal amountOut { get; set; }
-        public string transactionContent { get; set; }
-        public string referenceNumber { get; set; }
-        public string code { get; set; }
+        public string? gateway { get; set; }
+        public string? transactionDate { get; set; }
+        public string? accountNumber { get; set; }
+        public string? subAccount { get; set; }
+        public decimal transferAmount { get; set; }
+        public string? content { get; set; }
+        public string? transferType { get; set; }
+        public string? description { get; set; }
+        public string? referenceCode { get; set; }
+        public string? code { get; set; }
+        public decimal accumulated { get; set; }
     }
 }
