@@ -85,18 +85,6 @@ namespace SmartLMS.Web.Controllers.Api.Public
             });
         }
 
-            _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                InvoiceId = invoice.InvoiceId,
-                TransactionReference = txnRef,
-                Amount = invoice.Amount,
-                Message = "Tạo đơn hàng thành công, vui lòng quét mã QR."
-            });
-        }
-
         [HttpGet("status/{txnRef}")]
         public async Task<IActionResult> GetPaymentStatus(string txnRef)
         {
