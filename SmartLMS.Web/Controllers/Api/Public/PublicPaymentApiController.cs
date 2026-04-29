@@ -127,5 +127,73 @@ namespace SmartLMS.Web.Controllers.Api.Public
 
             return Ok(new { Message = "Thanh toán thành công! Khóa học đã được mở." });
         }
+
+        [HttpPost("sepay-webhook")]
+        public async Task<IActionResult> SePayWebhook([FromBody] SePayWebhookPayload payload)
+        {
+            if (payload == null || string.IsNullOrEmpty(payload.transactionContent))
+            {
+                return BadRequest(new { success = false, message = "Invalid payload" });
+            }
+
+            // Tìm mã đơn hàng (18 chữ số) trong nội dung chuyển khoản
+            var match = System.Text.RegularExpressions.Regex.Match(payload.transactionContent, @"\d{15,20}");
+            if (!match.Success)
+            {
+                return Ok(new { success = true, message = "No invoice reference found, ignoring." });
+            }
+
+            string txnRef = match.Value;
+
+            var invoice = await _context.Invoices.FirstOrDefaultAsync(i => i.TransactionReference == txnRef);
+            if (invoice == null) 
+            {
+                return Ok(new { success = true, message = $"Invoice {txnRef} not found, ignoring." });
+            }
+
+            if (invoice.Status == "Paid") 
+            {
+                return Ok(new { success = true, message = "Already paid." });
+            }
+
+            // Kiểm tra số tiền chuyển có đủ không (Chấp nhận lớn hơn hoặc bằng)
+            if (payload.amountIn >= invoice.Amount)
+            {
+                invoice.Status = "Paid";
+                invoice.PaidAt = DateTime.Now;
+
+                // Grant course access (Enrollment)
+                var exists = await _context.Enrollments.AnyAsync(e => e.UserId == invoice.UserId && e.CourseId == invoice.CourseId);
+                if (!exists)
+                {
+                    _context.Enrollments.Add(new Enrollment
+                    {
+                        UserId = invoice.UserId,
+                        CourseId = invoice.CourseId,
+                        LastAccessDate = DateTime.Now,
+                        Progress = 0,
+                        IsCompleted = false
+                    });
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(new { success = true, message = "Payment verified and course unlocked." });
+            }
+
+            return Ok(new { success = true, message = "Amount is less than invoice amount." });
+        }
+    }
+
+    public class SePayWebhookPayload
+    {
+        public long id { get; set; }
+        public string gateway { get; set; }
+        public string transactionDate { get; set; }
+        public string accountNumber { get; set; }
+        public decimal amountIn { get; set; }
+        public decimal amountOut { get; set; }
+        public string transactionContent { get; set; }
+        public string referenceNumber { get; set; }
+        public string code { get; set; }
     }
 }
