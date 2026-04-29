@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using System;
+using System.IO;
+using System.Text.Json;
 
 namespace SmartLMS.Web.Controllers;
 
@@ -19,6 +21,40 @@ public class RevenueController : Controller
         _context = context;
         // Fix for EPPlus 8.0 License Exception
         ExcelPackage.License.SetNonCommercialPersonal("SmartLMS Admin");
+    }
+
+    [HttpGet]
+    public IActionResult PaymentConfig()
+    {
+        var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
+        var model = new BankConfigModel();
+        
+        if (System.IO.File.Exists(configPath))
+        {
+            var json = System.IO.File.ReadAllText(configPath);
+            model = JsonSerializer.Deserialize<BankConfigModel>(json) ?? new BankConfigModel();
+        }
+        
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult PaymentConfig(BankConfigModel model)
+    {
+        var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
+        var json = JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true });
+        System.IO.File.WriteAllText(configPath, json);
+        
+        ViewBag.Success = "Đã lưu cấu hình tài khoản ngân hàng thành công!";
+        return View(model);
+    }
+
+    public class BankConfigModel
+    {
+        public string BankId { get; set; } = "MB";
+        public string AccountNo { get; set; } = "0987654321";
+        public string AccountName { get; set; } = "NGUYEN VAN A";
+        public int TestAmount { get; set; } = 3000;
     }
 
     public async Task<IActionResult> Index()

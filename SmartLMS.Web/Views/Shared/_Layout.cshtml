@@ -189,9 +189,15 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a href="/Revenue" class="nav-link @(_ctrl == "Revenue" ? "active" : "")">
+                                <a href="/Revenue" class="nav-link @(_ctrl == "Revenue" && _act == "Index" ? "active" : "")">
                                     <i class="nav-icon fas fa-wallet text-success"></i>
                                     <p>Báo cáo Tài chính</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Revenue/PaymentConfig" class="nav-link @(_ctrl == "Revenue" && _act == "PaymentConfig" ? "active" : "")">
+                                    <i class="nav-icon fas fa-university text-warning"></i>
+                                    <p>Cấu hình QR</p>
                                 </a>
                             </li>
                             <li class="nav-item">

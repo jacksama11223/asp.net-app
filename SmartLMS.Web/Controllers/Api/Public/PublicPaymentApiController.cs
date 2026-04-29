@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Models;
 using System;
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Web.Controllers.Api.Public
@@ -21,13 +23,19 @@ namespace SmartLMS.Web.Controllers.Api.Public
         [HttpGet("config")]
         public IActionResult GetPaymentConfig()
         {
-            // Hardcoded config for test flow.
-            // In a real scenario, this would come from the database config table.
+            var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
+            if (System.IO.File.Exists(configPath))
+            {
+                var json = System.IO.File.ReadAllText(configPath);
+                return Content(json, "application/json");
+            }
+
+            // Fallback
             return Ok(new
             {
                 BankId = "MB",
-                AccountNo = "0987654321", // Replace with real account number
-                AccountName = "NGUYEN VAN A", // Replace with real account name
+                AccountNo = "0987654321",
+                AccountName = "NGUYEN VAN A",
                 TestAmount = 3000
             });
         }
@@ -40,18 +48,42 @@ namespace SmartLMS.Web.Controllers.Api.Public
 
             var txnRef = DateTime.Now.Ticks.ToString();
             
-            // Tìm user có sẵn hoặc dùng user test (VD: id = 1)
+            // Đọc số tiền test từ config
+            int testAmount = 3000;
+            var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
+            if (System.IO.File.Exists(configPath))
+            {
+                var json = System.IO.File.ReadAllText(configPath);
+                using var doc = JsonDocument.Parse(json);
+                if (doc.RootElement.TryGetProperty("TestAmount", out var amountProp))
+                {
+                    testAmount = amountProp.GetInt32();
+                }
+            }
+
             var testUser = await _context.Users.FirstOrDefaultAsync() ?? new User { UserId = 1 };
 
             var invoice = new Invoice
             {
                 UserId = testUser.UserId,
                 CourseId = course.CourseId,
-                Amount = 3000, // TEST AMOUNT
+                Amount = testAmount,
                 Status = "Pending",
                 TransactionReference = txnRef,
                 CreatedAt = DateTime.Now
             };
+
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                InvoiceId = invoice.InvoiceId,
+                TransactionReference = txnRef,
+                Amount = invoice.Amount,
+                Message = "Tạo đơn hàng thành công, vui lòng quét mã QR."
+            });
+        }
 
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();

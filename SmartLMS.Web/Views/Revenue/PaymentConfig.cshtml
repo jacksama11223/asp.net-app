@@ -1,0 +1,74 @@
+@model SmartLMS.Web.Controllers.RevenueController.BankConfigModel
+@{
+    ViewData["Title"] = "Cấu hình Tài khoản Ngân hàng";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Cấu hình Thanh toán QR</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Payment Config</li>
+    </ol>
+
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i> @ViewBag.Success
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-university me-1"></i>
+            Thiết lập tài khoản nhận tiền VietQR
+        </div>
+        <div class="card-body">
+            <form asp-action="PaymentConfig" method="post">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="BankId" class="form-label fw-bold">Mã Ngân Hàng (Bank ID)</label>
+                        <select asp-for="BankId" class="form-select">
+                            <option value="MB">MBBank (Ngân hàng Quân Đội)</option>
+                            <option value="VCB">Vietcombank (Ngoại thương VN)</option>
+                            <option value="ICB">VietinBank (Công thương VN)</option>
+                            <option value="TCB">Techcombank (Kỹ thương VN)</option>
+                            <option value="VBA">Agribank (Nông nghiệp VN)</option>
+                            <option value="ACB">ACB (Á Châu)</option>
+                            <option value="VPB">VPBank (Việt Nam Thịnh Vượng)</option>
+                        </select>
+                        <div class="form-text">Mã hệ thống Napas 247.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="AccountNo" class="form-label fw-bold">Số Tài Khoản</label>
+                        <input asp-for="AccountNo" type="text" class="form-control" placeholder="Nhập số tài khoản..." required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="AccountName" class="form-label fw-bold">Tên Chủ Tài Khoản</label>
+                        <input asp-for="AccountName" type="text" class="form-control" placeholder="NGUYEN VAN A..." required />
+                        <div class="form-text">Viết HOA không dấu.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="TestAmount" class="form-label fw-bold">Số Tiền Test (VNĐ)</label>
+                        <input asp-for="TestAmount" type="number" class="form-control" placeholder="3000" required />
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-save me-2"></i> Lưu cấu hình
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle me-2"></i> <strong>Thông tin:</strong> Các thay đổi ở đây sẽ tự động cập nhật theo thời gian thực (Real-time) cho ứng dụng React Frontend mà không cần build lại hệ thống.
+    </div>
+</div>
