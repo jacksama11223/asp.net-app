@@ -11,16 +11,16 @@ namespace SmartLMS.Web.Controllers.Api.Public
 {
     [Route("api/public/courses")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "ApiKey")]
+    // [Authorize(AuthenticationSchemes = "ApiKey")]
     public class CoursesApiController : ControllerBase
     {
         private readonly SmartLMSContext _context;
-
+ 
         public CoursesApiController(SmartLMSContext context)
         {
             _context = context;
         }
-
+ 
         /// <summary>
         /// Lấy danh sách khóa học công khai của Tổ chức.
         /// </summary>
@@ -28,10 +28,10 @@ namespace SmartLMS.Web.Controllers.Api.Public
         public async Task<ActionResult<IEnumerable<object>>> GetCourses()
         {
             // Lấy OrganizationId từ Claims (đã được nạp bởi ApiKeyAuthHandler)
-            var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
-            if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
-
-            int orgId = int.Parse(orgIdClaim);
+            // var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
+            // if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
+ 
+            // int orgId = int.Parse(orgIdClaim);
 
             var courses = await _context.Courses
                 .Where(c => c.Status == "Published" && !c.IsDeleted) // Lọc theo Status và Soft Delete
@@ -57,18 +57,18 @@ namespace SmartLMS.Web.Controllers.Api.Public
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetCourseDetails(int id)
         {
-            var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
-            if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
-
-            int orgId = int.Parse(orgIdClaim);
-
+            // var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
+            // if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
+ 
+            // int orgId = int.Parse(orgIdClaim);
+ 
             var course = await _context.Courses
                 .Include(c => c.CourseModules)
                 .ThenInclude(m => m.Lessons)
                 .FirstOrDefaultAsync(c => c.CourseId == id && !c.IsDeleted);
-
+ 
             if (course == null) return NotFound();
-
+ 
             return Ok(new
             {
                 course.CourseId,
@@ -88,8 +88,8 @@ namespace SmartLMS.Web.Controllers.Api.Public
         [HttpPost]
         public async Task<ActionResult<object>> CreateCourse([FromBody] CourseCreateRequest request)
         {
-            var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
-            if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
+            // var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
+            // if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
 
             var newCourse = new Course
             {
