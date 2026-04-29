@@ -2,8 +2,12 @@ import axios from 'axios';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
-    // If we are on the production server IP, use it. Otherwise default to localhost.
+    // If we are on the production server IP, use origin (via Nginx proxy on port 80).
+    // Otherwise default to localhost:5181 for local development.
     const hostname = window.location.hostname;
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      return window.location.origin;
+    }
     return `http://${hostname}:5181`;
   }
   return 'http://localhost:5181';
