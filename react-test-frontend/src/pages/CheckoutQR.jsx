@@ -127,13 +127,18 @@ export const CheckoutQR = () => {
     );
   }
 
-  // Format VietQR String (Napass247 standard format)
-  // Format: 00020101021238540010A0000007270124...
-  // For simplicity here, we generate a basic QR payload string. 
-  // In a real app, use a proper VietQR string generator library or an API like VietQR.io.
-  const qrData = `vietqr://transfer?bank=${config.bankId}&account=${config.accountNo}&amount=${config.testAmount}&memo=${invoice.transactionReference}`;
+  // Handle PascalCase properties from C# backend
+  const bankId = config.BankId || config.bankId;
+  const accountNo = config.AccountNo || config.accountNo;
+  const accountName = config.AccountName || config.accountName;
+  const testAmount = config.TestAmount || config.testAmount;
+
+  // Use VietQR API to generate a standard EMVCo QR code image that works with all banking apps
+  const memo = invoice.transactionReference || invoice.TransactionReference;
+  const qrImageUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${testAmount}&addInfo=${memo}&accountName=${encodeURIComponent(accountName)}`;
 
   const formatMoney = (amount) => {
+    if (!amount) return '0 ₫';
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   };
 
@@ -158,8 +163,8 @@ export const CheckoutQR = () => {
               Quét mã QR dưới đây bằng ứng dụng Ngân hàng để thanh toán tự động.
             </Text>
 
-            <Paper p="md" radius="lg" className="bg-white border-2 border-brand-500 shadow-[0_0_20px_rgba(79,70,229,0.2)]">
-              <QRCodeSVG value={qrData} size={250} level="H" includeMargin={true} />
+            <Paper p="md" radius="lg" className="bg-white border-2 border-brand-500 shadow-[0_0_20px_rgba(79,70,229,0.2)] flex justify-center items-center overflow-hidden">
+              <img src={qrImageUrl} alt="VietQR" style={{ width: 250, height: 250, objectFit: 'contain' }} />
             </Paper>
 
             <Divider w="100%" label="Hoặc chuyển khoản thủ công" labelPosition="center" />
@@ -167,17 +172,17 @@ export const CheckoutQR = () => {
             <Stack gap="xs" w="100%">
               <Group justify="space-between">
                 <Text size="sm" c="dimmed">Ngân hàng:</Text>
-                <Text fw={700}>{config.bankId}</Text>
+                <Text fw={700}>{bankId}</Text>
               </Group>
               <Group justify="space-between">
                 <Text size="sm" c="dimmed">Chủ tài khoản:</Text>
-                <Text fw={700}>{config.accountName}</Text>
+                <Text fw={700}>{accountName}</Text>
               </Group>
               <Group justify="space-between" align="center">
                 <Text size="sm" c="dimmed">Số tài khoản:</Text>
                 <Group gap="xs">
-                  <Text fw={900} className="text-brand-600 text-lg">{config.accountNo}</Text>
-                  <CopyButton value={config.accountNo} timeout={2000}>
+                  <Text fw={900} className="text-brand-600 text-lg">{accountNo}</Text>
+                  <CopyButton value={accountNo} timeout={2000}>
                     {({ copied, copy }) => (
                       <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="subtle">
                         {copied ? <LuCheck size={16} /> : <LuCopy size={16} />}
@@ -188,13 +193,13 @@ export const CheckoutQR = () => {
               </Group>
               <Group justify="space-between" align="center">
                 <Text size="sm" c="dimmed">Số tiền:</Text>
-                <Text fw={900} className="text-red-500 text-xl">{formatMoney(config.testAmount)}</Text>
+                <Text fw={900} className="text-red-500 text-xl">{formatMoney(testAmount)}</Text>
               </Group>
               <Group justify="space-between" align="center">
                 <Text size="sm" c="dimmed">Nội dung (Bắt buộc):</Text>
                 <Group gap="xs">
-                  <Text fw={700} className="bg-yellow-100 px-2 py-1 rounded">{invoice.transactionReference}</Text>
-                  <CopyButton value={invoice.transactionReference} timeout={2000}>
+                  <Text fw={700} className="bg-yellow-100 px-2 py-1 rounded">{memo}</Text>
+                  <CopyButton value={memo} timeout={2000}>
                     {({ copied, copy }) => (
                       <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="subtle">
                         {copied ? <LuCheck size={16} /> : <LuCopy size={16} />}
