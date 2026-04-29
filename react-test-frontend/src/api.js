@@ -34,3 +34,24 @@ export const createCourse = async (apiClient, courseData) => {
   const response = await apiClient.post('/api/public/courses', courseData);
   return response.data;
 };
+
+// Payment APIs
+export const getPaymentConfig = async (apiClient) => {
+  const response = await apiClient.get('/api/public/payment/config');
+  return response.data;
+};
+
+export const checkoutCourse = async (apiClient, courseId) => {
+  const response = await apiClient.post(`/api/public/payment/checkout/${courseId}`);
+  return response.data;
+};
+
+export const checkPaymentStatus = async (apiClient, txnRef) => {
+  const response = await apiClient.get(`/api/public/payment/status/${txnRef}`);
+  return response.data;
+};
+
+export const triggerMockWebhook = async (apiClient, txnRef) => {
+  const response = await apiClient.post(`/api/public/payment/mock-webhook/${txnRef}`);
+  return response.data;
+};

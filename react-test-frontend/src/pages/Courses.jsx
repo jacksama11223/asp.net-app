@@ -25,6 +25,7 @@ import {
 } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CardWrapper = ({ children, index }) => (
@@ -50,6 +51,7 @@ export const Courses = () => {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
   const [parent] = useAutoAnimate();
+  const navigate = useNavigate();
 
   const handleFetch = async () => {
     setLoading(true);
@@ -176,10 +178,11 @@ export const Courses = () => {
                       variant="light" 
                       color="brand" 
                       radius="md" 
+                      onClick={() => navigate(`/checkout/${course.courseId}`)}
                       rightSection={<LuBookOpen size={16} />}
                       className="hover:bg-brand-600 hover:text-white transition-all shadow-md shadow-brand-500/10"
                     >
-                      View Details
+                      Mua Ngay
                     </Button>
                   </Group>
                 </Stack>
