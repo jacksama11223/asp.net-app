@@ -20,8 +20,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
-      - ConnectionStrings__DefaultConnection=Server=db-server;Database=SmartLMS;User Id=sa;Password=YourSecurePassword;
-      - ConnectionStrings__ReadOnlyConnection=Server=db-replica;Database=SmartLMS;User Id=sa;Password=YourSecurePassword;
+      - ConnectionStrings__DefaultConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YourStrongPassword123!;
+      - ConnectionStrings__ReadOnlyConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YourStrongPassword123!;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
     networks:
