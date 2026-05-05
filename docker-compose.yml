@@ -56,4 +56,4 @@ services:
 
 networks:
   lms-network:
-    driver: overlay # Dùng overlay để các container trên nhiều node có thể nói chuyện với nhau
+    driver: bridge # Chuyển sang bridge để chạy ổn định trên 1 node
