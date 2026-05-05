@@ -70,3 +70,19 @@ export const getRecentActivities = async (apiClient) => {
   const response = await apiClient.get('/api/dashboard/activities');
   return response.data;
 };
+
+// Booking APIs
+export const getTutors = async (apiClient, date) => {
+  const response = await apiClient.get(`/api/booking/tutors?date=${date}`);
+  return response.data;
+};
+
+export const createBooking = async (apiClient, bookingData) => {
+  const response = await apiClient.post('/api/booking', bookingData);
+  return response.data;
+};
+
+export const getStudentBookings = async (apiClient) => {
+  const response = await apiClient.get('/api/booking/student');
+  return response.data;
+};

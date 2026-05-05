@@ -125,15 +125,27 @@ export const Dashboard = () => {
             </Title>
             <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green.7" fw={700}>{stats?.dropoutRiskRate || '92.4'}%</Text>. Keep it up!</Text>
           </Box>
-          <Button 
-            variant="gradient" 
-            gradient={{ from: 'brand', to: 'indigo' }} 
-            radius="md" 
-            leftSection={<LuZap size={18} />}
-            className="shadow-xl shadow-brand-500/30"
-          >
-            Start Learning
-          </Button>
+          <Group>
+            <Button 
+              variant="light" 
+              color="brand"
+              radius="md" 
+              leftSection={<LuClock size={18} />}
+              onClick={() => navigate('/booking')}
+            >
+              Book Tutor
+            </Button>
+            <Button 
+              variant="gradient" 
+              gradient={{ from: 'brand', to: 'indigo' }} 
+              radius="md" 
+              leftSection={<LuZap size={18} />}
+              className="shadow-xl shadow-brand-500/30"
+              onClick={() => navigate('/courses')}
+            >
+              Start Learning
+            </Button>
+          </Group>
         </Group>
       </Box>
 
@@ -141,7 +153,7 @@ export const Dashboard = () => {
         <StatCard label="Total Students" value={stats?.totalStudents || 0} change="+2" color="brand" icon={LuUsers} />
         <StatCard label="Avg Completion" value={`${stats?.avgCompletionRate || 0}%`} change="+14%" color="blue" icon={LuClock} />
         <StatCard label="Dropout Risk" value={`${stats?.dropoutRiskRate || 0}%`} change="AI" color="orange" icon={LuTriangleAlert} />
-        <StatCard label="Active Sessions" value="24" change="LIVE" color="teal" icon={LuZap} />
+        <StatCard label="Total Revenue" value={new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats?.totalRevenue || 0)} change="LIVE" color="teal" icon={LuZap} />
       </SimpleGrid>
 
       <Grid gutter="xl">

@@ -178,11 +178,11 @@ export const Courses = () => {
                       variant="light" 
                       color="brand" 
                       radius="md" 
-                      onClick={() => navigate(`/checkout/${course.courseId}`)}
+                      onClick={() => navigate(`/course/${course.courseId}`)}
                       rightSection={<LuBookOpen size={16} />}
                       className="hover:bg-brand-600 hover:text-white transition-all shadow-md shadow-brand-500/10"
                     >
-                      Mua Ngay
+                      Xem Chi Tiết
                     </Button>
                   </Group>
                 </Stack>
