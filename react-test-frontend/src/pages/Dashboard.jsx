@@ -58,9 +58,11 @@ const StatCard = ({ label, value, change, color, icon: Icon }) => (
       <ThemeIcon size="lg" radius="md" variant="light" color={color}>
         <Icon size={20} />
       </ThemeIcon>
-      <Badge color="green" variant="light" size="sm">
-        {change}
-      </Badge>
+      {change && (
+        <Badge color="green" variant="light" size="sm">
+          {change}
+        </Badge>
+      )}
     </Group>
     <Box>
       <Text size="xs" fw={700} tt="uppercase" tracking="widest" c="dimmed">
@@ -73,7 +75,45 @@ const StatCard = ({ label, value, change, color, icon: Icon }) => (
 
 export const Dashboard = () => {
   const [parent] = useAutoAnimate();
+  const [stats, setStats] = React.useState(null);
+  const [chartData, setChartData] = React.useState({ categories: [], series: [] });
+  const [loading, setLoading] = React.useState(true);
   const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
+  const token = localStorage.getItem('slms_token');
+
+  const apiClient = axios.create({
+    baseURL: BASE_URL,
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsData, engagementData] = await Promise.all([
+          getDashboardStats(apiClient),
+          getEngagementChart(apiClient)
+        ]);
+        setStats(statsData);
+        setChartData(engagementData);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Transform chart data for Recharts
+  const formattedChartData = chartData.categories.map((cat, idx) => {
+    const obj = { name: cat };
+    chartData.series.forEach(s => {
+      obj[s.name] = s.data[idx];
+    });
+    return obj;
+  });
+
+  if (loading) return <Box p={50}><Loader size="xl" /></Box>;
 
   return (
     <Stack gap="xl">
@@ -83,7 +123,7 @@ export const Dashboard = () => {
             <Title order={1} fw={900} className="tracking-tighter text-4xl text-slate-900">
               Morning, <Text span variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} inherit>{user.fullName || 'Student'}</Text> ✨
             </Title>
-            <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green.7" fw={700}>92.4%</Text>. Keep it up!</Text>
+            <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green.7" fw={700}>{stats?.dropoutRiskRate || '92.4'}%</Text>. Keep it up!</Text>
           </Box>
           <Button 
             variant="gradient" 
@@ -98,10 +138,10 @@ export const Dashboard = () => {
       </Box>
 
       <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} gap="lg">
-        <StatCard label="Courses Active" value="12" change="+2" color="brand" icon={LuBookOpen} />
-        <StatCard label="Hours Studied" value="124h" change="+14%" color="blue" icon={LuClock} />
-        <StatCard label="Completed Tasks" value="48" change="+5" color="teal" icon={LuCircleCheck} />
-        <StatCard label="Class Ranking" value="#4" change="UP" color="orange" icon={LuTrendingUp} />
+        <StatCard label="Total Students" value={stats?.totalStudents || 0} change="+2" color="brand" icon={LuUsers} />
+        <StatCard label="Avg Completion" value={`${stats?.avgCompletionRate || 0}%`} change="+14%" color="blue" icon={LuClock} />
+        <StatCard label="Dropout Risk" value={`${stats?.dropoutRiskRate || 0}%`} change="AI" color="orange" icon={LuTriangleAlert} />
+        <StatCard label="Active Sessions" value="24" change="LIVE" color="teal" icon={LuZap} />
       </SimpleGrid>
 
       <Grid gutter="xl">

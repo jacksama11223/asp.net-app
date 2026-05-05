@@ -1,42 +1,79 @@
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace SmartLMS.Business
 {
     public class S3StorageService : IStorageService
     {
+        private readonly IAmazonS3 _s3Client;
         private readonly ILogger<S3StorageService> _logger;
+        private readonly string _bucketName;
+        private readonly string _cloudFrontUrl;
 
-        public S3StorageService(ILogger<S3StorageService> logger)
+        public S3StorageService(IAmazonS3 s3Client, IConfiguration configuration, ILogger<S3StorageService> logger)
         {
+            _s3Client = s3Client;
             _logger = logger;
+            _bucketName = configuration["AWS:BucketName"] ?? "smartlms-assets";
+            _cloudFrontUrl = configuration["AWS:CloudFrontUrl"] ?? "";
         }
 
         public async Task<string> UploadFileAsync(Stream fileStream, string fileName, string contentType)
         {
-            // GIẢ LẬP AWS S3 SDK
-            // Khi có account AWS, ta sẽ thêm mã lệnh:
-            // var s3Client = new AmazonS3Client(...);
-            // var putRequest = new PutObjectRequest { BucketName = "smartlms-assets", Key = fileName, InputStream = fileStream };
-            // await s3Client.PutObjectAsync(putRequest);
+            try
+            {
+                var fileKey = $"uploads/{Guid.NewGuid()}_{fileName}";
+                
+                var fileTransferUtility = new TransferUtility(_s3Client);
+                var uploadRequest = new TransferUtilityUploadRequest
+                {
+                    InputStream = fileStream,
+                    Key = fileKey,
+                    BucketName = _bucketName,
+                    ContentType = contentType,
+                    CannedACL = S3CannedACL.PublicRead
+                };
 
-            // Tạm thời Fake việc Upload lên S3 tốn 500ms
-            await Task.Delay(500);
-            
-            var cloudFrontUrl = $"https://d123cdn.cloudfront.net/images/courses/{Guid.NewGuid()}_{fileName}";
-            
-            _logger.LogInformation($"[Mock S3] Đã upload thành công {fileName} lên S3 Bucket. URL: {cloudFrontUrl}");
+                await fileTransferUtility.UploadAsync(uploadRequest);
+                
+                _logger.LogInformation($"[S3] Uploaded {fileName} to bucket {_bucketName}. Key: {fileKey}");
 
-            return cloudFrontUrl;
+                if (!string.IsNullOrEmpty(_cloudFrontUrl))
+                {
+                    return $"{_cloudFrontUrl.TrimEnd('/')}/{fileKey}";
+                }
+
+                return $"https://{_bucketName}.s3.amazonaws.com/{fileKey}";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"[S3] Error uploading file {fileName}");
+                throw;
+            }
         }
 
         public async Task<bool> DeleteFileAsync(string fileUrl)
         {
-            await Task.Delay(200);
-            _logger.LogInformation($"[Mock S3] Đã xóa file tại S3 Bucket: {fileUrl}");
-            return true;
+            try
+            {
+                // Extract key from URL
+                var uri = new Uri(fileUrl);
+                var key = uri.AbsolutePath.TrimStart('/');
+
+                await _s3Client.DeleteObjectAsync(_bucketName, key);
+                _logger.LogInformation($"[S3] Deleted object {key} from bucket {_bucketName}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"[S3] Error deleting file {fileUrl}");
+                return false;
+            }
         }
     }
 }

@@ -1,12 +1,23 @@
 using Microsoft.AspNetCore.SignalR;
+using SmartLMS.Business;
+using System;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Web.Hubs;
 
-public class DashboardHub : Hub
+public class DashboardHub : Hub<ISmartLmsHub>
 {
-    public async Task SendActivityNotification(string user, string action)
+    public override async Task OnConnectedAsync()
     {
-        await Clients.All.SendAsync("ReceiveActivity", user, action, DateTime.Now.ToString("HH:mm:ss"));
+        if (Context.User.IsInRole("Admin"))
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
+        }
+        await base.OnConnectedAsync();
+    }
+
+    public async Task SendActivity(string user, string action)
+    {
+        await Clients.All.ReceiveActivity(user, action, DateTime.Now.ToString("HH:mm:ss"));
     }
 }

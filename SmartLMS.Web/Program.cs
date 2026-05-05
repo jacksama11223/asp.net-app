@@ -249,7 +249,9 @@ builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, o
 });
 
 // Dependency Injection
-builder.Services.AddHttpClient(); // Đăng ký HttpClient Factory mặc định
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<Amazon.S3.IAmazonS3>();
+builder.Services.AddHttpClient(); 
 builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
 
 // Security & Encryption
@@ -257,6 +259,7 @@ builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS
 
 builder.Services.AddScoped(typeof(SmartLMS.Data.Repositories.IRepository<>), typeof(SmartLMS.Data.Repositories.Repository<>));
 builder.Services.AddScoped<SmartLMS.Business.ICourseService, SmartLMS.Business.CourseService>();
+builder.Services.AddScoped<SmartLMS.Business.ICurriculumService, SmartLMS.Business.CurriculumService>();
 builder.Services.AddScoped<SmartLMS.Business.IPredictionService, SmartLMS.Business.PredictionService>();
 builder.Services.AddScoped<SmartLMS.Business.IReportingService, SmartLMS.Business.ReportingService>();
 builder.Services.AddScoped<SmartLMS.Business.IStudentService, SmartLMS.Business.StudentService>();
@@ -265,6 +268,8 @@ builder.Services.AddScoped<SmartLMS.Business.IUserService, SmartLMS.Business.Use
 builder.Services.AddScoped<SmartLMS.Business.IApiKeyService, SmartLMS.Business.ApiKeyService>();
 builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.CohortService>();
 builder.Services.AddScoped<SmartLMS.Business.Jobs.IAuditCleanupJob, SmartLMS.Business.Jobs.AuditCleanupJob>();
+builder.Services.AddScoped<SmartLMS.Business.IOrderService, SmartLMS.Business.OrderService>();
+builder.Services.AddScoped<SmartLMS.Business.INotificationService, SmartLMS.Business.NotificationService>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
 if (builder.Environment.IsDevelopment())
 {

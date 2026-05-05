@@ -1,66 +1,87 @@
-# ⚙️ DANH SÁCH DỊCH VỤ (SERVICES) & CƠ CHẾ VẬN HÀNH
+# Kiểm toán Hệ thống: Services & Controllers (SmartLMS)
 
-Tài liệu này giải thích vai trò của các lớp xử lý nghiệp vụ (Business Logic) và cách chúng phối hợp với nhau.
-
----
-
-## 🏗️ 1. CƠ CHẾ "GỌI" DỊCH VỤ (DEPENDENCY INJECTION)
-
-Hệ thống sử dụng cơ chế **Dependency Injection (DI)**. Các Controller không bao giờ tự tạo mới dịch vụ bằng lệnh `new Service()`. Thay vào đó, chúng "yêu cầu" dịch vụ qua hàm khởi tạo (Constructor).
-
-**Ví dụ luồng đi:**
-`Trình duyệt` -> `CourseController` -> `ICourseService` -> `IRepository` -> `Database`.
+Bản tài liệu này cung cấp cái nhìn toàn diện về hiện trạng các thành phần logic trong hệ thống và các hướng cải thiện để đạt chuẩn Enterprise.
 
 ---
 
-## 🛠️ 2. DANH MỤC CÁC DỊCH VỤ CHÍNH
+## 1. Danh mục Service & Interface (SmartLMS.Business)
 
-### A. Nhóm Dịch vụ Nghiệp vụ (Business Core)
-| Dịch vụ | Vai trò | Cách gọi (Example) |
-| :--- | :--- | :--- |
-| **CourseService** | Quản lý khóa học, trạng thái, và thống kê. | `courseService.GetAllCoursesAsync()` |
-| **StudentService** | Quản lý thông tin học viên và lộ trình học. | `studentService.GetProfileAsync(id)` |
-| **AssessmentService** | Xử lý bài thi, câu hỏi và chấm điểm tự động. | `assessmentService.SubmitExamAsync(dto)` |
-| **CohortService** | Quản lý các lớp học (Cohorts) và thành viên. | `cohortService.AddStudentToCohort(id)` |
+Hiện tại hệ thống đã có bộ khung Service khá tốt, nhưng một số chỗ vẫn còn trộn lẫn logic.
 
-### B. Nhóm Dịch vụ AI & Phân tích (Intelligence)
-| Dịch vụ | Vai trò | Tệp tin nguồn |
-| :--- | :--- | :--- |
-| **PredictionService** | Sử dụng ML.NET để dự báo rủi ro học viên bỏ học. | `PredictionService.cs` |
-| **ReportingService** | Tổng hợp dữ liệu thành báo cáo doanh thu/biểu đồ. | `ReportingService.cs` |
-| **ScoringEngine** | Tính toán điểm số và cấp huy hiệu (Badge) dựa trên luật Gamification. | `ScoringEngine.cs` |
-
-### C. Nhóm Dịch vụ Tích hợp (Integrations)
-| Dịch vụ | Vai trò | Đối tác tích hợp |
-| :--- | :--- | :--- |
-| **VNPayGateway** | Tạo URL thanh toán và xử lý IPN (phản hồi từ bank). | [VNPay] |
-| **ZoomIntegrationService** | Tạo phòng học trực tuyến, quản lý lịch họp Zoom. | [Zoom SDK] |
-| **S3StorageService** | Lưu trữ ảnh/video khóa học lên đám mây (AWS S3/MinIO). | [Cloud Storage] |
-| **EmailService** | Gửi thông báo, mã OTP, xác nhận thanh toán qua SMTP. | [MailKit] |
-
-### D. Nhóm Dịch vụ Hạ tầng (Infrastructure)
-| Dịch vụ | Vai trò | Công nghệ |
-| :--- | :--- | :--- |
-| **RabbitMQBus** | Gửi tin nhắn giữa các module một cách không đồng bộ. | [RabbitMQ] |
-| **SqlService** | Thực thi các lệnh SQL đặc biệt cho Master Console. | [Dapper / SQL Client] |
-| **WebhookService** | Gửi thông báo đến các hệ thống bên ngoài khi có sự kiện. | [HTTP Client] |
+| Interface | Implementation | Trạng thái | Ghi chú |
+| :--- | :--- | :--- | :--- |
+| `ICourseService` | `CourseService` | Hoàn thiện | Xử lý CRUD, Cache, Soft Delete. |
+| `IUserService` | `UserService` | Hoàn thiện | Auth, RBAC, Blind Indexing. |
+| `IAssessmentService`| `AssessmentService` | Hoàn thiện | Thi cử, Leaderboard, XP. |
+| `IPredictionService`| `PredictionService` | Hoàn thiện | AI Dropout Prediction (ML.NET). |
+| `IReportingService` | `ReportingService` | Cơ bản | Dashboard stats, Charts. |
+| `IPaymentGateway` | `VNPayGateway` | Hoàn thiện | Tích hợp VNPay. |
+| `IStorageService` | `S3StorageService` | Hoàn thiện | Upload AWS S3. |
+| `IWebhookService` | `WebhookService` | Hoàn thiện | Hangfire + HMAC. |
+| `IEmailService` | `EmailService` | Cơ bản | Gửi mail thông báo. |
+| `ISqlService` | `SqlService` | Cơ bản | Thực thi SQL trực tiếp (Dapper). |
+| `IApiKeyService` | `ApiKeyService` | Cơ bản | Quản lý API keys. |
+| `IScoringEngine` | `ScoringEngine` | Hoàn thiện | Thuật toán tính điểm. |
+| `ICertificateService`| `CertificateService` | Mới | Cấp chứng chỉ PDF. |
+| `IZoomService` | `ZoomIntegrationService`| Cơ bản | Tạo phòng họp Zoom. |
+| `IAffiliateService` | `AffiliateService` | Cơ bản | Quản lý hoa hồng. |
 
 ---
 
-## 🔄 3. CHU TRÌNH XỬ LÝ MỘT REQUEST (VÍ DỤ)
+## 2. Danh mục Controllers (SmartLMS.Web)
 
-Khi một học viên nhấn **"Thanh toán khóa học"**:
-1. **OrderController** nhận request.
-2. Nó gọi **VNPayGateway** để lấy link thanh toán.
-3. Sau khi trả tiền, **VNPay** gọi lại (Callback).
-4. **OrderController** gọi **CourseService** để mở khóa học cho học viên.
-5. Đồng thời gọi **MessageBus** (RabbitMQ) để gửi một tin nhắn "Có đơn mới".
-6. **EmailService** (đang chờ tin nhắn) sẽ tự động gửi Mail cảm ơn cho học viên.
+Hệ thống chia làm 2 dạng: **Web Controller** (trả về View) và **Api Controller** (trả về JSON cho Frontend/Mobile).
+
+### A. Web Controllers (Server-Side Rendering)
+- `CourseManagementController`: Quản lý toàn bộ khóa học.
+- `AssessmentController`: Giao diện thi và bảng xếp hạng.
+- `UserManagementController`: Quản lý danh sách người dùng.
+- `DashboardController`: Trang chủ quản trị.
+- `PaymentController`: Xử lý luồng thanh toán VNPay.
+- `CohortController`: Quản lý lớp học.
+- `CouponController`: Quản lý mã giảm giá.
+- `RevenueController`: Báo cáo doanh thu.
+
+### B. Api Controllers (Dành cho Frontend React/Vue/Mobile)
+- `AssessmentApiController`: API lấy câu hỏi, nộp bài.
+- `AuthApiController`: API đăng nhập/đăng ký (JWT).
+- `PublicPaymentApiController`: Webhook VNPay/SePay và API thanh toán cho Frontend.
+- `IAMController`: API quản lý quyền và phân tầng tổ chức.
 
 ---
-## 📄 CÁCH ĐĂNG KÝ DỊCH VỤ
-Bạn có thể xem cách tất cả các dịch vụ này được "khai báo" với hệ thống tại file:
-👉 **[Program.cs](file:///c:/code/asp.net/SmartLMS.Web/Program.cs)** (Từ dòng 137 đến 168).
+
+## 3. Các khoảng trống (Missing Gaps) & Hướng cải thiện
+
+Qua nghiên cứu, hệ thống đang **THIẾU** hoặc cần **TÁCH BIỆT** các thành phần sau:
+
+### 1. Thiếu `OrderService` / `InvoiceService`
+- **Hiện trạng:** Logic tạo hóa đơn và cập nhật trạng thái "Paid" đang nằm rải rác ở `PaymentController` và `PublicPaymentApiController`.
+- **Cải thiện:** Cần tạo một Service riêng để quản lý vòng đời hóa đơn, tính toán thuế/giảm giá tập trung.
+
+### 2. Thiếu `CurriculumService` (Module & Lesson)
+- **Hiện trạng:** Logic thêm Module/Lesson đang được viết trực tiếp trong `CourseManagementController` (Web layer).
+- **Cải thiện:** Tách ra `ICurriculumService` để sau này API Mobile cũng có thể gọi vào để thêm nội dung khóa học.
+
+### 3. Thiếu `NotificationService` đa kênh
+- **Hiện trạng:** Chỉ mới có Email.
+- **Cải thiện:** Cần một service trung tâm để gửi thông báo qua SignalR (Real-time), Email, và Webhook cùng lúc.
+
+### 4. Thiếu `AuditLogService` chuyên sâu
+- **Hiện trạng:** Việc ghi log hành động người dùng đang làm thủ công trong DB Context hoặc Controller.
+- **Cải thiện:** Tạo một Service để ghi log không đồng bộ (Async) toàn bộ hành động nhạy cảm của Admin.
+
+### 5. Frontend Integration Gap
+- **Vấn đề:** Các Controller Web (`CourseManagementController`) đang nắm giữ quá nhiều logic nghiệp vụ mà API không có.
+- **Giải pháp:** Chuyển dịch toàn bộ logic từ Controller vào Service. Sau đó cả Web Controller và Api Controller chỉ việc gọi vào Service đó.
 
 ---
-*Tài liệu được biên soạn bởi Antigravity AI - Trợ lý của bạn.*
+
+## 4. Kế hoạch hành động đề xuất
+
+1.  **Refactor Course Logic:** Chuyển các thao tác Module/Lesson từ `CourseManagementController` sang `CourseService`.
+2.  **Centralize Payment:** Tạo `IOrderService` để hợp nhất luồng xử lý VNPay và SePay.
+3.  **Modernize Notification:** Triển khai `NotificationService` sử dụng SignalR để đẩy thông báo "Học viên vừa nộp bài" lên Dashboard Admin ngay lập tức.
+4.  **Security Audit:** Nâng cấp `UserService` để hỗ trợ Multi-Factor Authentication (MFA).
+
+---
+*Tài liệu này sẽ được cập nhật khi có các service mới được triển khai.*

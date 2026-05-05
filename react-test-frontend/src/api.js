@@ -55,3 +55,18 @@ export const triggerMockWebhook = async (apiClient, txnRef) => {
   const response = await apiClient.post(`/api/public/payment/mock-webhook/${txnRef}`);
   return response.data;
 };
+// Dashboard & Analytics
+export const getDashboardStats = async (apiClient) => {
+  const response = await apiClient.get('/api/dashboard/stats');
+  return response.data;
+};
+
+export const getEngagementChart = async (apiClient) => {
+  const response = await apiClient.get('/api/dashboard/engagement-chart');
+  return response.data;
+};
+
+export const getRecentActivities = async (apiClient) => {
+  const response = await apiClient.get('/api/dashboard/activities');
+  return response.data;
+};

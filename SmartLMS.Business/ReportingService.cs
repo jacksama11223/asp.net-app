@@ -30,16 +30,16 @@ public class ReportingService : IReportingService
     public async Task<DashboardStats> GetDashboardStatsAsync()
     {
         using var db = CreateConnection();
-        return await db.QueryFirstOrDefaultAsync<DashboardStats>("sp_GetDashboardStats", commandType: CommandType.StoredProcedure) ?? new DashboardStats();
+        return await db.QueryFirstOrDefaultAsync<DashboardStats>("CALL sp_GetDashboardStats()", commandType: CommandType.Text) ?? new DashboardStats();
     }
 
     public async Task<IEnumerable<RecentActivityViewModel>> GetRecentActivitiesAsync(int top = 5)
     {
         using var db = CreateConnection();
         return await db.QueryAsync<RecentActivityViewModel>(
-            "sp_GetRecentActivity", 
-            new { Top = top }, 
-            commandType: CommandType.StoredProcedure);
+            "CALL sp_GetRecentActivity(@topCount)", 
+            new { topCount = top }, 
+            commandType: CommandType.Text);
     }
 
     public async Task<object> GetEngagementChartDataAsync()
