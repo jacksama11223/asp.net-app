@@ -21,7 +21,7 @@ public class OrderService : IOrderService
         var course = await _context.Courses.FindAsync(courseId);
         if (course == null) throw new Exception("Không tìm thấy khóa học.");
 
-        decimal finalPrice = course.Price;
+        decimal finalPrice = course.Price ?? 0;
 
         if (!string.IsNullOrEmpty(couponCode))
         {
@@ -65,9 +65,10 @@ public class OrderService : IOrderService
             {
                 UserId = invoice.UserId,
                 CourseId = invoice.CourseId,
-                EnrollDate = DateTime.Now,
+                LastAccessDate = DateTime.Now,
                 Progress = 0,
-                Status = "Active"
+                IsCompleted = false,
+                IsDropout = false
             };
             _context.Enrollments.Add(enrollment);
         }
@@ -91,16 +92,18 @@ public class OrderService : IOrderService
         var course = await _context.Courses.FindAsync(courseId);
         if (course == null) return 0;
 
+        decimal basePrice = course.Price ?? 0;
+
         var coupon = await _context.Coupons
             .FirstOrDefaultAsync(c => c.Code == couponCode && c.IsActive && (c.ExpiryDate == null || c.ExpiryDate > DateTime.Now));
 
-        if (coupon == null) return course.Price;
+        if (coupon == null) return basePrice;
 
         if (coupon.DiscountType == "Percentage")
         {
-            return course.Price * (1 - coupon.DiscountAmount / 100);
+            return basePrice * (1 - (decimal)coupon.DiscountAmount / 100);
         }
         
-        return Math.Max(0, course.Price - coupon.DiscountAmount);
+        return Math.Max(0, basePrice - (decimal)coupon.DiscountAmount);
     }
 }
