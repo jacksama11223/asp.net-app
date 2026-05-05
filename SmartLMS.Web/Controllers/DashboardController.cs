@@ -95,43 +95,41 @@ public class DashboardController : Controller
     public IActionResult Index() => View();
 
     [HttpGet]
+    [Route("api/dashboard/stats")]
     public async Task<IActionResult> GetStats()
     {
         var users = await _context.Users.ToListAsync();
         var enrollments = await _context.Enrollments.ToListAsync();
         
-        // Doanh thu thực tế từ hệ thống VNPay mới
-        var totalRevenueSaas = await _context.Set<Invoice>()
-            .Where(i => i.Status == "Success")
+        // Doanh thu thực tế từ hệ thống hóa đơn mới
+        var totalRevenue = await _context.Invoices
+            .Where(i => i.Status == "Paid")
             .SumAsync(i => i.Amount);
 
         var avgProgress = enrollments.Any() ? enrollments.Average(e => e.Progress) : 0;
-        var dropoutRiskCount = enrollments.Count(e => e.Progress < 20); // Giả lập AI logic đơn giản
+        var dropoutRiskCount = enrollments.Count(e => e.Progress != null && e.Progress < 20);
         
         return Json(new {
-            totalStudents = users.Count(u => u.Role == "Student"),
+            totalStudents = users.Count(u => u.UserType == 1), // Student
             avgCompletionRate = Math.Round(avgProgress ?? 0, 1),
             dropoutRiskRate = enrollments.Any() ? Math.Round((double)dropoutRiskCount / enrollments.Count() * 100, 1) : 0,
-            totalRevenueSaas = totalRevenueSaas
+            totalRevenue = totalRevenue
         });
     }
 
     [HttpGet]
+    [Route("api/dashboard/engagement-chart")]
+    public async Task<IActionResult> GetEngagementChart()
+    {
+        var data = await _reportingService.GetEngagementChartDataAsync();
+        return Json(data);
+    }
+
+    [HttpGet]
+    [Route("api/dashboard/activities")]
     public async Task<IActionResult> GetActivities()
     {
         var activities = await _reportingService.GetRecentActivitiesAsync(10);
         return Json(activities);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> SendNudge(string message, string? email)
-    {
-        if (!string.IsNullOrEmpty(email)) {
-            // Đẩy vào Hangfire để gửi email ở background
-            Hangfire.BackgroundJob.Enqueue<IEmailService>(service => 
-                service.SendEmailAsync(email, "Nhắc nhở từ Giảng viên (SmartLMS AI)", message));
-        }
-        await _hubContext.Clients.All.SendAsync("ReceiveNotification", "System", "Đã ghi nhận yêu cầu nhắc nhở. Email đang được gửi ở background.");
-        return Ok(new { success = true });
     }
 }
