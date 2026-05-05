@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj": {}
+    "c:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj": {}
   },
   "projects": {
-    "C:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj": {
+    "c:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj",
+        "projectUniqueName": "c:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj",
         "projectName": "SmartLMS.Business",
-        "projectPath": "C:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj",
+        "projectPath": "c:\\code\\asp.net\\SmartLMS.Business\\SmartLMS.Business.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\asp.net\\SmartLMS.Business\\obj\\",
+        "outputPath": "c:\\code\\asp.net\\SmartLMS.Business\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -26,11 +26,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj": {
-                "projectPath": "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj"
+              "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj": {
+                "projectPath": "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj"
               },
-              "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj": {
-                "projectPath": "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj"
+              "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj": {
+                "projectPath": "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj"
               }
             }
           }
@@ -50,6 +50,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AWSSDK.Extensions.NETCore.Setup": {
+              "target": "Package",
+              "version": "[4.0.3.36, )"
+            },
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[4.0.22.2, )"
+            },
             "BCrypt.Net-Next": {
               "target": "Package",
               "version": "[4.1.0, )"
@@ -73,6 +81,10 @@
             "MailKit": {
               "target": "Package",
               "version": "[4.16.0, )"
+            },
+            "Microsoft.AspNetCore.SignalR.Core": {
+              "target": "Package",
+              "version": "[1.2.9, )"
             },
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
@@ -115,14 +127,14 @@
         }
       }
     },
-    "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj": {
+    "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
+        "projectUniqueName": "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
         "projectName": "SmartLMS.Data",
-        "projectPath": "C:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
+        "projectPath": "c:\\code\\asp.net\\SmartLMS.Data\\SmartLMS.Data.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\asp.net\\SmartLMS.Data\\obj\\",
+        "outputPath": "c:\\code\\asp.net\\SmartLMS.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -137,8 +149,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj": {
-                "projectPath": "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj"
+              "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj": {
+                "projectPath": "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj"
               }
             }
           }
@@ -191,14 +203,14 @@
         }
       }
     },
-    "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj": {
+    "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj",
+        "projectUniqueName": "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj",
         "projectName": "SmartLMS.Models",
-        "projectPath": "C:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj",
+        "projectPath": "c:\\code\\asp.net\\SmartLMS.Models\\SmartLMS.Models.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\asp.net\\SmartLMS.Models\\obj\\",
+        "outputPath": "c:\\code\\asp.net\\SmartLMS.Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
