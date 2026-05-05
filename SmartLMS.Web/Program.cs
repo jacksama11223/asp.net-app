@@ -269,7 +269,7 @@ builder.Services.AddScoped<SmartLMS.Business.IApiKeyService, SmartLMS.Business.A
 builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.CohortService>();
 builder.Services.AddScoped<SmartLMS.Business.Jobs.IAuditCleanupJob, SmartLMS.Business.Jobs.AuditCleanupJob>();
 builder.Services.AddScoped<SmartLMS.Business.IOrderService, SmartLMS.Business.OrderService>();
-builder.Services.AddScoped<SmartLMS.Business.INotificationService, SmartLMS.Business.NotificationService>();
+builder.Services.AddScoped<SmartLMS.Business.INotificationService, SmartLMS.Web.Services.NotificationService>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
 if (builder.Environment.IsDevelopment())
 {

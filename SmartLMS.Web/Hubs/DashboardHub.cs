@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.SignalR;
-using SmartLMS.Business;
 using System;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Web.Hubs;
 
-public class DashboardHub : Hub<ISmartLmsHub>
+public class DashboardHub : Hub
 {
     public override async Task OnConnectedAsync()
     {
-        if (Context.User.IsInRole("Admin"))
+        if (Context.User != null && Context.User.IsInRole("Admin"))
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
         }
@@ -18,6 +17,6 @@ public class DashboardHub : Hub<ISmartLmsHub>
 
     public async Task SendActivity(string user, string action)
     {
-        await Clients.All.ReceiveActivity(user, action, DateTime.Now.ToString("HH:mm:ss"));
+        await Clients.All.SendAsync("ReceiveActivity", user, action, DateTime.Now.ToString("HH:mm:ss"));
     }
 }
