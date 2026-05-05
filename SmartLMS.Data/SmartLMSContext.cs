@@ -115,6 +115,7 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Enrollment> Enrollments { get; set; }
     public virtual DbSet<Lesson> Lessons { get; set; }
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Booking> Bookings { get; set; }
     public virtual DbSet<Cohort> Cohorts { get; set; }
     public virtual DbSet<UserCohort> UserCohorts { get; set; }
     public virtual DbSet<Coupon> Coupons { get; set; }

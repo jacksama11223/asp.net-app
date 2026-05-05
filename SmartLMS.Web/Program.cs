@@ -270,6 +270,7 @@ builder.Services.AddScoped<SmartLMS.Business.ICohortService, SmartLMS.Business.C
 builder.Services.AddScoped<SmartLMS.Business.Jobs.IAuditCleanupJob, SmartLMS.Business.Jobs.AuditCleanupJob>();
 builder.Services.AddScoped<SmartLMS.Business.IOrderService, SmartLMS.Business.OrderService>();
 builder.Services.AddScoped<SmartLMS.Business.INotificationService, SmartLMS.Web.Services.NotificationService>();
+builder.Services.AddScoped<SmartLMS.Business.IBookingService, SmartLMS.Business.BookingService>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
 if (builder.Environment.IsDevelopment())
 {
