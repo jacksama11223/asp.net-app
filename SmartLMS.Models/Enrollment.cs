@@ -24,4 +24,5 @@ public partial class Enrollment
     public virtual Course? Course { get; set; }
 
     public virtual User? User { get; set; }
+    public bool IsDeleted { get; set; } = false;
 }
