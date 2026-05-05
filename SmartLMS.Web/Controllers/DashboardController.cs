@@ -78,20 +78,6 @@ public class DashboardController : Controller
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetEngagementChart()
-    {
-        var data = await _reportingService.GetEngagementChartDataAsync();
-        return Json(data);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetRoleDistribution()
-    {
-        var data = await _reportingService.GetRoleDistributionAsync();
-        return Json(data);
-    }
-
     public IActionResult Index() => View();
 
     [HttpGet]
