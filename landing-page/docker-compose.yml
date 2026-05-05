@@ -1,0 +1,15 @@
+services:
+  landing-page:
+    build: .
+    container_name: lms-landing-page
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: lms-gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
