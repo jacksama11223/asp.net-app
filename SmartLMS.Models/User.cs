@@ -38,6 +38,7 @@ public partial class User
     public int? DepartmentId { get; set; }
     public int? OrganizationId { get; set; }
     public virtual Organization? Organization { get; set; }
+    public bool IsDeleted { get; set; } = false;
 
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();

@@ -84,9 +84,9 @@ public class BookingService : IBookingService
 
     public async Task<IEnumerable<User>> GetAvailableTutorsAsync(DateTime date)
     {
-        // Lấy danh sách giảng viên (UserType = 2/Tutor) và không bận cả ngày (ví dụ đơn giản)
+        // Lấy danh sách giảng viên (Role = "Instructor") và chưa bị xóa
         return await _context.Users
-            .Where(u => u.UserType == 2 && !u.IsDeleted)
+            .Where(u => u.Role == "Instructor" && !u.IsDeleted)
             .ToListAsync();
     }
 }

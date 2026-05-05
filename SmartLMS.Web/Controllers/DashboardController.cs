@@ -110,7 +110,7 @@ public class DashboardController : Controller
         var dropoutRiskCount = enrollments.Count(e => e.Progress != null && e.Progress < 20);
         
         return Json(new {
-            totalStudents = users.Count(u => u.UserType == 1), // Student
+            totalStudents = users.Count(u => u.Role == "Student"), // Student
             avgCompletionRate = Math.Round(avgProgress ?? 0, 1),
             dropoutRiskRate = enrollments.Any() ? Math.Round((double)dropoutRiskCount / enrollments.Count() * 100, 1) : 0,
             totalRevenue = totalRevenue
