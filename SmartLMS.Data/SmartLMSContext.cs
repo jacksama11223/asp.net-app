@@ -133,6 +133,8 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<QuizAttempt> QuizAttempts { get; set; }
     public virtual DbSet<Webhook> Webhooks { get; set; }
     public virtual DbSet<Invoice> Invoices { get; set; }
+    public virtual DbSet<CodingChallenge> CodingChallenges { get; set; }
+    public virtual DbSet<TestCase> TestCases { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -327,6 +329,17 @@ public partial class SmartLMSContext : DbContext
             entity.HasKey(e => e.WebhookId);
             entity.Property(e => e.TargetUrl).IsRequired();
             entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+
+        modelBuilder.Entity<CodingChallenge>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasMany(e => e.TestCases).WithOne(t => t.CodingChallenge).HasForeignKey(t => t.CodingChallengeId);
+            entity.HasOne(e => e.Course).WithMany().HasForeignKey(e => e.CourseId);
+            entity.HasOne(e => e.Lesson).WithMany().HasForeignKey(e => e.LessonId);
+        });
+
+        modelBuilder.Entity<TestCase>(entity => {
+            entity.HasKey(e => e.Id);
         });
 
         OnModelCreatingPartial(modelBuilder);

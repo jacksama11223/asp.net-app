@@ -186,6 +186,12 @@
                                 <p>Courses Management</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/CodingChallengeManagement" class="nav-link @(_ctrl == "CodingChallengeManagement" ? "active" : "")">
+                                <i class="nav-icon fas fa-code text-indigo"></i>
+                                <p>Coding Challenges</p>
+                            </a>
+                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">

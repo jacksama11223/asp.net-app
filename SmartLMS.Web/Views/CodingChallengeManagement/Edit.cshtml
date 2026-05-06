@@ -1,0 +1,122 @@
+@model SmartLMS.Models.CodingChallenge
+@{
+    ViewData["Title"] = "Chỉnh sửa bài tập";
+    Layout = "_Layout";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-bold text-indigo"><i class="fas fa-edit mr-2"></i> Chỉnh sửa bài tập</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card card-indigo shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title text-bold">Thông tin chi tiết</h3>
+                    </div>
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Tiêu đề bài tập</label>
+                                <input asp-for="Title" class="form-control" placeholder="Ví dụ: Tính tổng hai số" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Mô tả đề bài (Markdown)</label>
+                                <textarea asp-for="Description" class="form-control" rows="6" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Code mẫu ban đầu (Template)</label>
+                                <textarea asp-for="TemplateCode" class="form-control" rows="8" style="font-family: monospace;"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Điểm thưởng (EXP)</label>
+                                        <input asp-for="Points" type="number" class="form-control" value="10" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Ngôn ngữ</label>
+                                        <select asp-for="Language" class="form-control">
+                                            <option value="csharp">C#</option>
+                                            <option value="python">Python</option>
+                                            <option value="javascript">JavaScript</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white text-right">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm">Cập nhật thông tin</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="card card-success shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title text-bold"><i class="fas fa-vial mr-2"></i> Quản lý Test Cases</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5>Thêm Test Case mới</h5>
+                        <form asp-action="AddTestCase" method="post" class="bg-light p-3 rounded border mb-4">
+                            <input type="hidden" name="challengeId" value="@Model.Id" />
+                            <div class="form-group">
+                                <label class="small text-bold">Dữ liệu đầu vào (Input)</label>
+                                <input name="input" class="form-control form-control-sm" required placeholder="Ví dụ: 5 10" />
+                            </div>
+                            <div class="form-group">
+                                <label class="small text-bold">Kết quả dự kiến (Expected Output)</label>
+                                <input name="expectedOutput" class="form-control form-control-sm" required placeholder="Ví dụ: 15" />
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm btn-block shadow-sm">Thêm bộ test</button>
+                        </form>
+
+                        <hr />
+                        <h5>Danh sách bài test hiện tại</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover border">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Input</th>
+                                        <th>Output</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var tc in Model.TestCases)
+                                    {
+                                        <tr>
+                                            <td><code>@tc.Input</code></td>
+                                            <td class="text-success font-weight-bold">@tc.ExpectedOutput</td>
+                                            <td>
+                                                <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (!Model.TestCases.Any())
+                                    {
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted italic p-3">Chưa có test case nào.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

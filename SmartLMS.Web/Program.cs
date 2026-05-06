@@ -272,6 +272,7 @@ builder.Services.AddScoped<SmartLMS.Business.IOrderService, SmartLMS.Business.Or
 builder.Services.AddScoped<SmartLMS.Business.INotificationService, SmartLMS.Web.Services.NotificationService>();
 builder.Services.AddScoped<SmartLMS.Business.IBookingService, SmartLMS.Business.BookingService>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
+builder.Services.AddScoped<SmartLMS.Business.ICompilerService, SmartLMS.Business.CompilerService>();
 if (builder.Environment.IsDevelopment())
 {
     // Lite Mode: Dùng RAM host làm Cache, không cần cài Redis
