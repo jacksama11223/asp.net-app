@@ -48,12 +48,12 @@ public class ReportingService : IReportingService
         // Lấy lượt tương tác trong 7 ngày gần nhất
         var sql = @"
             SELECT 
-                FORMAT(Timestamp, 'dd/MM') as Day,
+                DATE_FORMAT(Timestamp, '%d/%m') as Day,
                 ActionType,
                 COUNT(*) as Count
             FROM ActivityLogs
-            WHERE Timestamp >= DATEADD(day, -7, GETDATE())
-            GROUP BY FORMAT(Timestamp, 'dd/MM'), ActionType
+            WHERE Timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            GROUP BY DATE_FORMAT(Timestamp, '%d/%m'), ActionType
             ORDER BY MIN(Timestamp)";
         
         var rows = await db.QueryAsync(sql);

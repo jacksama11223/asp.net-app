@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using Dapper;
 using System;
 using Microsoft.AspNetCore.SignalR;
@@ -42,7 +42,7 @@ public class DashboardController : Controller
     {
         string studentDefaultHash = BCrypt.Net.BCrypt.HashPassword("123456");
 
-        using var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        using var db = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         await db.OpenAsync();
         using var transaction = await db.BeginTransactionAsync();
 
@@ -89,7 +89,7 @@ public class DashboardController : Controller
         
         // Doanh thu thực tế từ hệ thống hóa đơn mới
         var totalRevenue = await _context.Invoices
-            .Where(i => i.Status == "Paid")
+            .Where(i => i.Status == "Paid" || i.Status == "Success")
             .SumAsync(i => i.Amount);
 
         var avgProgress = enrollments.Any() ? enrollments.Average(e => e.Progress) : 0;

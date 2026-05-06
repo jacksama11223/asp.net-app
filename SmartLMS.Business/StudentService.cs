@@ -31,7 +31,7 @@ namespace SmartLMS.Business;
             var sql = @"
                 SELECT u.UserId, u.FullName, u.Email,
                        COUNT(e.EnrollmentId) as CourseCount,
-                       ISNULL(AVG(e.Progress), 0) as AvgProgress
+                       IFNULL(AVG(e.Progress), 0) as AvgProgress
                 FROM Users u
                 LEFT JOIN Enrollments e ON u.UserId = e.UserId
                 WHERE u.Role = 'Student' OR u.UserType = 'Student'
