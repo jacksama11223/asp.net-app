@@ -1,37 +1,67 @@
 @model IEnumerable<SmartLMS.Models.Post>
 @{
-    ViewData["Title"] = "Cộng đồng chia sẻ kiến thức";
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Cộng đồng chia sẻ tri thức";
 }
 
-<div class="container mt-4">
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-4 py-2 mb-4">✨ Hệ sinh thái học tập & chia sẻ số 1</div>
+        <h1 class="hero-title mb-4">Chia sẻ kiến thức.<br>Kết nối chuyên gia.</h1>
+        <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 700px;">Nơi hàng ngàn Creator và học viên cùng nhau xây dựng cộng đồng học tập văn minh, hiện đại và hoàn toàn miễn phí.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#feed" class="btn btn-premium btn-lg">Khám phá ngay</a>
+            <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-4">Tìm hiểu thêm</a>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5 pt-5" id="feed">
     <div class="row">
-        <div class="col-md-8">
-            <h1 class="mb-4"><i class="fas fa-users text-primary"></i> Thảo luận mới nhất</h1>
-            
+        <!-- Main Feed -->
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <h2 class="h3 fw-bold mb-0">Thảo luận nổi bật</h2>
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Mới nhất</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Mới nhất</a></li>
+                        <li><a class="dropdown-item" href="#">Phổ biến nhất</a></li>
+                    </ul>
+                </div>
+            </div>
+
             @if (!Model.Any())
             {
-                <div class="alert alert-info">Chưa có bài viết nào trong cộng đồng. Hãy là người đầu tiên chia sẻ!</div>
+                <div class="card community-card border-0 p-5 text-center">
+                    <div class="mb-4 text-muted"><i class="fas fa-feather fa-4x opacity-25"></i></div>
+                    <h3 class="h5">Chưa có bài viết nào</h3>
+                    <p class="text-muted">Hãy trở thành người đầu tiên đặt nền móng cho cộng đồng!</p>
+                    <button class="btn btn-primary mt-3 px-4">Tạo bài viết đầu tiên</button>
+                </div>
             }
             else
             {
                 @foreach (var post in Model)
                 {
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <h2 class="card-title h4">
-                                <a asp-action="Details" asp-route-slug="@post.Slug" class="text-dark font-weight-bold">@post.Title</a>
-                            </h2>
-                            <p class="card-text text-muted">@post.Summary</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="user-info">
-                                    <span class="badge badge-light">@post.Category</span>
-                                    <small class="text-muted ml-2">
-                                        <i class="fas fa-user"></i> @post.Author.FullName • @post.CreatedAt.ToString("dd/MM/yyyy")
-                                    </small>
-                                </div>
-                                <div class="stats">
-                                    <span class="mr-3"><i class="fas fa-eye"></i> @post.ViewCount</span>
-                                    <span><i class="fas fa-thumbs-up"></i> @post.VoteCount</span>
+                    <div class="card community-card mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-start gap-3">
+                                <img src="https://ui-avatars.com/api/?name=@post.Author.FullName&background=random" class="rounded-circle shadow-sm" width="50" height="50">
+                                <div class="flex-grow-1">
+                                    <div class="mb-1">
+                                        <span class="badge bg-soft-primary text-primary bg-primary bg-opacity-10">@post.Category</span>
+                                        <small class="text-muted ms-2">@post.Author.FullName • @post.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <h3 class="h4 fw-bold">
+                                        <a asp-action="Details" asp-route-slug="@post.Slug" class="text-dark text-decoration-none">@post.Title</a>
+                                    </h3>
+                                    <p class="text-secondary opacity-75 mb-3">@post.Summary</p>
+                                    <div class="d-flex gap-4 text-muted">
+                                        <span><i class="far fa-thumbs-up me-1"></i> @post.VoteCount</span>
+                                        <span><i class="far fa-comment me-1"></i> @post.Comments.Count</span>
+                                        <span class="ms-auto"><i class="far fa-eye me-1"></i> @post.ViewCount lượt xem</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -39,21 +69,34 @@
                 }
             }
         </div>
-        
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">Chủ đề phổ biến</div>
-                <div class="list-group list-group-flush">
-                    <a href="/Community?category=C#" class="list-group-item list-group-item-action">C# & .NET</a>
-                    <a href="/Community?category=React" class="list-group-item list-group-item-action">React & Frontend</a>
-                    <a href="/Community?category=AI" class="list-group-item list-group-item-action">AI & Machine Learning</a>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card community-card mb-4 overflow-hidden border-0 bg-dark text-white p-4" style="background: linear-gradient(45deg, #0f172a 0%, #1e293b 100%);">
+                <h4 class="fw-bold mb-3">Dành cho Creator</h4>
+                <p class="text-white-50 small mb-4">Chia sẻ kiến thức của bạn, xây dựng thương hiệu cá nhân và tạo ra thu nhập từ quảng cáo.</p>
+                <button class="btn btn-premium w-100">Đăng ký Creator</button>
+            </div>
+
+            <div class="card community-card mb-4 border-0 p-4">
+                <h5 class="fw-bold mb-3">Chủ đề thịnh hành</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#dotnet8</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#react_js</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#ai_future</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#clean_code</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#web_security</a>
                 </div>
             </div>
-            
-            <div class="card bg-light border-0 p-3 text-center">
-                <h5>Bạn có kiến thức hay?</h5>
-                <p>Hãy chia sẻ với mọi người và nhận lại sự tôn trọng!</p>
-                <button class="btn btn-outline-primary btn-block">Viết bài ngay</button>
+
+            <div class="card community-card border-0 p-4 bg-primary bg-opacity-10">
+                <h5 class="fw-bold text-primary mb-2">Donate để ủng hộ</h5>
+                <p class="small text-secondary mb-3">Góp phần xây dựng hệ thống máy chủ mạnh mẽ hơn để phục vụ cộng đồng.</p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-white border-0">đ</span>
+                    <input type="text" class="form-control border-0" placeholder="Số tiền...">
+                    <button class="btn btn-primary">Gửi</button>
+                </div>
             </div>
         </div>
     </div>
