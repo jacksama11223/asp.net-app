@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  smartlms-community:
+    image: smartlms-community:latest
+    build:
+      context: .
+      dockerfile: SmartLMS.Community/SmartLMS.Community/Dockerfile
+    ports:
+      - "5182:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=141.253.114.218;Database=SmartLMS;User=root;Password=YourStrongPassword123!;
+    restart: always
