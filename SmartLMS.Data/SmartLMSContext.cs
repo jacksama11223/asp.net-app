@@ -135,6 +135,11 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Invoice> Invoices { get; set; }
     public virtual DbSet<CodingChallenge> CodingChallenges { get; set; }
     public virtual DbSet<TestCase> TestCases { get; set; }
+    
+    // Community Module
+    public virtual DbSet<Post> Posts { get; set; }
+    public virtual DbSet<Comment> Comments { get; set; }
+    public virtual DbSet<PostVote> PostVotes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -340,6 +345,29 @@ public partial class SmartLMSContext : DbContext
 
         modelBuilder.Entity<TestCase>(entity => {
             entity.HasKey(e => e.Id);
+        });
+
+        // Community Module Configurations
+        modelBuilder.Entity<Post>(entity => {
+            entity.HasKey(e => e.PostId);
+            entity.Property(e => e.Title).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Slug).HasMaxLength(255);
+            entity.HasOne(e => e.Author).WithMany().HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasQueryFilter(e => !e.IsDeleted);
+        });
+
+        modelBuilder.Entity<Comment>(entity => {
+            entity.HasKey(e => e.CommentId);
+            entity.HasOne(e => e.Post).WithMany(p => p.Comments).HasForeignKey(e => e.PostId);
+            entity.HasOne(e => e.Author).WithMany().HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasQueryFilter(e => !e.IsDeleted);
+        });
+
+        modelBuilder.Entity<PostVote>(entity => {
+            entity.HasKey(e => e.PostVoteId);
+            entity.HasOne(e => e.Post).WithMany(p => p.PostVotes).HasForeignKey(e => e.PostId);
+            entity.HasOne(e => e.User).WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(e => new { e.PostId, e.UserId }).IsUnique();
         });
 
         OnModelCreatingPartial(modelBuilder);

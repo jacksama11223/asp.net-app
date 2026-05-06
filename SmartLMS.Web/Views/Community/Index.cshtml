@@ -1,0 +1,60 @@
+@model IEnumerable<SmartLMS.Models.Post>
+@{
+    ViewData["Title"] = "Cộng đồng chia sẻ kiến thức";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4"><i class="fas fa-users text-primary"></i> Thảo luận mới nhất</h1>
+            
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">Chưa có bài viết nào trong cộng đồng. Hãy là người đầu tiên chia sẻ!</div>
+            }
+            else
+            {
+                @foreach (var post in Model)
+                {
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title h4">
+                                <a asp-action="Details" asp-route-slug="@post.Slug" class="text-dark font-weight-bold">@post.Title</a>
+                            </h2>
+                            <p class="card-text text-muted">@post.Summary</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="user-info">
+                                    <span class="badge badge-light">@post.Category</span>
+                                    <small class="text-muted ml-2">
+                                        <i class="fas fa-user"></i> @post.Author.FullName • @post.CreatedAt.ToString("dd/MM/yyyy")
+                                    </small>
+                                </div>
+                                <div class="stats">
+                                    <span class="mr-3"><i class="fas fa-eye"></i> @post.ViewCount</span>
+                                    <span><i class="fas fa-thumbs-up"></i> @post.VoteCount</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">Chủ đề phổ biến</div>
+                <div class="list-group list-group-flush">
+                    <a href="/Community?category=C#" class="list-group-item list-group-item-action">C# & .NET</a>
+                    <a href="/Community?category=React" class="list-group-item list-group-item-action">React & Frontend</a>
+                    <a href="/Community?category=AI" class="list-group-item list-group-item-action">AI & Machine Learning</a>
+                </div>
+            </div>
+            
+            <div class="card bg-light border-0 p-3 text-center">
+                <h5>Bạn có kiến thức hay?</h5>
+                <p>Hãy chia sẻ với mọi người và nhận lại sự tôn trọng!</p>
+                <button class="btn btn-outline-primary btn-block">Viết bài ngay</button>
+            </div>
+        </div>
+    </div>
+</div>
