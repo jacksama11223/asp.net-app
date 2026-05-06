@@ -24,6 +24,8 @@ services:
       - ConnectionStrings__ReadOnlyConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YourStrongPassword123!;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
+    ports:
+      - "5181:8080"
     networks:
       - lms-network
 
