@@ -12,5 +12,5 @@ public class RecentActivityViewModel
     public string StudentName { get; set; }
     public string CourseName { get; set; }
     public double Progress { get; set; }
-    public string RiskStatus { get; set; }
+    public string RiskLevel { get; set; }
 }
