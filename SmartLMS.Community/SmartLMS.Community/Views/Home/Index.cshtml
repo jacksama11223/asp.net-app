@@ -1,0 +1,38 @@
+@model IEnumerable<SmartLMS.Models.Post>
+@{
+    ViewData["Title"] = "Cộng đồng SmartLMS";
+}
+
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content text-center">
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold font-outfit">Xin chào Cộng đồng!</h1>
+      <p class="py-6">Đây là dự án độc lập sử dụng <b>Tailwind CSS & DaisyUI</b>. Chào mừng bạn đến với kỷ nguyên mới của SmartLMS.</p>
+      <button class="btn btn-primary">Bắt đầu ngay</button>
+    </div>
+  </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold mb-8">Thảo luận nổi bật (Từ Database chính)</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach (var post in Model)
+        {
+            <div class="card w-full bg-base-100 shadow-xl border border-base-300">
+              <figure><img src="https://picsum.photos/seed/@post.PostId/400/225" alt="Post thumbnail" /></figure>
+              <div class="card-body">
+                <h2 class="card-title">
+                  @post.Title
+                  <div class="badge badge-secondary">NEW</div>
+                </h2>
+                <p>@post.Summary</p>
+                <div class="card-actions justify-end mt-4">
+                  <div class="badge badge-outline">@post.Category</div> 
+                  <div class="badge badge-outline">@post.Author.FullName</div>
+                </div>
+              </div>
+            </div>
+        }
+    </div>
+</div>

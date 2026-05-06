@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartLMS Community</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind & DaisyUI CDN (Dùng cho dev nhanh) -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.0.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                inter: ['Inter', 'sans-serif'],
+                outfit: ['Outfit', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="font-inter">
+    <header>
+        <div class="navbar bg-base-100 shadow-md px-4 lg:px-20">
+          <div class="flex-1">
+            <a class="btn btn-ghost normal-case text-xl font-outfit" href="/">SmartLMS <span class="text-primary">Community</span></a>
+          </div>
+          <div class="flex-none">
+            <ul class="menu menu-horizontal px-1">
+              <li><a>Khám phá</a></li>
+              <li>
+                <details>
+                  <summary>
+                    Chủ đề
+                  </summary>
+                  <ul class="p-2 bg-base-100">
+                    <li><a>.NET</a></li>
+                    <li><a>React</a></li>
+                  </ul>
+                </details>
+              </li>
+              <li><a>Creators</a></li>
+            </ul>
+          </div>
+        </div>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="footer p-10 bg-neutral text-neutral-content mt-20">
+      <div>
+        <span class="footer-title">SmartLMS</span> 
+        <a class="link link-hover">Về chúng tôi</a>
+        <a class="link link-hover">Liên hệ</a>
+        <a class="link link-hover">Quảng cáo</a>
+      </div> 
+      <div>
+        <span class="footer-title">Pháp lý</span> 
+        <a class="link link-hover">Điều khoản sử dụng</a>
+        <a class="link link-hover">Chính sách bảo mật</a>
+      </div> 
+      <div>
+        <span class="footer-title">Bản quyền</span> 
+        <p>© 2026 SmartLMS Community. All rights reserved.</p>
+      </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
