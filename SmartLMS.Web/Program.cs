@@ -248,9 +248,25 @@ builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, o
     // options.AddInterceptors(new SmartLMS.Data.ReadOnlyInterceptor(config));
 });
 
-// Dependency Injection
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-builder.Services.AddAWSService<Amazon.S3.IAmazonS3>();
+// 4. Enterprise Storage & AWS Configuration
+var awsAccessKey = builder.Configuration["AWS:AccessKey"];
+var awsSecretKey = builder.Configuration["AWS:SecretKey"];
+var awsRegion = builder.Configuration["AWS:Region"] ?? "us-east-1";
+
+if (!string.IsNullOrEmpty(awsAccessKey) && !awsAccessKey.Contains("EXAMPLE") && awsAccessKey != "NOP")
+{
+    builder.Services.AddSingleton<Amazon.S3.IAmazonS3>(new Amazon.S3.AmazonS3Client(
+        new Amazon.Runtime.BasicAWSCredentials(awsAccessKey, awsSecretKey), 
+        Amazon.RegionEndpoint.GetBySystemName(awsRegion)));
+}
+else
+{
+    // Fallback: Register a dummy client that won't crash on injection, but will fail gracefully on usage
+    builder.Services.AddSingleton<Amazon.S3.IAmazonS3>(new Amazon.S3.AmazonS3Client(
+        new Amazon.Runtime.BasicAWSCredentials("DUMMY_KEY", "DUMMY_SECRET"), 
+        Amazon.RegionEndpoint.GetBySystemName(awsRegion)));
+}
+
 builder.Services.AddHttpClient(); 
 builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
 
