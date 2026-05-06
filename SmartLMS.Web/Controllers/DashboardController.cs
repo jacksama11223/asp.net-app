@@ -81,6 +81,7 @@ public class DashboardController : Controller
     public IActionResult Index() => View();
 
     [HttpGet]
+    [Route("Dashboard/GetStats")]
     [Route("api/dashboard/stats")]
     public async Task<IActionResult> GetStats()
     {
@@ -104,6 +105,7 @@ public class DashboardController : Controller
     }
 
     [HttpGet]
+    [Route("Dashboard/GetEngagementChart")]
     [Route("api/dashboard/engagement-chart")]
     public async Task<IActionResult> GetEngagementChart()
     {
@@ -112,10 +114,19 @@ public class DashboardController : Controller
     }
 
     [HttpGet]
+    [Route("Dashboard/GetActivities")]
     [Route("api/dashboard/activities")]
     public async Task<IActionResult> GetActivities()
     {
         var activities = await _reportingService.GetRecentActivitiesAsync(10);
         return Json(activities);
+    }
+
+    [HttpGet]
+    [Route("Dashboard/GetRoleDistribution")]
+    public async Task<IActionResult> GetRoleDistribution()
+    {
+        var data = await _reportingService.GetRoleDistributionAsync();
+        return Json(data);
     }
 }
