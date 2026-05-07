@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Business;
+using SmartLMS.Business.Security;
+using SmartLMS.Models.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,8 @@ var serverVersion = ServerVersion.AutoDetect(connectionString);
 
 builder.Services.AddDbContext<SmartLMSContext>(options =>
     options.UseMySql(connectionString, serverVersion));
+
+builder.Services.AddScoped<IEncryptionService, AesEncryptionService>();
 
 // Shared Services
 builder.Services.AddScoped<ICourseService, CourseService>();
