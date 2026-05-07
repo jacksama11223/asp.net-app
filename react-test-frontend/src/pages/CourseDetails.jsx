@@ -5,7 +5,7 @@ import {
   Loader, Divider, Box, SimpleGrid
 } from '@mantine/core';
 import { 
-  LuPlayCircle, LuFileText, LuHelpCircle, LuCheckCircle2, 
+  LuPlay, LuFileText, LuInfo, LuCheck, 
   LuUsers, LuClock, LuStar, LuBookOpen 
 } from 'react-icons/lu';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -77,7 +77,7 @@ export const CourseDetails = () => {
               <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
                 {[1, 2, 3, 4].map((i) => (
                   <Group key={i} align="flex-start" wrap="nowrap">
-                    <LuCheckCircle2 className="text-brand-600 mt-1 shrink-0" size={18} />
+                    <LuCheck className="text-brand-600 mt-1 shrink-0" size={18} />
                     <Text size="sm">Core industry concepts and advanced practical methodologies.</Text>
                   </Group>
                 ))}
@@ -102,7 +102,7 @@ export const CourseDetails = () => {
                     <Accordion.Panel>
                       <List spacing="sm" size="sm" center icon={
                         <ThemeIcon color="brand" size={24} radius="xl">
-                          <LuPlayCircle size={14} />
+                          <LuPlay size={14} />
                         </ThemeIcon>
                       }>
                         {module.lessons?.map((lesson) => (
@@ -182,7 +182,7 @@ export const CourseDetails = () => {
               <Text fw={700} size="sm" mb="md">This course includes:</Text>
               <Stack gap="xs">
                 <Group gap="xs">
-                  <LuPlayCircle size={16} className="text-brand-600" />
+                  <LuPlay size={16} className="text-brand-600" />
                   <Text size="xs">15 hours on-demand video</Text>
                 </Group>
                 <Group gap="xs">
