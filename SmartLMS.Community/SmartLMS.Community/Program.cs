@@ -2,9 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Business;
 
-var builder = WebApplication.CreateCollection(); // Wait, mistake here
-
-// Fix it:
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
