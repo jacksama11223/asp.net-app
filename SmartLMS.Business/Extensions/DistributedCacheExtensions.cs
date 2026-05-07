@@ -10,7 +10,7 @@ public static class DistributedCacheExtensions
 {
     private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
     {
-        ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        ReferenceHandler = ReferenceHandler.Preserve,
         WriteIndented = false
     };
 
