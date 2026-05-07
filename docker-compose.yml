@@ -26,6 +26,8 @@ services:
       - RabbitMQ__HostName=rabbitmq
     ports:
       - "5181:8080"
+    volumes:
+      - ./keys:/root/.aspnet/DataProtection-Keys
     networks:
       - lms-network
 
