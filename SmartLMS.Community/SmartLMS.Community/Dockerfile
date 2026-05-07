@@ -21,5 +21,5 @@ RUN dotnet publish "./SmartLMS.Community.csproj" -c $BUILD_CONFIGURATION -o /app
 
 FROM base AS final
 WORKDIR /app
-COPY --with=publish /app/publish .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SmartLMS.Community.dll"]
