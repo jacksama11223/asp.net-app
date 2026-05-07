@@ -1,12 +1,19 @@
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Business.Extensions;
 
 public static class DistributedCacheExtensions
 {
+    private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+    {
+        ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        WriteIndented = false
+    };
+
     public static async Task SetRecordAsync<T>(this IDistributedCache cache,
         string recordId,
         T data,
@@ -18,7 +25,7 @@ public static class DistributedCacheExtensions
         options.AbsoluteExpirationRelativeToNow = absoluteExpireTime ?? TimeSpan.FromSeconds(60);
         options.SlidingExpiration = unusedExpireTime;
 
-        var jsonData = JsonSerializer.Serialize(data);
+        var jsonData = JsonSerializer.Serialize(data, _jsonOptions);
         await cache.SetStringAsync(recordId, jsonData, options);
     }
 
@@ -31,6 +38,6 @@ public static class DistributedCacheExtensions
             return default(T);
         }
 
-        return JsonSerializer.Deserialize<T>(jsonData);
+        return JsonSerializer.Deserialize<T>(jsonData, _jsonOptions);
     }
 }
