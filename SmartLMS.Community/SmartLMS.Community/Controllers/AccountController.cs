@@ -23,14 +23,14 @@ namespace SmartLMS.Community.Controllers
         public async Task<IActionResult> Login(string username, string password)
         {
             var user = await _userService.AuthenticateAsync(username, password);
-            if (user != null && user.UserType == 1) // Assuming 1 = Instructor/Admin
+            if (user != null && (user.UserType == "1" || user.Role == "Instructor")) // Support both string "1" or "Instructor"
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Name, user.Username ?? ""),
                     new Claim(ClaimTypes.Email, user.Email ?? ""),
                     new Claim(ClaimTypes.Role, "Instructor"),
-                    new Claim("UserId", user.Id.ToString())
+                    new Claim("UserId", user.UserId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

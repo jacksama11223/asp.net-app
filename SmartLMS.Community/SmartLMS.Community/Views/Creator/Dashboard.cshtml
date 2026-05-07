@@ -99,9 +99,9 @@
                         @foreach(var item in Model)
                         {
                             <tr>
-                                <td class="font-bold">@item.Title</td>
+                                <td>@item.Title</td>
                                 <td>@item.Category</td>
-                                <td>@item.Price.ToString("N0") đ</td>
+                                <td>@((item.Price ?? 0).ToString("N0")) đ</td>
                                 <td>
                                     <div class="badge @(item.Status == "Published" ? "badge-success" : "badge-warning")">
                                         @item.Status
