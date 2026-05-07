@@ -22,6 +22,9 @@ public partial class Course
     public decimal? DiscountPrice { get; set; }
     public bool IsFree { get; set; } = false;
 
+    public double Rating { get; set; } = 4.5;
+    public int RatingCount { get; set; } = 0;
+
     /// <summary>Draft = 0 | Published = 1 | Archived = 2</summary>
     public string? Status { get; set; }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../api';
 
 const CodeWorkspace = () => {
     const { id } = useParams();
@@ -14,7 +15,7 @@ const CodeWorkspace = () => {
     useEffect(() => {
         const fetchChallenge = async () => {
             try {
-                const response = await axios.get(`http://localhost:5163/api/compiler/challenges/${id}`);
+                const response = await axios.get(`${BASE_URL}/api/compiler/challenges/${id}`);
                 setChallenge(response.data);
                 setCode(response.data.templateCode || "// Bắt đầu code tại đây...\nusing System;\n\npublic class Program {\n    public static void Main() {\n        Console.WriteLine(\"Hello World\");\n    }\n}");
             } catch (error) {
@@ -28,7 +29,7 @@ const CodeWorkspace = () => {
         setLoading(true);
         setActiveTab("output");
         try {
-            const response = await axios.post("http://localhost:5163/api/compiler/execute", {
+            const response = await axios.post(`${BASE_URL}/api/compiler/execute`, {
                 challengeId: parseInt(id),
                 code: code,
                 language: "csharp"

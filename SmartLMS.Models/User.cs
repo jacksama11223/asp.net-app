@@ -24,6 +24,8 @@ public partial class User
     public int? LecturerStatus { get; set; } // 0: None, 1: Pending, 2: Approved
 
     public string? Bio { get; set; }
+    public string? DonateUrl { get; set; }
+
 
     public string? KYCDocUrl { get; set; }
 

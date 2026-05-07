@@ -156,7 +156,7 @@ export const Courses = () => {
                       <LuUser size={14} />
                     </Avatar>
                     <Text size="sm" fw={700} className="text-slate-700">
-                      {course.instructorName}
+                      {course.instructorName || "Hệ thống SmartLMS"}
                     </Text>
                   </Group>
 
@@ -171,7 +171,9 @@ export const Courses = () => {
                       </Text>
                       <Group gap={4}>
                         <LuStar size={10} className="text-yellow-500 fill-yellow-500" />
-                        <Text size="10px" fw={700} c="dimmed">4.9 (2k+)</Text>
+                        <Text size="10px" fw={700} c="dimmed">
+                          {course.rating?.toFixed(1) || "4.5"} ({course.ratingCount || 0})
+                        </Text>
                       </Group>
                     </Stack>
                     <Button 

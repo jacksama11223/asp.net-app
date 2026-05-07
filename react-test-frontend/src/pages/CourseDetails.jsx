@@ -22,12 +22,9 @@ export const CourseDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [courseRes, curriculumRes] = await Promise.all([
-          axios.get(`${BASE_URL}/api/public/courses/${id}`),
-          axios.get(`${BASE_URL}/api/curriculum/${id}`)
-        ]);
-        setCourse(courseRes.data);
-        setCurriculum(curriculumRes.data);
+        const response = await axios.get(`${BASE_URL}/api/public/courses/${id}`);
+        setCourse(response.data);
+        setCurriculum(response.data.modules || []);
       } catch (err) {
         console.error("Failed to fetch course details", err);
       } finally {
@@ -59,12 +56,12 @@ export const CourseDetails = () => {
               
               <Group mt="xl" gap="xl">
                 <Group gap="xs">
-                  <Avatar size="sm" color="brand">{course.instructorName?.charAt(0)}</Avatar>
-                  <Text size="sm" fw={700}>{course.instructorName}</Text>
+                  <Avatar size="sm" color="brand">{course.instructor?.fullName?.charAt(0)}</Avatar>
+                  <Text size="sm" fw={700}>{course.instructor?.fullName || "Hệ thống SmartLMS"}</Text>
                 </Group>
                 <Group gap="xs">
                   <LuStar className="text-yellow-500 fill-yellow-500" size={16} />
-                  <Text size="sm" fw={700}>4.9 (2.4k reviews)</Text>
+                  <Text size="sm" fw={700}>{course.rating?.toFixed(1) || "4.5"} ({course.ratingCount || 0} đánh giá)</Text>
                 </Group>
                 <Group gap="xs">
                   <LuUsers className="text-slate-400" size={16} />
@@ -151,17 +148,31 @@ export const CourseDetails = () => {
             </Group>
 
             <Stack gap="md">
-              <Button 
+               <Button 
                 size="lg" 
                 radius="md" 
                 color="brand" 
                 fullWidth
                 onClick={() => navigate(`/checkout/${id}`)}
               >
-                Enroll Now
+                Đăng Ký Ngay
               </Button>
+              {course.instructor?.donateUrl && (
+                <Button 
+                  size="lg" 
+                  radius="md" 
+                  variant="light" 
+                  color="orange" 
+                  fullWidth
+                  component="a"
+                  href={course.instructor.donateUrl}
+                  target="_blank"
+                >
+                  Donate Cho Tác Giả ☕
+                </Button>
+              )}
               <Button size="lg" radius="md" variant="light" color="gray" fullWidth>
-                Add to Wishlist
+                Thêm vào yêu thích
               </Button>
             </Stack>
 

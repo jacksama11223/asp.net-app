@@ -34,7 +34,8 @@ namespace SmartLMS.Web.Controllers.Api.Public
             // int orgId = int.Parse(orgIdClaim);
 
             var courses = await _context.Courses
-                .Where(c => c.Status == "Published" && !c.IsDeleted) // Lọc theo Status và Soft Delete
+                .Include(c => c.Instructor)
+                .Where(c => c.Status == "Published" && !c.IsDeleted)
                 .Select(c => new
                 {
                     c.CourseId,
@@ -43,7 +44,9 @@ namespace SmartLMS.Web.Controllers.Api.Public
                     c.ThumbnailUrl,
                     c.Price,
                     c.DiscountPrice,
-                    InstructorName = "Hệ thống SmartLMS", 
+                    InstructorName = c.Instructor != null ? c.Instructor.FullName : "Hệ thống SmartLMS",
+                    Rating = c.Rating,
+                    RatingCount = c.RatingCount,
                     TotalStudents = c.Enrollments.Count
                 })
                 .ToListAsync();
@@ -63,6 +66,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
             // int orgId = int.Parse(orgIdClaim);
  
             var course = await _context.Courses
+                .Include(c => c.Instructor)
                 .Include(c => c.CourseModules)
                 .ThenInclude(m => m.Lessons)
                 .FirstOrDefaultAsync(c => c.CourseId == id && !c.IsDeleted);
@@ -75,10 +79,19 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 CourseName = course.Title,
                 course.Description,
                 course.Price,
+                course.ThumbnailUrl,
+                course.Rating,
+                course.RatingCount,
+                Instructor = new
+                {
+                    course.Instructor?.FullName,
+                    course.Instructor?.Bio,
+                    course.Instructor?.DonateUrl
+                },
                 Modules = course.CourseModules.Select(m => new
                 {
                     m.Title,
-                    LessonCount = m.Lessons.Count
+                    Lessons = m.Lessons.Select(l => new { l.LessonId, l.Title, l.LessonType }).ToList()
                 })
             });
         }

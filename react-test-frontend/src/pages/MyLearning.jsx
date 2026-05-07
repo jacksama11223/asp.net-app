@@ -64,7 +64,7 @@ export const MyLearning = () => {
                 <Stack mt="md" gap="xs">
                   <Badge size="xs" variant="light" color="blue">{enrollment.course?.category || 'Development'}</Badge>
                   <Title order={4} lineClamp={1}>{enrollment.course?.title}</Title>
-                  <Text size="xs" c="dimmed">By {enrollment.course?.instructor?.fullName || 'Expert Instructor'}</Text>
+                  <Text size="xs" c="dimmed">By {enrollment.course?.instructor?.fullName || 'Hệ thống SmartLMS'}</Text>
                   
                   <Box mt="sm">
                     <Group justify="space-between" mb={4}>

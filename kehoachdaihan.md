@@ -151,7 +151,13 @@ Bên cạnh Quảng cáo (Ads), hệ thống sẽ tích hợp luồng tiền t�
     *   Phân loại bài viết theo chuyên mục (Web, AI, Mobile).
     *   Tìm kiếm bài viết theo từ khóa (Full-text search).
 
-**Giai đoạn 2: Cổng Người Sáng Tạo (Creator Portal) - Đang thực hiện 🚧**
-1.  **Dashboard Giảng viên:** Trang thống kê dành riêng cho giảng viên (số học viên, bài viết, khóa học).
-2.  **Quản lý nội dung:** Creator có thể tự đăng bài và quản lý khóa học của mình.
-3.  **Hệ thống phân quyền:** Phân biệt User thường và Creator dựa trên Email/Role.
+**Giai đoạn 3: Hệ sinh thái Học viên (React Frontend - VPS Cũ) - Đang lập kế hoạch 🗺️**
+1.  **Marketplace & Inventory:** 
+    *   Trang hiển thị khóa học kèm tên Tác giả (liên kết với Creator Portal).
+    *   Module "Kho khóa học của tôi" (My Library).
+2.  **Learning Experience:**
+    *   Course Player: Xem video, tài liệu, tải code mẫu.
+    *   Social Features: Đánh giá sao, Review và hệ thống Donate cho giảng viên.
+3.  **Smart Learning Tools:**
+    *   Flashcards & Quizzes (Áp dụng Spaced Repetition).
+    *   Hệ thống Highlight & Note lỗi sai để ôn tập.
