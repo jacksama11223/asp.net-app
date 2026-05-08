@@ -68,7 +68,7 @@ export const MyLearning = () => {
         <Tabs value={activeTab} onChange={setActiveTab} variant="pills" radius="xl" color="brand">
           <Tabs.List mb="xl">
             <Tabs.Tab value="courses" leftSection={<LuLayoutGrid size={16} />}>Đang học</Tabs.Tab>
-            <Tabs.Tab value="mistakes" leftSection={<LuAlertTriangle size={16} />}>Sổ tay lỗi sai</Tabs.Tab>
+            <Tabs.Tab value="mistakes" leftSection={<LuInfo size={16} />}>Sổ tay lỗi sai</Tabs.Tab>
             <Tabs.Tab value="flashcards" leftSection={<LuBrain size={16} />}>Thẻ nhớ (SRS)</Tabs.Tab>
           </Tabs.List>
 
