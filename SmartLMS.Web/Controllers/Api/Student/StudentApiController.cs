@@ -36,11 +36,11 @@ public class StudentApiController : ControllerBase
         var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
         if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
 
-        int userId = int.Parse(userIdStr);
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var enrollments = await _context.Enrollments
             .Include(e => e.Course)
-            .ThenInclude(c => c != null ? c.Instructor : null)
+            .ThenInclude(c => (c != null) ? c.Instructor : null)
             .Where(e => e.Course != null && !e.Course.IsDeleted && e.UserId == userId)
             .Select(e => new
             {
@@ -52,7 +52,7 @@ public class StudentApiController : ControllerBase
                     e.Course.Title,
                     e.Course.ThumbnailUrl,
                     e.Course.Category,
-                    Instructor = e.Course.Instructor != null ? new
+                    Instructor = (e.Course.Instructor != null) ? new
                     {
                         e.Course.Instructor.FullName
                     } : null
