@@ -8,7 +8,7 @@ import {
 import { 
   LuBook, LuCode, LuFileText, LuMessageSquare, 
   LuStar, LuHeart, LuArrowLeft, LuPlay, 
-  LuCheckCircle2, LuHelpCircle, LuPenTool
+  LuCheckCircle, LuInfo, LuPenTool
 } from 'react-icons/lu';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -209,7 +209,7 @@ export const StudyWorkspace = () => {
                           </Paper>
                           <Paper p="md" withBorder radius="md" className="hover:border-brand-500 cursor-pointer">
                             <Group>
-                              <LuHelpCircle className="text-blue-500" />
+                              <LuInfo className="text-blue-500" />
                               <Box>
                                 <Text fw={600}>Quiz: Middleware & Pipeline</Text>
                                 <Text size="xs" c="dimmed">10 câu hỏi • 80% pass</Text>
