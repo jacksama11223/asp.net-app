@@ -57,8 +57,9 @@ public class StudentApiController : ControllerBase
     [HttpGet("course-content/{courseId}")]
     public async Task<ActionResult> GetCourseContent(int courseId)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
-        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        int userId = int.Parse(userIdStr);
 
         var content = await _studentService.GetCourseContentForWorkspaceAsync(courseId, userId);
         return Ok(content);
@@ -67,8 +68,9 @@ public class StudentApiController : ControllerBase
     [HttpPost("log-mistake")]
     public async Task<ActionResult> LogMistake([FromBody] MistakeLog log)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
-        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        int userId = int.Parse(userIdStr);
 
         log.UserId = userId;
         await _studentService.LogMistakeAsync(log);
@@ -78,8 +80,9 @@ public class StudentApiController : ControllerBase
     [HttpGet("mistakes/{courseId}")]
     public async Task<ActionResult> GetMistakes(int courseId)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
-        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        int userId = int.Parse(userIdStr);
 
         var mistakes = await _studentService.GetMistakeNotebookAsync(userId, courseId);
         return Ok(mistakes);
@@ -102,10 +105,11 @@ public class StudentApiController : ControllerBase
     }
 
     [HttpPost("ask-question")]
-    public async Task<ActionResult> AskQuestion([FromBody] Question question)
+    public async Task<ActionResult> AskQuestion([FromBody] LessonQuestion question)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
-        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        int userId = int.Parse(userIdStr);
 
         question.UserId = userId;
         await _studentService.AskQuestionAsync(question);

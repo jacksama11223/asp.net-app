@@ -90,7 +90,7 @@ namespace SmartLMS.Business;
             await _emailService.SendEmailAsync(user.Email, subject, body);
         }
 
-        public async Task<object> GetCourseContentForWorkspaceAsync(int courseId, string userId)
+        public async Task<object> GetCourseContentForWorkspaceAsync(int courseId, int userId)
         {
             var modules = await _context.CourseModules
                 .Include(m => m.Lessons)
@@ -113,7 +113,7 @@ namespace SmartLMS.Business;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(string userId, int courseId)
+        public async Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(int userId, int courseId)
         {
             return await _context.MistakeLogs
                 .Include(m => m.Lesson)
@@ -121,9 +121,9 @@ namespace SmartLMS.Business;
                 .ToListAsync();
         }
 
-        public async Task AskQuestionAsync(Question question)
+        public async Task AskQuestionAsync(LessonQuestion question)
         {
-            _context.Questions.Add(question);
+            _context.LessonQuestions.Add(question);
             await _context.SaveChangesAsync();
         }
 

@@ -5,7 +5,7 @@ namespace SmartLMS.Models;
 public class MistakeLog
 {
     public int MistakeLogId { get; set; }
-    public string UserId { get; set; } = null!;
+    public int UserId { get; set; }
     public int LessonId { get; set; }
     public string ExerciseType { get; set; } = null!; // Quiz, Code, Flashcard
     public string UserAnswer { get; set; } = null!;

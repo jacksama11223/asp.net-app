@@ -1,19 +1,17 @@
 using System;
+using System.Collections.Generic;
 
 namespace SmartLMS.Models;
 
 public class Question
 {
     public int QuestionId { get; set; }
-    public string UserId { get; set; } = null!;
-    public int LessonId { get; set; }
     public string Content { get; set; } = null!;
-    public string? Answer { get; set; }
-    public string? AnsweredBy { get; set; } // Instructor UserId
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? AnsweredAt { get; set; }
-    public bool IsPrivate { get; set; } = false;
+    public string? CorrectAnswer { get; set; }
+    public int XPValue { get; set; } = 10;
+    public int? DepartmentId { get; set; }
+    public int CourseId { get; set; }
 
-    public virtual User User { get; set; } = null!;
-    public virtual Lesson Lesson { get; set; } = null!;
+    public virtual Course Course { get; set; } = null!;
+    public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
 }

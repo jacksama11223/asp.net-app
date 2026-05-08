@@ -10,10 +10,10 @@ public interface IStudentService
     Task SendNudgeAsync(int userId);
     
     // Workspace Methods
-    Task<object> GetCourseContentForWorkspaceAsync(int courseId, string userId);
+    Task<object> GetCourseContentForWorkspaceAsync(int courseId, int userId);
     Task LogMistakeAsync(MistakeLog log);
-    Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(string userId, int courseId);
-    Task AskQuestionAsync(Question question);
+    Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(int userId, int courseId);
+    Task AskQuestionAsync(LessonQuestion question);
     Task<IEnumerable<Flashcard>> GetFlashcardsForLessonAsync(int lessonId);
     Task UpdateFlashcardProgressAsync(int flashcardId, bool wasCorrect);
 }
