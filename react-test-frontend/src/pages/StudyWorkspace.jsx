@@ -8,7 +8,7 @@ import {
 import { 
   LuBook, LuCode, LuFileText, LuMessageSquare, 
   LuStar, LuHeart, LuArrowLeft, LuPlay, 
-  LuCheckCircle, LuInfo, LuPenTool
+  LuCheck, LuInfo, LuPenTool
 } from 'react-icons/lu';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
