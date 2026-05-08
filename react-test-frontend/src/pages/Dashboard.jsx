@@ -20,7 +20,8 @@ import {
   ThemeIcon, 
   Box,
   Stack,
-  Button
+  Button,
+  Loader
 } from '@mantine/core';
 import { 
   LuTrendingUp, 
