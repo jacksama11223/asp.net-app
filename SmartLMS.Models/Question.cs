@@ -5,13 +5,15 @@ namespace SmartLMS.Models;
 public class Question
 {
     public int QuestionId { get; set; }
-    public int CourseId { get; set; }
-    public string Content { get; set; } = string.Empty;
-    public string? ImageUrl { get; set; }
-    public string Options { get; set; } = string.Empty; // Store as JSON or comma separated
-    public string CorrectAnswer { get; set; } = string.Empty;
-    public int XPValue { get; set; } = 10;
-    public int? DepartmentId { get; set; }
-    
-    public virtual Course Course { get; set; } = null!;
+    public string UserId { get; set; } = null!;
+    public int LessonId { get; set; }
+    public string Content { get; set; } = null!;
+    public string? Answer { get; set; }
+    public string? AnsweredBy { get; set; } // Instructor UserId
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? AnsweredAt { get; set; }
+    public bool IsPrivate { get; set; } = false;
+
+    public virtual User User { get; set; } = null!;
+    public virtual Lesson Lesson { get; set; } = null!;
 }

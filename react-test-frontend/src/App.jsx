@@ -10,6 +10,7 @@ import { CheckoutQR } from './pages/CheckoutQR';
 import { BookingPage } from './pages/BookingPage';
 import { CourseDetails } from './pages/CourseDetails';
 import { MyLearning } from './pages/MyLearning';
+import { StudyWorkspace } from './pages/StudyWorkspace';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
@@ -38,6 +39,7 @@ function App() {
         <Route path="/course/:id" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
         <Route path="/my-learning" element={<ProtectedRoute><MyLearning /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
+        <Route path="/study/:courseId" element={<ProtectedRoute><StudyWorkspace /></ProtectedRoute>} />
         <Route path="/coding/:id" element={<CodeWorkspace />} />
         <Route path="/students" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Students Management (Coming Soon)</Text></Box></ProtectedRoute>} />
         <Route path="/ai" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">AI Prediction Engine (Coming Soon)</Text></Box></ProtectedRoute>} />

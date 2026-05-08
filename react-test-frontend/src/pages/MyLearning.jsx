@@ -39,8 +39,8 @@ export const MyLearning = () => {
     <Container size="lg" py="xl">
       <Stack gap="xl">
         <Box>
-          <Title order={1} fw={900}>My Learning</Title>
-          <Text c="dimmed">Continue where you left off and achieve your goals.</Text>
+          <Title order={1} fw={900}>Kho khóa học</Title>
+          <Text c="dimmed">Tiếp tục hành trình chinh phục kiến thức của bạn.</Text>
         </Box>
 
         {enrolledCourses.length === 0 ? (
@@ -80,7 +80,7 @@ export const MyLearning = () => {
                     variant={enrollment.progress === 100 ? 'light' : 'filled'}
                     color={enrollment.progress === 100 ? 'green' : 'brand'}
                     leftSection={<LuPlay size={14} />}
-                    onClick={() => navigate(`/lesson/${enrollment.courseId}`)}
+                    onClick={() => navigate(`/study/${enrollment.courseId}`)}
                   >
                     {enrollment.progress === 100 ? 'Review Course' : (enrollment.progress > 0 ? 'Continue' : 'Start Learning')}
                   </Button>

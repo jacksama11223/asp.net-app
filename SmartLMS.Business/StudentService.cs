@@ -1,6 +1,6 @@
 using Dapper;
 using MySqlConnector;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using SmartLMS.Models;
 using System.Collections.Generic;
 using System.Data;
@@ -15,12 +15,14 @@ namespace SmartLMS.Business;
         private readonly string _connectionString;
         private readonly IPredictionService _predictionService;
         private readonly IEmailService _emailService;
+        private readonly SmartLMSContext _context;
 
-        public StudentService(IConfiguration configuration, IPredictionService predictionService, IEmailService emailService)
+        public StudentService(IConfiguration configuration, IPredictionService predictionService, IEmailService emailService, SmartLMSContext context)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
             _predictionService = predictionService;
             _emailService = emailService;
+            _context = context;
         }
 
         private IDbConnection CreateConnection() => new MySqlConnection(_connectionString);
@@ -84,5 +86,68 @@ namespace SmartLMS.Business;
             string body = $"Chào {user.FullName}, chúng tôi nhận thấy bạn đang gặp khó khăn trong việc hoàn thành khóa học. Hãy quay lại học tập ngay hôm nay nhé!";
             
             await _emailService.SendEmailAsync(user.Email, subject, body);
+        }
+
+        public async Task<object> GetCourseContentForWorkspaceAsync(int courseId, string userId)
+        {
+            var modules = await _context.CourseModules
+                .Include(m => m.Lessons)
+                .Where(m => m.CourseId == courseId)
+                .OrderBy(m => m.OrderIndex)
+                .ToListAsync();
+
+            var enrollment = await _context.Enrollments
+                .FirstOrDefaultAsync(e => e.CourseId == courseId && e.UserId == userId);
+
+            return new {
+                Modules = modules,
+                Progress = enrollment?.Progress ?? 0
+            };
+        }
+
+        public async Task LogMistakeAsync(MistakeLog log)
+        {
+            _context.MistakeLogs.Add(log);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(string userId, int courseId)
+        {
+            return await _context.MistakeLogs
+                .Include(m => m.Lesson)
+                .Where(m => m.UserId == userId && m.Lesson.Module.CourseId == courseId)
+                .ToListAsync();
+        }
+
+        public async Task AskQuestionAsync(Question question)
+        {
+            _context.Questions.Add(question);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Flashcard>> GetFlashcardsForLessonAsync(int lessonId)
+        {
+            return await _context.Flashcards
+                .Where(f => f.LessonId == lessonId)
+                .ToListAsync();
+        }
+
+        public async Task UpdateFlashcardProgressAsync(int flashcardId, bool wasCorrect)
+        {
+            var card = await _context.Flashcards.FindAsync(flashcardId);
+            if (card == null) return;
+
+            card.LastReviewDate = DateTime.UtcNow;
+            if (wasCorrect)
+            {
+                card.IntervalDays *= 2; // Simple multiplier
+                card.NextReviewDate = DateTime.UtcNow.AddDays(card.IntervalDays);
+            }
+            else
+            {
+                card.IntervalDays = 1;
+                card.NextReviewDate = DateTime.UtcNow.AddDays(1);
+            }
+            await _context.SaveChangesAsync();
         }
     }

@@ -12,6 +12,8 @@ public partial class Lesson
     public string? Content { get; set; }
     public string? LessonType { get; set; } // Video, Document, Code
     public int? OrderIndex { get; set; }
+    public bool IsExercise { get; set; } = false;
+    public int Points { get; set; } = 0;
 
     public virtual CourseModule Module { get; set; } = null!;
 }

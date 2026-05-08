@@ -21,6 +21,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const navData = [
   { label: 'Dashboard', icon: LuLayoutDashboard, path: '/dashboard', color: 'brand' },
   { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
+  { label: 'Kho khóa học', icon: LuBookOpen, path: '/my-learning', color: 'teal' },
   { label: 'Community', icon: LuUsers, path: '/students', color: 'blue' },
   { label: 'Success Engine', icon: LuZap, path: '/ai', color: 'orange' },
 ];

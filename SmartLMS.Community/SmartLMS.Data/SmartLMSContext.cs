@@ -135,6 +135,8 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Invoice> Invoices { get; set; }
     public virtual DbSet<CodingChallenge> CodingChallenges { get; set; }
     public virtual DbSet<TestCase> TestCases { get; set; }
+    public virtual DbSet<Flashcard> Flashcards { get; set; }
+    public virtual DbSet<MistakeLog> MistakeLogs { get; set; }
     
     // Community Module
     public virtual DbSet<Post> Posts { get; set; }
@@ -282,8 +284,18 @@ public partial class SmartLMSContext : DbContext
 
         modelBuilder.Entity<Question>(entity => {
             entity.HasKey(e => e.QuestionId);
-            entity.HasOne(d => d.Course).WithMany(p => p.Questions).HasForeignKey(d => d.CourseId);
-            entity.HasQueryFilter(e => !e.Course.IsDeleted);
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Lesson).WithMany().HasForeignKey(d => d.LessonId);
+        });
+
+        modelBuilder.Entity<Flashcard>(entity => {
+            entity.HasKey(e => e.FlashcardId);
+        });
+
+        modelBuilder.Entity<MistakeLog>(entity => {
+            entity.HasKey(e => e.MistakeLogId);
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Lesson).WithMany().HasForeignKey(d => d.LessonId);
         });
 
         modelBuilder.Entity<UserBadge>(entity => {

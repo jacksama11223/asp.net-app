@@ -8,6 +8,14 @@ public interface IStudentService
 {
     Task<IEnumerable<StudentViewModel>> GetAllStudentsAsync();
     Task SendNudgeAsync(int userId);
+    
+    // Workspace Methods
+    Task<object> GetCourseContentForWorkspaceAsync(int courseId, string userId);
+    Task LogMistakeAsync(MistakeLog log);
+    Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(string userId, int courseId);
+    Task AskQuestionAsync(Question question);
+    Task<IEnumerable<Flashcard>> GetFlashcardsForLessonAsync(int lessonId);
+    Task UpdateFlashcardProgressAsync(int flashcardId, bool wasCorrect);
 }
 
 public class StudentViewModel
