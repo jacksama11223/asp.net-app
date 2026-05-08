@@ -62,14 +62,16 @@ public class PaymentController : Controller
         return Redirect(paymentUrl);
     }
 
-    public IActionResult VnpayReturn()
+    public async Task<IActionResult> VnpayReturn()
     {
         var queryDictionary = Request.Query.ToDictionary(k => k.Key, v => v.Value.ToString());
         var vnp_ResponseCode = queryDictionary.GetValueOrDefault("vnp_ResponseCode");
         var vnp_SecureHash = queryDictionary.GetValueOrDefault("vnp_SecureHash");
         var vnp_TxnRef = queryDictionary.GetValueOrDefault("vnp_TxnRef");
 
-        // Kiểm tra chữ ký bảo mật
+        _logger.LogInformation("VNPay Return received for TxnRef: {TxnRef}, ResponseCode: {ResponseCode}", vnp_TxnRef, vnp_ResponseCode);
+
+        // 1. Kiểm tra chữ ký bảo mật
         if (vnp_SecureHash == null || !_paymentGateway.VerifyChecksum(queryDictionary, vnp_SecureHash))
         {
             ViewBag.Error = "Chữ ký không hợp lệ (Signature mismatch).";
@@ -78,6 +80,29 @@ public class PaymentController : Controller
 
         if (vnp_ResponseCode == "00")
         {
+            // 2. Xử lý Ghi danh ngay lập tức (Dự phòng cho IPN)
+            var invoice = await _context.Invoices.FirstOrDefaultAsync(i => i.TransactionReference == vnp_TxnRef);
+            if (invoice != null && invoice.Status == "Pending")
+            {
+                invoice.Status = "Paid";
+                invoice.PaidAt = DateTime.Now;
+
+                var exists = await _context.Enrollments.AnyAsync(e => e.UserId == invoice.UserId && e.CourseId == invoice.CourseId);
+                if (!exists)
+                {
+                    _context.Enrollments.Add(new Enrollment
+                    {
+                        UserId = invoice.UserId,
+                        CourseId = invoice.CourseId,
+                        LastAccessDate = DateTime.Now,
+                        Progress = 0,
+                        IsCompleted = false
+                    });
+                }
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Auto-enrolled user {UserId} to course {CourseId} via Return URL", invoice.UserId, invoice.CourseId);
+            }
+
             ViewBag.TxnRef = vnp_TxnRef;
             return View("Success");
         }
