@@ -29,23 +29,23 @@ public class StudentApiController : ControllerBase
 
         var enrollments = await _context.Enrollments
             .Include(e => e.Course)
-            .ThenInclude(c => c.Instructor)
-            .Where(e => e.UserId == userId && !e.Course.IsDeleted)
+            .ThenInclude(c => c != null ? c.Instructor : null)
+            .Where(e => e.Course != null && !e.Course.IsDeleted && e.UserId == userId)
             .Select(e => new
             {
                 e.EnrollmentId,
                 e.CourseId,
                 e.Progress,
-                Course = new
+                Course = e.Course != null ? new
                 {
                     e.Course.Title,
                     e.Course.ThumbnailUrl,
                     e.Course.Category,
-                    Instructor = new
+                    Instructor = e.Course.Instructor != null ? new
                     {
                         e.Course.Instructor.FullName
-                    }
-                }
+                    } : null
+                } : null
             })
             .ToListAsync();
 

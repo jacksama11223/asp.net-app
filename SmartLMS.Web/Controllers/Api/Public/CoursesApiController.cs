@@ -47,7 +47,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
                     InstructorName = c.Instructor != null ? c.Instructor.FullName : "Hệ thống SmartLMS",
                     Rating = c.Rating,
                     RatingCount = c.RatingCount,
-                    TotalStudents = c.Enrollments.Count
+                    TotalStudents = c.Enrollments != null ? c.Enrollments.Count : 0
                 })
                 .ToListAsync();
 
