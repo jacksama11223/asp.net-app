@@ -40,7 +40,7 @@ public class StudentApiController : ControllerBase
 
         var enrollments = await _context.Enrollments
             .Include(e => e.Course)
-            .ThenInclude(c => (c != null) ? c.Instructor : null)
+                .ThenInclude(c => c.Instructor)
             .Where(e => e.Course != null && !e.Course.IsDeleted && e.UserId == userId)
             .Select(e => new
             {
@@ -52,9 +52,9 @@ public class StudentApiController : ControllerBase
                     e.Course.Title,
                     e.Course.ThumbnailUrl,
                     e.Course.Category,
-                    Instructor = (e.Course.Instructor != null) ? new
+                    Instructor = e.Course.Instructor != null ? new
                     {
-                        e.Course.Instructor.FullName
+                        FullName = e.Course.Instructor.FullName
                     } : null
                 } : null
             })
