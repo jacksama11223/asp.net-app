@@ -22,6 +22,14 @@ public class StudentApiController : ControllerBase
         _studentService = studentService;
     }
 
+    [HttpGet("whoami")]
+    public IActionResult WhoAmI()
+    {
+        var claims = User.Claims.Select(c => new { c.Type, c.Value });
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        return Ok(new { userId = userIdStr, claims });
+    }
+
     [HttpGet("enrolled-courses")]
     public async Task<ActionResult<object>> GetEnrolledCourses()
     {
