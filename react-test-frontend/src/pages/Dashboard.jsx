@@ -34,6 +34,9 @@ import {
 } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL, getDashboardStats, getEngagementChart } from '../api';
 import { COURSE_TRENDS, AI_RISK_DATA, RECENT_ACTIVITY } from '../utils/mockData';
 
 const CardWrapper = ({ children, p = "xl" }) => (
@@ -78,6 +81,7 @@ export const Dashboard = () => {
   const [stats, setStats] = React.useState(null);
   const [chartData, setChartData] = React.useState({ categories: [], series: [] });
   const [loading, setLoading] = React.useState(true);
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
   const token = localStorage.getItem('slms_token');
 
