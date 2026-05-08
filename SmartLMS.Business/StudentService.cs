@@ -1,6 +1,8 @@
 using Dapper;
 using MySqlConnector;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SmartLMS.Data;
 using SmartLMS.Models;
 using System.Collections.Generic;
 using System.Data;
