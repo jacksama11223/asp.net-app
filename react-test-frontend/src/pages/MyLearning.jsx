@@ -6,7 +6,7 @@ import {
 } from '@mantine/core';
 import { 
   LuPlay, LuTrophy, LuBookOpen, LuBrain, 
-  LuAlertTriangle, LuArrowRight, LuLayoutGrid, LuList
+  LuAlertCircle, LuArrowRight, LuLayoutGrid, LuList
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -150,7 +150,7 @@ export const MyLearning = () => {
 
           <Tabs.Panel value="mistakes">
             <Paper p={50} radius="xl" withBorder style={{ textAlign: 'center' }} className="bg-orange-50/30 border-orange-100">
-               <LuAlertTriangle size={48} className="text-orange-300 mx-auto mb-md" />
+               <LuAlertCircle size={48} className="text-orange-300 mx-auto mb-md" />
                <Title order={3}>Sổ tay lỗi sai</Title>
                <Text c="dimmed">Tính năng đang được hoàn thiện. Nơi lưu trữ các bài tập bạn làm sai để luyện tập lại.</Text>
             </Paper>
