@@ -132,6 +132,7 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
     public virtual DbSet<QuizAttempt> QuizAttempts { get; set; }
     public virtual DbSet<Webhook> Webhooks { get; set; }
+    public virtual DbSet<Invoice> Invoices { get; set; }
     public virtual DbSet<CodingChallenge> CodingChallenges { get; set; }
     public virtual DbSet<TestCase> TestCases { get; set; }
     public virtual DbSet<Flashcard> Flashcards { get; set; }
