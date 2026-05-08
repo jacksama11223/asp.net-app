@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Business;
+using SmartLMS.Models;
 using System.Security.Claims;
 
 namespace SmartLMS.Web.Controllers.Api.Student;
