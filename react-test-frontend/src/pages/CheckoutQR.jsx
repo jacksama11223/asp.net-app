@@ -37,6 +37,7 @@ export const CheckoutQR = () => {
   const [invoice, setInvoice] = useState(null);
   const [isPaid, setIsPaid] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
+  const [loadingVNPay, setLoadingVNPay] = useState(false);
   
   // Initialize apiClient
   const apiClient = axios.create({
@@ -107,6 +108,26 @@ export const CheckoutQR = () => {
       handleSuccess();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleVNPay = async () => {
+    setLoadingVNPay(true);
+    try {
+      const token = localStorage.getItem('slms_token');
+      const response = await axios.post(`${BASE_URL}/api/payment/create-invoice`, 
+        { courseId: parseInt(id) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      if (response.data.paymentUrl) {
+        window.location.href = response.data.paymentUrl;
+      }
+    } catch (err) {
+      console.error("VNPay initialization failed", err);
+      setError("Không thể khởi tạo VNPay. Vui lòng thử lại.");
+    } finally {
+      setLoadingVNPay(false);
     }
   };
 
@@ -209,6 +230,20 @@ export const CheckoutQR = () => {
                 </Group>
               </Group>
             </Stack>
+
+            <Alert icon={<LuZap size={16} />} title="Cổng thanh toán VNPay" color="brand" variant="light" mt="md" w="100%">
+              Thanh toán nhanh chóng qua thẻ ATM, Visa, Mastercard hoặc ứng dụng Ngân hàng.
+              <Button 
+                fullWidth 
+                mt="sm" 
+                color="brand" 
+                onClick={handleVNPay} 
+                leftSection={<LuBanknote size={16} />}
+                loading={loadingVNPay}
+              >
+                Thanh toán qua VNPay
+              </Button>
+            </Alert>
 
             <Alert icon={<LuZap size={16} />} title="Giả lập thanh toán (Test)" color="blue" variant="light" mt="md" w="100%">
               Nhấn nút dưới đây để giả lập ngân hàng gửi Webhook báo đã nhận tiền.
