@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace SmartLMS.Web.Controllers.Api.Gamification;
 
 [Route("api/gamification")]
 [ApiController]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class GamificationApiController : ControllerBase
 {
     private readonly SmartLMSContext _context;
@@ -41,7 +42,8 @@ public class GamificationApiController : ControllerBase
 
     private int CalculateLevel(int xp)
     {
-        // Logic tính level đơn giản: Mỗi 1000 XP là 1 level
+        // Logic tÃ­nh level Ä‘Æ¡n giáº£n: Má»—i 1000 XP lÃ  1 level
         return (xp / 1000) + 1;
     }
 }
+

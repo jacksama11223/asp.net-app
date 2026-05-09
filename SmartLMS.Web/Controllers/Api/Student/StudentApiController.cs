@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace SmartLMS.Web.Controllers.Api.Student;
 
 [Route("api/student")]
 [ApiController]
-[Authorize] // Yêu cầu đăng nhập
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class StudentApiController : ControllerBase
 {
     private readonly SmartLMSContext _context;
@@ -127,3 +128,4 @@ public class StudentApiController : ControllerBase
         return Ok();
     }
 }
+

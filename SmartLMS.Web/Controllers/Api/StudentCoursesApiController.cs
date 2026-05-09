@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace SmartLMS.Web.Controllers.Api
 {
     [Route("api/student/courses")]
     [ApiController]
-    [Authorize] // Requires JWT
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StudentCoursesApiController : ControllerBase
     {
         private readonly SmartLMSContext _context;
@@ -76,3 +77,4 @@ namespace SmartLMS.Web.Controllers.Api
         }
     }
 }
+

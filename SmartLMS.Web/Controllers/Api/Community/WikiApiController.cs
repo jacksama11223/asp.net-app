@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace SmartLMS.Web.Controllers.Api.Community;
 
 [Route("api/wiki")]
 [ApiController]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class WikiApiController : ControllerBase
 {
     private readonly SmartLMSContext _context;
@@ -108,3 +109,4 @@ public class WikiApiController : ControllerBase
         return Ok(new { success = true });
     }
 }
+

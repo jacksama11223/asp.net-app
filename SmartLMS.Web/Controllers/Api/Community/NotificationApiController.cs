@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace SmartLMS.Web.Controllers.Api.Community;
 
 [Route("api/notifications")]
 [ApiController]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class NotificationApiController : ControllerBase
 {
     private readonly SmartLMSContext _context;
@@ -63,3 +64,4 @@ public class NotificationApiController : ControllerBase
         return Ok(new { success = true });
     }
 }
+

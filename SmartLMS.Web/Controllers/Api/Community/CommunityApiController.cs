@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace SmartLMS.Web.Controllers.Api.Community;
 
 [Route("api/community")]
 [ApiController]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CommunityApiController : ControllerBase
 {
     private readonly SmartLMSContext _context;
@@ -116,9 +117,9 @@ public class CommunityApiController : ControllerBase
         var post = await _context.Posts.FindAsync(postId);
         if (post == null) return NotFound("Post not found");
 
-        // Chỉ tác giả hoặc Admin mới được verify
+        // Chá»‰ tÃ¡c giáº£ hoáº·c Admin má»›i Ä‘Æ°á»£c verify
         if (post.AuthorId != userId && !User.IsInRole("Admin")) 
-            return Forbid("Chỉ tác giả mới được xác nhận câu trả lời.");
+            return Forbid("Chá»‰ tÃ¡c giáº£ má»›i Ä‘Æ°á»£c xÃ¡c nháº­n cÃ¢u tráº£ lá»i.");
 
         post.VerifiedCommentId = commentId;
         await _context.SaveChangesAsync();
@@ -126,3 +127,4 @@ public class CommunityApiController : ControllerBase
         return Ok(new { success = true });
     }
 }
+
