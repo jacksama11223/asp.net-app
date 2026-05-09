@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   Container, SimpleGrid, Card, Image, Title, Text, 
   Progress, Button, Group, Stack, Badge, Box, Loader, Paper,
-  Tabs, ActionIcon, Tooltip
+  ActionIcon, ThemeIcon, Grid, RingProgress
 } from '@mantine/core';
 import { 
-  LuPlay, LuTrophy, LuBookOpen, LuBrain, 
-  LuInfo, LuArrowRight, LuLayoutGrid, LuList
+  LuTrophy, LuBookOpen, LuBrain, 
+  LuArrowRight, LuCalendarDays, LuTarget, LuFlame, LuAlertTriangle
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,10 +15,10 @@ import { BASE_URL } from '../api';
 export const MyLearning = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('courses');
   const navigate = useNavigate();
-
+  const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
   const token = localStorage.getItem('slms_token');
+
   const apiClient = axios.create({
     baseURL: BASE_URL,
     headers: { 'Authorization': `Bearer ${token}` }
@@ -36,134 +36,190 @@ export const MyLearning = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [token]);
 
   if (loading) return (
     <Stack align="center" py={100} gap="md">
       <Loader size="xl" color="brand" type="bars" />
-      <Text fw={600} className="animate-pulse">Đang chuẩn bị kho kiến thức của bạn...</Text>
+      <Text fw={600} className="animate-pulse">Đang chuẩn bị trạm trung chuyển của bạn...</Text>
     </Stack>
   );
 
   return (
-    <Container size="lg" py="xl">
+    <Container size="xl" py="xl">
       <Stack gap={40}>
+        
+        {/* Lời chào & Mục tiêu ngày */}
+        <Box className="bg-gradient-to-r from-brand-600 to-indigo-800 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+          <Grid align="center">
+            <Grid.Col span={{ base: 12, md: 8 }}>
+              <Title order={1} fw={900} size={36} className="tracking-tight">Chào mừng trở lại, {user.fullName?.split(' ').pop() || 'bạn'}! 👋</Title>
+              <Text size="lg" mt="xs" className="opacity-90">Hôm nay là một ngày tuyệt vời để chinh phục kiến thức mới.</Text>
+              
+              <Group mt="xl" gap="xl">
+                <Box>
+                  <Text size="xs" tt="uppercase" fw={700} className="opacity-70 mb-1">Mục tiêu ngày</Text>
+                  <Group gap="xs">
+                    <LuTarget size={20} className="text-yellow-400" />
+                    <Text fw={800} size="xl">2/5 <Text span size="sm" fw={500} className="opacity-80">Bài học</Text></Text>
+                  </Group>
+                </Box>
+                <Box>
+                  <Text size="xs" tt="uppercase" fw={700} className="opacity-70 mb-1">Đang duy trì</Text>
+                  <Group gap="xs">
+                    <LuFlame size={20} className="text-orange-400" />
+                    <Text fw={800} size="xl">3 <Text span size="sm" fw={500} className="opacity-80">Ngày liên tiếp</Text></Text>
+                  </Group>
+                </Box>
+              </Group>
+            </Grid.Col>
+            
+            <Grid.Col span={{ base: 12, md: 4 }} className="flex justify-center md:justify-end">
+              <RingProgress
+                size={140}
+                thickness={14}
+                roundCaps
+                sections={[{ value: 40, color: 'yellow' }]}
+                label={
+                  <Text ta="center" fw={900} size="xl">40%</Text>
+                }
+              />
+            </Grid.Col>
+          </Grid>
+        </Box>
+
+        {/* Nhiệm vụ hôm nay (Spaced Repetition & Weak points) */}
         <Box>
-          <Group justify="space-between" align="flex-end">
-            <Box>
-              <Title order={1} fw={900} size={36} className="tracking-tight">Kho khóa học</Title>
-              <Text c="dimmed" size="lg">Học tập mỗi ngày để nâng cao kỹ năng của bạn.</Text>
-            </Box>
-            <Button 
-              variant="light" 
-              color="brand" 
-              leftSection={<LuBookOpen size={18} />}
-              onClick={() => navigate('/courses')}
-            >
+          <Title order={3} fw={800} mb="lg" className="flex items-center gap-2">
+            <LuCalendarDays className="text-brand-500" /> Nhiệm vụ hôm nay
+          </Title>
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
+            <Card shadow="sm" radius="xl" withBorder className="border-blue-100 bg-blue-50/30 hover:shadow-md transition-shadow">
+              <Group wrap="nowrap" align="flex-start">
+                <ThemeIcon size={48} radius="xl" color="blue" variant="light">
+                  <LuBrain size={24} />
+                </ThemeIcon>
+                <Box style={{ flex: 1 }}>
+                  <Group justify="space-between" mb="xs">
+                    <Title order={4}>Ôn tập Thẻ nhớ (SRS)</Title>
+                    <Badge color="blue" variant="filled">24 thẻ đến hạn</Badge>
+                  </Group>
+                  <Text size="sm" c="dimmed" mb="md">
+                    Hệ thống AI đã chọn ra các thẻ nhớ cần ôn tập để củng cố trí nhớ dài hạn của bạn.
+                  </Text>
+                  <Button variant="light" color="blue" fullWidth rightSection={<LuArrowRight size={16} />}>
+                    Bắt đầu ôn tập
+                  </Button>
+                </Box>
+              </Group>
+            </Card>
+
+            <Card shadow="sm" radius="xl" withBorder className="border-orange-100 bg-orange-50/30 hover:shadow-md transition-shadow">
+              <Group wrap="nowrap" align="flex-start">
+                <ThemeIcon size={48} radius="xl" color="orange" variant="light">
+                  <LuAlertTriangle size={24} />
+                </ThemeIcon>
+                <Box style={{ flex: 1 }}>
+                  <Group justify="space-between" mb="xs">
+                    <Title order={4}>Khắc phục điểm yếu</Title>
+                    <Badge color="orange" variant="filled">3 bài tập</Badge>
+                  </Group>
+                  <Text size="sm" c="dimmed" mb="md">
+                    Các bài tập được AI tự động tạo ra dựa trên những lỗi sai gần đây của bạn trong phần C# Basics.
+                  </Text>
+                  <Button variant="light" color="orange" fullWidth rightSection={<LuArrowRight size={16} />}>
+                    Luyện tập ngay
+                  </Button>
+                </Box>
+              </Group>
+            </Card>
+          </SimpleGrid>
+        </Box>
+
+        {/* Khóa học đang học */}
+        <Box>
+          <Group justify="space-between" mb="lg">
+            <Title order={3} fw={800} className="flex items-center gap-2">
+              <LuBookOpen className="text-brand-500" /> Tiếp tục học
+            </Title>
+            <Button variant="subtle" color="brand" onClick={() => navigate('/courses')}>
               Khám phá thêm
             </Button>
           </Group>
-        </Box>
 
-        <Tabs value={activeTab} onChange={setActiveTab} variant="pills" radius="xl" color="brand">
-          <Tabs.List mb="xl">
-            <Tabs.Tab value="courses" leftSection={<LuLayoutGrid size={16} />}>Đang học</Tabs.Tab>
-            <Tabs.Tab value="mistakes" leftSection={<LuInfo size={16} />}>Sổ tay lỗi sai</Tabs.Tab>
-            <Tabs.Tab value="flashcards" leftSection={<LuBrain size={16} />}>Thẻ nhớ (SRS)</Tabs.Tab>
-          </Tabs.List>
+          {enrolledCourses.length === 0 ? (
+            <Paper p={60} withBorder radius="xl" className="bg-slate-50/50 border-dashed border-2 text-center">
+              <Box className="bg-white p-4 rounded-full shadow-sm inline-block mb-4">
+                <LuBookOpen size={48} className="text-slate-300" />
+              </Box>
+              <Title order={4}>Chưa có khóa học nào</Title>
+              <Text c="dimmed" mt="xs" mb="lg" maw={400} mx="auto">
+                Bạn chưa ghi danh khóa học nào. Hãy bắt đầu hành trình bằng cách chọn một khóa học phù hợp nhé!
+              </Text>
+              <Button radius="md" color="brand" onClick={() => navigate('/courses')}>
+                Đến danh mục khóa học
+              </Button>
+            </Paper>
+          ) : (
+            <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="xl">
+              {enrolledCourses.map((enrollment) => (
+                <Card 
+                  key={enrollment.enrollmentId} 
+                  shadow="sm" 
+                  radius="xl" 
+                  withBorder 
+                  className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full"
+                >
+                  <Card.Section className="overflow-hidden">
+                    <Image
+                      src={enrollment.course?.thumbnailUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop"}
+                      height={160}
+                      alt={enrollment.course?.title}
+                      className="group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </Card.Section>
 
-          <Tabs.Panel value="courses">
-            {enrolledCourses.length === 0 ? (
-              <Paper p={80} withBorder radius="xl" className="bg-slate-50/50 border-dashed border-2">
-                <Stack align="center" gap="md">
-                  <Box className="bg-white p-6 rounded-full shadow-md">
-                    <LuBookOpen size={64} className="text-slate-300" />
-                  </Box>
-                  <Title order={3}>Chưa có khóa học nào</Title>
-                  <Text c="dimmed" ta="center" maw={400}>
-                    Bắt đầu hành trình học tập ngay hôm nay bằng cách đăng ký các khóa học chất lượng từ chuyên gia.
-                  </Text>
-                  <Button size="lg" radius="md" color="brand" onClick={() => navigate('/courses')} mt="md">
-                    Tìm kiếm khóa học ngay
-                  </Button>
-                </Stack>
-              </Paper>
-            ) : (
-              <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="xl">
-                {enrolledCourses.map((enrollment) => (
-                  <Card 
-                    key={enrollment.enrollmentId} 
-                    shadow="sm" 
-                    radius="xl" 
-                    withBorder 
-                    className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
-                  >
-                    <Card.Section className="overflow-hidden">
-                      <Image
-                        src={enrollment.course?.thumbnailUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop"}
-                        height={180}
-                        alt={enrollment.course?.title}
-                        className="group-hover:scale-105 transition-transform duration-500"
+                  <Stack mt="md" gap="xs" style={{ flex: 1 }}>
+                    <Badge size="xs" variant="light" color="blue" radius="sm">
+                      {enrollment.course?.category || 'Development'}
+                    </Badge>
+                    <Title order={5} lineClamp={2} className="min-h-[2.5rem]">
+                      {enrollment.course?.title}
+                    </Title>
+                    
+                    <Box mt="auto" pt="sm">
+                      <Group justify="space-between" mb={4}>
+                        <Text size="xs" fw={700} c="brand">{enrollment.progress || 0}% Đã hoàn thành</Text>
+                        {enrollment.progress === 100 && <LuTrophy size={14} className="text-yellow-500" />}
+                      </Group>
+                      <Progress 
+                        value={enrollment.progress || 0} 
+                        size="sm" 
+                        radius="xl" 
+                        color="brand" 
+                        animated={enrollment.progress > 0 && enrollment.progress < 100}
                       />
-                    </Card.Section>
+                    </Box>
+                  </Stack>
 
-                    <Stack mt="md" gap="xs">
-                      <Badge size="xs" variant="light" color="blue" radius="sm">
-                        {enrollment.course?.category || 'Development'}
-                      </Badge>
-                      <Title order={4} lineClamp={2} className="min-h-[3rem]">
-                        {enrollment.course?.title}
-                      </Title>
-                      
-                      <Box mt="sm">
-                        <Group justify="space-between" mb={4}>
-                          <Text size="xs" fw={700} c="brand">{enrollment.progress || 0}% Đã hoàn thành</Text>
-                          {enrollment.progress === 100 && <LuTrophy size={14} className="text-yellow-500" />}
-                        </Group>
-                        <Progress 
-                          value={enrollment.progress || 0} 
-                          size="sm" 
-                          radius="xl" 
-                          color="brand" 
-                          animated={enrollment.progress > 0 && enrollment.progress < 100}
-                        />
-                      </Box>
-
-                      <Button 
-                        fullWidth 
-                        mt="md" 
-                        size="md"
-                        radius="md"
-                        variant={enrollment.progress === 100 ? 'light' : 'filled'}
-                        color={enrollment.progress === 100 ? 'green' : 'brand'}
-                        rightSection={<LuArrowRight size={16} />}
-                        onClick={() => navigate(`/study/${enrollment.courseId}`)}
-                      >
-                        {enrollment.progress === 100 ? 'Xem lại' : (enrollment.progress > 0 ? 'Học tiếp' : 'Bắt đầu ngay')}
-                      </Button>
-                    </Stack>
-                  </Card>
-                ))}
-              </SimpleGrid>
-            )}
-          </Tabs.Panel>
-
-          <Tabs.Panel value="mistakes">
-            <Paper p={50} radius="xl" withBorder style={{ textAlign: 'center' }} className="bg-orange-50/30 border-orange-100">
-               <LuInfo size={48} className="text-orange-300 mx-auto mb-md" />
-               <Title order={3}>Sổ tay lỗi sai</Title>
-               <Text c="dimmed">Tính năng đang được hoàn thiện. Nơi lưu trữ các bài tập bạn làm sai để luyện tập lại.</Text>
-            </Paper>
-          </Tabs.Panel>
-
-          <Tabs.Panel value="flashcards">
-             <Paper p={50} radius="xl" withBorder style={{ textAlign: 'center' }} className="bg-blue-50/30 border-blue-100">
-               <LuBrain size={48} className="text-blue-300 mx-auto mb-md" />
-               <Title order={3}>Kho thẻ nhớ SRS</Title>
-               <Text c="dimmed">Luyện tập ghi nhớ kiến thức thông qua phương pháp lặp lại ngắt quãng.</Text>
-            </Paper>
-          </Tabs.Panel>
-        </Tabs>
+                  <Button 
+                    fullWidth 
+                    mt="md" 
+                    size="md"
+                    radius="md"
+                    variant={enrollment.progress === 100 ? 'light' : 'filled'}
+                    color={enrollment.progress === 100 ? 'green' : 'brand'}
+                    rightSection={<LuArrowRight size={16} />}
+                    onClick={() => navigate(`/study/${enrollment.courseId}`)}
+                  >
+                    {enrollment.progress === 100 ? 'Xem lại' : (enrollment.progress > 0 ? 'Học tiếp' : 'Vào học ngay')}
+                  </Button>
+                </Card>
+              ))}
+            </SimpleGrid>
+          )}
+        </Box>
       </Stack>
     </Container>
   );
