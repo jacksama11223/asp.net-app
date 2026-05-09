@@ -44,33 +44,23 @@ export const Topbar = () => {
     headers: { 'Authorization': `Bearer ${token}` }
   });
 
-  apiClient.interceptors.response.use(
-    response => response,
-    error => {
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem('slms_token');
-        localStorage.removeItem('slms_user');
-        window.location.href = '/';
-      }
-      return Promise.reject(error);
-    }
-  );
-
   useEffect(() => {
     if (!token) return;
     
-    // Fetch Gamification Stats
+    // Fetch Gamification Stats (silent fail - không kick user ra ngoài nếu lỗi)
     apiClient.get('/api/gamification/status')
-      .then(res => setGamification(res.data))
-      .catch(err => console.error('Failed to fetch gamification stats', err));
+      .then(res => { if (Array.isArray(res.data) || typeof res.data === 'object') setGamification(res.data); })
+      .catch(() => {}); // Silent fail cho background API
 
-    // Fetch Notifications
+    // Fetch Notifications (silent fail)
     apiClient.get('/api/notifications')
       .then(res => {
-        setNotifications(res.data);
-        setUnreadCount(res.data.filter(n => !n.isRead).length);
+        if (Array.isArray(res.data)) {
+          setNotifications(res.data);
+          setUnreadCount(res.data.filter(n => !n.isRead).length);
+        }
       })
-      .catch(err => console.error('Failed to fetch notifications', err));
+      .catch(() => {}); // Silent fail cho background API
   }, [token]);
 
   const handleLogout = () => {
