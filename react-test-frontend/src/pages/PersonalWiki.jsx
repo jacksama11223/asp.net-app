@@ -5,7 +5,7 @@ import {
 } from '@mantine/core';
 import { 
   LuPlus, LuFileText, LuHash, LuSettings, 
-  LuShare2, LuTrash2, LuMoreVertical, LuChevronRight
+  LuShare2, LuTrash2, LuMenu, LuChevronRight
 } from 'react-icons/lu';
 import axios from 'axios';
 import { BASE_URL } from '../api';
@@ -90,7 +90,7 @@ export const PersonalWiki = () => {
               </Box>
               <Group>
                 <Button variant="light" color="gray" leftSection={<LuShare2 size={16} />}>Chia sẻ</Button>
-                <ActionIcon variant="subtle" color="gray" size="lg"><LuMoreVertical size={20} /></ActionIcon>
+                <ActionIcon variant="subtle" color="gray" size="lg"><LuMenu size={20} /></ActionIcon>
               </Group>
             </Group>
 

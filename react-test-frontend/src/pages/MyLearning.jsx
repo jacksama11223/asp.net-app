@@ -6,7 +6,7 @@ import {
 } from '@mantine/core';
 import { 
   LuTrophy, LuBookOpen, LuBrain, 
-  LuArrowRight, LuCalendarDays, LuTarget, LuFlame, LuAlertTriangle
+  LuArrowRight, LuCalendarDays, LuTarget, LuFlame, LuInfo
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -118,7 +118,7 @@ export const MyLearning = () => {
             <Card shadow="sm" radius="xl" withBorder className="border-orange-100 bg-orange-50/30 hover:shadow-md transition-shadow">
               <Group wrap="nowrap" align="flex-start">
                 <ThemeIcon size={48} radius="xl" color="orange" variant="light">
-                  <LuAlertTriangle size={24} />
+                  <LuInfo size={24} />
                 </ThemeIcon>
                 <Box style={{ flex: 1 }}>
                   <Group justify="space-between" mb="xs">
