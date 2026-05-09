@@ -5,7 +5,7 @@ import {
 } from '@mantine/core';
 import { 
   LuSearch, LuPlus, LuMessageSquare, LuEye, 
-  LuArrowBigUp, LuCheckCircle, LuFilter
+  LuArrowBigUp, LuCheck, LuFilter
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -101,7 +101,7 @@ export const Community = () => {
                     </Group>
                     
                     <Title order={4} mb="xs" className="group-hover:text-brand-600 transition-colors">
-                      {post.title} {post.hasVerifiedAnswer && <LuCheckCircle size={18} className="text-green-500 inline ml-1" />}
+                      {post.title} {post.hasVerifiedAnswer && <LuCheck size={18} className="text-green-500 inline ml-1" />}
                     </Title>
                     
                     <Text size="sm" c="dimmed" lineClamp={2} mb="md">
