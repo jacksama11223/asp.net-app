@@ -1,4 +1,6 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SmartLMS.Business.Events;
 using SmartLMS.Data;
 using SmartLMS.Models;
 using System;
@@ -11,12 +13,12 @@ namespace SmartLMS.Business;
 public class BookingService : IBookingService
 {
     private readonly SmartLMSContext _context;
-    private readonly INotificationService _notificationService;
+    private readonly IMediator _mediator;
 
-    public BookingService(SmartLMSContext context, INotificationService notificationService)
+    public BookingService(SmartLMSContext context, IMediator mediator)
     {
         _context = context;
-        _notificationService = notificationService;
+        _mediator = mediator;
     }
 
     public async Task<IEnumerable<Booking>> GetStudentBookingsAsync(int studentId)
@@ -62,8 +64,10 @@ public class BookingService : IBookingService
         _context.Bookings.Add(booking);
         await _context.SaveChangesAsync();
 
-        // 3. Thông báo cho giảng viên
-        await _notificationService.NotifyUserAsync(tutorId, "Yêu cầu đặt lịch mới", $"Sinh viên yêu cầu học lúc {startTime:dd/MM HH:mm}", "Booking");
+        // [MODULAR] Không gọi NotificationService trực tiếp nữa.
+        // Phát Event để NotificationEventHandler tự xử lý.
+        await _mediator.Publish(new BookingCreatedEvent(
+            studentId, tutorId, "", startTime, ""));
 
         return booking;
     }
@@ -76,8 +80,9 @@ public class BookingService : IBookingService
         booking.Status = status;
         await _context.SaveChangesAsync();
 
-        // Thông báo cho sinh viên
-        await _notificationService.NotifyUserAsync(booking.StudentId, "Cập nhật trạng thái lịch hẹn", $"Lịch hẹn của bạn đã được chuyển thành: {status}", "Booking");
+        // [MODULAR] Phát Event để NotificationEventHandler xử lý thông báo.
+        await _mediator.Publish(new BookingCreatedEvent(
+            booking.StudentId, booking.TutorId, "", booking.StartTime, ""));
 
         return true;
     }

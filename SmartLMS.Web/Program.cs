@@ -119,6 +119,14 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
+// === MEDIATR: Event Bus nội bộ cho Modular Monolith ===
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(typeof(SmartLMS.Business.AssessmentService).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(SmartLMS.Web.Controllers.AuthApiController).Assembly);
+});
+// ======================================================
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SmartLMS Enterprise API", Version = "v1" });

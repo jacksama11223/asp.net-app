@@ -13,6 +13,7 @@
     <PackageReference Include="EPPlus" Version="8.5.1" />
     <PackageReference Include="Hangfire.Core" Version="1.8.23" />
     <PackageReference Include="MailKit" Version="4.16.0" />
+    <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.2.9" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.5.0" />
     <PackageReference Include="MySqlConnector" Version="2.3.7" />

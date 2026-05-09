@@ -7,6 +7,8 @@ using MySqlConnector;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Distributed;
 using Dapper;
+using MediatR;
+using SmartLMS.Business.Events;
 using SmartLMS.Business.Extensions;
 using SmartLMS.Models;
 using SmartLMS.Data;
@@ -23,16 +25,18 @@ namespace SmartLMS.Business
         private readonly IScoringEngine _scoringEngine;
         private readonly IMessageBus _messageBus;
         private readonly SmartLMSContext _context;
+        private readonly IMediator _mediator;
 
         public AssessmentService(IConfiguration configuration, IDistributedCache cache, 
                                  IScoringEngine scoringEngine, IMessageBus messageBus, 
-                                 SmartLMSContext context)
+                                 SmartLMSContext context, IMediator mediator)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
             _cache = cache;
             _scoringEngine = scoringEngine;
             _messageBus = messageBus;
             _context = context;
+            _mediator = mediator;
         }
 
         public async Task<IEnumerable<dynamic>> GetLeaderboardAsync(int? departmentId = null)
@@ -192,12 +196,10 @@ namespace SmartLMS.Business
                 };
                 _context.QuizAttempts.Add(attempt);
 
-                // Cộng XP cho User
+                // [MODULAR] Không cộng XP trực tiếp tại đây nữa.
+                // Phát Event để GamificationEventHandler tự xử lý (Loose Coupling).
                 var user = await _context.Users.FindAsync(userId);
-                if (user != null)
-                {
-                    user.TotalXP += xpEarned;
-                }
+                await _mediator.Publish(new AssessmentCompletedEvent(userId, xpEarned));
 
                 // [EVENT-DRIVEN] Thay vì Server tự xử lý (Cấp Badge, Phóng Webhook), ta ném sự kiện này vào Background/Microservices khác làm việc.
                 // Điều này giúp hệ thống Assessment trả kết quả về cho Học sinh trong vòng 0.001s
