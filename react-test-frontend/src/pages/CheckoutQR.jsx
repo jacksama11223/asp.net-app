@@ -39,10 +39,14 @@ export const CheckoutQR = () => {
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
   const [loadingVNPay, setLoadingVNPay] = useState(false);
   
-  // Initialize apiClient
+  // Initialize apiClient with token if available
+  const token = localStorage.getItem('slms_token');
   const apiClient = axios.create({
     baseURL: BASE_URL,
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : ''
+    }
   });
 
   useEffect(() => {

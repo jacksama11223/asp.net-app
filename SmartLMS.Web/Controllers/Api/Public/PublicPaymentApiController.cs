@@ -6,6 +6,8 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Linq;
 
 namespace SmartLMS.Web.Controllers.Api.Public
 {
@@ -61,11 +63,18 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 }
             }
 
-            var testUser = await _context.Users.FirstOrDefaultAsync() ?? new User { UserId = 1 };
+            // Lấy UserId từ Token nếu có
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+            int userId = 1; // Mặc định nếu không đăng nhập (cho phép khách xem QR nhưng không khuyến khích)
+            
+            if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int parsedId))
+            {
+                userId = parsedId;
+            }
 
             var invoice = new Invoice
             {
-                UserId = testUser.UserId,
+                UserId = userId,
                 CourseId = course.CourseId,
                 Amount = testAmount,
                 Status = "Pending",
