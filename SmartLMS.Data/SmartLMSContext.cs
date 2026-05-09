@@ -144,6 +144,9 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Comment> Comments { get; set; }
     public virtual DbSet<PostVote> PostVotes { get; set; }
 
+    public virtual DbSet<Notification> Notifications { get; set; }
+    public virtual DbSet<DocumentPage> DocumentPages { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Value Converters for Encryption

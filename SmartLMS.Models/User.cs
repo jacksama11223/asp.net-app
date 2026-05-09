@@ -49,4 +49,5 @@ public partial class User
     public virtual ICollection<UserCohort> UserCohorts { get; set; } = new List<UserCohort>();
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
     public virtual ICollection<UserBadge> UserBadges { get; set; } = new List<UserBadge>();
+    public virtual ICollection<DocumentPage> DocumentPages { get; set; } = new List<DocumentPage>();
 }

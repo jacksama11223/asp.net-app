@@ -23,6 +23,9 @@ public class Post
     public int ViewCount { get; set; } = 0;
     public int VoteCount { get; set; } = 0;
     
+    public int? VerifiedCommentId { get; set; } // ID của câu trả lời đã được xác thực
+    public virtual Comment? VerifiedComment { get; set; }
+    
     public bool IsPublished { get; set; } = true;
     public bool IsDeleted { get; set; } = false;
 
