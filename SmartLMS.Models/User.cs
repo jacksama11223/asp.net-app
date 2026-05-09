@@ -35,7 +35,9 @@ public partial class User
 
     public string? Hometown { get; set; }
 
-    public int? TotalXP { get; set; }
+    public int? TotalXP { get; set; } = 0;
+    public int CurrentStreak { get; set; } = 0;
+    public DateTime? LastActivityDate { get; set; }
     public int? HierarchyLevel { get; set; } = 3; // 1: SuperAdmin, 2: DeptAdmin, 3: Staff/Student
     public int? DepartmentId { get; set; }
     public int? OrganizationId { get; set; }
