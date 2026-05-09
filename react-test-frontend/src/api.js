@@ -16,13 +16,27 @@ const getBaseUrl = () => {
 export const BASE_URL = getBaseUrl();
 
 export const createApiClient = (apiKey) => {
-  return axios.create({
+  const client = axios.create({
     baseURL: BASE_URL,
     headers: {
       'X-API-Key': apiKey,
       'Content-Type': 'application/json'
     }
   });
+
+  client.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem('slms_token');
+        localStorage.removeItem('slms_user');
+        window.location.href = '/';
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  return client;
 };
 
 export const getCourses = async (apiClient) => {

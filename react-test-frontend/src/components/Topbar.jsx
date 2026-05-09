@@ -44,6 +44,18 @@ export const Topbar = () => {
     headers: { 'Authorization': `Bearer ${token}` }
   });
 
+  apiClient.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem('slms_token');
+        localStorage.removeItem('slms_user');
+        window.location.href = '/';
+      }
+      return Promise.reject(error);
+    }
+  );
+
   useEffect(() => {
     if (!token) return;
     
