@@ -11,6 +11,8 @@ import { BookingPage } from './pages/BookingPage';
 import { CourseDetails } from './pages/CourseDetails';
 import { MyLearning } from './pages/MyLearning';
 import { StudyWorkspace } from './pages/StudyWorkspace';
+import { Community } from './pages/Community';
+import { PersonalWiki } from './pages/PersonalWiki';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
@@ -38,6 +40,8 @@ function App() {
         <Route path="/checkout/:id" element={<ProtectedRoute><CheckoutQR /></ProtectedRoute>} />
         <Route path="/course/:id" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
         <Route path="/my-learning" element={<ProtectedRoute><MyLearning /></ProtectedRoute>} />
+        <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+        <Route path="/wiki" element={<ProtectedRoute><PersonalWiki /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
         <Route path="/study/:courseId" element={<ProtectedRoute><StudyWorkspace /></ProtectedRoute>} />
         <Route path="/coding/:id" element={<CodeWorkspace />} />
