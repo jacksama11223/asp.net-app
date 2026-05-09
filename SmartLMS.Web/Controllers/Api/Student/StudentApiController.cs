@@ -33,34 +33,36 @@ public class StudentApiController : ControllerBase
     [HttpGet("enrolled-courses")]
     public async Task<ActionResult<object>> GetEnrolledCourses()
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
-        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        try 
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userIdStr)) return Unauthorized(new { message = "No User Identity found in token" });
 
-        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+            if (!int.TryParse(userIdStr, out int userId)) return Unauthorized(new { message = "Invalid User Identity format" });
 
-        var enrollments = await _context.Enrollments
-            .Include(e => e.Course)
-                .ThenInclude(c => c.Instructor)
-            .Where(e => e.Course != null && !e.Course.IsDeleted && e.UserId == userId)
-            .Select(e => new
-            {
-                e.EnrollmentId,
-                e.CourseId,
-                e.Progress,
-                Course = e.Course != null ? new
+            var enrollments = await _context.Enrollments
+                .Include(e => e.Course)
+                .Where(e => e.UserId == userId && e.Course != null && !e.Course.IsDeleted)
+                .Select(e => new
                 {
-                    e.Course.Title,
-                    e.Course.ThumbnailUrl,
-                    e.Course.Category,
-                    Instructor = e.Course.Instructor != null ? new
+                    e.EnrollmentId,
+                    e.CourseId,
+                    e.Progress,
+                    Course = new
                     {
-                        FullName = e.Course.Instructor.FullName
-                    } : null
-                } : null
-            })
-            .ToListAsync();
+                        e.Course!.Title,
+                        e.Course.ThumbnailUrl,
+                        e.Course.Category
+                    }
+                })
+                .ToListAsync();
 
-        return Ok(enrollments);
+            return Ok(enrollments);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message, inner = ex.InnerException?.Message });
+        }
     }
 
     [HttpGet("course-content/{courseId}")]
