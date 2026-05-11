@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Box, Title, Text, Stack, Group, Button, SimpleGrid, Paper, Badge, ActionIcon, Progress
 } from '@mantine/core';
-import { LuPlus, LuPenTool, LuMoreHorizontal, LuUsers, LuClock, LuEye } from 'react-icons/lu';
+import { LuPlus, LuPenTool, LuSettings, LuUsers, LuClock, LuEye, LuZap } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 
 export const CourseManager = () => {
@@ -42,7 +42,7 @@ export const CourseManager = () => {
                   {course.status}
                 </Badge>
                 <ActionIcon variant="subtle" color="gray">
-                  <LuMoreHorizontal size={18} />
+                  <LuSettings size={18} />
                 </ActionIcon>
               </Group>
               
@@ -56,7 +56,7 @@ export const CourseManager = () => {
                   <Text size="xs" c="dimmed" fw={600}>{course.students}</Text>
                 </Group>
                 <Group gap={4}>
-                  <LuClock size={14} className="text-slate-400" />
+                  <LuZap size={14} className="text-brand-300 self-end mt-1" />
                   <Text size="xs" c="dimmed" fw={600}>12 Lessons</Text>
                 </Group>
               </Group>

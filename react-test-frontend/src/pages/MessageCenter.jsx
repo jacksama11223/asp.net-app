@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Box, Title, Text, Stack, Group, Paper, Avatar, TextInput, ActionIcon, ScrollArea, Divider, Badge
 } from '@mantine/core';
-import { LuSearch, LuSend, LuMoreHorizontal, LuCheck } from 'react-icons/lu';
+import { LuSearch, LuSend, LuSettings, LuZap } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 
 export const MessageCenter = () => {
@@ -86,7 +86,7 @@ export const MessageCenter = () => {
               </Box>
             </Group>
             <ActionIcon variant="subtle" color="gray">
-              <LuMoreHorizontal size={18} />
+              <LuSettings size={18} />
             </ActionIcon>
           </Group>
 
@@ -115,7 +115,7 @@ export const MessageCenter = () => {
                       >
                         <Text size="sm">{msg.text}</Text>
                       </Box>
-                      {isMe && <LuCheck size={14} className="text-brand-300 self-end mt-1" />}
+                      {isMe && <LuZap size={14} className="text-brand-300 self-end mt-1" />}
                     </Box>
                   </motion.div>
                 );

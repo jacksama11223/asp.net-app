@@ -10,7 +10,7 @@ const targetFiles = [
 ];
 
 // Các component/icon thường gây lỗi nếu khác version
-const forbiddenStrings = ['TypographyStylesProvider', 'LuLayout', 'LuMoreVertical', 'LuCheckCheck']; 
+const forbiddenStrings = ['TypographyStylesProvider', 'LuLayout', 'LuMoreVertical', 'LuCheckCheck', 'LuMoreHorizontal', 'LuCheck']; 
 
 console.log("==================================================");
 console.log("🔍 KIỂM TRA ĐỘ TƯƠNG THÍCH FRONTEND TRƯỚC KHI BUILD");
