@@ -15,8 +15,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using MySqlConnector;
 using Hangfire.MySql;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// === XÓA MAPPING MẶC ĐỊNH CỦA JWT ĐỂ FIX LỖI USER ID ===
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+// ========================================================
 
 // === BỘ LỌC CHUỖI KẾT NỐI SIÊU CẤP (XÓA SẠCH SQL SERVER FLAGS) ===
 string CleanConnectionString(string connectionString)
