@@ -1,5 +1,16 @@
 # Changelog - SmartLMS.AI
 
+## [2026-05-11] - Expansion Ecosystem Completion (Sprint 1, 2, 3)
+### Added
+- **Sprint 1 (Analytics):** Creator Analytics với biểu đồ Recharts và hệ thống Course Reviews/Ratings.
+- **Sprint 2 (Community):** Friend Module (kết bạn/gợi ý), Bookmark & Progress Ring trong Study Workspace, AI Weak Points Analysis.
+- **Sprint 3 (Engagement):** AI Self Quiz Builder (tự tạo trắc nghiệm) và Tutor Dashboard (quản lý Mentoring 1:1/Live Q&A).
+- **Hardening:** 100% Icon Safety trên toàn bộ 25 file JSX.
+
+### Fixed
+- Fixed duplicate icon declarations in multiple frontend pages (RegisterPage, Dashboard, etc.) that caused production build failures.
+- Updated `test_full_system.js` with the correct production VPS IP.
+
 ## [2026-05-11] - Icon SafeList Hardening & Creator Studio UI Polish
 ### Fixed
 - **Build Stability:** Thay thế triệt để toàn bộ icon không tương thích với phiên bản `react-icons` trên VPS:

@@ -15,7 +15,7 @@ import {
   ThemeIcon,
   Alert
 } from '@mantine/core';
-import { LuZap, LuSend, LuSettings, LuArrowLeft, LuZap } from 'react-icons/lu';
+import { LuZap, LuSend, LuSettings, LuArrowLeft } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';

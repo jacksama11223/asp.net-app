@@ -13,16 +13,7 @@ import {
   ActionIcon,
   Badge
 } from '@mantine/core';
-import { 
-  LuZap, 
-  LuBookOpen, 
-  LuUsers, 
-  LuSparkles, 
-  LuPlay,
-  LuZap,
-  LuLayoutDashboard,
-  LuPenTool
-} from 'react-icons/lu';
+import { LuZap, LuBookOpen, LuUsers, LuSparkles, LuPlay, LuLayoutDashboard, LuPenTool } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 

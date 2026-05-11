@@ -15,17 +15,7 @@ import {
   Divider,
   ScrollArea
 } from '@mantine/core';
-import { 
-  LuSearch, 
-  LuZap, 
-  LuSettings,
-  LuSettings,
-  LuUsers,
-  LuLogOut,
-  LuSparkles,
-  LuSparkles,
-  LuZap
-} from 'react-icons/lu';
+import { LuSearch, LuZap, LuSettings, LuUsers, LuLogOut, LuSparkles } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';

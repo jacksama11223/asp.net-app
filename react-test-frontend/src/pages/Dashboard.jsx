@@ -5,9 +5,7 @@ import {
 import { 
   Paper, Grid, Title, Text, Group, SimpleGrid, Progress, Badge, ThemeIcon, Box, Stack, Button, Loader, Table, ActionIcon, Modal, Textarea, ScrollArea, Avatar
 } from '@mantine/core';
-import { 
-  LuSparkles, LuZap, LuClock, LuZap, LuBookOpen, LuUsers, LuPlay, LuZap, LuPlus, LuSend, LuPlay
-} from 'react-icons/lu';
+import { LuSparkles, LuZap, LuClock, LuBookOpen, LuUsers, LuPlay, LuPlus, LuSend } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import axios from 'axios';

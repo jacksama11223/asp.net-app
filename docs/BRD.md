@@ -4,9 +4,11 @@
 
 ### 1.1 Hệ thống Quản lý Học tập (LMS & Content)
 - **Curriculum:** Quản lý Course -> Module -> Lesson. Hỗ trợ nhiều loại nội dung (Video, Document).
-- **Interactive Workspace:** Hệ thống Flashcards (Spaced Repetition), Mistake Notebook (Sổ tay lỗi sai), và đặt câu hỏi ngay trong bài học.
-- **Creator Studio (Instructor Dashboard):** Giao diện quản trị dành riêng cho Giảng viên với Sidebar co giãn (Smart-Collapse), theo dõi học viên, doanh thu và tiến độ thực tế trên từng khóa học.
-- **Direct Messaging:** Hệ thống Inbox tập trung, Glassmorphism UI, hỗ trợ trao đổi 2 chiều giữa Giảng viên và Học viên theo từng khóa học cụ thể.
+- **Interactive Workspace:** Hệ thống Flashcards (Spaced Repetition), Mistake Notebook (Sổ tay lỗi sai), Bookmark & Resume, và phân tích điểm yếu bằng AI.
+- **Creator Studio (Instructor Dashboard):** Giao diện quản trị dành riêng cho Giảng viên với Sidebar co giãn, theo dõi học viên, doanh thu (Analytics Charts) và tiến độ thực tế.
+- **Tutor Dashboard:** Bảng điều khiển cho Mentor/Gia sư quản lý lịch hẹn 1:1 và trả lời câu hỏi khẩn cấp.
+- **Self Quiz Builder:** Công cụ AI cho phép học viên tự tạo bộ câu hỏi và Flashcard từ chủ đề bất kỳ.
+- **Direct Messaging:** Hệ thống Inbox tập trung, Glassmorphism UI, hỗ trợ trao đổi 2 chiều.
 - **Live Classes:** Tích hợp Zoom API để tổ chức các buổi học trực tuyến đồng bộ.
 - **Coding Challenge:** Engine thực thi code (CompilerService) hỗ trợ làm bài tập lập trình trực tiếp, kiểm tra qua TestCases.
 

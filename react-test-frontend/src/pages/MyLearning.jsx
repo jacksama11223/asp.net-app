@@ -4,10 +4,7 @@ import {
   Progress, Button, Group, Stack, Badge, Box, Loader, Paper,
   ActionIcon, ThemeIcon, Grid, RingProgress
 } from '@mantine/core';
-import { 
-  LuSparkles, LuBookOpen, LuUsers, 
-  LuArrowLeft, LuClock, LuZap, LuSearch, LuSparkles
-} from 'react-icons/lu';
+import { LuSparkles, LuBookOpen, LuUsers, LuArrowLeft, LuClock, LuZap, LuSearch } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';

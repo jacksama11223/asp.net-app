@@ -12,7 +12,7 @@ const path = require('path');
 // ============================================================
 // CẤU HÌNH
 // ============================================================
-const API_BASE = 'http://145.241.160.156:5182';
+const API_BASE = 'http://141.253.114.218:5181';
 const TEST_CREDENTIALS = {
   instructor: { username: 'admin', password: 'Admin@123' },
   student: { username: 'student1', password: 'Student@123' }

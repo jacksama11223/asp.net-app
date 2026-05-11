@@ -4,7 +4,7 @@ import {
   Button, Group, Stack, Badge, Modal, ActionIcon, Box
 } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
-import { LuClock, LuClock, LuUsers, LuPlay } from 'react-icons/lu';
+import { LuClock, LuUsers, LuPlay } from 'react-icons/lu';
 import axios from 'axios';
 import { BASE_URL, getTutors, createBooking, getStudentBookings } from '../api';
 

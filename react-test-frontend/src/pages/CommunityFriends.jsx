@@ -3,9 +3,7 @@ import {
   Box, Title, Text, Stack, Group, Paper, Button,
   TextInput, Avatar, Badge, ActionIcon, Grid, Tabs
 } from '@mantine/core';
-import {
-  LuSearch, LuUsers, LuUsers, LuSend, LuBookOpen, LuSparkles, LuLogOut
-} from 'react-icons/lu';
+import { LuSearch, LuUsers, LuSend, LuBookOpen, LuSparkles, LuLogOut } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 
 export const CommunityFriends = () => {

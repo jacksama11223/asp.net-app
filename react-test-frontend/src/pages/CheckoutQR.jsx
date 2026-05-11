@@ -14,13 +14,7 @@ import {
   Card,
   Divider
 } from '@mantine/core';
-import { 
-  LuSparkles, 
-  LuExternalLink, 
-  LuZap,
-  LuZap,
-  LuZap
-} from 'react-icons/lu';
+import { LuSparkles, LuExternalLink, LuZap } from 'react-icons/lu';
 import { QRCodeSVG } from 'qrcode.react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
