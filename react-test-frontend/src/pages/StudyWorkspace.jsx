@@ -3,12 +3,12 @@ import {
   Container, Grid, Paper, Title, Text, Stack, 
   Group, Badge, ActionIcon, Box, SimpleGrid, 
   Tabs, ThemeIcon, Loader, Button, Avatar, Divider,
-  ScrollArea, NavLink
+  ScrollArea, NavLink, AspectRatio, TypographyStylesProvider
 } from '@mantine/core';
 import { 
   LuBook, LuCode, LuFileText, LuMessageSquare, 
   LuStar, LuHeart, LuArrowLeft, LuPlay, 
-  LuCheck, LuInfo, LuPenTool
+  LuCheck, LuInfo, LuPenTool, LuZap, LuLayout, LuExternalLink
 } from 'react-icons/lu';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -34,7 +34,7 @@ export const StudyWorkspace = () => {
       try {
         const response = await apiClient.get(`/api/student/course-content/${courseId}`);
         setContent(response.data);
-        // Tự động chọn bài học đầu tiên
+        // Tự động chọn bài học đầu tiên từ module đầu tiên
         if (response.data.modules?.[0]?.lessons?.[0]) {
           setSelectedLesson(response.data.modules[0].lessons[0]);
         }
@@ -46,6 +46,15 @@ export const StudyWorkspace = () => {
     };
     fetchContent();
   }, [courseId]);
+
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const id = url.split('v=')[1] || url.split('/').pop();
+      return `https://www.youtube.com/embed/${id}`;
+    }
+    return url;
+  };
 
   if (loading) return (
     <Stack align="center" justify="center" h="80vh">
@@ -67,16 +76,19 @@ export const StudyWorkspace = () => {
             Quay lại Kho khóa học
           </Button>
           <Group>
-            <Badge size="lg" color="brand" variant="light">Pro Student</Badge>
+            <Badge size="lg" color="brand" variant="light" leftSection={<LuStar size={12} />}>Premium Learner</Badge>
           </Group>
         </Group>
 
         <Grid gutter="xl">
           {/* Cột trái: Sidebar danh sách bài học */}
           <Grid.Col span={{ base: 12, md: 3 }}>
-            <Paper radius="xl" p="md" withBorder className="glass">
-              <Title order={4} mb="md" px="xs">Nội dung khóa học</Title>
-              <ScrollArea h={600} offsetScrollbars>
+            <Paper radius="xl" p="md" withBorder className="glass shadow-sm sticky top-4">
+              <Group mb="md" px="xs">
+                <LuLayout size={18} className="text-brand-500" />
+                <Title order={4}>Lộ trình học tập</Title>
+              </Group>
+              <ScrollArea h="calc(100vh - 200px)" offsetScrollbars>
                 {content?.modules?.map((module) => (
                   <Box key={module.moduleId} mb="md">
                     <Text size="xs" fw={700} c="dimmed" mb={4} px="xs" tt="uppercase">
@@ -87,6 +99,7 @@ export const StudyWorkspace = () => {
                         <NavLink
                           key={lesson.lessonId}
                           label={lesson.title}
+                          description={lesson.lessonType}
                           leftSection={
                             <ThemeIcon size="sm" variant="light" color={lesson.lessonType === 'Video' ? 'blue' : 'teal'}>
                               {lesson.lessonType === 'Video' ? <LuPlay size={12} /> : <LuFileText size={12} />}
@@ -107,163 +120,197 @@ export const StudyWorkspace = () => {
           {/* Cột chính: Workspace động */}
           <Grid.Col span={{ base: 12, md: 9 }}>
             <Stack gap="xl">
-              {/* Header bài học đang chọn */}
-              <Paper radius="xl" p="xl" withBorder className="glass bg-white">
-                <Group justify="space-between" align="flex-start">
-                  <Box>
-                    <Title order={2} fw={900} className="tracking-tight">
-                      {selectedLesson?.title || "Chọn bài học để bắt đầu"}
-                    </Title>
-                    <Text c="dimmed" size="sm" mt={4}>
-                      Giảng viên: <Text span fw={700} c="brand">Nguyễn Thị Giang</Text> • Đánh giá: 4.9 ⭐
-                    </Text>
-                  </Box>
-                  <Button variant="light" color="orange" leftSection={<LuHeart size={16} />}>
-                    Donate ☕
-                  </Button>
-                </Group>
+              {/* Header bài học */}
+              <Paper radius="xl" p="xl" withBorder className="glass bg-white shadow-sm">
+                <Stack gap="md">
+                   <Group justify="space-between" align="flex-start">
+                    <Box>
+                      <Title order={2} fw={900} className="tracking-tight text-slate-800">
+                        {selectedLesson?.title || "Chọn bài học để bắt đầu"}
+                      </Title>
+                      <Text c="dimmed" size="sm" mt={4}>
+                        Module: <Text span fw={700} c="brand">Nền tảng kiến thức</Text> • Thưởng: <Text span fw={700} color="orange">{selectedLesson?.points || 0} XP</Text>
+                      </Text>
+                    </Box>
+                    <Group>
+                       <Button variant="light" color="orange" leftSection={<LuHeart size={16} />}>
+                        Yêu thích
+                      </Button>
+                    </Group>
+                  </Group>
+
+                  {/* Vùng hiển thị Video hoặc Content */}
+                  {selectedLesson?.lessonType === 'Video' && selectedLesson?.videoUrl ? (
+                    <AspectRatio ratio={16 / 9} radius="xl" className="overflow-hidden shadow-2xl border-4 border-slate-100">
+                      <iframe
+                        src={getEmbedUrl(selectedLesson.videoUrl)}
+                        title="Lesson Video"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </AspectRatio>
+                  ) : (
+                    <Paper p="xl" radius="xl" bg="slate.0" withBorder>
+                       <TypographyStylesProvider>
+                          <div dangerouslySetInnerHTML={{ __html: selectedLesson?.content || "<p>Chưa có nội dung văn bản cho bài học này.</p>" }} />
+                       </TypographyStylesProvider>
+                    </Paper>
+                  )}
+                </Stack>
               </Paper>
 
-              {/* 3 Trụ cột chính (Top Repositories) */}
+              {/* Tabs bổ trợ: Exercises, Code, Articles */}
               <SimpleGrid cols={3} spacing="lg">
                 <Paper 
                   radius="xl" p="lg" withBorder 
-                  className={`cursor-pointer transition-all ${activeTab === 'exercises' ? 'border-brand-500 bg-brand-50/50 shadow-lg' : 'hover:bg-white'}`}
+                  className={`cursor-pointer transition-all border-2 ${activeTab === 'exercises' ? 'border-brand-500 bg-brand-50/50 shadow-md' : 'border-transparent hover:bg-white'}`}
                   onClick={() => setActiveTab('exercises')}
                 >
                   <Group>
-                    <ThemeIcon color="brand" radius="md" size="lg">
+                    <ThemeIcon color="brand" radius="md" size="lg" variant={activeTab === 'exercises' ? 'filled' : 'light'}>
                       <LuBook size={20} />
                     </ThemeIcon>
                     <Box>
-                      <Text fw={700} size="sm">Kho Bài Tập</Text>
-                      <Text size="xs" c="dimmed">Flashcards & Quiz</Text>
+                      <Text fw={700} size="sm">Hệ thống Bài tập</Text>
+                      <Text size="xs" c="dimmed">{selectedLesson?.flashcardCount || 0} Flashcards & Quiz</Text>
                     </Box>
                   </Group>
                 </Paper>
 
                 <Paper 
                   radius="xl" p="lg" withBorder 
-                  className={`cursor-pointer transition-all ${activeTab === 'code' ? 'border-indigo-500 bg-indigo-50/50 shadow-lg' : 'hover:bg-white'}`}
+                  className={`cursor-pointer transition-all border-2 ${activeTab === 'code' ? 'border-indigo-500 bg-indigo-50/50 shadow-md' : 'border-transparent hover:bg-white'}`}
                   onClick={() => setActiveTab('code')}
                 >
                   <Group>
-                    <ThemeIcon color="indigo" radius="md" size="lg">
+                    <ThemeIcon color="indigo" radius="md" size="lg" variant={activeTab === 'code' ? 'filled' : 'light'}>
                       <LuCode size={20} />
                     </ThemeIcon>
                     <Box>
-                      <Text fw={700} size="sm">Kho Bài Code</Text>
-                      <Text size="xs" c="dimmed">Thực hành lập trình</Text>
+                      <Text fw={700} size="sm">Thực hành Code</Text>
+                      <Text size="xs" c="dimmed">{selectedLesson?.hasChallenge ? '1 Thử thách' : 'Chưa có bài code'}</Text>
                     </Box>
                   </Group>
                 </Paper>
 
                 <Paper 
                   radius="xl" p="lg" withBorder 
-                  className={`cursor-pointer transition-all ${activeTab === 'articles' ? 'border-teal-500 bg-teal-50/50 shadow-lg' : 'hover:bg-white'}`}
+                  className={`cursor-pointer transition-all border-2 ${activeTab === 'articles' ? 'border-teal-500 bg-teal-50/50 shadow-md' : 'border-transparent hover:bg-white'}`}
                   onClick={() => setActiveTab('articles')}
                 >
                   <Group>
-                    <ThemeIcon color="teal" radius="md" size="lg">
+                    <ThemeIcon color="teal" radius="md" size="lg" variant={activeTab === 'articles' ? 'filled' : 'light'}>
                       <LuFileText size={20} />
                     </ThemeIcon>
                     <Box>
-                      <Text fw={700} size="sm">Article/Tài liệu</Text>
-                      <Text size="xs" c="dimmed">Kiến thức mở rộng</Text>
+                      <Text fw={700} size="sm">Tài liệu mở rộng</Text>
+                      <Text size="xs" c="dimmed">PDF & Slide bài giảng</Text>
                     </Box>
                   </Group>
                 </Paper>
               </SimpleGrid>
 
-              {/* Khu vực (4): Danh sách hiển thị động */}
+              {/* Content Panel động */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  key={activeTab + (selectedLesson?.lessonId || '')}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Paper radius="xl" p="xl" withBorder className="glass bg-white min-h-[400px]">
-                    <Group justify="space-between" mb="xl">
-                      <Title order={3}>
-                        {activeTab === 'exercises' && "📚 Hệ thống bài tập ôn luyện"}
-                        {activeTab === 'code' && "💻 Thử thách lập trình"}
-                        {activeTab === 'articles' && "📄 Tài liệu đi kèm"}
-                      </Title>
-                      <Badge size="lg" variant="dot">8 bài chưa làm</Badge>
-                    </Group>
-
-                    {/* Nội dung danh sách động */}
-                    <Stack gap="md">
-                      {activeTab === 'exercises' && (
-                        <SimpleGrid cols={2}>
-                          <Paper p="md" withBorder radius="md" className="hover:border-brand-500 cursor-pointer">
-                            <Group>
-                              <LuZap className="text-orange-500" />
-                              <Box>
-                                <Text fw={600}>Flashcard: Cơ bản về ASP.NET</Text>
-                                <Text size="xs" c="dimmed">15 thẻ • Spaced Repetition</Text>
-                              </Box>
+                  <Paper radius="xl" p="xl" withBorder className="glass bg-white min-h-[300px] shadow-sm">
+                    {/* Exercises Panel */}
+                    {activeTab === 'exercises' && (
+                      <Stack gap="md">
+                        <Title order={3}>📚 Bài tập củng cố</Title>
+                        {selectedLesson?.flashcardCount > 0 ? (
+                           <Paper p="md" withBorder radius="md" className="hover:border-brand-500 cursor-pointer group" onClick={() => navigate(`/flashcards/${selectedLesson.lessonId}`)}>
+                            <Group justify="space-between">
+                              <Group>
+                                <LuZap className="text-orange-500 group-hover:scale-125 transition-transform" />
+                                <Box>
+                                  <Text fw={600}>Bộ Flashcards: {selectedLesson.title}</Text>
+                                  <Text size="xs" c="dimmed">{selectedLesson.flashcardCount} thẻ • Spaced Repetition</Text>
+                                </Box>
+                              </Group>
+                              <LuExternalLink size={16} className="text-slate-300" />
                             </Group>
                           </Paper>
-                          <Paper p="md" withBorder radius="md" className="hover:border-brand-500 cursor-pointer">
-                            <Group>
-                              <LuInfo className="text-blue-500" />
-                              <Box>
-                                <Text fw={600}>Quiz: Middleware & Pipeline</Text>
-                                <Text size="xs" c="dimmed">10 câu hỏi • 80% pass</Text>
-                              </Box>
-                            </Group>
-                          </Paper>
-                        </SimpleGrid>
-                      )}
+                        ) : (
+                          <Text c="dimmed" ta="center" py="xl">Chưa có Flashcard cho bài học này.</Text>
+                        )}
+                        
+                        <Paper p="md" withBorder radius="md" className="hover:border-blue-500 cursor-pointer group">
+                          <Group>
+                            <LuInfo className="text-blue-500 group-hover:rotate-12 transition-transform" />
+                            <Box>
+                              <Text fw={600}>Quiz kiến thức nhanh</Text>
+                              <Text size="xs" c="dimmed">Tự động tạo bởi AI dựa trên nội dung bài</Text>
+                            </Box>
+                          </Group>
+                        </Paper>
+                      </Stack>
+                    )}
 
-                      {activeTab === 'code' && (
-                        <Box ta="center" py={50}>
-                          <LuCode size={48} className="text-slate-200 mb-4" />
-                          <Text fw={700}>Bắt đầu thực hành Code bài này</Text>
+                    {/* Code Panel */}
+                    {activeTab === 'code' && (
+                       <Box ta="center" py={50}>
+                        <LuCode size={48} className="text-slate-200 mb-4" />
+                        <Title order={4}>{selectedLesson?.hasChallenge ? 'Sẵn sàng thử thách?' : 'Bài học này chưa có thử thách code'}</Title>
+                        {selectedLesson?.hasChallenge ? (
                           <Button 
-                            mt="md" color="indigo" radius="md"
-                            onClick={() => navigate(`/coding/${selectedLesson?.lessonId}`)}
+                            mt="md" color="indigo" radius="md" size="lg"
+                            onClick={() => navigate(`/coding/${selectedLesson.challengeId}`)}
                           >
-                            Mở IDE (Code Workspace)
+                            Mở IDE & Bắt đầu Code
                           </Button>
-                        </Box>
-                      )}
+                        ) : (
+                          <Text c="dimmed" mt="xs">Giảng viên đang biên soạn bài tập thực hành...</Text>
+                        )}
+                      </Box>
+                    )}
 
-                      {activeTab === 'articles' && (
-                        <Stack>
-                          <Paper p="md" withBorder radius="md" className="flex justify-between items-center">
-                            <Group>
-                              <LuFileText className="text-teal-500" />
-                              <Text fw={600}>Cấu trúc thư mục dự án mẫu.pdf</Text>
-                            </Group>
-                            <Button variant="light" size="xs">Tải xuống</Button>
-                          </Paper>
-                        </Stack>
-                      )}
-
-                      <Divider my="lg" label="Công cụ hỗ trợ" labelPosition="center" />
-                      
-                      <SimpleGrid cols={2}>
-                         <Button 
-                            variant="light" color="blue" fullWidth radius="md"
-                            leftSection={<LuMessageSquare size={16} />}
-                          >
-                            Hỏi giảng viên bài này
-                          </Button>
-                          <Button 
-                            variant="light" color="grape" fullWidth radius="md"
-                            leftSection={<LuPenTool size={16} />}
-                          >
-                            Ghi chú lỗi sai (Mistake Note)
-                          </Button>
-                      </SimpleGrid>
-                    </Stack>
+                    {/* Articles Panel */}
+                    {activeTab === 'articles' && (
+                       <Stack>
+                        <Title order={3}>📄 Tài liệu giáo trình</Title>
+                        <Paper p="md" withBorder radius="md" className="flex justify-between items-center hover:bg-slate-50 transition-colors">
+                          <Group>
+                            <LuFileText className="text-teal-500" />
+                            <Box>
+                               <Text fw={600}>Slide bài giảng: {selectedLesson?.title}</Text>
+                               <Text size="xs" c="dimmed">Định dạng: PDF • 1.2 MB</Text>
+                            </Box>
+                          </Group>
+                          <Button variant="light" size="xs">Xem / Tải xuống</Button>
+                        </Paper>
+                        <Divider label="Tài liệu tham khảo" labelPosition="center" />
+                        <Text size="sm" c="dimmed" ta="center">Không có tài liệu tham khảo bổ sung.</Text>
+                      </Stack>
+                    )}
                   </Paper>
                 </motion.div>
               </AnimatePresence>
+
+              {/* Footer Tools */}
+              <SimpleGrid cols={2}>
+                  <Button 
+                    variant="light" color="blue" fullWidth radius="xl" size="md"
+                    leftSection={<LuMessageSquare size={16} />}
+                    className="hover:shadow-md transition-shadow"
+                  >
+                    Hỏi giảng viên (Live Chat)
+                  </Button>
+                  <Button 
+                    variant="light" color="grape" fullWidth radius="xl" size="md"
+                    leftSection={<LuPenTool size={16} />}
+                    className="hover:shadow-md transition-shadow"
+                  >
+                    Ghi chú cá nhân (Wiki)
+                  </Button>
+              </SimpleGrid>
             </Stack>
           </Grid.Col>
         </Grid>

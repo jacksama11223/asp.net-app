@@ -146,6 +146,7 @@ public partial class SmartLMSContext : DbContext
 
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<DocumentPage> DocumentPages { get; set; }
+    public virtual DbSet<DirectMessage> DirectMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -390,6 +391,13 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(e => e.Post).WithMany(p => p.PostVotes).HasForeignKey(e => e.PostId);
             entity.HasOne(e => e.User).WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
             entity.HasIndex(e => new { e.PostId, e.UserId }).IsUnique();
+        });
+
+        modelBuilder.Entity<DirectMessage>(entity => {
+            entity.HasKey(e => e.MessageId);
+            entity.HasOne(d => d.Sender).WithMany().HasForeignKey(d => d.SenderId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(d => d.Receiver).WithMany().HasForeignKey(d => d.ReceiverId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId).OnDelete(DeleteBehavior.Restrict);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -12,14 +12,15 @@
 - [x] Phát triển AI Predictor (Dropout prediction) và Item Analysis.
 - [x] Xây dựng Community (Forum, Wiki, Notifications).
 
-## Phase 3: Architecture Refactor - Modular Monolith (Completed & Verified)
+## Phase 3: Architecture Refactor - Modular Monolith (Completed & Hardened)
 - [x] Cài đặt MediatR.
 - [x] Decouple Gamification (Assessment -> Event -> Gamification).
 - [x] Decouple Notifications (Booking -> Event -> Notification).
-- [x] Fix lỗi Auth (JWT 401 Interceptor & Inbound Claim Mapping Fix).
+- [x] **Bulletproof Auth Fix:** Triển khai cơ chế trích xuất Identity đa tầng trên 11 Controllers.
 - [x] Xây dựng bộ Smoke Test tự động (`verify_apis.js` & `test_courses.js`).
 
 ## Phase 4: Business & Enterprise Expansion (Current)
+- [/] **Study Module Stabilization:** Fix White Screen (LuZap) & Content richness (Video/Docs/Quiz).
 - [ ] Hoàn thiện luồng Thanh toán (VNPay) và Hóa đơn.
 - [ ] Kích hoạt hệ thống Affiliate và Coupon.
 - [ ] Tích hợp Zoom API cho lớp học trực tuyến.

@@ -101,8 +101,29 @@ namespace SmartLMS.Business;
             var enrollment = await _context.Enrollments
                 .FirstOrDefaultAsync(e => e.CourseId == courseId && e.UserId == userId);
 
+            // Lấy thêm các asset liên quan để làm giàu không gian học tập
+            var flashcards = await _context.Flashcards.ToListAsync();
+            var challenges = await _context.CodingChallenges.Where(c => c.CourseId == courseId).ToListAsync();
+            var exams = await _context.Exams.Where(e => e.CourseId == courseId).ToListAsync();
+
             return new {
-                Modules = modules,
+                Modules = modules.Select(m => new {
+                    m.ModuleId,
+                    m.Title,
+                    m.OrderIndex,
+                    Lessons = m.Lessons.OrderBy(l => l.OrderIndex).Select(l => new {
+                        l.LessonId,
+                        l.Title,
+                        l.LessonType,
+                        l.VideoUrl,
+                        l.Content,
+                        l.Points,
+                        FlashcardCount = flashcards.Count(f => f.LessonId == l.LessonId),
+                        HasChallenge = challenges.Any(c => c.LessonId == l.LessonId),
+                        ChallengeId = challenges.FirstOrDefault(c => c.LessonId == l.LessonId)?.Id
+                    }),
+                    Exams = exams.Where(e => e.CourseId == courseId) // Có thể gắn exam vào module sau
+                }),
                 Progress = enrollment?.Progress ?? 0
             };
         }

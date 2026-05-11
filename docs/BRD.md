@@ -39,7 +39,8 @@
 
 ## 3. Quy tắc phát triển (Do's & Don'ts)
 - **DO:** Luôn sử dụng `_mediator.Publish()` khi một hành động ở module này cần tác động đến module khác.
-- **DO:** Cấu hình `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()` trong `Program.cs` để tránh `sub` claim ghi đè `NameIdentifier`.
+- **DO:** Sử dụng claim `UserId` (ưu tiên) hoặc `NameIdentifier` (có kiểm tra kiểu số) để định danh người dùng.
+- **DO:** Cấu hình `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()` để tránh xung đột claim `sub`.
 - **DO:** Cập nhật Audit Log cho mọi entity quan trọng.
 - **DON'T:** Không viết logic nghiệp vụ phức tạp trực tiếp trong Controller.
 - **DON'T:** Không lưu mật khẩu hoặc dữ liệu nhạy cảm dạng text thuần.
