@@ -14,6 +14,8 @@ import { StudyWorkspace } from './pages/StudyWorkspace';
 import { Community } from './pages/Community';
 import { PersonalWiki } from './pages/PersonalWiki';
 import CodeWorkspace from './pages/CodeWorkspace';
+import { CourseManager } from './pages/CourseManager';
+import { MessageCenter } from './pages/MessageCenter';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
 
@@ -48,6 +50,11 @@ function App() {
         <Route path="/students" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Students Management (Coming Soon)</Text></Box></ProtectedRoute>} />
         <Route path="/ai" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">AI Prediction Engine (Coming Soon)</Text></Box></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Global Settings (Coming Soon)</Text></Box></ProtectedRoute>} />
+        
+        {/* Creator / Instructor Routes */}
+        <Route path="/creator/courses" element={<ProtectedRoute><CourseManager /></ProtectedRoute>} />
+        <Route path="/creator/messages" element={<ProtectedRoute><MessageCenter /></ProtectedRoute>} />
+        <Route path="/creator/analytics" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Analytics (Coming Soon)</Text></Box></ProtectedRoute>} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
