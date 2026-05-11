@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
 using SmartLMS.Models;
@@ -24,7 +24,7 @@ public class BookingController : ControllerBase
     [HttpGet("student")]
     public async Task<ActionResult<IEnumerable<Booking>>> GetStudentBookings()
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = int.Parse(User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value ?? "0");
         var result = await _bookingService.GetStudentBookingsAsync(userId);
         return Ok(result);
     }
@@ -32,7 +32,7 @@ public class BookingController : ControllerBase
     [HttpGet("tutor")]
     public async Task<ActionResult<IEnumerable<Booking>>> GetTutorBookings()
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = int.Parse(User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value ?? "0");
         var result = await _bookingService.GetTutorBookingsAsync(userId);
         return Ok(result);
     }
@@ -40,7 +40,7 @@ public class BookingController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Booking>> CreateBooking([FromBody] BookingRequest request)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userId = int.Parse(User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value ?? "0");
         try
         {
             var result = await _bookingService.CreateBookingAsync(userId, request.TutorId, request.StartTime, request.DurationMinutes);
@@ -74,3 +74,4 @@ public class BookingRequest
     public DateTime StartTime { get; set; }
     public int DurationMinutes { get; set; }
 }
+

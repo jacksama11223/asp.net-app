@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Models;
@@ -46,11 +46,11 @@ namespace SmartLMS.Web.Controllers.Api.Public
         public async Task<IActionResult> Checkout(int courseId)
         {
             var course = await _context.Courses.FindAsync(courseId);
-            if (course == null) return NotFound("Khóa học không tồn tại.");
+            if (course == null) return NotFound("KhÃ³a há»c khÃ´ng tá»“n táº¡i.");
 
             var txnRef = DateTime.Now.Ticks.ToString();
             
-            // Đọc số tiền test từ config
+            // Äá»c sá»‘ tiá»n test tá»« config
             int testAmount = 3000;
             var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
             if (System.IO.File.Exists(configPath))
@@ -63,9 +63,9 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 }
             }
 
-            // Lấy UserId từ Token nếu có
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
-            int userId = 1; // Mặc định nếu không đăng nhập (cho phép khách xem QR nhưng không khuyến khích)
+            // Láº¥y UserId tá»« Token náº¿u cÃ³
+            var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
+            int userId = 1; // Máº·c Ä‘á»‹nh náº¿u khÃ´ng Ä‘Äƒng nháº­p (cho phÃ©p khÃ¡ch xem QR nhÆ°ng khÃ´ng khuyáº¿n khÃ­ch)
             
             if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int parsedId))
             {
@@ -90,7 +90,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 InvoiceId = invoice.InvoiceId,
                 TransactionReference = txnRef,
                 Amount = invoice.Amount,
-                Message = "Tạo đơn hàng thành công, vui lòng quét mã QR."
+                Message = "Táº¡o Ä‘Æ¡n hÃ ng thÃ nh cÃ´ng, vui lÃ²ng quÃ©t mÃ£ QR."
             });
         }
 
@@ -134,7 +134,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Thanh toán thành công! Khóa học đã được mở." });
+            return Ok(new { Message = "Thanh toÃ¡n thÃ nh cÃ´ng! KhÃ³a há»c Ä‘Ã£ Ä‘Æ°á»£c má»Ÿ." });
         }
 
         [HttpPost("sepay-webhook")]
@@ -145,7 +145,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 return BadRequest(new { success = false, message = "Invalid payload" });
             }
 
-            // Tìm mã đơn hàng (18 chữ số) trong nội dung chuyển khoản
+            // TÃ¬m mÃ£ Ä‘Æ¡n hÃ ng (18 chá»¯ sá»‘) trong ná»™i dung chuyá»ƒn khoáº£n
             var match = System.Text.RegularExpressions.Regex.Match(payload.content, @"\d{15,20}");
             if (!match.Success)
             {
@@ -165,7 +165,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 return Ok(new { success = true, message = "Already paid." });
             }
 
-            // Kiểm tra số tiền chuyển có đủ không (Chấp nhận lớn hơn hoặc bằng)
+            // Kiá»ƒm tra sá»‘ tiá»n chuyá»ƒn cÃ³ Ä‘á»§ khÃ´ng (Cháº¥p nháº­n lá»›n hÆ¡n hoáº·c báº±ng)
             if (payload.transferAmount >= invoice.Amount)
             {
                 invoice.Status = "Paid";
@@ -209,3 +209,4 @@ namespace SmartLMS.Web.Controllers.Api.Public
         public decimal accumulated { get; set; }
     }
 }
+

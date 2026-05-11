@@ -81,7 +81,7 @@ namespace SmartLMS.Web.Controllers
         [HttpPost("submit")]
         public async Task<IActionResult> SubmitQuiz([FromBody] QuizSubmissionRequest request)
         {
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
             if (!int.TryParse(userIdStr, out var userId)) 
                 return Unauthorized();
 

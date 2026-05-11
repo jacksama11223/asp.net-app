@@ -27,7 +27,7 @@ public class StudentApiController : ControllerBase
     public IActionResult WhoAmI()
     {
         var claims = User.Claims.Select(c => new { c.Type, c.Value });
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         return Ok(new { userId = userIdStr, claims });
     }
 
@@ -36,7 +36,7 @@ public class StudentApiController : ControllerBase
     {
         try 
         {
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+            var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
             if (string.IsNullOrEmpty(userIdStr)) return Unauthorized(new { message = "No User Identity found in token" });
 
             if (!int.TryParse(userIdStr, out int userId)) return Unauthorized(new { message = "Invalid User Identity format" });
@@ -69,7 +69,7 @@ public class StudentApiController : ControllerBase
     [HttpGet("course-content/{courseId}")]
     public async Task<ActionResult> GetCourseContent(int courseId)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
         int userId = int.Parse(userIdStr);
 
@@ -80,7 +80,7 @@ public class StudentApiController : ControllerBase
     [HttpPost("log-mistake")]
     public async Task<ActionResult> LogMistake([FromBody] MistakeLog log)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
         int userId = int.Parse(userIdStr);
 
@@ -92,7 +92,7 @@ public class StudentApiController : ControllerBase
     [HttpGet("mistakes/{courseId}")]
     public async Task<ActionResult> GetMistakes(int courseId)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
         int userId = int.Parse(userIdStr);
 
@@ -119,7 +119,7 @@ public class StudentApiController : ControllerBase
     [HttpPost("ask-question")]
     public async Task<ActionResult> AskQuestion([FromBody] LessonQuestion question)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
         int userId = int.Parse(userIdStr);
 
@@ -128,4 +128,5 @@ public class StudentApiController : ControllerBase
         return Ok();
     }
 }
+
 

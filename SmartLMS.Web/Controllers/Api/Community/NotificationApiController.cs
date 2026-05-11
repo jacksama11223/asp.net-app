@@ -24,7 +24,7 @@ public class NotificationApiController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetNotifications()
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var notifications = await _context.Notifications
@@ -50,7 +50,7 @@ public class NotificationApiController : ControllerBase
     [HttpPost("{id}/read")]
     public async Task<IActionResult> MarkAsRead(int id)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var notification = await _context.Notifications
@@ -64,4 +64,5 @@ public class NotificationApiController : ControllerBase
         return Ok(new { success = true });
     }
 }
+
 

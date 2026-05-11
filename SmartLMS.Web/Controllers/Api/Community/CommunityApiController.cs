@@ -79,7 +79,7 @@ public class CommunityApiController : ControllerBase
     [HttpPost("posts")]
     public async Task<IActionResult> CreatePost([FromBody] Post post)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         post.AuthorId = userId;
@@ -95,7 +95,7 @@ public class CommunityApiController : ControllerBase
     [HttpPost("posts/{id}/comment")]
     public async Task<IActionResult> AddComment(int id, [FromBody] Comment comment)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         comment.PostId = id;
@@ -111,7 +111,7 @@ public class CommunityApiController : ControllerBase
     [HttpPost("posts/{postId}/verify/{commentId}")]
     public async Task<IActionResult> VerifyAnswer(int postId, int commentId)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var post = await _context.Posts.FindAsync(postId);
@@ -127,4 +127,5 @@ public class CommunityApiController : ControllerBase
         return Ok(new { success = true });
     }
 }
+
 

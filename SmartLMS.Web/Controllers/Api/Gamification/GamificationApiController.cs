@@ -23,7 +23,7 @@ public class GamificationApiController : ControllerBase
     [HttpGet("status")]
     public async Task<IActionResult> GetUserStatus()
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var user = await _context.Users
@@ -46,4 +46,5 @@ public class GamificationApiController : ControllerBase
         return (xp / 1000) + 1;
     }
 }
+
 

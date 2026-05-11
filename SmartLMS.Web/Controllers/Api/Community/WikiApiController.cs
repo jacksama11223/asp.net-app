@@ -26,7 +26,7 @@ public class WikiApiController : ControllerBase
     [HttpGet("pages")]
     public async Task<IActionResult> GetUserPages()
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var pages = await _context.DocumentPages
@@ -48,7 +48,7 @@ public class WikiApiController : ControllerBase
     [HttpGet("pages/{id}")]
     public async Task<IActionResult> GetPageDetail(int id)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var page = await _context.DocumentPages
@@ -62,7 +62,7 @@ public class WikiApiController : ControllerBase
     [HttpPost("pages")]
     public async Task<IActionResult> CreatePage([FromBody] DocumentPage page)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         page.UserId = userId;
@@ -78,7 +78,7 @@ public class WikiApiController : ControllerBase
     [HttpPut("pages/{id}")]
     public async Task<IActionResult> UpdatePage(int id, [FromBody] DocumentPage update)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var page = await _context.DocumentPages.FindAsync(id);
@@ -97,7 +97,7 @@ public class WikiApiController : ControllerBase
     [HttpDelete("pages/{id}")]
     public async Task<IActionResult> DeletePage(int id)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var page = await _context.DocumentPages.FindAsync(id);
@@ -109,4 +109,5 @@ public class WikiApiController : ControllerBase
         return Ok(new { success = true });
     }
 }
+
 

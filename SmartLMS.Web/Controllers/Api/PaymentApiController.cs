@@ -28,7 +28,7 @@ public class PaymentApiController : ControllerBase
     [HttpPost("create-invoice")]
     public async Task<ActionResult> CreateInvoice([FromBody] PaymentRequest request)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("UserId");
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
         if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
 
         var course = await _context.Courses.FindAsync(request.CourseId);
@@ -59,4 +59,5 @@ public class PaymentRequest
 {
     public int CourseId { get; set; }
 }
+
 
