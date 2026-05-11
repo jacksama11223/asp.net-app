@@ -6,9 +6,9 @@ import {
   ScrollArea, NavLink, AspectRatio
 } from '@mantine/core';
 import { 
-  LuBook, LuCode, LuFileText, LuMessageSquare, 
-  LuStar, LuHeart, LuArrowLeft, LuPlay, 
-  LuCheck, LuInfo, LuPenTool, LuZap, LuExternalLink
+  LuBookOpen, LuSettings, LuZap, LuUsers, 
+  LuSparkles, LuLayoutDashboard, LuArrowLeft, LuPlay, 
+  LuPenTool, LuExternalLink, LuSearch, LuSend
 } from 'react-icons/lu';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -76,7 +76,7 @@ export const StudyWorkspace = () => {
             Quay lại Kho khóa học
           </Button>
           <Group>
-            <Badge size="lg" color="brand" variant="light" leftSection={<LuStar size={12} />}>Premium Learner</Badge>
+            <Badge size="lg" color="brand" variant="light" leftSection={<LuSparkles size={12} />}>Premium Learner</Badge>
           </Group>
         </Group>
 
@@ -85,7 +85,7 @@ export const StudyWorkspace = () => {
           <Grid.Col span={{ base: 12, md: 3 }}>
             <Paper radius="xl" p="md" withBorder className="glass shadow-sm sticky top-4">
               <Group mb="md" px="xs">
-                <LuBook size={18} className="text-brand-500" />
+                <LuBookOpen size={18} className="text-brand-500" />
                 <Title order={4}>Lộ trình học tập</Title>
               </Group>
               <ScrollArea h="calc(100vh - 200px)" offsetScrollbars>
@@ -102,7 +102,7 @@ export const StudyWorkspace = () => {
                           description={lesson.lessonType}
                           leftSection={
                             <ThemeIcon size="sm" variant="light" color={lesson.lessonType === 'Video' ? 'blue' : 'teal'}>
-                              {lesson.lessonType === 'Video' ? <LuPlay size={12} /> : <LuFileText size={12} />}
+                              {lesson.lessonType === 'Video' ? <LuPlay size={12} /> : <LuSettings size={12} />}
                             </ThemeIcon>
                           }
                           active={selectedLesson?.lessonId === lesson.lessonId}
@@ -133,7 +133,7 @@ export const StudyWorkspace = () => {
                       </Text>
                     </Box>
                     <Group>
-                       <Button variant="light" color="orange" leftSection={<LuHeart size={16} />}>
+                       <Button variant="light" color="orange" leftSection={<LuZap size={16} />}>
                         Yêu thích
                       </Button>
                     </Group>
@@ -169,7 +169,7 @@ export const StudyWorkspace = () => {
                 >
                   <Group>
                     <ThemeIcon color="brand" radius="md" size="lg" variant={activeTab === 'exercises' ? 'filled' : 'light'}>
-                      <LuBook size={20} />
+                      <LuBookOpen size={20} />
                     </ThemeIcon>
                     <Box>
                       <Text fw={700} size="sm">Hệ thống Bài tập</Text>
@@ -185,7 +185,7 @@ export const StudyWorkspace = () => {
                 >
                   <Group>
                     <ThemeIcon color="indigo" radius="md" size="lg" variant={activeTab === 'code' ? 'filled' : 'light'}>
-                      <LuCode size={20} />
+                      <LuPenTool size={20} />
                     </ThemeIcon>
                     <Box>
                       <Text fw={700} size="sm">Thực hành Code</Text>
@@ -201,7 +201,7 @@ export const StudyWorkspace = () => {
                 >
                   <Group>
                     <ThemeIcon color="teal" radius="md" size="lg" variant={activeTab === 'articles' ? 'filled' : 'light'}>
-                      <LuFileText size={20} />
+                      <LuSettings size={20} />
                     </ThemeIcon>
                     <Box>
                       <Text fw={700} size="sm">Tài liệu mở rộng</Text>
@@ -244,7 +244,7 @@ export const StudyWorkspace = () => {
                         
                         <Paper p="md" withBorder radius="md" className="hover:border-blue-500 cursor-pointer group">
                           <Group>
-                            <LuInfo className="text-blue-500 group-hover:rotate-12 transition-transform" />
+                            <LuSparkles className="text-blue-500 group-hover:rotate-12 transition-transform" />
                             <Box>
                               <Text fw={600}>Quiz kiến thức nhanh</Text>
                               <Text size="xs" c="dimmed">Tự động tạo bởi AI dựa trên nội dung bài</Text>
@@ -257,7 +257,7 @@ export const StudyWorkspace = () => {
                     {/* Code Panel */}
                     {activeTab === 'code' && (
                        <Box ta="center" py={50}>
-                        <LuCode size={48} className="text-slate-200 mb-4" />
+                        <LuPenTool size={48} className="text-slate-200 mb-4" />
                         <Title order={4}>{selectedLesson?.hasChallenge ? 'Sẵn sàng thử thách?' : 'Bài học này chưa có thử thách code'}</Title>
                         {selectedLesson?.hasChallenge ? (
                           <Button 
@@ -278,7 +278,7 @@ export const StudyWorkspace = () => {
                         <Title order={3}>📄 Tài liệu giáo trình</Title>
                         <Paper p="md" withBorder radius="md" className="flex justify-between items-center hover:bg-slate-50 transition-colors">
                           <Group>
-                            <LuFileText className="text-teal-500" />
+                            <LuSettings className="text-teal-500" />
                             <Box>
                                <Text fw={600}>Slide bài giảng: {selectedLesson?.title}</Text>
                                <Text size="xs" c="dimmed">Định dạng: PDF • 1.2 MB</Text>
@@ -298,7 +298,7 @@ export const StudyWorkspace = () => {
               <SimpleGrid cols={2}>
                   <Button 
                     variant="light" color="blue" fullWidth radius="xl" size="md"
-                    leftSection={<LuMessageSquare size={16} />}
+                    leftSection={<LuSend size={16} />}
                     className="hover:shadow-md transition-shadow"
                   >
                     Hỏi giảng viên (Live Chat)

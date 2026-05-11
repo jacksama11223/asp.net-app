@@ -12,8 +12,11 @@ const targetFiles = [
 // Các component/icon thường gây lỗi nếu khác version
 const forbiddenStrings = ['TypographyStylesProvider', 'LuLayout', 'LuMoreVertical', 'LuCheckCheck', 'LuMoreHorizontal', 'LuCheck']; 
 
+// Các Icon đã được kiểm chứng là chạy tốt trên Server (từ Sidebar.jsx)
+const safeIcons = ['LuLayoutDashboard', 'LuBookOpen', 'LuUsers', 'LuZap', 'LuSettings', 'LuLogOut', 'LuSparkles', 'LuPlus', 'LuPenTool', 'LuClock', 'LuEye', 'LuSearch', 'LuSend', 'LuArrowLeft', 'LuPlay', 'LuExternalLink'];
+
 console.log("==================================================");
-console.log("🔍 KIỂM TRA ĐỘ TƯƠNG THÍCH FRONTEND TRƯỚC KHI BUILD");
+console.log("🔍 KIỂM TRA ĐỘ TƯƠNG THÍCH FRONTEND (LOCAL TEST)");
 console.log("==================================================\n");
 
 let hasError = false;
@@ -25,8 +28,16 @@ targetFiles.forEach(file => {
         forbiddenStrings.forEach(str => {
             const regex = new RegExp(`\\b${str}\\b`);
             if (regex.test(content)) {
-                console.log(`❌ LỖI: Vẫn tìm thấy chuỗi '${str}' trong file ${path.basename(file)}.`);
+                console.log(`❌ LỖI NGHIÊM TRỌNG: Vẫn tìm thấy chuỗi '${str}' trong file ${path.basename(file)}.`);
                 hasError = true;
+            }
+        });
+
+        // Kiểm tra Icon lạ chưa kiểm chứng
+        const iconMatches = content.match(/Lu[A-Z][a-zA-Z]+/g) || [];
+        iconMatches.forEach(icon => {
+            if (!safeIcons.includes(icon) && !forbiddenStrings.includes(icon)) {
+                console.log(`⚠️ Cảnh báo: Icon '${icon}' trong ${path.basename(file)} chưa được kiểm chứng trên Server.`);
             }
         });
     } else {

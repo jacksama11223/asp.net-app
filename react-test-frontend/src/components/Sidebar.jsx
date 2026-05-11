@@ -4,7 +4,7 @@ import {
 } from '@mantine/core';
 import { 
   LuLayoutDashboard, LuBookOpen, LuUsers, LuZap, LuSettings, 
-  LuLogOut, LuSparkles, LuPanelLeftClose, LuPanelLeftOpen, LuMessageCircle, LuPenTool
+  LuLogOut, LuSparkles, LuArrowLeft, LuPenTool, LuSend
 } from 'react-icons/lu';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const studentNav = [
 const instructorNav = [
   { label: 'Creator Studio', icon: LuLayoutDashboard, path: '/dashboard', color: 'indigo' },
   { label: 'Quản lý Khóa học', icon: LuPenTool, path: '/creator/courses', color: 'brand' },
-  { label: 'Trung tâm Tin nhắn', icon: LuMessageCircle, path: '/creator/messages', color: 'teal' },
+  { label: 'Trung tâm Tin nhắn', icon: LuSend, path: '/creator/messages', color: 'teal' },
   { label: 'Học viên & Doanh thu', icon: LuUsers, path: '/creator/analytics', color: 'orange' },
 ];
 
@@ -59,7 +59,7 @@ export const Sidebar = ({ collapsed, onToggle }) => {
           )}
           
           <ActionIcon variant="subtle" color="gray" onClick={onToggle} title="Toggle Sidebar">
-            {collapsed ? <LuPanelLeftOpen size={20} /> : <LuPanelLeftClose size={20} />}
+            {collapsed ? <LuArrowLeft size={20} /> : <LuSettings size={20} />}
           </ActionIcon>
         </Group>
 
