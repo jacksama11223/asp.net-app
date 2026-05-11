@@ -8,7 +8,7 @@ import {
 } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 
-export const SelfQuizBuilder = () => {
+export const CommunityQuizBuilder = () => {
   const [topic, setTopic] = useState('');
   const [description, setDescription] = useState('');
   const [difficulty, setDifficulty] = useState('Medium');
