@@ -3,12 +3,12 @@ import {
   Container, Grid, Paper, Title, Text, Stack, 
   Group, Badge, ActionIcon, Box, SimpleGrid, 
   Tabs, ThemeIcon, Loader, Button, Avatar, Divider,
-  ScrollArea, NavLink, AspectRatio, TypographyStylesProvider
+  ScrollArea, NavLink, AspectRatio
 } from '@mantine/core';
 import { 
   LuBook, LuCode, LuFileText, LuMessageSquare, 
   LuStar, LuHeart, LuArrowLeft, LuPlay, 
-  LuCheck, LuInfo, LuPenTool, LuZap, LuLayout, LuExternalLink
+  LuCheck, LuInfo, LuPenTool, LuZap, LuExternalLink
 } from 'react-icons/lu';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -85,7 +85,7 @@ export const StudyWorkspace = () => {
           <Grid.Col span={{ base: 12, md: 3 }}>
             <Paper radius="xl" p="md" withBorder className="glass shadow-sm sticky top-4">
               <Group mb="md" px="xs">
-                <LuLayout size={18} className="text-brand-500" />
+                <LuBook size={18} className="text-brand-500" />
                 <Title order={4}>Lộ trình học tập</Title>
               </Group>
               <ScrollArea h="calc(100vh - 200px)" offsetScrollbars>
@@ -152,9 +152,9 @@ export const StudyWorkspace = () => {
                     </AspectRatio>
                   ) : (
                     <Paper p="xl" radius="xl" bg="slate.0" withBorder>
-                       <TypographyStylesProvider>
+                       <div className="prose max-w-none">
                           <div dangerouslySetInnerHTML={{ __html: selectedLesson?.content || "<p>Chưa có nội dung văn bản cho bài học này.</p>" }} />
-                       </TypographyStylesProvider>
+                       </div>
                     </Paper>
                   )}
                 </Stack>
