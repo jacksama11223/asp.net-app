@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Box, Title, Text, Stack, Group, Button, SimpleGrid, Paper, Badge, ActionIcon, Progress
 } from '@mantine/core';
-import { LuPlus, LuPenTool, LuMoreVertical, LuUsers, LuClock, LuEye } from 'react-icons/lu';
+import { LuPlus, LuPenTool, LuMoreHorizontal, LuUsers, LuClock, LuEye } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 
 export const CourseManager = () => {
@@ -42,7 +42,7 @@ export const CourseManager = () => {
                   {course.status}
                 </Badge>
                 <ActionIcon variant="subtle" color="gray">
-                  <LuMoreVertical size={18} />
+                  <LuMoreHorizontal size={18} />
                 </ActionIcon>
               </Group>
               

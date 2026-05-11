@@ -10,7 +10,7 @@ const targetFiles = [
 ];
 
 // Các component/icon thường gây lỗi nếu khác version
-const forbiddenStrings = ['TypographyStylesProvider', 'LuLayout']; 
+const forbiddenStrings = ['TypographyStylesProvider', 'LuLayout', 'LuMoreVertical', 'LuCheckCheck']; 
 
 console.log("==================================================");
 console.log("🔍 KIỂM TRA ĐỘ TƯƠNG THÍCH FRONTEND TRƯỚC KHI BUILD");
@@ -23,7 +23,8 @@ targetFiles.forEach(file => {
     if (fs.existsSync(file)) {
         const content = fs.readFileSync(file, 'utf8');
         forbiddenStrings.forEach(str => {
-            if (content.includes(str)) {
+            const regex = new RegExp(`\\b${str}\\b`);
+            if (regex.test(content)) {
                 console.log(`❌ LỖI: Vẫn tìm thấy chuỗi '${str}' trong file ${path.basename(file)}.`);
                 hasError = true;
             }

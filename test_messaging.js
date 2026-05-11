@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 // Cấu hình
 const BASE_URL = 'http://141.253.114.218'; 
 const INSTRUCTOR_CREDENTIALS = { username: 'admin', password: 'Admin@123456' };
@@ -11,51 +9,63 @@ let studentId = 2;
 
 async function login(credentials, role) {
     try {
-        const response = await axios.post(`${BASE_URL}/api/auth/login`, credentials);
+        const response = await fetch(`${BASE_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials)
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
         console.log(`✅ [DB AUTH] ${role} đăng nhập thành công! Token cấp phát từ ASP.NET.`);
-        return response.data.token;
+        return data.token;
     } catch (error) {
-        console.error(`❌ [LỖI DB AUTH] Không thể đăng nhập ${role}. Kiểm tra DB Connection.`, error.response?.data || error.message);
+        console.error(`❌ [LỖI DB AUTH] Không thể đăng nhập ${role}. Kiểm tra DB Connection.`, error.message);
         throw error;
     }
 }
 
 async function getUnreadCount(token, role) {
     try {
-        const response = await axios.get(`${BASE_URL}/api/messages/unread`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const response = await fetch(`${BASE_URL}/api/messages/unread`, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-        console.log(`📊 [DB QUERY] ${role} hiện có ${response.data.count} tin nhắn chưa đọc.`);
-        return response.data.count;
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log(`📊 [DB QUERY] ${role} hiện có ${data.count} tin nhắn chưa đọc.`);
+        return data.count;
     } catch (error) {
-        console.error(`❌ [LỖI DB QUERY] Không thể đếm số tin nhắn chưa đọc.`, error.response?.data || error.message);
+        console.error(`❌ [LỖI DB QUERY] Không thể đếm số tin nhắn chưa đọc.`, error.message);
     }
 }
 
 async function sendMessage(token, receiverId, courseId, content, role) {
     console.log(`\n✉️ [DB INSERT] ${role} đang ghi tin nhắn vào Database: "${content}"`);
     try {
-        const response = await axios.post(`${BASE_URL}/api/messages/send`, {
-            receiverId: receiverId,
-            courseId: courseId,
-            content: content
-        }, {
-            headers: { Authorization: `Bearer ${token}` }
+        const response = await fetch(`${BASE_URL}/api/messages/send`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({ receiverId, courseId, content })
         });
-        console.log(`✅ [DB INSERT OK] Tin nhắn đã lưu vào bảng DirectMessages (MessageId: ${response.data.messageId}).`);
-        return response.data;
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log(`✅ [DB INSERT OK] Tin nhắn đã lưu vào bảng DirectMessages (MessageId: ${data.messageId}).`);
+        return data;
     } catch (error) {
-        console.error(`❌ [LỖI DB INSERT] Ghi dữ liệu thất bại:`, error.response?.data || error.message);
+        console.error(`❌ [LỖI DB INSERT] Ghi dữ liệu thất bại:`, error.message);
     }
 }
 
 async function getChatHistory(token, courseId, otherUserId, role) {
     console.log(`\n📥 [DB SELECT & UPDATE] ${role} tải hộp thư (sẽ tự động Update IsRead = True trong DB)...`);
     try {
-        const response = await axios.get(`${BASE_URL}/api/messages/history/${courseId}/${otherUserId}`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const response = await fetch(`${BASE_URL}/api/messages/history/${courseId}/${otherUserId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-        const msgs = response.data;
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const msgs = await response.json();
         if (msgs.length === 0) {
             console.log(`⚠️ Hộp thư trống.`);
         } else {
@@ -66,7 +76,7 @@ async function getChatHistory(token, courseId, otherUserId, role) {
             });
         }
     } catch (error) {
-        console.error(`❌ Lỗi lấy lịch sử chat:`, error.response?.data || error.message);
+        console.error(`❌ Lỗi lấy lịch sử chat:`, error.message);
     }
 }
 
