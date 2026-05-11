@@ -1,5 +1,21 @@
 # Changelog - SmartLMS.AI
 
+## [2026-05-11] - Instructor Ecosystem & Study Workspace Upgrade
+### Added
+- **Creator Studio (Instructor Dashboard):** Giao diện quản trị riêng cho Giảng viên với bảng theo dõi học viên, doanh thu và công cụ tạo khóa học.
+- **Direct Messaging System:** Hệ thống nhắn tin 2 chiều giữa Giảng viên và Học viên (kèm API `MessageApiController` và Model `DirectMessage`).
+- **Rich Study Workspace:** Nâng cấp trang học tập với Video player, nội dung bài học động và tích hợp Flashcards/Code Challenges.
+- **Tools:** `test_messaging.js` (kiểm tra luồng chat) và `ui_extractor.js` (trích xuất UI cho Figma AI).
+- **Verification:** `verify_frontend.js` để kiểm tra lỗi build trước khi triển khai.
+
+### Fixed
+- Lỗi trắng màn hình (`ReferenceError: LuZap is not defined`) tại trang học tập.
+- Lỗi Build Frontend do thiếu export `TypographyStylesProvider` và `LuLayout` (đã thay thế bằng CSS classes và icon tiêu chuẩn).
+
+### Refactored
+- Tách luồng Dashboard thành `InstructorDashboard` và `StudentDashboard` dựa trên Role.
+- Làm giàu dữ liệu API `course-content` để bao gồm đầy đủ tài sản học tập liên quan.
+
 ## [2026-05-11] - Modular Refactor & Auth Fix
 ### Added
 - Tích hợp **MediatR** làm Event Bus nội bộ để tách biệt các Module.

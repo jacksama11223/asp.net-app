@@ -20,7 +20,8 @@
 - [x] Xây dựng bộ Smoke Test tự động (`verify_apis.js` & `test_courses.js`).
 
 ## Phase 4: Business & Enterprise Expansion (Current)
-- [/] **Study Module Stabilization:** Fix White Screen (LuZap) & Content richness (Video/Docs/Quiz).
+- [x] **Study Module Stabilization:** Fix White Screen (LuZap) & Content richness (Video/Docs/Quiz).
+- [x] **Creator Studio & Messaging:** Hệ thống quản trị cho Giảng viên và Chat trực tiếp Giảng viên - Học sinh.
 - [ ] Hoàn thiện luồng Thanh toán (VNPay) và Hóa đơn.
 - [ ] Kích hoạt hệ thống Affiliate và Coupon.
 - [ ] Tích hợp Zoom API cho lớp học trực tuyến.
