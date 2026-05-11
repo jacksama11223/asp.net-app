@@ -17,11 +17,11 @@ import {
 } from '@mantine/core';
 import { 
   LuSearch, 
-  LuFilter, 
+  LuSettings, 
   LuBookOpen, 
-  LuStar,
-  LuCircleAlert,
-  LuUser
+  LuSparkles,
+  LuZap,
+  LuUsers
 } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -106,7 +106,7 @@ export const Courses = () => {
         <Button 
           variant="light" 
           color="gray"
-          leftSection={<LuFilter size={18} />} 
+          leftSection={<LuSettings size={18} />} 
           size="md" 
           radius="xl"
           style={{ flexGrow: 0 }}
@@ -117,7 +117,7 @@ export const Courses = () => {
       </Group>
 
       {error && (
-        <Alert icon={<LuCircleAlert size={16} />} title="Connection Error" color="red" radius="xl" variant="light">
+        <Alert icon={<LuZap size={16} />} title="Connection Error" color="red" radius="xl" variant="light">
           {error}
         </Alert>
       )}
@@ -153,7 +153,7 @@ export const Courses = () => {
 
                   <Group gap="sm">
                     <Avatar radius="xl" size="sm" src={null} color="brand">
-                      <LuUser size={14} />
+                      <LuUsers size={14} />
                     </Avatar>
                     <Text size="sm" fw={700} className="text-slate-700">
                       {course.instructorName || "Hệ thống SmartLMS"}
@@ -170,7 +170,7 @@ export const Courses = () => {
                         {course.price === 0 ? 'FREE' : `$${course.price}`}
                       </Text>
                       <Group gap={4}>
-                        <LuStar size={10} className="text-yellow-500 fill-yellow-500" />
+                        <LuSparkles size={10} className="text-yellow-500" />
                         <Text size="10px" fw={700} c="dimmed">
                           {course.rating?.toFixed(1) || "4.5"} ({course.ratingCount || 0})
                         </Text>

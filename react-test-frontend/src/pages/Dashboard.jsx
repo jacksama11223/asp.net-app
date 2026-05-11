@@ -6,7 +6,7 @@ import {
   Paper, Grid, Title, Text, Group, SimpleGrid, Progress, Badge, ThemeIcon, Box, Stack, Button, Loader, Table, ActionIcon, Modal, Textarea, ScrollArea, Avatar
 } from '@mantine/core';
 import { 
-  LuTrendingUp, LuCircleCheck, LuClock, LuZap, LuBookOpen, LuUsers, LuDownload, LuTriangleAlert, LuPlus, LuMessageCircle, LuSend, LuPlay
+  LuTrendingUp, LuCircleCheck, LuClock, LuZap, LuBookOpen, LuUsers, LuDownload, LuTriangleAlert, LuPlus, LuSend, LuPlay
 } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';

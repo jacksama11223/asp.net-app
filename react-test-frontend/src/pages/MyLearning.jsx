@@ -5,8 +5,8 @@ import {
   ActionIcon, ThemeIcon, Grid, RingProgress
 } from '@mantine/core';
 import { 
-  LuTrophy, LuBookOpen, LuBrain, 
-  LuArrowRight, LuCalendarDays, LuTarget, LuFlame, LuInfo
+  LuTrophy, LuBookOpen, LuUsers, 
+  LuArrowLeft, LuClock, LuZap, LuSearch, LuSparkles
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';

@@ -4,8 +4,8 @@ import {
   UnstyledButton, Group, Divider, TextInput, Tooltip
 } from '@mantine/core';
 import { 
-  LuPlus, LuFileText, LuHash, LuSettings, 
-  LuShare2, LuTrash2, LuMenu, LuChevronRight
+  LuPlus, LuBookOpen, LuSettings, 
+  LuSend, LuZap, LuSearch
 } from 'react-icons/lu';
 import axios from 'axios';
 import { BASE_URL } from '../api';
@@ -61,7 +61,7 @@ export const PersonalWiki = () => {
                 : 'hover:bg-slate-100/50 text-slate-600'
               }`}
             >
-              <LuFileText size={18} className={selectedPage?.documentPageId === page.documentPageId ? 'text-brand-500' : 'text-slate-400'} />
+              <LuBookOpen size={18} className={selectedPage?.documentPageId === page.documentPageId ? 'text-brand-500' : 'text-slate-400'} />
               <Text size="sm" fw={600} truncate>{page.title || 'Untitled'}</Text>
             </UnstyledButton>
           ))}
@@ -70,7 +70,7 @@ export const PersonalWiki = () => {
         <Divider my="md" />
         <Stack gap={4}>
           <UnstyledButton className="p-2 rounded-lg hover:bg-slate-100/50 flex items-center gap-3 text-slate-500">
-            <LuTrash2 size={18} />
+            <LuZap size={18} />
             <Text size="sm" fw={600}>Thùng rác</Text>
           </UnstyledButton>
           <UnstyledButton className="p-2 rounded-lg hover:bg-slate-100/50 flex items-center gap-3 text-slate-500">
@@ -89,8 +89,8 @@ export const PersonalWiki = () => {
                 <Text size="32px">📄</Text>
               </Box>
               <Group>
-                <Button variant="light" color="gray" leftSection={<LuShare2 size={16} />}>Chia sẻ</Button>
-                <ActionIcon variant="subtle" color="gray" size="lg"><LuMenu size={20} /></ActionIcon>
+                <Button variant="light" color="gray" leftSection={<LuSend size={16} />}>Chia sẻ</Button>
+                <ActionIcon variant="subtle" color="gray" size="lg"><LuSettings size={20} /></ActionIcon>
               </Group>
             </Group>
 
@@ -120,7 +120,7 @@ export const PersonalWiki = () => {
           </Container>
         ) : (
           <Stack align="center" justify="center" h="100%" gap="md">
-            <LuFileText size={80} className="text-slate-100" />
+            <LuBookOpen size={80} className="text-slate-100" />
             <Text c="dimmed">Chọn một trang hoặc tạo trang mới để bắt đầu.</Text>
           </Stack>
         )}

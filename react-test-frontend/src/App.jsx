@@ -16,6 +16,7 @@ import { PersonalWiki } from './pages/PersonalWiki';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { CourseManager } from './pages/CourseManager';
 import { MessageCenter } from './pages/MessageCenter';
+import { CreatorAnalytics } from './pages/CreatorAnalytics';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
 
@@ -54,7 +55,7 @@ function App() {
         {/* Creator / Instructor Routes */}
         <Route path="/creator/courses" element={<ProtectedRoute><CourseManager /></ProtectedRoute>} />
         <Route path="/creator/messages" element={<ProtectedRoute><MessageCenter /></ProtectedRoute>} />
-        <Route path="/creator/analytics" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Analytics (Coming Soon)</Text></Box></ProtectedRoute>} />
+        <Route path="/creator/analytics" element={<ProtectedRoute><CreatorAnalytics /></ProtectedRoute>} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

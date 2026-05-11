@@ -21,7 +21,8 @@ const instructorNav = [
   { label: 'Creator Studio', icon: LuLayoutDashboard, path: '/dashboard', color: 'indigo' },
   { label: 'Quản lý Khóa học', icon: LuPenTool, path: '/creator/courses', color: 'brand' },
   { label: 'Trung tâm Tin nhắn', icon: LuSend, path: '/creator/messages', color: 'teal' },
-  { label: 'Học viên & Doanh thu', icon: LuUsers, path: '/creator/analytics', color: 'orange' },
+  { label: 'Analytics & Doanh thu', icon: LuZap, path: '/creator/analytics', color: 'orange' },
+  { label: 'Học viên', icon: LuUsers, path: '/creator/students', color: 'violet' },
 ];
 
 export const Sidebar = ({ collapsed, onToggle }) => {
