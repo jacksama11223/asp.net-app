@@ -4,7 +4,7 @@ import {
   Button, Group, Stack, Badge, Modal, ActionIcon, Box
 } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
-import { LuCalendar, LuClock, LuUser, LuVideo } from 'react-icons/lu';
+import { LuClock, LuClock, LuUsers, LuPlay } from 'react-icons/lu';
 import axios from 'axios';
 import { BASE_URL, getTutors, createBooking, getStudentBookings } from '../api';
 
@@ -105,12 +105,12 @@ export const BookingPage = () => {
               <Group justify="space-between">
                 <Group>
                   <ActionIcon size="xl" radius="md" variant="light" color="brand">
-                    <LuVideo size={20} />
+                    <LuPlay size={20} />
                   </ActionIcon>
                   <div>
                     <Text fw={700}>Meeting with {b.tutor?.fullName || 'Tutor'}</Text>
                     <Group gap="xs">
-                      <LuCalendar size={14} className="text-slate-400" />
+                      <LuClock size={14} className="text-slate-400" />
                       <Text size="xs" c="dimmed">{new Date(b.startTime).toLocaleString()}</Text>
                     </Group>
                   </div>
@@ -129,7 +129,7 @@ export const BookingPage = () => {
             placeholder="Pick date"
             value={date}
             onChange={setDate}
-            leftSection={<LuCalendar size={16} />}
+            leftSection={<LuClock size={16} />}
           />
           <TimeInput
             label="Pick a time"

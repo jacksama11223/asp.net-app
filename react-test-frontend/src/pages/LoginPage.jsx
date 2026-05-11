@@ -15,7 +15,7 @@ import {
   ThemeIcon,
   Alert
 } from '@mantine/core';
-import { LuZap, LuMail, LuLock, LuArrowLeft, LuCircleAlert } from 'react-icons/lu';
+import { LuZap, LuSend, LuSettings, LuArrowLeft, LuZap } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -68,7 +68,7 @@ export const LoginPage = () => {
 
         <Paper radius={24} p={40} className="bg-white/90 backdrop-blur-2xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]">
           {error && (
-            <Alert icon={<LuCircleAlert size={16} />} color="red" radius="md" mb="xl" variant="light">
+            <Alert icon={<LuZap size={16} />} color="red" radius="md" mb="xl" variant="light">
               {error}
             </Alert>
           )}
@@ -81,7 +81,7 @@ export const LoginPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuMail size={16} className="text-brand-500" />}
+                leftSection={<LuSend size={16} className="text-brand-500" />}
                 value={username}
                 onChange={(e) => setUsername(e.currentTarget.value)}
                 className="transition-all focus:scale-[1.01]"
@@ -92,7 +92,7 @@ export const LoginPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuLock size={16} className="text-brand-500" />}
+                leftSection={<LuSettings size={16} className="text-brand-500" />}
                 value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
                 className="transition-all focus:scale-[1.01]"

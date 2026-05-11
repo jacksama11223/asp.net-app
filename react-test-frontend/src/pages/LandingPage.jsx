@@ -17,11 +17,11 @@ import {
   LuZap, 
   LuBookOpen, 
   LuUsers, 
-  LuTrophy, 
-  LuChevronRight,
-  LuShield,
-  LuGlobe,
-  LuBrainCircuit
+  LuSparkles, 
+  LuPlay,
+  LuZap,
+  LuLayoutDashboard,
+  LuPenTool
 } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -119,7 +119,7 @@ export const LandingPage = () => {
                 size="xl" 
                 radius="md" 
                 color="brand" 
-                rightSection={<LuChevronRight size={20} />}
+                rightSection={<LuPlay size={20} />}
                 className="px-8 shadow-xl shadow-brand-500/30"
               >
                 Join 12,000+ Students
@@ -142,17 +142,17 @@ export const LandingPage = () => {
       <Container size="xl" py={100} id="features">
         <SimpleGrid cols={{ base: 1, md: 3 }} spacing={30}>
           <Feature 
-            icon={LuBrainCircuit} 
+            icon={LuPenTool} 
             title="Adaptive Learning" 
             description="Our AI engine analyzes your learning patterns to create a truly personalized path that evolves with you."
           />
           <Feature 
-            icon={LuGlobe} 
+            icon={LuLayoutDashboard} 
             title="Global Community" 
             description="Connect with experts and peers from around the world. Learn, collaborate, and grow together."
           />
           <Feature 
-            icon={LuTrophy} 
+            icon={LuSparkles} 
             title="Verified Rewards" 
             description="Earn industry-recognized certificates and NFT-backed badges that showcase your real-world skills."
           />
@@ -189,7 +189,7 @@ export const LandingPage = () => {
           <Group justify="space-between">
             <Text size="sm" c="dimmed">© 2026 SmartLMS.AI. All rights reserved.</Text>
             <Group gap="md">
-              <ActionIcon variant="subtle" color="gray" size="lg"><LuShield size={20} /></ActionIcon>
+              <ActionIcon variant="subtle" color="gray" size="lg"><LuZap size={20} /></ActionIcon>
               <ActionIcon variant="subtle" color="gray" size="lg"><LuUsers size={20} /></ActionIcon>
             </Group>
           </Group>

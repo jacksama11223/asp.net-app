@@ -12,6 +12,8 @@ import { CourseDetails } from './pages/CourseDetails';
 import { MyLearning } from './pages/MyLearning';
 import { StudyWorkspace } from './pages/StudyWorkspace';
 import { Community } from './pages/Community';
+import { CommunityNewPost } from './pages/CommunityNewPost';
+import { CommunityFriends } from './pages/CommunityFriends';
 import { PersonalWiki } from './pages/PersonalWiki';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { CourseManager } from './pages/CourseManager';
@@ -44,6 +46,8 @@ function App() {
         <Route path="/course/:id" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
         <Route path="/my-learning" element={<ProtectedRoute><MyLearning /></ProtectedRoute>} />
         <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+        <Route path="/community/post/new" element={<ProtectedRoute><CommunityNewPost /></ProtectedRoute>} />
+        <Route path="/community/friends" element={<ProtectedRoute><CommunityFriends /></ProtectedRoute>} />
         <Route path="/wiki" element={<ProtectedRoute><PersonalWiki /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
         <Route path="/study/:courseId" element={<ProtectedRoute><StudyWorkspace /></ProtectedRoute>} />

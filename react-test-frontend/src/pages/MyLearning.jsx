@@ -5,7 +5,7 @@ import {
   ActionIcon, ThemeIcon, Grid, RingProgress
 } from '@mantine/core';
 import { 
-  LuTrophy, LuBookOpen, LuUsers, 
+  LuSparkles, LuBookOpen, LuUsers, 
   LuArrowLeft, LuClock, LuZap, LuSearch, LuSparkles
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
@@ -61,14 +61,14 @@ export const MyLearning = () => {
                 <Box>
                   <Text size="xs" tt="uppercase" fw={700} className="opacity-70 mb-1">Mục tiêu ngày</Text>
                   <Group gap="xs">
-                    <LuTarget size={20} className="text-yellow-400" />
+                    <LuSearch size={20} className="text-yellow-400" />
                     <Text fw={800} size="xl">2/5 <Text span size="sm" fw={500} className="opacity-80">Bài học</Text></Text>
                   </Group>
                 </Box>
                 <Box>
                   <Text size="xs" tt="uppercase" fw={700} className="opacity-70 mb-1">Đang duy trì</Text>
                   <Group gap="xs">
-                    <LuFlame size={20} className="text-orange-400" />
+                    <LuSparkles size={20} className="text-orange-400" />
                     <Text fw={800} size="xl">3 <Text span size="sm" fw={500} className="opacity-80">Ngày liên tiếp</Text></Text>
                   </Group>
                 </Box>
@@ -92,13 +92,13 @@ export const MyLearning = () => {
         {/* Nhiệm vụ hôm nay (Spaced Repetition & Weak points) */}
         <Box>
           <Title order={3} fw={800} mb="lg" className="flex items-center gap-2">
-            <LuCalendarDays className="text-brand-500" /> Nhiệm vụ hôm nay
+            <LuClock className="text-brand-500" /> Nhiệm vụ hôm nay
           </Title>
           <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
             <Card shadow="sm" radius="xl" withBorder className="border-blue-100 bg-blue-50/30 hover:shadow-md transition-shadow">
               <Group wrap="nowrap" align="flex-start">
                 <ThemeIcon size={48} radius="xl" color="blue" variant="light">
-                  <LuBrain size={24} />
+                  <LuBookOpen size={24} />
                 </ThemeIcon>
                 <Box style={{ flex: 1 }}>
                   <Group justify="space-between" mb="xs">
@@ -108,7 +108,7 @@ export const MyLearning = () => {
                   <Text size="sm" c="dimmed" mb="md">
                     Hệ thống AI đã chọn ra các thẻ nhớ cần ôn tập để củng cố trí nhớ dài hạn của bạn.
                   </Text>
-                  <Button variant="light" color="blue" fullWidth rightSection={<LuArrowRight size={16} />}>
+                  <Button variant="light" color="blue" fullWidth rightSection={<LuPlay size={16} />}>
                     Bắt đầu ôn tập
                   </Button>
                 </Box>
@@ -118,7 +118,7 @@ export const MyLearning = () => {
             <Card shadow="sm" radius="xl" withBorder className="border-orange-100 bg-orange-50/30 hover:shadow-md transition-shadow">
               <Group wrap="nowrap" align="flex-start">
                 <ThemeIcon size={48} radius="xl" color="orange" variant="light">
-                  <LuInfo size={24} />
+                  <LuSettings size={24} />
                 </ThemeIcon>
                 <Box style={{ flex: 1 }}>
                   <Group justify="space-between" mb="xs">
@@ -128,7 +128,7 @@ export const MyLearning = () => {
                   <Text size="sm" c="dimmed" mb="md">
                     Các bài tập được AI tự động tạo ra dựa trên những lỗi sai gần đây của bạn trong phần C# Basics.
                   </Text>
-                  <Button variant="light" color="orange" fullWidth rightSection={<LuArrowRight size={16} />}>
+                  <Button variant="light" color="orange" fullWidth rightSection={<LuPlay size={16} />}>
                     Luyện tập ngay
                   </Button>
                 </Box>
@@ -191,7 +191,7 @@ export const MyLearning = () => {
                     <Box mt="auto" pt="sm">
                       <Group justify="space-between" mb={4}>
                         <Text size="xs" fw={700} c="brand">{enrollment.progress || 0}% Đã hoàn thành</Text>
-                        {enrollment.progress === 100 && <LuTrophy size={14} className="text-yellow-500" />}
+                        {enrollment.progress === 100 && <LuSparkles size={14} className="text-yellow-500" />}
                       </Group>
                       <Progress 
                         value={enrollment.progress || 0} 
@@ -210,7 +210,7 @@ export const MyLearning = () => {
                     radius="md"
                     variant={enrollment.progress === 100 ? 'light' : 'filled'}
                     color={enrollment.progress === 100 ? 'green' : 'brand'}
-                    rightSection={<LuArrowRight size={16} />}
+                    rightSection={<LuPlay size={16} />}
                     onClick={() => navigate(`/study/${enrollment.courseId}`)}
                   >
                     {enrollment.progress === 100 ? 'Xem lại' : (enrollment.progress > 0 ? 'Học tiếp' : 'Vào học ngay')}

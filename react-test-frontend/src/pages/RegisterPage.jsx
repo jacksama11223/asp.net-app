@@ -13,7 +13,7 @@ import {
   ThemeIcon,
   Alert
 } from '@mantine/core';
-import { LuZap, LuMail, LuLock, LuUser, LuArrowLeft, LuCircleAlert, LuCircleCheck } from 'react-icons/lu';
+import { LuZap, LuSend, LuSettings, LuUsers, LuArrowLeft, LuZap, LuZap } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -83,12 +83,12 @@ export const RegisterPage = () => {
 
         <Paper radius={24} p={40} className="bg-white/90 backdrop-blur-2xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]">
           {error && (
-            <Alert icon={<LuCircleAlert size={16} />} color="red" radius="md" mb="xl" variant="light">
+            <Alert icon={<LuZap size={16} />} color="red" radius="md" mb="xl" variant="light">
               {error}
             </Alert>
           )}
           {success && (
-            <Alert icon={<LuCircleCheck size={16} />} color="teal" radius="md" mb="xl" variant="light">
+            <Alert icon={<LuZap size={16} />} color="teal" radius="md" mb="xl" variant="light">
               Đăng ký thành công! Đang chuyển hướng tới đăng nhập...
             </Alert>
           )}
@@ -101,7 +101,7 @@ export const RegisterPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuUser size={16} className="text-brand-500" />}
+                leftSection={<LuUsers size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                 className="transition-all focus:scale-[1.01]"
               />
@@ -111,7 +111,7 @@ export const RegisterPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuUser size={16} className="text-brand-500" />}
+                leftSection={<LuUsers size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, username: e.target.value})}
                 className="transition-all focus:scale-[1.01]"
               />
@@ -121,7 +121,7 @@ export const RegisterPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuMail size={16} className="text-brand-500" />}
+                leftSection={<LuSend size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 className="transition-all focus:scale-[1.01]"
               />
@@ -131,7 +131,7 @@ export const RegisterPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuLock size={16} className="text-brand-500" />}
+                leftSection={<LuSettings size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 className="transition-all focus:scale-[1.01]"
               />
@@ -141,7 +141,7 @@ export const RegisterPage = () => {
                 required 
                 size="md"
                 radius="md"
-                leftSection={<LuLock size={16} className="text-brand-500" />}
+                leftSection={<LuSettings size={16} className="text-brand-500" />}
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                 className="transition-all focus:scale-[1.01]"
               />

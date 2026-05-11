@@ -13,6 +13,7 @@ const studentNav = [
   { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
   { label: 'Kho khóa học', icon: LuBookOpen, path: '/my-learning', color: 'teal' },
   { label: 'Cộng đồng', icon: LuUsers, path: '/community', color: 'blue' },
+  { label: 'Bạn bè', icon: LuUsers, path: '/community/friends', color: 'pink' },
   { label: 'Wiki cá nhân', icon: LuSparkles, path: '/wiki', color: 'violet' },
   { label: 'Success Engine', icon: LuZap, path: '/ai', color: 'orange' },
 ];

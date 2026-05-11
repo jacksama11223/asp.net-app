@@ -307,11 +307,11 @@ function testFrontendRoutes() {
     { path: '/creator/courses', name: 'Creator - Course Manager' },
     { path: '/creator/messages', name: 'Creator - Message Center' },
     { path: '/creator/analytics', name: 'Creator - Analytics' },
+    { path: '/community/post/new', name: 'Community - New Post' },
+    { path: '/community/friends', name: 'Friend Module' },
   ];
 
   const missingRoutes = [
-    { path: '/community/post/new', name: 'Community - New Post [MISSING - Sprint 2]' },
-    { path: '/community/friends', name: 'Friend Module [MISSING - Sprint 2]' },
     { path: '/community/quiz-builder', name: 'Self Quiz Builder [MISSING - Sprint 3]' },
     { path: '/tutor/dashboard', name: 'Tutor Dashboard [MISSING - Sprint 3]' },
   ];

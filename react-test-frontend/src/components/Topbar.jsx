@@ -17,13 +17,13 @@ import {
 } from '@mantine/core';
 import { 
   LuSearch, 
-  LuBell, 
-  LuChevronDown,
+  LuZap, 
+  LuSettings,
   LuSettings,
   LuUsers,
   LuLogOut,
   LuSparkles,
-  LuFlame,
+  LuSparkles,
   LuZap
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
@@ -93,7 +93,7 @@ export const Topbar = () => {
       <Group gap="lg">
         {/* Gamification Stats */}
         <Group gap="xs" className="bg-orange-50/50 px-3 py-1.5 rounded-full border border-orange-100">
-          <LuFlame size={18} className="text-orange-500" />
+          <LuSparkles size={18} className="text-orange-500" />
           <Text fw={800} className="text-orange-600">{gamification.currentStreak}</Text>
         </Group>
         
@@ -107,7 +107,7 @@ export const Topbar = () => {
           <Popover.Target>
             <Indicator color="red" offset={4} size={10} disabled={unreadCount === 0} label={unreadCount} withBorder processing>
               <ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5">
-                <LuBell size={20} className="text-slate-600" />
+                <LuZap size={20} className="text-slate-600" />
               </ActionIcon>
             </Indicator>
           </Popover.Target>
@@ -153,7 +153,7 @@ export const Topbar = () => {
                 <Avatar size="md" radius="lg" src={null} color="brand" className="shadow-lg shadow-brand-500/20">
                   <LuSparkles size={18} />
                 </Avatar>
-                <LuChevronDown size={14} className="text-slate-400" />
+                <LuSettings size={14} className="text-slate-400" />
               </Group>
             </UnstyledButton>
           </Menu.Target>

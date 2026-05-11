@@ -110,7 +110,7 @@ export const PersonalWiki = () => {
 
             <Box mt={100} className="bg-brand-50/50 p-6 rounded-3xl border border-brand-100">
               <Group>
-                <ThemeIcon color="brand" radius="xl" size="lg"><LuHash size={20} /></ThemeIcon>
+                <ThemeIcon color="brand" radius="xl" size="lg"><LuSettings size={20} /></ThemeIcon>
                 <Box>
                   <Text fw={700} c="brand-700">Mẹo nhỏ từ AI</Text>
                   <Text size="sm" c="brand-600">Bạn có thể bôi đen bất kỳ đoạn văn bản nào để tạo nhanh Thẻ nhớ (Flashcard) ôn tập đấy!</Text>

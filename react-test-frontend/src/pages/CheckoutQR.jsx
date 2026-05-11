@@ -15,10 +15,10 @@ import {
   Divider
 } from '@mantine/core';
 import { 
-  LuCheck, 
-  LuCopy, 
-  LuCircleAlert,
-  LuBanknote,
+  LuSparkles, 
+  LuExternalLink, 
+  LuZap,
+  LuZap,
   LuZap
 } from 'react-icons/lu';
 import { QRCodeSVG } from 'qrcode.react';
@@ -146,7 +146,7 @@ export const CheckoutQR = () => {
 
   if (error) {
     return (
-      <Alert icon={<LuCircleAlert size={16} />} title="Lỗi thanh toán" color="red" radius="md">
+      <Alert icon={<LuZap size={16} />} title="Lỗi thanh toán" color="red" radius="md">
         {error}
       </Alert>
     );
@@ -210,7 +210,7 @@ export const CheckoutQR = () => {
                   <CopyButton value={accountNo} timeout={2000}>
                     {({ copied, copy }) => (
                       <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="subtle">
-                        {copied ? <LuCheck size={16} /> : <LuCopy size={16} />}
+                        {copied ? <LuSparkles size={16} /> : <LuExternalLink size={16} />}
                       </ActionIcon>
                     )}
                   </CopyButton>
@@ -227,7 +227,7 @@ export const CheckoutQR = () => {
                   <CopyButton value={memo} timeout={2000}>
                     {({ copied, copy }) => (
                       <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="subtle">
-                        {copied ? <LuCheck size={16} /> : <LuCopy size={16} />}
+                        {copied ? <LuSparkles size={16} /> : <LuExternalLink size={16} />}
                       </ActionIcon>
                     )}
                   </CopyButton>
@@ -242,7 +242,7 @@ export const CheckoutQR = () => {
                 mt="sm" 
                 color="brand" 
                 onClick={handleVNPay} 
-                leftSection={<LuBanknote size={16} />}
+                leftSection={<LuZap size={16} />}
                 loading={loadingVNPay}
               >
                 Thanh toán qua VNPay
@@ -251,7 +251,7 @@ export const CheckoutQR = () => {
 
             <Alert icon={<LuZap size={16} />} title="Giả lập thanh toán (Test)" color="blue" variant="light" mt="md" w="100%">
               Nhấn nút dưới đây để giả lập ngân hàng gửi Webhook báo đã nhận tiền.
-              <Button fullWidth mt="sm" onClick={handleMockPay} leftSection={<LuBanknote size={16} />}>
+              <Button fullWidth mt="sm" onClick={handleMockPay} leftSection={<LuZap size={16} />}>
                 Giả lập Đã Chuyển Tiền
               </Button>
             </Alert>
@@ -261,7 +261,7 @@ export const CheckoutQR = () => {
         <Card shadow="xl" padding="xl" radius="xl" className="w-full max-w-md text-center bg-gradient-to-br from-green-50 to-emerald-100 border border-green-200">
           <Stack align="center" gap="lg">
             <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30">
-              <LuCheck size={48} className="text-white" />
+              <LuSparkles size={48} className="text-white" />
             </div>
             <Title order={3} className="text-green-800">Thanh Toán Thành Công!</Title>
             <Text c="dimmed">

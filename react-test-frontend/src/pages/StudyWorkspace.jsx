@@ -3,7 +3,7 @@ import {
   Container, Grid, Paper, Title, Text, Stack, 
   Group, Badge, ActionIcon, Box, SimpleGrid, 
   Tabs, ThemeIcon, Loader, Button, Avatar, Divider,
-  ScrollArea, NavLink, AspectRatio
+  ScrollArea, NavLink, AspectRatio, RingProgress
 } from '@mantine/core';
 import { 
   LuBookOpen, LuSettings, LuZap, LuUsers, 
@@ -22,6 +22,8 @@ export const StudyWorkspace = () => {
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [bookmarked, setBookmarked] = useState(false);
+  const [completionRate, setCompletionRate] = useState(45); // Mock completion rate
 
   const token = localStorage.getItem('slms_token');
   const apiClient = axios.create({
@@ -76,6 +78,12 @@ export const StudyWorkspace = () => {
             Quay lại Kho khóa học
           </Button>
           <Group>
+            <RingProgress
+              size={50}
+              thickness={4}
+              sections={[{ value: completionRate, color: 'brand' }]}
+              label={<Text ta="center" size="xs" fw={700}>{completionRate}%</Text>}
+            />
             <Badge size="lg" color="brand" variant="light" leftSection={<LuSparkles size={12} />}>Premium Learner</Badge>
           </Group>
         </Group>
@@ -133,8 +141,13 @@ export const StudyWorkspace = () => {
                       </Text>
                     </Box>
                     <Group>
-                       <Button variant="light" color="orange" leftSection={<LuZap size={16} />}>
-                        Yêu thích
+                       <Button 
+                        variant={bookmarked ? "filled" : "light"} 
+                        color="orange" 
+                        leftSection={<LuZap size={16} />}
+                        onClick={() => setBookmarked(!bookmarked)}
+                      >
+                        {bookmarked ? "Đã lưu dấu trang" : "Đánh dấu trang"}
                       </Button>
                     </Group>
                   </Group>
@@ -206,6 +219,21 @@ export const StudyWorkspace = () => {
                     <Box>
                       <Text fw={700} size="sm">Tài liệu mở rộng</Text>
                       <Text size="xs" c="dimmed">PDF & Slide bài giảng</Text>
+                    </Box>
+                  </Group>
+                </Paper>
+                <Paper 
+                  radius="xl" p="lg" withBorder 
+                  className={`cursor-pointer transition-all border-2 ${activeTab === 'weakPoints' ? 'border-red-500 bg-red-50/50 shadow-md' : 'border-transparent hover:bg-white'}`}
+                  onClick={() => setActiveTab('weakPoints')}
+                >
+                  <Group>
+                    <ThemeIcon color="red" radius="md" size="lg" variant={activeTab === 'weakPoints' ? 'filled' : 'light'}>
+                      <LuSearch size={20} />
+                    </ThemeIcon>
+                    <Box>
+                      <Text fw={700} size="sm">Điểm yếu của tôi</Text>
+                      <Text size="xs" c="dimmed">Phân tích bằng AI</Text>
                     </Box>
                   </Group>
                 </Paper>
@@ -290,18 +318,56 @@ export const StudyWorkspace = () => {
                         <Text size="sm" c="dimmed" ta="center">Không có tài liệu tham khảo bổ sung.</Text>
                       </Stack>
                     )}
+                    {/* Weak Points Panel */}
+                    {activeTab === 'weakPoints' && (
+                      <Stack>
+                        <Title order={3}>🎯 Phân tích điểm yếu</Title>
+                        <Text c="dimmed" size="sm">Dựa trên kết quả bài tập Flashcard và Quiz, hệ thống AI phát hiện bạn thường xuyên sai ở các chủ đề sau:</Text>
+                        <SimpleGrid cols={2} spacing="md">
+                          <Paper p="md" withBorder radius="md" className="border-red-200 bg-red-50">
+                            <Group justify="space-between" mb="xs">
+                              <Badge color="red" variant="filled">Khái niệm cốt lõi</Badge>
+                              <Text size="xs" fw={700} c="red">Sai 4 lần</Text>
+                            </Group>
+                            <Text size="sm" fw={600}>Dependency Injection Lifecycle</Text>
+                            <Text size="xs" c="dimmed" mt="xs">Khuyên dùng: Xem lại Module 2, Bài 3</Text>
+                          </Paper>
+                          <Paper p="md" withBorder radius="md" className="border-orange-200 bg-orange-50">
+                            <Group justify="space-between" mb="xs">
+                              <Badge color="orange" variant="filled">Thực hành</Badge>
+                              <Text size="xs" fw={700} c="orange">Sai 2 lần</Text>
+                            </Group>
+                            <Text size="sm" fw={600}>Kết nối Entity Framework</Text>
+                            <Text size="xs" c="dimmed" mt="xs">Khuyên dùng: Làm lại thử thách code Module 3</Text>
+                          </Paper>
+                        </SimpleGrid>
+                      </Stack>
+                    )}
                   </Paper>
                 </motion.div>
               </AnimatePresence>
 
               {/* Footer Tools */}
-              <SimpleGrid cols={2}>
+              <SimpleGrid cols={{ base: 1, sm: 3 }}>
                   <Button 
                     variant="light" color="blue" fullWidth radius="xl" size="md"
                     leftSection={<LuSend size={16} />}
                     className="hover:shadow-md transition-shadow"
+                    onClick={() => navigate('/community/post/new', { 
+                      state: { 
+                        lessonTitle: selectedLesson?.title,
+                        extractedContent: `Tôi có thắc mắc về bài học **${selectedLesson?.title || ''}**:\n\n[Mô tả vấn đề của bạn ở đây...]` 
+                      } 
+                    })}
                   >
-                    Hỏi giảng viên (Live Chat)
+                    Hỏi Cộng đồng
+                  </Button>
+                  <Button 
+                    variant="light" color="indigo" fullWidth radius="xl" size="md"
+                    leftSection={<LuUsers size={16} />}
+                    className="hover:shadow-md transition-shadow"
+                  >
+                    Hỏi giảng viên
                   </Button>
                   <Button 
                     variant="light" color="grape" fullWidth radius="xl" size="md"

@@ -6,7 +6,7 @@ import {
   Paper, Grid, Title, Text, Group, SimpleGrid, Progress, Badge, ThemeIcon, Box, Stack, Button, Loader, Table, ActionIcon, Modal, Textarea, ScrollArea, Avatar
 } from '@mantine/core';
 import { 
-  LuTrendingUp, LuCircleCheck, LuClock, LuZap, LuBookOpen, LuUsers, LuDownload, LuTriangleAlert, LuPlus, LuSend, LuPlay
+  LuSparkles, LuZap, LuClock, LuZap, LuBookOpen, LuUsers, LuPlay, LuZap, LuPlus, LuSend, LuPlay
 } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -113,7 +113,7 @@ const InstructorDashboard = ({ user, apiClient, navigate }) => {
         <StatCard label="Tổng Học Viên" value="1,245" change="+12" color="indigo" icon={LuUsers} />
         <StatCard label="Khóa Đang Dạy" value={courses.length} color="blue" icon={LuBookOpen} />
         <StatCard label="Đánh giá TB" value="4.9" change="⭐" color="yellow" icon={LuZap} />
-        <StatCard label="Doanh Thu Tháng" value="15.4M" change="+2.1M" color="teal" icon={LuTrendingUp} />
+        <StatCard label="Doanh Thu Tháng" value="15.4M" change="+2.1M" color="teal" icon={LuSparkles} />
       </SimpleGrid>
 
       <Grid gutter="xl">
@@ -152,7 +152,7 @@ const InstructorDashboard = ({ user, apiClient, navigate }) => {
                     <Table.Td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(c.price * 5)}</Table.Td>
                     <Table.Td>
                       <ActionIcon color="indigo" variant="light" onClick={() => openChat(2, c.courseId)} title="Nhắn tin cho học viên (Test)">
-                        <LuMessageCircle size={16} />
+                        <LuSend size={16} />
                       </ActionIcon>
                     </Table.Td>
                   </Table.Tr>
@@ -245,7 +245,7 @@ const StudentDashboard = ({ user, stats, chartData, navigate }) => {
       <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} gap="lg">
         <StatCard label="Total Students" value={stats?.totalStudents || 0} change="+2" color="brand" icon={LuUsers} />
         <StatCard label="Avg Completion" value={`${stats?.avgCompletionRate || 0}%`} change="+14%" color="blue" icon={LuClock} />
-        <StatCard label="Dropout Risk" value={`${stats?.dropoutRiskRate || 0}%`} change="AI" color="orange" icon={LuTriangleAlert} />
+        <StatCard label="Dropout Risk" value={`${stats?.dropoutRiskRate || 0}%`} change="AI" color="orange" icon={LuZap} />
         <StatCard label="Total Revenue" value={new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats?.totalRevenue || 0)} change="LIVE" color="teal" icon={LuZap} />
       </SimpleGrid>
 
@@ -255,12 +255,12 @@ const StudentDashboard = ({ user, stats, chartData, navigate }) => {
             <Group justify="space-between" mb="xl">
               <Box>
                 <Group gap="xs" mb={4}>
-                  <LuTrendingUp size={20} color="var(--mantine-color-brand-600)" />
+                  <LuSparkles size={20} color="var(--mantine-color-brand-600)" />
                   <Title order={3} className="tracking-tight text-slate-800">Learning Momentum</Title>
                 </Group>
                 <Text size="xs" c="dimmed">Your engagement data over the last 30 days</Text>
               </Box>
-              <Button variant="subtle" size="xs" rightSection={<LuDownload size={14} />}>Export Analytics</Button>
+              <Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />}>Export Analytics</Button>
             </Group>
 
             <Box h={300}>
