@@ -309,12 +309,11 @@ function testFrontendRoutes() {
     { path: '/creator/analytics', name: 'Creator - Analytics' },
     { path: '/community/post/new', name: 'Community - New Post' },
     { path: '/community/friends', name: 'Friend Module' },
+    { path: '/community/quiz-builder', name: 'Self Quiz Builder' },
+    { path: '/tutor/dashboard', name: 'Tutor Dashboard' },
   ];
 
-  const missingRoutes = [
-    { path: '/community/quiz-builder', name: 'Self Quiz Builder [MISSING - Sprint 3]' },
-    { path: '/tutor/dashboard', name: 'Tutor Dashboard [MISSING - Sprint 3]' },
-  ];
+  const missingRoutes = [];
 
   requiredRoutes.forEach(route => {
     const exists = content.includes(`"${route.path}"`) || content.includes(`'${route.path}'`);

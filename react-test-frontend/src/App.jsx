@@ -14,6 +14,8 @@ import { StudyWorkspace } from './pages/StudyWorkspace';
 import { Community } from './pages/Community';
 import { CommunityNewPost } from './pages/CommunityNewPost';
 import { CommunityFriends } from './pages/CommunityFriends';
+import { CommunityQuizBuilder } from './pages/CommunityQuizBuilder';
+import { TutorDashboard } from './pages/TutorDashboard';
 import { PersonalWiki } from './pages/PersonalWiki';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { CourseManager } from './pages/CourseManager';
@@ -48,6 +50,7 @@ function App() {
         <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
         <Route path="/community/post/new" element={<ProtectedRoute><CommunityNewPost /></ProtectedRoute>} />
         <Route path="/community/friends" element={<ProtectedRoute><CommunityFriends /></ProtectedRoute>} />
+        <Route path="/community/quiz-builder" element={<ProtectedRoute><CommunityQuizBuilder /></ProtectedRoute>} />
         <Route path="/wiki" element={<ProtectedRoute><PersonalWiki /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
         <Route path="/study/:courseId" element={<ProtectedRoute><StudyWorkspace /></ProtectedRoute>} />
@@ -60,6 +63,7 @@ function App() {
         <Route path="/creator/courses" element={<ProtectedRoute><CourseManager /></ProtectedRoute>} />
         <Route path="/creator/messages" element={<ProtectedRoute><MessageCenter /></ProtectedRoute>} />
         <Route path="/creator/analytics" element={<ProtectedRoute><CreatorAnalytics /></ProtectedRoute>} />
+        <Route path="/tutor/dashboard" element={<ProtectedRoute><TutorDashboard /></ProtectedRoute>} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
