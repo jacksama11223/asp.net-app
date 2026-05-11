@@ -22,12 +22,15 @@
 ## Phase 4: Business & Enterprise Expansion (Current)
 - [x] **Study Module Stabilization:** Fix White Screen (LuZap) & Content richness (Video/Docs/Quiz).
 - [x] **Creator Studio & Messaging:** Hệ thống quản trị cho Giảng viên và Chat trực tiếp Giảng viên - Học sinh.
+- [x] **Smart-Collapse Sidebar:** Sidebar co giãn với RBAC (Role-Based Navigation) tự động nhận diện Giảng viên/Học viên.
+- [x] **Icon SafeList & Build Hardening:** Thay thế toàn bộ icon không tương thích bằng SafeIcons đã kiểm chứng. Script `verify_frontend.js` được nâng cấp để cảnh báo icon lạ trước khi build.
 - [ ] Hoàn thiện luồng Thanh toán (VNPay) và Hóa đơn.
 - [ ] Kích hoạt hệ thống Affiliate và Coupon.
 - [ ] Tích hợp Zoom API cho lớp học trực tuyến.
 - [ ] Triển khai Coding Challenge engine hoàn chỉnh.
 
 ## Phase 5: UI/UX Premium & Optimization (Next)
-- [ ] Redesign Dashboard theo chuẩn SaaS Premium (Dark mode, Glassmorphism).
+- [ ] Tích hợp biểu đồ Doanh thu & Analytics thời gian thực vào Creator Studio.
+- [ ] Redesign Dashboard theo chuẩn SaaS Premium (Dark mode, Glassmorphism đồng bộ toàn hệ thống).
 - [ ] Tối ưu hóa hiệu năng SQL (Stored Procedures, Index tuning).
 - [ ] Mở rộng hệ thống Webhooks cho đối tác Enterprise.

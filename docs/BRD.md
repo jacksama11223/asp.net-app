@@ -5,8 +5,8 @@
 ### 1.1 Hệ thống Quản lý Học tập (LMS & Content)
 - **Curriculum:** Quản lý Course -> Module -> Lesson. Hỗ trợ nhiều loại nội dung (Video, Document).
 - **Interactive Workspace:** Hệ thống Flashcards (Spaced Repetition), Mistake Notebook (Sổ tay lỗi sai), và đặt câu hỏi ngay trong bài học.
-- **Creator Studio (Instructor Dashboard):** Giao diện quản trị dành riêng cho giảng viên để thiết kế khóa học, theo dõi số lượng học viên, doanh thu và tiến độ thực tế.
-- **Direct Messaging:** Hệ thống nhắn tin 2 chiều giữa Giảng viên và Học viên để giải đáp thắc mắc và hỗ trợ học tập trực tiếp.
+- **Creator Studio (Instructor Dashboard):** Giao diện quản trị dành riêng cho Giảng viên với Sidebar co giãn (Smart-Collapse), theo dõi học viên, doanh thu và tiến độ thực tế trên từng khóa học.
+- **Direct Messaging:** Hệ thống Inbox tập trung, Glassmorphism UI, hỗ trợ trao đổi 2 chiều giữa Giảng viên và Học viên theo từng khóa học cụ thể.
 - **Live Classes:** Tích hợp Zoom API để tổ chức các buổi học trực tuyến đồng bộ.
 - **Coding Challenge:** Engine thực thi code (CompilerService) hỗ trợ làm bài tập lập trình trực tiếp, kiểm tra qua TestCases.
 
@@ -36,8 +36,8 @@
 - **Database:** MariaDB (MySQL compatible).
 - **Caching & Queue:** Redis (Leaderboard), Hangfire (Emails, Background tasks).
 - **Communication:** MediatR (In-process Event Bus) cho Modular Monolith.
-- **Frontend:** React + Vite, Axios, Lucide Icons.
-- **DevOps:** Docker (Multi-stage build), Nginx Reverse Proxy.
+- **Frontend:** React + Vite, Mantine UI, Framer Motion, react-icons/lu (SafeIcons only), Axios.
+- **DevOps:** Docker (Multi-stage build), Nginx Reverse Proxy, `verify_frontend.js` (pre-build static analysis).
 
 ## 3. Quy tắc phát triển (Do's & Don'ts)
 - **DO:** Luôn sử dụng `_mediator.Publish()` khi một hành động ở module này cần tác động đến module khác.

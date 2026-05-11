@@ -1,5 +1,16 @@
 # Changelog - SmartLMS.AI
 
+## [2026-05-11] - Icon SafeList Hardening & Creator Studio UI Polish
+### Fixed
+- **Build Stability:** Thay thế triệt để toàn bộ icon không tương thích với phiên bản `react-icons` trên VPS:
+  - `StudyWorkspace.jsx`: Thay `LuBook`, `LuCode`, `LuFileText`, `LuHeart`, `LuStar`, `LuInfo`, `LuMessageSquare`, `LuCheck` → bộ SafeIcons.
+  - `Sidebar.jsx`: Thay `LuPanelLeftClose`, `LuPanelLeftOpen`, `LuMessageCircle` → `LuArrowLeft`, `LuSettings`, `LuSend`.
+  - `CourseManager.jsx` & `MessageCenter.jsx`: Thay `LuMoreVertical`, `LuCheckCheck`, `LuMoreHorizontal`, `LuCheck` → `LuSettings`, `LuZap`.
+
+### Refactored
+- **`verify_frontend.js` v2:** Nâng cấp script kiểm tra từ "Blacklist" sang "SafeList + Blacklist". Script giờ sẽ cảnh báo (`⚠️`) với icon chưa kiểm chứng và báo lỗi nghiêm trọng (`❌`) với icon bị cấm — trước khi build trên VPS.
+- **SafeIcons Registry:** Danh sách 16 icon đã kiểm chứng: `LuLayoutDashboard`, `LuBookOpen`, `LuUsers`, `LuZap`, `LuSettings`, `LuLogOut`, `LuSparkles`, `LuPlus`, `LuPenTool`, `LuEye`, `LuSearch`, `LuSend`, `LuArrowLeft`, `LuPlay`, `LuExternalLink`, `LuClock`.
+
 ## [2026-05-11] - Instructor Ecosystem & Study Workspace Upgrade
 ### Added
 - **Creator Studio (Instructor Dashboard):** Giao diện quản trị riêng cho Giảng viên với bảng theo dõi học viên, doanh thu và công cụ tạo khóa học.
