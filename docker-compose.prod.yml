@@ -14,10 +14,10 @@ services:
       - mariadb-data:/var/lib/mysql
     mem_limit: 150m
     command: >
-      --innodb-buffer-pool-size=64M
-      --innodb-log-file-size=32M
-      --max-connections=200
-      --tmp-table-size=16M
+      --innodb-buffer-pool-size=128M
+      --innodb-log-file-size=64M
+      --max-connections=1000
+      --tmp-table-size=32M
       --query-cache-size=0
     healthcheck:
       test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
@@ -39,8 +39,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
-      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=500;
+      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=500;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
       - COMPlus_gcServer=0

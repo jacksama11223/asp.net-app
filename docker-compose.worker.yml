@@ -8,7 +8,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
       # ✅ Kết nối về VPS-A (Thay IP_VPS_A bằng 141.253.114.218)
-      - ConnectionStrings__DefaultConnection=Server=141.253.114.218;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
+      - ConnectionStrings__DefaultConnection=Server=141.253.114.218;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=500;
       - Redis__ConnectionString=141.253.114.218:6379,password=YourRedisPass
     ports:
       - "5181:8080"
