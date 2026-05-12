@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AppShell, Container } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { motion } from 'framer-motion';
@@ -7,22 +8,31 @@ import { motion } from 'framer-motion';
 export const Layout = ({ children }) => {
   // Sidebar mặc định đóng theo yêu cầu
   const [collapsed, setCollapsed] = useState(true);
+  const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] = useDisclosure();
 
   return (
     <AppShell
-      header={{ height: 80 }}
-      navbar={{ width: collapsed ? 80 : 280, breakpoint: 'sm' }}
-      padding="xl"
+      header={{ height: { base: 60, sm: 80 } }}
+      navbar={{ 
+        width: { base: 280, sm: collapsed ? 80 : 280 },
+        breakpoint: 'sm',
+        collapsed: { mobile: !mobileOpened, desktop: false }
+      }}
+      padding={{ base: 'md', sm: 'xl' }}
       className="bg-slate-50 relative overflow-hidden transition-all duration-300"
     >
       <div className="absolute inset-0 bg-mesh-gradient opacity-40 pointer-events-none" />
       
       <AppShell.Header className="bg-white/40 backdrop-blur-xl border-b border-black/5 z-50">
-        <Topbar />
+        <Topbar mobileOpened={mobileOpened} toggleMobile={toggleMobile} />
       </AppShell.Header>
 
       <AppShell.Navbar className="bg-transparent border-none z-40 transition-all duration-300">
-        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
+        <Sidebar 
+          collapsed={collapsed} 
+          onToggle={() => setCollapsed(!collapsed)} 
+          closeMobile={closeMobile}
+        />
       </AppShell.Navbar>
 
       <AppShell.Main className="relative z-10 transition-all duration-300">

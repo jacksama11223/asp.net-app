@@ -13,14 +13,15 @@ import {
   Popover,
   Stack,
   Divider,
-  ScrollArea
+  ScrollArea,
+  Burger
 } from '@mantine/core';
 import { LuSearch, LuZap, LuSettings, LuUsers, LuLogOut, LuSparkles } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
 
-export const Topbar = () => {
+export const Topbar = ({ mobileOpened, toggleMobile }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
   const token = localStorage.getItem('slms_token');
@@ -67,12 +68,13 @@ export const Topbar = () => {
   };
 
   return (
-    <Group justify="space-between" h="100%" px="xl" className="bg-transparent">
-      <Group gap="xl">
+    <Group justify="space-between" h="100%" px={{ base: 'sm', md: 'xl' }} className="bg-transparent flex-nowrap overflow-hidden">
+      <Group gap="sm" wrap="nowrap">
+        <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
         <TextInput
-          placeholder="Search courses, lessons, notes..."
+          placeholder="Search..."
           leftSection={<LuSearch size={18} className="text-brand-500" />}
-          w={400}
+          w={{ base: 140, xs: 180, sm: 300, md: 400 }}
           radius="xl"
           variant="unstyled"
           className="glass border-black/5 px-4 bg-white/40"
@@ -80,16 +82,16 @@ export const Topbar = () => {
         />
       </Group>
 
-      <Group gap="lg">
+      <Group gap={{ base: 'xs', sm: 'lg' }} wrap="nowrap">
         {/* Gamification Stats */}
-        <Group gap="xs" className="bg-orange-50/50 px-3 py-1.5 rounded-full border border-orange-100">
-          <LuSparkles size={18} className="text-orange-500" />
-          <Text fw={800} className="text-orange-600">{gamification.currentStreak}</Text>
+        <Group gap="xs" className="bg-orange-50/50 px-2 py-1.5 rounded-full border border-orange-100" visibleFrom="xs">
+          <LuSparkles size={16} className="text-orange-500" />
+          <Text fw={800} size="sm" className="text-orange-600">{gamification.currentStreak}</Text>
         </Group>
         
-        <Group gap="xs" className="bg-yellow-50/50 px-3 py-1.5 rounded-full border border-yellow-100 mr-2">
-          <LuZap size={18} className="text-yellow-500" />
-          <Text fw={800} className="text-yellow-600">{gamification.totalXP}</Text>
+        <Group gap="xs" className="bg-yellow-50/50 px-2 py-1.5 rounded-full border border-yellow-100 mr-1" visibleFrom="xs">
+          <LuZap size={16} className="text-yellow-500" />
+          <Text fw={800} size="sm" className="text-yellow-600">{gamification.totalXP}</Text>
         </Group>
 
         {/* Notification Bell */}

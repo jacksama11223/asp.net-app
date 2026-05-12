@@ -26,7 +26,7 @@ const instructorNav = [
   { label: 'Học viên', icon: LuUsers, path: '/creator/students', color: 'violet' },
 ];
 
-export const Sidebar = ({ collapsed, onToggle }) => {
+export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
@@ -74,6 +74,7 @@ export const Sidebar = ({ collapsed, onToggle }) => {
                 key={item.path}
                 component={Link}
                 to={item.path}
+                onClick={closeMobile}
                 label={!collapsed && item.label}
                 leftSection={
                   <ThemeIcon size="md" radius="md" variant={isActive ? 'filled' : 'light'} color={item.color}>
@@ -112,6 +113,7 @@ export const Sidebar = ({ collapsed, onToggle }) => {
             <NavLink
               component={Link}
               to="/settings"
+              onClick={closeMobile}
               label={!collapsed && "Cài đặt"}
               leftSection={<LuSettings size={18} />}
               className={`rounded-xl text-slate-500 hover:bg-black/5 ${collapsed ? 'justify-center px-0' : ''}`}
