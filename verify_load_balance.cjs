@@ -11,7 +11,8 @@ async function verify() {
 
     for (let i = 0; i < 20; i++) {
         try {
-            const res = await axios.get(LB_URL, { timeout: 10000 });
+            // Thêm t=${Date.now()} để phá băng cache, buộc server trả về ID thật
+            const res = await axios.get(`${LB_URL}?t=${Date.now()}_${i}`, { timeout: 10000 });
             const nodeName = res.data.serverNode || 'Unknown';
             nodes.add(nodeName);
             stats[nodeName] = (stats[nodeName] || 0) + 1;
