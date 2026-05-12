@@ -35,17 +35,17 @@ services:
     restart: always
     mem_limit: 150m
     deploy:
-      replicas: 4
+      replicas: 8
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=500;
-      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=500;
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=1000;
+      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;Maximum Pool Size=1000;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
       - COMPlus_gcServer=0
       - DOTNET_GCConserveMemory=9
-      - DOTNET_GCHeapHardLimitPercent=75
+      - DOTNET_GCHeapHardLimitPercent=60
       - Logging__LogLevel__Default=Critical
       - Logging__LogLevel__Microsoft=Critical
     depends_on:
@@ -54,7 +54,7 @@ services:
       redis:
         condition: service_started
     ports:
-      - "5181-5184:8080"
+      - "5181-5188:8080"
     networks:
       - smartlms-net
 
