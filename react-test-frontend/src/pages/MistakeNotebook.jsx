@@ -7,9 +7,9 @@ import {
 } from '@mantine/core';
 import { 
   LuBookOpen, LuZap, LuSearch, LuArrowLeft,
-  LuClock, LuCheckCircle, LuAlertCircle,
-  LuMessageSquare, LuTrash2, LuSparkles
+  LuClock, LuMessageSquare, LuTrash2, LuSparkles
 } from 'react-icons/lu';
+import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import { SimpleGrid } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -100,7 +100,7 @@ const MistakeNotebook = () => {
              <Paper p="md" radius="xl" withBorder className="glass">
                <Group>
                  <ThemeIcon size="xl" color="red" variant="light" radius="md">
-                   <LuAlertCircle size={24} />
+                   <FiAlertCircle size={24} />
                  </ThemeIcon>
                  <Box>
                    <Text size="xs" c="dimmed" fw={700}>CẦN ÔN TẬP</Text>
@@ -111,7 +111,7 @@ const MistakeNotebook = () => {
              <Paper p="md" radius="xl" withBorder className="glass">
                <Group>
                  <ThemeIcon size="xl" color="teal" variant="light" radius="md">
-                   <LuCheckCircle size={24} />
+                   <FiCheckCircle size={24} />
                  </ThemeIcon>
                  <Box>
                    <Text size="xs" c="dimmed" fw={700}>ĐÃ VƯỢT QUA</Text>
@@ -266,7 +266,7 @@ const MistakeNotebook = () => {
               </Stack>
             ) : (
               <Paper p={100} radius="xl" withBorder className="glass" ta="center">
-                <LuCheckCircle size={64} className="text-teal-200 mb-4 mx-auto" />
+                <FiCheckCircle size={64} className="text-teal-200 mb-4 mx-auto" />
                 <Title order={3} c="dimmed">Tuyệt vời! Không có lỗi sai nào cần ôn tập.</Title>
                 <Text c="dimmed" mt="xs">Hãy tiếp tục học để rèn luyện tư duy nhé.</Text>
               </Paper>

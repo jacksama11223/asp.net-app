@@ -5,8 +5,9 @@ import {
 } from '@mantine/core';
 import {
   LuSearch, LuPlus, LuMessageSquare, LuEye, 
-  LuZap, LuClock, LuChevronUp, LuFilter, LuMoreVertical
+  LuZap, LuClock, LuChevronUp, LuFilter
 } from 'react-icons/lu';
+import { FiMoreVertical } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
