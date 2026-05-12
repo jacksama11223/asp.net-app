@@ -35,7 +35,7 @@ services:
     restart: always
     mem_limit: 150m
     deploy:
-      replicas: 3
+      replicas: 2
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
@@ -54,7 +54,7 @@ services:
       redis:
         condition: service_started
     ports:
-      - "5181-5183:8080"
+      - "5181-5182:8080"
     networks:
       - smartlms-net
 

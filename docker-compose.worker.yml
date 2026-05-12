@@ -4,7 +4,7 @@ services:
     restart: always
     mem_limit: 250m
     deploy:
-      replicas: 4
+      replicas: 5
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
@@ -15,7 +15,7 @@ services:
       - DOTNET_GCConserveMemory=9
       - DOTNET_GCHeapHardLimitPercent=75
     ports:
-      - "5381-5384:8080"
+      - "5381-5385:8080"
     networks:
       - smartlms-worker-net
 
