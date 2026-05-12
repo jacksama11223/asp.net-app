@@ -17,9 +17,13 @@ import { CommunityFriends } from './pages/CommunityFriends';
 import { CommunityQuizBuilder } from './pages/CommunityQuizBuilder';
 import { TutorDashboard } from './pages/TutorDashboard';
 import { PersonalWiki } from './pages/PersonalWiki';
+import MistakeNotebook from './pages/MistakeNotebook';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { CourseManager } from './pages/CourseManager';
 import { MessageCenter } from './pages/MessageCenter';
+import { ForumHome } from './pages/ForumHome';
+import { Leaderboard } from './pages/Leaderboard';
+import { PublicProfile } from './pages/PublicProfile';
 import { CreatorAnalytics } from './pages/CreatorAnalytics';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
@@ -47,7 +51,7 @@ function App() {
         <Route path="/checkout/:id" element={<ProtectedRoute><CheckoutQR /></ProtectedRoute>} />
         <Route path="/course/:id" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
         <Route path="/my-learning" element={<ProtectedRoute><MyLearning /></ProtectedRoute>} />
-        <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+        <Route path="/community" element={<ProtectedRoute><ForumHome /></ProtectedRoute>} />
         <Route path="/community/post/new" element={<ProtectedRoute><CommunityNewPost /></ProtectedRoute>} />
         <Route path="/community/friends" element={<ProtectedRoute><CommunityFriends /></ProtectedRoute>} />
         <Route path="/community/quiz-builder" element={<ProtectedRoute><CommunityQuizBuilder /></ProtectedRoute>} />
@@ -57,6 +61,9 @@ function App() {
         <Route path="/coding/:id" element={<CodeWorkspace />} />
         <Route path="/students" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Students Management (Coming Soon)</Text></Box></ProtectedRoute>} />
         <Route path="/ai" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">AI Prediction Engine (Coming Soon)</Text></Box></ProtectedRoute>} />
+        <Route path="/mistakes" element={<ProtectedRoute><MistakeNotebook /></ProtectedRoute>} />
+        <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+        <Route path="/profile/:userId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Global Settings (Coming Soon)</Text></Box></ProtectedRoute>} />
         
         {/* Creator / Instructor Routes */}

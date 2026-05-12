@@ -10,12 +10,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const studentNav = [
   { label: 'Dashboard', icon: LuLayoutDashboard, path: '/dashboard', color: 'brand' },
-  { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
+  { label: 'Sổ tay lỗi sai', icon: LuPenTool, path: '/mistakes', color: 'red' },
   { label: 'Kho khóa học', icon: LuBookOpen, path: '/my-learning', color: 'teal' },
+  { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
   { label: 'Cộng đồng', icon: LuUsers, path: '/community', color: 'blue' },
   { label: 'Bạn bè', icon: LuUsers, path: '/community/friends', color: 'pink' },
   { label: 'Wiki cá nhân', icon: LuSparkles, path: '/wiki', color: 'violet' },
-  { label: 'Success Engine', icon: LuZap, path: '/ai', color: 'orange' },
 ];
 
 const instructorNav = [

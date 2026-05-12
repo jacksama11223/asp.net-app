@@ -5,6 +5,13 @@
 - **Mobile Responsive:** Chuyển đổi Sidebar sang cơ chế Drawer (ngăn kéo) trên điện thoại.
 - **Burger Menu:** Bổ sung nút điều hướng cho người dùng Mobile.
 - **Measurement Tool:** Thêm `measure_responsive.js` để tự động quét các vị trí Hardcoded Pixel gây lỗi giao diện.
+- **Forum Home (VOZ Style):** Giao diện diễn đàn chuyên nghiệp với bảng Thread-based.
+- **Leaderboard System:** Trang vinh danh cao thủ (Hall of Fame) với bục Top 3.
+- **Public Learner Profile:** Trang hồ sơ công khai hiển thị Huy hiệu, XP và hoạt động.
+- **Notion-style Editor:** Nâng cấp trình tạo bài viết với Cover, Emoji và Borderless UI.
+- **AI Tutor Feedback:** Tích hợp lời khuyên từ AI vào Sổ tay lỗi sai.
+- **Donation & Follow:** Tính năng ủng hộ giảng viên và theo dõi người dùng.
+- **Build Safety V2:** Script kiểm soát lỗi Import và Build Backend/Frontend.
 
 ### Fixed
 - **Vite Build:** Sửa lỗi `MISSING_EXPORT` tại `CommunityQuizBuilder.jsx` do sai tên component export.

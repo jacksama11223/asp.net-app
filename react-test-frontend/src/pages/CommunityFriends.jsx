@@ -41,115 +41,121 @@ export const CommunityFriends = () => {
 
         <Paper radius="xl" p="md" withBorder className="glass bg-white">
           <Tabs value={activeTab} onChange={setActiveTab} variant="pills" radius="xl">
-            <Tabs.List>
-              <Tabs.Tab value="find" leftSection={<LuSearch size={16} />}>Tìm bạn bè</Tabs.Tab>
-              <Tabs.Tab value="requests" leftSection={<LuUsers size={16} />}>
-                Lời mời kết bạn
-                {friendRequests.length > 0 && (
-                  <Badge size="xs" color="red" variant="filled" ml={6}>{friendRequests.length}</Badge>
-                )}
+            <Tabs.List grow>
+              <Tabs.Tab value="find" leftSection={<LuSearch size={18} />}>Khám phá cộng đồng</Tabs.Tab>
+              <Tabs.Tab value="requests" leftSection={<LuUsers size={18} />}>
+                Lời mời ({friendRequests.length})
               </Tabs.Tab>
-              <Tabs.Tab value="my-friends" leftSection={<LuUsers size={16} />}>Bạn bè của tôi</Tabs.Tab>
+              <Tabs.Tab value="my-friends" leftSection={<LuSparkles size={18} />}>Bạn bè của tôi</Tabs.Tab>
             </Tabs.List>
 
-            <Box mt="lg">
-              {activeTab === 'find' && (
-                <Stack gap="lg">
-                  <TextInput
-                    placeholder="Tìm kiếm theo tên, kỹ năng hoặc khóa học..."
-                    size="md" radius="xl"
-                    leftSection={<LuSearch size={18} />}
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                  
-                  <Text fw={700} mt="md">Gợi ý kết bạn</Text>
-                  <Grid>
-                    {suggestedFriends.map(user => (
-                      <Grid.Col span={{ base: 12, sm: 6 }} key={user.id}>
-                        <Paper p="md" radius="lg" withBorder className="hover:border-brand-300 transition-colors">
-                          <Group wrap="nowrap">
-                            <Avatar size="lg" radius="xl" color="brand">{user.name.charAt(0)}</Avatar>
-                            <Box style={{ flex: 1 }}>
-                              <Text fw={700}>{user.name}</Text>
-                              <Badge size="xs" variant="light" color={user.role === 'Premium Learner' ? 'brand' : 'gray'}>
-                                {user.role}
-                              </Badge>
-                              <Group gap="xs" mt={6}>
-                                <LuBookOpen size={14} className="text-slate-400" />
+            <Box mt="xl">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {activeTab === 'find' && (
+                    <Stack gap="xl">
+                      <TextInput
+                        placeholder="Tìm theo tên, sở thích hoặc khóa học..."
+                        size="lg" radius="2rem"
+                        leftSection={<LuSearch size={22} className="text-brand-500" />}
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="shadow-sm"
+                      />
+                      
+                      <Text fw={800} size="xl" className="tracking-tight">Gợi ý cho bạn</Text>
+                      <Grid>
+                        {suggestedFriends.map(user => (
+                          <Grid.Col span={{ base: 12, sm: 6 }} key={user.id}>
+                            <Paper p="xl" radius="2rem" withBorder className="hover:shadow-xl transition-all border-slate-100 group">
+                              <Stack align="center" ta="center">
+                                <Avatar 
+                                  size={80} radius="xl" color="brand" 
+                                  className="cursor-pointer hover:scale-105 transition-transform"
+                                  onClick={() => navigate(`/profile/${user.id}`)}
+                                >
+                                  {user.name.charAt(0)}
+                                </Avatar>
+                                <Box>
+                                  <Text fw={800} size="lg">{user.name}</Text>
+                                  <Badge size="sm" variant="light" color="brand">{user.role}</Badge>
+                                </Box>
                                 <Text size="xs" c="dimmed">{user.sharedInterest}</Text>
-                              </Group>
-                            </Box>
-                            <ActionIcon variant="light" color="brand" radius="xl" size="lg">
-                              <LuUsers size={20} />
-                            </ActionIcon>
-                          </Group>
-                        </Paper>
-                      </Grid.Col>
-                    ))}
-                  </Grid>
-                </Stack>
-              )}
-
-              {activeTab === 'requests' && (
-                <Stack gap="md">
-                  {friendRequests.length === 0 ? (
-                    <Text ta="center" c="dimmed" py="xl">Không có lời mời kết bạn nào.</Text>
-                  ) : (
-                    friendRequests.map(req => (
-                      <Paper p="md" radius="lg" withBorder key={req.id}>
-                        <Group justify="space-between">
-                          <Group>
-                            <Avatar size="md" radius="xl" color="indigo">{req.name.charAt(0)}</Avatar>
-                            <Box>
-                              <Text fw={700}>{req.name}</Text>
-                              <Text size="xs" c="dimmed">{req.message}</Text>
-                            </Box>
-                          </Group>
-                          <Group>
-                            <Button variant="light" color="teal" size="sm" radius="xl" leftSection={<LuSparkles size={16} />}>
-                              Đồng ý
-                            </Button>
-                            <ActionIcon variant="light" color="red" size="lg" radius="xl">
-                              <LuLogOut size={18} />
-                            </ActionIcon>
-                          </Group>
-                        </Group>
-                      </Paper>
-                    ))
-                  )}
-                </Stack>
-              )}
-
-              {activeTab === 'my-friends' && (
-                <Stack gap="md">
-                  <Grid>
-                    {myFriends.map(friend => (
-                      <Grid.Col span={{ base: 12, sm: 6 }} key={friend.id}>
-                        <Paper p="md" radius="lg" withBorder>
-                          <Group justify="space-between">
-                            <Group>
-                              <Avatar size="md" radius="xl" color="teal">
-                                {friend.name.charAt(0)}
-                              </Avatar>
-                              <Box>
-                                <Group gap="xs">
-                                  <Text fw={700}>{friend.name}</Text>
-                                  {friend.isOnline && <Badge size="xs" color="green" variant="filled">Online</Badge>}
+                                <Group grow w="100%" mt="md">
+                                  <Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>Hồ sơ</Button>
+                                  <Button radius="xl" color="brand" leftSection={<LuUsers size={16} />}>Kết bạn</Button>
                                 </Group>
-                                <Text size="xs" c="dimmed">{friend.mutualCourses} khóa học chung</Text>
-                              </Box>
-                            </Group>
-                            <ActionIcon variant="light" color="blue" radius="xl" size="lg">
-                              <LuSend size={18} />
-                            </ActionIcon>
-                          </Group>
+                              </Stack>
+                            </Paper>
+                          </Grid.Col>
+                        ))}
+                      </Grid>
+                    </Stack>
+                  )}
+
+                  {activeTab === 'requests' && (
+                    <Stack gap="md">
+                      {friendRequests.length === 0 ? (
+                        <Paper p={100} radius="2rem" withBorder ta="center" className="bg-slate-50 border-dashed">
+                           <LuUsers size={48} className="text-slate-200 mx-auto mb-4" />
+                           <Text c="dimmed">Không có lời mời nào mới.</Text>
                         </Paper>
-                      </Grid.Col>
-                    ))}
-                  </Grid>
-                </Stack>
-              )}
+                      ) : (
+                        friendRequests.map(req => (
+                          <Paper p="xl" radius="2rem" withBorder key={req.id} className="bg-white hover:shadow-md transition-shadow">
+                            <Group justify="space-between">
+                              <Group>
+                                <Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>
+                                  {req.name.charAt(0)}
+                                </Avatar>
+                                <Box>
+                                  <Text fw={800} size="lg">{req.name}</Text>
+                                  <Text size="sm" c="dimmed" italic>"{req.message}"</Text>
+                                </Box>
+                              </Group>
+                              <Group>
+                                <Button variant="light" color="teal" size="md" radius="xl">Chấp nhận</Button>
+                                <ActionIcon variant="subtle" color="red" size="xl" radius="xl"><LuLogOut size={20} /></ActionIcon>
+                              </Group>
+                            </Group>
+                          </Paper>
+                        ))
+                      )}
+                    </Stack>
+                  )}
+
+                  {activeTab === 'my-friends' && (
+                    <Grid>
+                      {myFriends.map(friend => (
+                        <Grid.Col span={{ base: 12, sm: 4 }} key={friend.id}>
+                          <Paper p="xl" radius="2rem" withBorder className="text-center group hover:bg-slate-50 transition-colors">
+                            <Box className="relative inline-block mx-auto mb-md">
+                               <Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>
+                                 {friend.name.charAt(0)}
+                               </Avatar>
+                               {friend.isOnline && (
+                                 <Box className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm" />
+                               )}
+                            </Box>
+                            <Text fw={800}>{friend.name}</Text>
+                            <Text size="xs" c="dimmed" mb="md">{friend.mutualCourses} khóa học chung</Text>
+                            <Group grow>
+                               <Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>Hồ sơ</Button>
+                               <Button variant="light" color="indigo" radius="xl" size="xs" leftSection={<LuSend size={14} />}>Chat</Button>
+                            </Group>
+                          </Paper>
+                        </Grid.Col>
+                      ))}
+                    </Grid>
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </Box>
           </Tabs>
         </Paper>

@@ -307,6 +307,7 @@ public partial class SmartLMSContext : DbContext
             entity.HasKey(e => e.MistakeLogId);
             entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
             entity.HasOne(d => d.Lesson).WithMany().HasForeignKey(d => d.LessonId);
+            entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId);
         });
 
         modelBuilder.Entity<UserBadge>(entity => {

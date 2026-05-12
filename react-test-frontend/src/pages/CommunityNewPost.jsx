@@ -103,96 +103,107 @@ export const CommunityNewPost = () => {
             </Paper>
           )}
 
-          {/* Form */}
-          <Paper radius="xl" p="xl" withBorder className="glass bg-white shadow-sm">
-            <Stack gap="lg">
-              {/* Title */}
-              <Box>
-                <Text fw={700} mb={6} size="sm">Tiêu đề câu hỏi <Text span c="red">*</Text></Text>
+          {/* Notion-like Header Section */}
+          <Paper radius="xl" className="overflow-hidden bg-white shadow-sm border border-slate-200">
+            {/* Cover Image */}
+            <Box h={180} className="bg-gradient-to-r from-brand-500 to-indigo-600 relative group">
+               <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+               <Button 
+                variant="white" size="xs" radius="xl" 
+                className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                leftSection={<LuSparkles size={14} />}
+               >
+                 Thay ảnh bìa
+               </Button>
+            </Box>
+
+            <Stack p="xl" gap="md" className="relative">
+              {/* Emoji Icon Picker Placeholder */}
+              <Box className="absolute -top-10 left-10">
+                <Paper radius="2rem" p="sm" shadow="xl" withBorder className="bg-white cursor-pointer hover:scale-105 transition-transform w-20 h-20 flex items-center justify-center text-4xl">
+                  {location.state?.lessonTitle ? '❓' : '📝'}
+                </Paper>
+              </Box>
+
+              <Box mt="xl">
                 <TextInput
-                  placeholder="Ví dụ: Làm sao xử lý lỗi 401 Unauthorized trong ASP.NET Core?"
-                  radius="xl"
-                  size="md"
+                  placeholder="Tiêu đề bài viết..."
+                  variant="unstyled"
+                  size="xl"
+                  styles={{ 
+                    input: { 
+                      fontSize: '2.5rem', 
+                      fontWeight: 900, 
+                      letterSpacing: '-0.05em',
+                      height: 'auto',
+                      padding: 0,
+                      color: '#1e293b'
+                    } 
+                  }}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
-                <Text size="xs" c="dimmed" mt={4}>Hãy đặt câu hỏi cụ thể và rõ ràng để nhận được câu trả lời tốt nhất.</Text>
-              </Box>
-
-              {/* Category & Tags */}
-              <Group grow>
-                <Box>
-                  <Text fw={700} mb={6} size="sm">Danh mục <Text span c="red">*</Text></Text>
+                
+                <Group gap="xs" mt="sm">
+                  {location.state?.lessonTitle && (
+                    <Badge variant="dot" color="brand" size="lg">
+                      Nguồn: {location.state.lessonTitle}
+                    </Badge>
+                  )}
                   <Select
-                    placeholder="Chọn danh mục phù hợp"
+                    placeholder="Chọn danh mục"
+                    variant="unstyled"
                     data={categories}
                     value={category}
                     onChange={setCategory}
-                    radius="xl"
-                    size="md"
+                    styles={{ input: { fontWeight: 600, color: '#64748b' } }}
                   />
-                </Box>
-                <Box>
-                  <Text fw={700} mb={6} size="sm">Thẻ tag (không bắt buộc)</Text>
-                  <MultiSelect
+                </Group>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                 <Textarea
+                    placeholder="Bắt đầu viết nội dung của bạn ở đây... (Hỗ trợ Markdown)"
+                    variant="unstyled"
+                    minRows={12}
+                    size="lg"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    styles={{ 
+                      input: { 
+                        fontSize: '1.1rem', 
+                        lineHeight: 1.8,
+                        padding: 0,
+                        color: '#334155'
+                      } 
+                    }}
+                 />
+              </Box>
+
+              <Group justify="space-between" mt="xl">
+                 <MultiSelect
                     placeholder="Thêm tag..."
+                    variant="filled"
                     data={tagOptions}
                     value={tags}
                     onChange={setTags}
                     radius="xl"
-                    size="md"
-                    maxValues={3}
-                  />
-                </Box>
-              </Group>
-
-              <Divider />
-
-              {/* Content */}
-              <Box>
-                <Text fw={700} mb={6} size="sm">Nội dung chi tiết <Text span c="red">*</Text></Text>
-                <Textarea
-                  placeholder="Mô tả chi tiết vấn đề bạn gặp phải. Hãy thêm code, ảnh chụp màn hình nếu cần..."
-                  minRows={10}
-                  radius="xl"
-                  size="md"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  styles={{ input: { fontFamily: 'inherit', lineHeight: 1.7 } }}
-                />
-                <Group justify="space-between" mt={4}>
-                  <Text size="xs" c="dimmed">Hỗ trợ Markdown để định dạng văn bản.</Text>
-                  <Text size="xs" c="dimmed">{content.length} ký tự</Text>
-                </Group>
-              </Box>
-
-              {/* Preview Card */}
-              {title && (
-                <Paper radius="xl" p="lg" className="bg-slate-50 border border-slate-200">
-                  <Text size="xs" fw={700} c="dimmed" mb="xs" tt="uppercase">Xem trước</Text>
-                  <Group gap="xs" mb="xs">
-                    {category && <Badge variant="light" color="brand">{category}</Badge>}
-                    {tags.map(t => <Badge key={t} variant="dot" color="gray" size="xs">{t}</Badge>)}
-                  </Group>
-                  <Title order={4}>{title}</Title>
-                  <Text size="sm" c="dimmed" lineClamp={3} mt="xs">{content}</Text>
-                </Paper>
-              )}
-
-              {/* Submit */}
-              <Group justify="flex-end" mt="md">
-                <Button variant="default" radius="xl" onClick={() => navigate('/community')}>
-                  Hủy
-                </Button>
-                <Button
-                  size="md" radius="xl" color="brand"
-                  leftSection={<LuSend size={16} />}
-                  loading={submitting}
-                  onClick={handleSubmit}
-                  className="shadow-md shadow-brand-500/20"
-                >
-                  Đăng lên Cộng đồng
-                </Button>
+                    className="flex-1 max-w-md"
+                 />
+                 <Group>
+                    <Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>
+                    <Button
+                      size="md" radius="xl" color="brand"
+                      leftSection={<LuSend size={16} />}
+                      loading={submitting}
+                      onClick={handleSubmit}
+                      className="shadow-xl shadow-brand-500/30 px-8"
+                    >
+                      Đăng bài viết
+                    </Button>
+                 </Group>
               </Group>
             </Stack>
           </Paper>

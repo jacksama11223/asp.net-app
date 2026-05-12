@@ -32,9 +32,22 @@
 - [ ] Kích hoạt hệ thống Affiliate và Coupon.
 - [ ] Tích hợp Zoom API cho lớp học trực tuyến.
 - [ ] Triển khai Coding Challenge engine hoàn chỉnh.
+- [ ] **Mistake Notebook & Spaced Repetition:** Triển khai hệ thống tự động lưu vết lỗi sai và nhắc lịch học AI.
 
-## Phase 5: UI/UX Premium & Optimization (Next)
+## Phase 5: UI/UX Premium & Optimization (Current)
+- [x] **Mobile Responsive Optimization:** Chuyển đổi Sidebar sang Drawer và fix lỗi giao diện trên iPhone.
 - [ ] Tích hợp biểu đồ Doanh thu & Analytics thời gian thực vào Creator Studio.
 - [ ] Redesign Dashboard theo chuẩn SaaS Premium (Dark mode, Glassmorphism đồng bộ toàn hệ thống).
 - [ ] Tối ưu hóa hiệu năng SQL (Stored Procedures, Index tuning).
-- [ ] Mở rộng hệ thống Webhooks cho đối tác Enterprise.
+
+## Phase 6: Community Hub & Social Learning (Completed)
+- [x] **Notion-like Editor Integration:** Xây dựng trình soạn thảo khối cho Wiki/Community.
+- [x] **Social Extraction Module:** Cơ chế đẩy nội dung từ Main App sang Community App.
+- [x] **Tutor Feedback System:** Giao diện phản hồi chuyên sâu cho Mentor (AI Tutor Feedback).
+- [ ] **Collaborative Content:** Tính năng đồng chỉnh sửa và mời bạn bè đóng góp bài viết.
+- [ ] **Public Portfolio:** Cơ chế xuất bản Wiki cá nhân ra cộng đồng.
+
+## Phase 7: AI Advanced Learning & Deep Work (Future)
+- [ ] **Smart Study Timer:** Tích hợp Pomodoro và theo dõi Deep Work vào Dashboard.
+- [ ] **AI Shadow Tutor:** Trợ lý ảo tư vấn lộ trình học dựa trên Sổ tay lỗi sai.
+- [ ] **Real-time Whiteboard:** Bảng vẽ trực tuyến cho các buổi Mentoring 1:1.

@@ -21,6 +21,8 @@ export const CourseDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reviewModal, setReviewModal] = useState(false);
+  const [donateModal, setDonateModal] = useState(false);
+  const [following, setFollowing] = useState(false);
   const [myRating, setMyRating] = useState(5);
   const [myReview, setMyReview] = useState('');
   const token = localStorage.getItem('slms_token');
@@ -94,6 +96,45 @@ export const CourseDetails = () => {
             onClick={handleSubmitReview}
           >
             Gửi đánh giá
+          </Button>
+        </Stack>
+      </Modal>
+
+      {/* Donate Modal */}
+      <Modal opened={donateModal} onClose={() => setDonateModal(false)} title="Ủng hộ Giảng viên" radius="xl" centered size="md">
+        <Stack gap="xl" p="md">
+          <Box ta="center">
+            <ThemeIcon size={80} radius="xl" color="orange" variant="light" mb="md">
+              <LuZap size={40} />
+            </ThemeIcon>
+            <Title order={3}>Mời giảng viên ly cà phê ☕</Title>
+            <Text c="dimmed" size="sm">Sự ủng hộ của bạn là động lực để giảng viên tạo ra nhiều nội dung giá trị hơn.</Text>
+          </Box>
+          
+          <SimpleGrid cols={3} spacing="md">
+            {[
+              { label: 'Cà phê', amount: '20k', icon: '☕' },
+              { label: 'Bữa trưa', amount: '50k', icon: '🍱' },
+              { label: 'Yêu quý', amount: '100k', icon: '❤️' },
+            ].map((item, i) => (
+              <Paper key={i} p="sm" withBorder radius="md" className="cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all text-center">
+                <Text size="xl">{item.icon}</Text>
+                <Text fw={700} size="sm">{item.label}</Text>
+                <Badge color="orange" variant="light">{item.amount}</Badge>
+              </Paper>
+            ))}
+          </SimpleGrid>
+
+          <Box className="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300" ta="center">
+            <Text size="xs" fw={700} c="dimmed" mb="xs">QUÉT MÃ QR ĐỂ THANH TOÁN</Text>
+            <Box h={150} className="bg-white flex items-center justify-center border rounded-lg">
+              <LuSparkles size={32} className="text-slate-200" />
+              <Text size="xs" c="dimmed" ml="xs">QR Code Mockup</Text>
+            </Box>
+          </Box>
+
+          <Button color="orange" fullWidth radius="xl" size="md" onClick={() => setDonateModal(false)}>
+            Tôi đã chuyển khoản thành công
           </Button>
         </Stack>
       </Modal>
@@ -288,7 +329,7 @@ export const CourseDetails = () => {
               <Button 
                 size="lg" radius="md" variant="light" color="orange" fullWidth
                 leftSection={<LuZap size={16} />}
-                onClick={() => setReviewModal(true)}
+                onClick={() => setDonateModal(true)}
               >
                 Ủng hộ Giảng viên ☕
               </Button>
@@ -326,7 +367,15 @@ export const CourseDetails = () => {
             {/* Sprint 1: Instructor Profile Card */}
             <Divider my="xl" />
             <Box>
-              <Text fw={700} size="sm" mb="md">Về giảng viên</Text>
+              <Group justify="space-between" mb="md">
+                <Text fw={700} size="sm">Về giảng viên</Text>
+                <Button 
+                  size="compact-xs" variant={following ? "filled" : "outline"} color="brand" radius="xl"
+                  onClick={() => setFollowing(!following)}
+                >
+                  {following ? "Đang theo dõi" : "+ Theo dõi"}
+                </Button>
+              </Group>
               <Group>
                 <Avatar size="lg" color="brand" radius="xl">{instructorInitial}</Avatar>
                 <Box>

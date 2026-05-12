@@ -11,11 +11,21 @@
 - **Direct Messaging:** Hệ thống Inbox tập trung, Glassmorphism UI, hỗ trợ trao đổi 2 chiều.
 - **Live Classes:** Tích hợp Zoom API để tổ chức các buổi học trực tuyến đồng bộ.
 - **Coding Challenge:** Engine thực thi code (CompilerService) hỗ trợ làm bài tập lập trình trực tiếp, kiểm tra qua TestCases.
+- **Mistake Notebook (Sổ tay lỗi sai):** Tự động lưu vết và phân loại lỗi sai từ các bài kiểm tra để học viên soi xét và ghi chú lại.
+- **Notion-like Editor:** Trình soạn thảo khối (Block-based) cho phép tùy biến Icon, Title và kéo thả linh hoạt cho trang Wiki/Cộng đồng.
 
 ### 1.6 Trải nghiệm Người dùng Di động (Mobile Optimization)
 - **Responsive Navigation:** Hệ thống Sidebar tự động chuyển sang Drawer (ngăn kéo) trên màn hình dọc (< 768px).
 - **Safe Viewport:** Đảm bảo 100% các thành phần UI (Search, User Profile, Badges) không bị tràn viền (Overflow) trên iPhone/Android.
 - **Micro-interactions:** Tối ưu hóa kích thước nút bấm và cử chỉ chạm (Touch-friendly) cho người dùng di động.
+
+### 1.7 Hệ thống Tương tác Tác giả & Cộng đồng
+- **Donation System:** Cơ chế ủng hộ trực tiếp cho giảng viên (Author Support).
+- **Social Extraction:** Một click để trích xuất nội dung lỗi sai hoặc bài học sang trang cộng đồng (`145.241.160.156`) để hỏi đáp.
+- **Collaborative Posts:** Mời bạn bè cùng tham gia đóng góp và phản hồi trên một bài viết.
+- **Smart Study Timer:** Hệ thống theo dõi thời gian học tập tập trung (Deep Work) tích hợp Pomodoro.
+- **AI Shadow Tutor:** Trợ lý ảo hiểu rõ lịch sử lỗi sai (Mistake Notebook) để giải thích kiến thức cá nhân hóa.
+- **Public Portfolio:** Chuyển đổi các bài viết Wiki và chứng chỉ thành trang hồ sơ năng lực công khai.
 
 ### 1.2 Hệ thống Đánh giá & Gamification
 - **Assessment Engine:** Chấm điểm trắc nghiệm, tự động cộng XP, cấp Badge (Huy hiệu) dựa trên thành tích.
