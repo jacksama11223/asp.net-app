@@ -15,7 +15,7 @@ services:
       - DOTNET_GCConserveMemory=9
       - DOTNET_GCHeapHardLimitPercent=60
     ports:
-      - "5181-5188:8080"
+      - "5381-5388:8080"
     networks:
       - smartlms-worker-net
 
