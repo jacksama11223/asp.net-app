@@ -17,7 +17,7 @@ services:
     command: >
       --innodb-buffer-pool-size=64M
       --innodb-log-file-size=32M
-      --max-connections=30
+      --max-connections=200
       --tmp-table-size=16M
       --query-cache-size=0
     healthcheck:

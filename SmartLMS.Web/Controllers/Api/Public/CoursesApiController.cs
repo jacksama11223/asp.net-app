@@ -6,6 +6,9 @@ using SmartLMS.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using System;
 
 namespace SmartLMS.Web.Controllers.Api.Public
 {
@@ -15,10 +18,12 @@ namespace SmartLMS.Web.Controllers.Api.Public
     public class CoursesApiController : ControllerBase
     {
         private readonly SmartLMSContext _context;
+        private readonly IDistributedCache _cache;
  
-        public CoursesApiController(SmartLMSContext context)
+        public CoursesApiController(SmartLMSContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
  
         /// <summary>
@@ -27,11 +32,13 @@ namespace SmartLMS.Web.Controllers.Api.Public
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetCourses()
         {
-            // Lấy OrganizationId từ Claims (đã được nạp bởi ApiKeyAuthHandler)
-            // var orgIdClaim = User.FindFirst("OrganizationId")?.Value;
-            // if (string.IsNullOrEmpty(orgIdClaim)) return Unauthorized();
- 
-            // int orgId = int.Parse(orgIdClaim);
+            string cacheKey = "public_courses_list";
+            var cachedData = await _cache.GetStringAsync(cacheKey);
+
+            if (!string.IsNullOrEmpty(cachedData))
+            {
+                return Ok(JsonSerializer.Deserialize<IEnumerable<object>>(cachedData));
+            }
 
             var courses = await _context.Courses
                 .Include(c => c.Instructor)
@@ -50,6 +57,13 @@ namespace SmartLMS.Web.Controllers.Api.Public
                     TotalStudents = c.Enrollments != null ? c.Enrollments.Count : 0
                 })
                 .ToListAsync();
+
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+            };
+
+            await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(courses), cacheOptions);
 
             return Ok(courses);
         }

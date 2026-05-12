@@ -255,12 +255,10 @@ builder.Services.AddAuthorization(options => {
 
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
 {
-    var serverVersion = ServerVersion.AutoDetect(defaultConn);
-    options.UseMySql(defaultConn, serverVersion);
-    
-    // Tạm thời tắt Interceptor để tránh lỗi chuỗi kết nối SQL Server cũ
-    // var config = serviceProvider.GetRequiredService<IConfiguration>();
-    // options.AddInterceptors(new SmartLMS.Data.ReadOnlyInterceptor(config));
+    var serverVersion = new MariaDbServerVersion(new Version(10, 11, 2));
+    options.UseMySql(defaultConn, serverVersion, mysqlOptions => {
+        mysqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+    });
 });
 
 // 4. Enterprise Storage & AWS Configuration
