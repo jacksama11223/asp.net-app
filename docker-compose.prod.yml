@@ -35,7 +35,7 @@ services:
     restart: always
     mem_limit: 150m
     deploy:
-      replicas: 8
+      replicas: 4
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
@@ -45,7 +45,7 @@ services:
       - RabbitMQ__HostName=rabbitmq
       - COMPlus_gcServer=0
       - DOTNET_GCConserveMemory=9
-      - DOTNET_GCHeapHardLimitPercent=60
+      - DOTNET_GCHeapHardLimitPercent=75
       - Logging__LogLevel__Default=Critical
       - Logging__LogLevel__Microsoft=Critical
     depends_on:
@@ -54,7 +54,7 @@ services:
       redis:
         condition: service_started
     ports:
-      - "5181-5188:8080"
+      - "5181-5184:8080"
     networks:
       - smartlms-net
 
