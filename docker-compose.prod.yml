@@ -12,7 +12,6 @@ services:
       - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
-    # ✅ Giới hạn RAM cho MariaDB: tiết kiệm ~150MB
     mem_limit: 150m
     command: >
       --innodb-buffer-pool-size=64M
@@ -35,7 +34,6 @@ services:
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
     container_name: smartlms-backend-prod
     restart: always
-    # ✅ Giới hạn RAM cho .NET Backend: giảm GC pressure
     mem_limit: 200m
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -44,11 +42,9 @@ services:
       - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
       - Redis__ConnectionString=redis:6379,password=YourRedisPass
       - RabbitMQ__HostName=rabbitmq
-      # ✅ Tối ưu .NET GC cho server ít RAM
       - DOTNET_GCConserveMemory=9
       - DOTNET_GCHeapHardLimit=150000000
       - COMPlus_GCConserveMemory=9
-      # ✅ Giảm logging để giảm tải I/O
       - Logging__LogLevel__Default=Warning
       - Logging__LogLevel__Microsoft=Error
       - Logging__LogLevel__Microsoft.Hosting.Lifetime=Information
@@ -67,8 +63,6 @@ services:
     build:
       context: ./react-test-frontend
       dockerfile: Dockerfile
-      args:
-        - VITE_API_URL=http://localhost:5181
     container_name: smartlms-frontend-prod
     restart: always
     mem_limit: 30m
@@ -79,16 +73,12 @@ services:
     networks:
       - smartlms-net
 
-  # ✅ Dùng Redis nhẹ nhàng hơn với giới hạn bộ nhớ
   redis:
     image: redis:7-alpine
     command: redis-server --requirepass YourRedisPass --maxmemory 32mb --maxmemory-policy allkeys-lru
     mem_limit: 40m
     networks:
       - smartlms-net
-
-  # ✅ RabbitMQ bị loại bỏ để tiết kiệm ~200MB RAM
-  # Backend đang dùng MockBus (Development mode) nên không cần RabbitMQ
 
   tunnel:
     container_name: smartlms-tunnel
@@ -98,9 +88,6 @@ services:
     mem_limit: 30m
     networks:
       - smartlms-net
-
-volumes:
-  mariadb-data:
 
   # ✅ Tầng Load Balancer điều phối traffic giữa 2 VPS
   lb:
@@ -116,6 +103,9 @@ volumes:
       - frontend
     networks:
       - smartlms-net
+
+volumes:
+  mariadb-data:
 
 networks:
   smartlms-net:
