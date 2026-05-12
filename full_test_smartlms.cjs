@@ -5,7 +5,7 @@ const LB_URL = 'http://141.253.114.218/api/public/courses';
 const VPS_A_URL = 'http://141.253.114.218:5181/api/public/courses';
 const VPS_B_URL = 'http://145.241.160.156:5181/api/public/courses';
 
-const CONCURRENT_USERS = 2000; 
+const CONCURRENT_USERS = 3000; 
 const ROUNDS = 5;
 
 async function testEndpoint(name, url) {
