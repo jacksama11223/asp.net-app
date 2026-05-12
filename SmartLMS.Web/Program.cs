@@ -250,16 +250,8 @@ builder.Services.AddAuthorization(options => {
         policy.RequireAuthenticatedUser();
     });
 });
-// Configure CORS for Frontend access
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
+// Configure CORS for Frontend access (Already defined at line 77)
+
 
 builder.Services.AddDbContext<SmartLMS.Data.SmartLMSContext>((serviceProvider, options) =>
 {
