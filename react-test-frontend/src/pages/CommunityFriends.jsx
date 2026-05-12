@@ -4,7 +4,7 @@ import {
   TextInput, Avatar, Badge, ActionIcon, Grid, Tabs
 } from '@mantine/core';
 import { LuSearch, LuUsers, LuSend, LuBookOpen, LuSparkles, LuLogOut } from 'react-icons/lu';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const CommunityFriends = () => {
   const [activeTab, setActiveTab] = useState('find');

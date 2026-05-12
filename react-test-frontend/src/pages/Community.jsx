@@ -47,7 +47,7 @@ export const Community = () => {
 
   const filteredPosts = posts.filter(p =>
     (activeTab === 'all' || p.category === activeTab) &&
-    (p.title.toLowerCase().includes(search.toLowerCase()) || p.summary?.toLowerCase().includes(search.toLowerCase()))
+    ((p.title || "").toLowerCase().includes(search.toLowerCase()) || p.summary?.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (

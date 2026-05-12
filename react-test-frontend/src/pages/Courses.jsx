@@ -71,8 +71,8 @@ export const Courses = () => {
   }, []);
 
   const filteredCourses = courses.filter(c => 
-    c.courseName.toLowerCase().includes(search.toLowerCase()) ||
-    c.instructorName.toLowerCase().includes(search.toLowerCase())
+    (c.courseName || "").toLowerCase().includes(search.toLowerCase()) ||
+    (c.instructorName || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
