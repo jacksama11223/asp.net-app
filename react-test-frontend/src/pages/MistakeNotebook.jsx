@@ -266,7 +266,7 @@ const MistakeNotebook = () => {
               </Stack>
             ) : (
               <Paper p={100} radius="xl" withBorder className="glass" ta="center">
-                <LuCheckCircle2 size={64} className="text-teal-200 mb-4 mx-auto" />
+                <LuCheckCircle size={64} className="text-teal-200 mb-4 mx-auto" />
                 <Title order={3} c="dimmed">Tuyệt vời! Không có lỗi sai nào cần ôn tập.</Title>
                 <Text c="dimmed" mt="xs">Hãy tiếp tục học để rèn luyện tư duy nhé.</Text>
               </Paper>
