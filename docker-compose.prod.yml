@@ -12,7 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
-    mem_limit: 150m
+    mem_limit: 400m
     command: >
       --innodb-buffer-pool-size=256M
       --innodb-log-file-size=64M
