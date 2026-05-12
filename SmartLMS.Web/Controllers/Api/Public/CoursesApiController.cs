@@ -54,6 +54,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
             }
 
             // 🚀 LỚP 3: Truy vấn Database (Chậm nhất)
+            var courses = await _context.Courses
                 .Include(c => c.Instructor)
                 .Where(c => c.Status == "Published" && !c.IsDeleted)
                 .Select(c => new
