@@ -118,7 +118,7 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("PublicApiPolicy", opt =>
     {
         opt.Window = TimeSpan.FromMinutes(1);
-        opt.PermitLimit = 60; 
+        opt.PermitLimit = 100000; // ✅ Nâng lên để Stress Test
         opt.QueueLimit = 0;
     });
 });
