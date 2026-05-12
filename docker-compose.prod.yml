@@ -32,9 +32,10 @@ services:
       context: .
       dockerfile: Dockerfile
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
-    container_name: smartlms-backend-prod
     restart: always
-    mem_limit: 200m
+    mem_limit: 150m
+    deploy:
+      replicas: 2
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080

@@ -36,14 +36,12 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const isCommunityHub = import.meta.env.VITE_IS_COMMUNITY_HUB === 'true';
-
   return (
     <Router>
       <Toaster position="top-right" richColors />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={isCommunityHub ? <Navigate to="/community" replace /> : <LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
@@ -53,7 +51,7 @@ function App() {
         <Route path="/checkout/:id" element={<ProtectedRoute><CheckoutQR /></ProtectedRoute>} />
         <Route path="/course/:id" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
         <Route path="/my-learning" element={<ProtectedRoute><MyLearning /></ProtectedRoute>} />
-        <Route path="/community" element={isCommunityHub ? <Layout><ForumHome /></Layout> : <ProtectedRoute><ForumHome /></ProtectedRoute>} />
+        <Route path="/community" element={<ProtectedRoute><ForumHome /></ProtectedRoute>} />
         <Route path="/community/post/new" element={<ProtectedRoute><CommunityNewPost /></ProtectedRoute>} />
         <Route path="/community/friends" element={<ProtectedRoute><CommunityFriends /></ProtectedRoute>} />
         <Route path="/community/quiz-builder" element={<ProtectedRoute><CommunityQuizBuilder /></ProtectedRoute>} />
