@@ -124,6 +124,7 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMemoryCache();
 
 // === MEDIATR: Event Bus nội bộ cho Modular Monolith ===
 builder.Services.AddMediatR(cfg => {

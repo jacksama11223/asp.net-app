@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 using System;
 
@@ -19,11 +20,13 @@ namespace SmartLMS.Web.Controllers.Api.Public
     {
         private readonly SmartLMSContext _context;
         private readonly IDistributedCache _cache;
+        private readonly IMemoryCache _memoryCache;
  
-        public CoursesApiController(SmartLMSContext context, IDistributedCache cache)
+        public CoursesApiController(SmartLMSContext context, IDistributedCache cache, IMemoryCache memoryCache)
         {
             _context = context;
             _cache = cache;
+            _memoryCache = memoryCache;
         }
  
         /// <summary>
@@ -33,14 +36,24 @@ namespace SmartLMS.Web.Controllers.Api.Public
         public async Task<ActionResult<IEnumerable<object>>> GetCourses()
         {
             string cacheKey = "public_courses_list";
-            var cachedData = await _cache.GetStringAsync(cacheKey);
 
-            if (!string.IsNullOrEmpty(cachedData))
+            // 🚀 LỚP 1: Kiểm tra RAM nội bộ (Siêu nhanh - 0ms)
+            if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<object>? localData))
             {
-                return Ok(JsonSerializer.Deserialize<IEnumerable<object>>(cachedData));
+                return Ok(localData);
             }
 
-            var courses = await _context.Courses
+            // 🚀 LỚP 2: Kiểm tra Redis (Nhanh - 10ms)
+            var cachedData = await _cache.GetStringAsync(cacheKey);
+            if (!string.IsNullOrEmpty(cachedData))
+            {
+                var redisData = JsonSerializer.Deserialize<IEnumerable<object>>(cachedData);
+                // Lưu ngược lại RAM để lần sau nhanh hơn
+                _memoryCache.Set(cacheKey, redisData, TimeSpan.FromMinutes(1));
+                return Ok(redisData);
+            }
+
+            // 🚀 LỚP 3: Truy vấn Database (Chậm nhất)
                 .Include(c => c.Instructor)
                 .Where(c => c.Status == "Published" && !c.IsDeleted)
                 .Select(c => new
