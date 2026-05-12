@@ -47,7 +47,11 @@ export const Community = () => {
 
   const filteredPosts = posts.filter(p =>
     (activeTab === 'all' || p.category === activeTab) &&
-    (p.title.toLowerCase().includes(search.toLowerCase()) || p.summary?.toLowerCase().i    <Container size="xl">
+    (p.title.toLowerCase().includes(search.toLowerCase()) || p.summary?.toLowerCase().includes(search.toLowerCase()))
+  );
+
+  return (
+    <Container size="xl">
       <Stack gap="xl">
         {/* Header Section */}
         <Group justify="space-between" align="flex-end">
