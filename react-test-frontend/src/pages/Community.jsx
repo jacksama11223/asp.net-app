@@ -273,13 +273,6 @@ export const Community = () => {
           </Grid.Col>
         </Grid>
       </Stack>
-    </Container>(''); setActiveTab('all'); fetchPosts(); }}>
-                Xem tất cả
-              </Button>
-            </Paper>
-          )}
-        </SimpleGrid>
-      )}
-    </Stack>
+    </Container>
   );
 };
