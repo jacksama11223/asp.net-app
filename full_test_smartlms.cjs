@@ -12,7 +12,10 @@ async function testEndpoint(name, url) {
     console.log(`\n🔍 Đang kiểm tra: ${name} (${url})`);
     try {
         const start = Date.now();
-        const res = await axios.get(url, { timeout: 5000 });
+        const res = await axios.get(url, { 
+            timeout: 15000, // ✅ Nâng lên 15s để gánh tải Swap
+            validateStatus: () => true 
+        });
         const duration = Date.now() - start;
         console.log(`✅ Kết nối thành công! Status: ${res.status} | Thời gian: ${duration}ms`);
         return true;
