@@ -118,7 +118,7 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("PublicApiPolicy", opt =>
     {
         opt.Window = TimeSpan.FromMinutes(1);
-        opt.PermitLimit = 60; 
+        opt.PermitLimit = 5000; 
         opt.QueueLimit = 0;
     });
 });

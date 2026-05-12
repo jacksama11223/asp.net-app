@@ -4,7 +4,7 @@ services:
     restart: always
     mem_limit: 250m
     deploy:
-      replicas: 8
+      replicas: 3
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
@@ -13,9 +13,9 @@ services:
       - Redis__ConnectionString=141.253.114.218:6379,password=YourRedisPass
       - COMPlus_gcServer=0
       - DOTNET_GCConserveMemory=9
-      - DOTNET_GCHeapHardLimitPercent=60
+      - DOTNET_GCHeapHardLimitPercent=75
     ports:
-      - "5381-5388:8080"
+      - "5381-5383:8080"
     networks:
       - smartlms-worker-net
 
