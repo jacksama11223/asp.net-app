@@ -19,6 +19,9 @@ services:
     build:
       context: ./react-test-frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_IS_COMMUNITY_HUB=true
+        - VITE_API_URL=http://141.253.114.218:5181
     container_name: smartlms-frontend-community
     restart: always
     mem_limit: 30m

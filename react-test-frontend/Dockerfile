@@ -10,7 +10,9 @@ RUN npm install --legacy-peer-deps
 COPY . .
 # Thiết lập biến môi trường cho API URL (có thể ghi đè lúc build)
 ARG VITE_API_URL=http://localhost:5181
+ARG VITE_IS_COMMUNITY_HUB=false
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_IS_COMMUNITY_HUB=$VITE_IS_COMMUNITY_HUB
 
 RUN npm run build
 
