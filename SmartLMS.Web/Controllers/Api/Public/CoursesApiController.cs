@@ -48,12 +48,12 @@ namespace SmartLMS.Web.Controllers.Api.Public
             if (!string.IsNullOrEmpty(cachedData))
             {
                 var redisData = JsonSerializer.Deserialize<IEnumerable<object>>(cachedData);
-                // Lưu ngược lại RAM để lần sau nhanh hơn
-                _memoryCache.Set(cacheKey, redisData, TimeSpan.FromMinutes(1));
+                // Lưu ngược lại RAM trong 2 phút
+                _memoryCache.Set(cacheKey, redisData, TimeSpan.FromMinutes(2));
                 return Ok(redisData);
             }
 
-            // 🚀 LỚP 3: Truy vấn Database (Chậm nhất)
+            // 🚀 LỚP 3: Truy vấn Database (Chậm nhất - Chỉ chạy khi cache trống)
             var courses = await _context.Courses
                 .Include(c => c.Instructor)
                 .Where(c => c.Status == "Published" && !c.IsDeleted)
@@ -74,7 +74,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
 
             var cacheOptions = new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
             };
 
             await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(courses), cacheOptions);
