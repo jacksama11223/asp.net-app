@@ -27,6 +27,7 @@
 - [x] **Sprint 2 - Community & Friends:** Hoàn thiện kết nối bạn bè và trích xuất bài viết cộng đồng.
 - [x] **Sprint 3 - Engagement:** Hoàn thiện AI Quiz Builder và Tutor Dashboard.
 - [x] **Icon SafeList & Build Hardening:** Thay thế 100% icon không tương thích trên 25 files.
+- [x] **Mobile Responsive Optimization:** Chuyển đổi Sidebar sang Drawer và fix lỗi giao diện trên iPhone.
 - [ ] Hoàn thiện luồng Thanh toán (VNPay) và Hóa đơn.
 - [ ] Kích hoạt hệ thống Affiliate và Coupon.
 - [ ] Tích hợp Zoom API cho lớp học trực tuyến.

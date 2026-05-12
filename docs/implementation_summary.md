@@ -29,6 +29,13 @@ Hệ thống đã hoàn thiện toàn bộ giao diện Frontend cho các tính n
   - Quản lý đặt lịch Mentoring 1:1 (tích hợp Google Meet).
   - Hệ thống "Hỏi đáp khẩn cấp" để hỗ trợ học viên realtime.
 
+### Mobile Optimization (Hardening Phase)
+- **Responsive Navigation (`Layout.jsx`, `Sidebar.jsx`, `Topbar.jsx`)**:
+  - Triển khai cơ chế **Sidebar Drawer** cho màn hình dọc (Vertical Phone).
+  - Tích hợp **Burger Menu** dành riêng cho Mobile.
+  - Tối ưu hóa **Typography & Overflow**: Sử dụng `ellipsis` và responsive `font-size` cho Sidebar labels để tránh vỡ layout.
+  - **Fluid Topbar**: Tự động thu gọn thanh tìm kiếm (Search) theo độ rộng màn hình.
+
 ## 2. Kỹ thuật & Hạ tầng (Technical Hardening)
 - **Icon Safety Policy**: 
   - Đã quét và thay thế 100% icon không tương thích trên 25 file giao diện.

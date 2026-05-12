@@ -12,6 +12,11 @@
 - **Live Classes:** Tích hợp Zoom API để tổ chức các buổi học trực tuyến đồng bộ.
 - **Coding Challenge:** Engine thực thi code (CompilerService) hỗ trợ làm bài tập lập trình trực tiếp, kiểm tra qua TestCases.
 
+### 1.6 Trải nghiệm Người dùng Di động (Mobile Optimization)
+- **Responsive Navigation:** Hệ thống Sidebar tự động chuyển sang Drawer (ngăn kéo) trên màn hình dọc (< 768px).
+- **Safe Viewport:** Đảm bảo 100% các thành phần UI (Search, User Profile, Badges) không bị tràn viền (Overflow) trên iPhone/Android.
+- **Micro-interactions:** Tối ưu hóa kích thước nút bấm và cử chỉ chạm (Touch-friendly) cho người dùng di động.
+
 ### 1.2 Hệ thống Đánh giá & Gamification
 - **Assessment Engine:** Chấm điểm trắc nghiệm, tự động cộng XP, cấp Badge (Huy hiệu) dựa trên thành tích.
 - **Leaderboard:** Bảng xếp hạng thời gian thực (tối ưu hóa bằng Redis Cache).

@@ -1,5 +1,17 @@
 # Changelog - SmartLMS.AI
 
+## [2026-05-12] - Mobile Optimization & Build Stability Hardening
+### Added
+- **Mobile Responsive:** Chuyển đổi Sidebar sang cơ chế Drawer (ngăn kéo) trên điện thoại.
+- **Burger Menu:** Bổ sung nút điều hướng cho người dùng Mobile.
+- **Measurement Tool:** Thêm `measure_responsive.js` để tự động quét các vị trí Hardcoded Pixel gây lỗi giao diện.
+
+### Fixed
+- **Vite Build:** Sửa lỗi `MISSING_EXPORT` tại `CommunityQuizBuilder.jsx` do sai tên component export.
+- **Reference Error:** Sửa lỗi `LuPlay is not defined` và `LuSettings is not defined` tại `MyLearning.jsx` (thiếu import).
+- **Sidebar Labels:** Sửa lỗi chữ bị ẩn trên Mobile và tối ưu chống tràn (ellipsis) cho văn bản.
+- **Topbar Overflow:** Sửa lỗi thanh tìm kiếm chèn lên các icon badge trên màn hình iPhone.
+
 ## [2026-05-11] - Expansion Ecosystem Completion (Sprint 1, 2, 3)
 ### Added
 - **Sprint 1 (Analytics):** Creator Analytics với biểu đồ Recharts và hệ thống Course Reviews/Ratings.

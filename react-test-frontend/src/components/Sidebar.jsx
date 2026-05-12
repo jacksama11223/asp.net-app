@@ -75,7 +75,7 @@ export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
                 component={Link}
                 to={item.path}
                 onClick={closeMobile}
-                label={!collapsed && item.label}
+                label={item.label}
                 leftSection={
                   <ThemeIcon size="md" radius="md" variant={isActive ? 'filled' : 'light'} color={item.color}>
                     <item.icon size={16} />
@@ -83,13 +83,24 @@ export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
                 }
                 active={isActive}
                 variant="filled"
-                className={`rounded-xl transition-all duration-200 ${collapsed ? 'py-3 px-2 justify-center' : 'py-3 px-4'} ${
+                className={`rounded-xl transition-all duration-200 ${collapsed ? 'py-3 px-2 justify-center lg:justify-center' : 'py-3 px-4'} ${
                   isActive 
                     ? 'bg-brand-500/10 text-brand-600' 
                     : 'hover:bg-black/5 text-slate-500 font-medium'
                 }`}
                 styles={{
-                  label: { fontWeight: 600, fontSize: '0.95rem', display: collapsed ? 'none' : 'block' },
+                  label: { 
+                    fontWeight: 600, 
+                    fontSize: '0.9rem',
+                    display: 'block',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    '@media (min-width: 768px)': {
+                      display: collapsed ? 'none' : 'block',
+                      fontSize: '0.95rem'
+                    }
+                  },
                   section: { margin: collapsed ? 0 : undefined }
                 }}
               />
@@ -114,20 +125,46 @@ export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
               component={Link}
               to="/settings"
               onClick={closeMobile}
-              label={!collapsed && "Cài đặt"}
+              label="Cài đặt"
               leftSection={<LuSettings size={18} />}
               className={`rounded-xl text-slate-500 hover:bg-black/5 ${collapsed ? 'justify-center px-0' : ''}`}
-              styles={{ section: { margin: collapsed ? 0 : undefined } }}
+              styles={{ 
+                section: { margin: collapsed ? 0 : undefined },
+                label: {
+                  display: 'block',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  '@media (min-width: 768px)': {
+                    display: collapsed ? 'none' : 'block'
+                  }
+                }
+              }}
             />
           </Tooltip>
           
           <Tooltip label="Đăng xuất" position="right" color="red" disabled={!collapsed}>
             <NavLink
               onClick={handleLogout}
-              label={!collapsed && "Đăng xuất"}
+              label="Đăng xuất"
               leftSection={<LuLogOut size={18} />}
               className={`rounded-xl text-red-500 hover:bg-red-500/10 transition-colors ${collapsed ? 'justify-center px-0' : ''}`}
-              styles={{ section: { margin: collapsed ? 0 : undefined }, label: { fontWeight: 600 } }}
+              styles={{ 
+                section: { margin: collapsed ? 0 : undefined }, 
+                label: { 
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  display: 'block',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  '@media (min-width: 768px)': {
+                    display: collapsed ? 'none' : 'block'
+                  }
+                } 
+              }}
             />
           </Tooltip>
         </Stack>
