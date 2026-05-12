@@ -14,9 +14,9 @@ services:
       - mariadb-data:/var/lib/mysql
     mem_limit: 150m
     command: >
-      --innodb-buffer-pool-size=128M
+      --innodb-buffer-pool-size=256M
       --innodb-log-file-size=64M
-      --max-connections=1000
+      --max-connections=5000
       --tmp-table-size=32M
       --query-cache-size=0
     healthcheck:
