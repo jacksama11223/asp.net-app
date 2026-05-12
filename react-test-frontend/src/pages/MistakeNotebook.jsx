@@ -7,7 +7,7 @@ import {
 } from '@mantine/core';
 import { 
   LuBookOpen, LuZap, LuSearch, LuArrowLeft,
-  LuClock, LuCheckCircle2, LuAlertTriangle,
+  LuClock, LuCheckCircle, LuAlertCircle,
   LuMessageSquare, LuTrash2, LuSparkles
 } from 'react-icons/lu';
 import { SimpleGrid } from '@mantine/core';
@@ -100,7 +100,7 @@ const MistakeNotebook = () => {
              <Paper p="md" radius="xl" withBorder className="glass">
                <Group>
                  <ThemeIcon size="xl" color="red" variant="light" radius="md">
-                   <LuAlertTriangle size={24} />
+                   <LuAlertCircle size={24} />
                  </ThemeIcon>
                  <Box>
                    <Text size="xs" c="dimmed" fw={700}>CẦN ÔN TẬP</Text>
@@ -111,7 +111,7 @@ const MistakeNotebook = () => {
              <Paper p="md" radius="xl" withBorder className="glass">
                <Group>
                  <ThemeIcon size="xl" color="teal" variant="light" radius="md">
-                   <LuCheckCircle2 size={24} />
+                   <LuCheckCircle size={24} />
                  </ThemeIcon>
                  <Box>
                    <Text size="xs" c="dimmed" fw={700}>ĐÃ VƯỢT QUA</Text>

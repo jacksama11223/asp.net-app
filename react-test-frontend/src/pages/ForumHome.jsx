@@ -5,7 +5,7 @@ import {
 } from '@mantine/core';
 import {
   LuSearch, LuPlus, LuMessageSquare, LuEye, 
-  LuZap, LuClock, LuChevronUp, LuFilter, LuMoreHorizontal
+  LuZap, LuClock, LuChevronUp, LuFilter, LuMoreVertical
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
