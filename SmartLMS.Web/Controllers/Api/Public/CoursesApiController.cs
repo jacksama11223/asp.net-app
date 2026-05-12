@@ -89,6 +89,25 @@ namespace SmartLMS.Web.Controllers.Api.Public
             return Ok(response);
         }
 
+        [HttpGet("performance")]
+        public async Task<IActionResult> GetPerformance()
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            await _cache.SetStringAsync("perf_test", "1");
+            var redisTime = sw.ElapsedMilliseconds;
+            sw.Restart();
+
+            var count = await _context.Courses.CountAsync();
+            var dbTime = sw.ElapsedMilliseconds;
+
+            return Ok(new
+            {
+                Node = Environment.MachineName,
+                RedisTime = $"{redisTime}ms",
+                DbTime = $"{dbTime}ms"
+            });
+        }
+
         /// <summary>
         /// Lấy chi tiết một khóa học cụ thể.
         /// </summary>
