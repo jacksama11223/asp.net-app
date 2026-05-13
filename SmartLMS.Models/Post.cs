@@ -26,6 +26,8 @@ public class Post
     public int VoteCount { get; set; } = 0;
     
     public int? VerifiedCommentId { get; set; } // ID của câu trả lời đã được xác thực
+    
+    [System.ComponentModel.DataAnnotations.Schema.ForeignKey("VerifiedCommentId")]
     public virtual Comment? VerifiedComment { get; set; }
     
     public bool IsPublished { get; set; } = true;
