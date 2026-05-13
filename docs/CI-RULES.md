@@ -49,5 +49,10 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **Root-Level Coding:** Hạn chế gán cứng các tiền tố như `[Route("hub")]` trong Controller. Hãy để ứng dụng chạy tại Root (`/`) để có thể truy cập trực tiếp qua cổng phụ (vd: 3080).
 - **Proxy Stripping:** Sử dụng cấu hình `proxy_pass http://upstream/;` (có dấu gạch chéo cuối) để Nginx tự động cắt tiền tố trước khi gửi vào Backend. Điều này giúp mã nguồn sạch hơn và linh hoạt hơn.
 
+## 10. QUY TẮC ĐỒNG BỘ DATABASE (SCHEMA SYNC)
+- **Model vs Schema:** Khi thêm bất kỳ thuộc tính (`Property`) nào vào Model C#, phải kiểm tra xem cột tương ứng đã tồn tại trong Database chưa.
+- **Migration SQL:** Mọi module mới hoặc thay đổi Model quan trọng phải đi kèm với tệp `.sql` để chạy lệnh `ALTER TABLE` hoặc `CREATE TABLE` trên môi trường Production.
+- **Kiểm tra Lỗi SELECT:** Nếu gặp lỗi `Unknown column`, ngay lập tức rà soát tệp Model và tạo script `sync_db_schema.sql` để đồng bộ.
+
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau khi mở cổng 3080 cho Hub.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố thiếu cột LastActivityAt.*
