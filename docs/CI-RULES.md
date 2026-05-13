@@ -49,10 +49,13 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **Root-Level Coding:** Hạn chế gán cứng các tiền tố như `[Route("hub")]` trong Controller. Hãy để ứng dụng chạy tại Root (`/`) để có thể truy cập trực tiếp qua cổng phụ (vd: 3080).
 - **Proxy Stripping:** Sử dụng cấu hình `proxy_pass http://upstream/;` (có dấu gạch chéo cuối) để Nginx tự động cắt tiền tố trước khi gửi vào Backend. Điều này giúp mã nguồn sạch hơn và linh hoạt hơn.
 
-## 10. QUY TẮC ĐỒNG BỘ DATABASE (SCHEMA SYNC)
-- **Model vs Schema:** Khi thêm bất kỳ thuộc tính (`Property`) nào vào Model C#, phải kiểm tra xem cột tương ứng đã tồn tại trong Database chưa.
-- **Migration SQL:** Mọi module mới hoặc thay đổi Model quan trọng phải đi kèm với tệp `.sql` để chạy lệnh `ALTER TABLE` hoặc `CREATE TABLE` trên môi trường Production.
-- **Kiểm tra Lỗi SELECT:** Nếu gặp lỗi `Unknown column`, ngay lập tức rà soát tệp Model và tạo script `sync_db_schema.sql` để đồng bộ.
+## 11. QUẢN TRỊ TÀI NGUYÊN (LOW-RAM STRATEGY)
+- **Serial Build:** Trên các máy chủ có RAM < 2GB (vd: Oracle Free Tier), tuyệt đối không chạy `docker compose up --build` cho tất cả các service cùng lúc. Phải build từng service đơn lẻ (`docker compose build <service_name>`) để tránh treo máy (Thrashing).
+- **Cứu hộ (Rescue):** Nếu máy chủ bị treo do quá tải, thực hiện `sudo reboot` (hoặc Force Reboot từ Console) -> `docker system prune -f` để làm sạch RAM và ổ cứng trước khi build lại.
+
+## 12. VẬN HÀNH TỰ ĐỘNG (NOHUP DEPLOYMENT)
+- **Background Task:** Sử dụng `nohup sh -c "chuỗi_lệnh" > log_file.txt 2>&1 &` để thực hiện các đợt Deploy dài hơi. Điều này cho phép ngắt kết nối SSH/tắt máy tính mà tiến trình build vẫn an toàn.
+- **Verification:** Luôn kiểm tra file log bằng `tail -f <log_file>` trong ít nhất 10 giây để đảm bảo lệnh đã "ăn" và đang chạy đúng lộ trình (tránh các lỗi typo như `ohup` thay vì `nohup`).
 
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố thiếu cột LastActivityAt.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau chiến dịch hồi sinh Hub bằng Serial Build.*
