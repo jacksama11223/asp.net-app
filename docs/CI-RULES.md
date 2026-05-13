@@ -45,5 +45,9 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **Độ ưu tiên (Priority):** Luôn sử dụng `location ^~ /path` cho các phân hệ quan trọng để đảm bảo Nginx không bị nhầm lẫn với các `location /` hoặc biểu thức chính quy (Regex) khác.
 - **Upstream Connection:** Khi proxy tới ASP.NET Hub, luôn bổ sung `proxy_http_version 1.1` và `proxy_set_header Connection ""` để tối ưu hóa kết nối.
 
+## 9. QUY TẮC ĐỊNH TUYẾN ĐỘC LẬP (STANDALONE ROUTING)
+- **Root-Level Coding:** Hạn chế gán cứng các tiền tố như `[Route("hub")]` trong Controller. Hãy để ứng dụng chạy tại Root (`/`) để có thể truy cập trực tiếp qua cổng phụ (vd: 3080).
+- **Proxy Stripping:** Sử dụng cấu hình `proxy_pass http://upstream/;` (có dấu gạch chéo cuối) để Nginx tự động cắt tiền tố trước khi gửi vào Backend. Điều này giúp mã nguồn sạch hơn và linh hoạt hơn.
+
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố định tuyến Hub sang Frontend.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau khi mở cổng 3080 cho Hub.*

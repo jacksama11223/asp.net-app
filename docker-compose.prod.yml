@@ -74,6 +74,7 @@ services:
         condition: service_healthy
     ports:
       - "5183:8080"
+      - "3080:8080"
     networks:
       - smartlms-net
 
