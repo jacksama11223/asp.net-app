@@ -1,5 +1,21 @@
 # Changelog - SmartLMS.AI Distributed System
 
+## [2026-05-13] - Community Hub v2 & System Stabilization
+### Added
+- Hoàn thiện 100% module **Community Engagement Hub** (Resources, Events, Q&A, Study Groups, Leaderboard).
+- Hệ thống Layout cao cấp cho Community Hub dùng Tailwind CSS.
+- Công cụ chẩn đoán kết nối Load Balancer (`diagnose_lb_connectivity.cjs`).
+- Script rà soát toàn diện hệ thống (`system_integrity_check.cjs`).
+
+### Fixed
+- **CS0101/CS0102:** Xử lý triệt để lỗi trùng lặp định nghĩa Class trong Models và DbContext.
+- **CS1061/CS0117:** Đồng bộ hóa tên trường (`BadgeId`, `EarnedDate`, `PostId`) để đảm bảo tương thích ngược với core Business.
+- **502 Bad Gateway:** Sửa lỗi định tuyến Nginx sang Docker Network (`community:8080`) và vô hiệu hóa HTTPS Redirection gây loop.
+
+### Technical Notes
+- **UserBadge Migration:** Luôn sử dụng `BadgeId` và `EarnedDate` để giữ tương thích với `AssessmentService`.
+- **Nginx Config:** Sử dụng tên Service Docker thay vì `127.0.0.1` bên trong container.
+
 Tất cả các thay đổi quan trọng đối với dự án này sẽ được ghi lại trong tệp này.
 
 ## [Unreleased] - 2026-05-13
