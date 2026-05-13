@@ -57,5 +57,10 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **Background Task:** Sử dụng `nohup sh -c "chuỗi_lệnh" > log_file.txt 2>&1 &` để thực hiện các đợt Deploy dài hơi. Điều này cho phép ngắt kết nối SSH/tắt máy tính mà tiến trình build vẫn an toàn.
 - **Verification:** Luôn kiểm tra file log bằng `tail -f <log_file>` trong ít nhất 10 giây để đảm bảo lệnh đã "ăn" và đang chạy đúng lộ trình (tránh các lỗi typo như `ohup` thay vì `nohup`).
 
+## 13. CẢNH BÁO EF CORE NAMING CONVENTION
+- **Shadow Properties:** Cẩn thận khi đặt tên Navigation Property (vd: `VerifiedComment`). Nếu không khai báo rõ ràng, EF Core sẽ tự tìm cột `VerifiedCommentCommentId`.
+- **Mapping Tiên quyết:** Luôn sử dụng `[ForeignKey("TênCộtThựcTế")]` trên Navigation Property để tránh việc EF Core tự suy luận sai tên cột trên môi trường Production.
+- **SQL Patch:** Nếu đã Deploy mà bị lỗi "Unknown Column" do mapping, hãy dùng SQL Patch để thêm cột "bí danh" vào DB thay vì build lại toàn bộ để tiết kiệm tài nguyên.
+
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau chiến dịch hồi sinh Hub bằng Serial Build.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố Mapping VerifiedCommentCommentId.*
