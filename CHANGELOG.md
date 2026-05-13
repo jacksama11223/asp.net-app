@@ -2,6 +2,15 @@
 
 Tất cả các thay đổi quan trọng đối với dự án này sẽ được ghi lại trong tệp này.
 
+## [Unreleased] - 2026-05-13
+
+### Added
+- Khởi tạo phân hệ **Group Learning Hub** (Community Module) trong thư mục `asp.net-group`.
+- Bổ sung Model `CommunityEvent` và `CommunityResource` hỗ trợ chia sẻ tài liệu và tổ chức sự kiện.
+- Cập nhật Model `Post` với thuộc tính `Tags` và `LastActivityAt` để tối ưu hóa Forum.
+- Triển khai `ICommunityService` và `CommunityController` với kiến trúc Modular Monolith.
+- Cấu hình kết nối Database và Redis đồng bộ cho phân hệ Cộng đồng.
+
 ## [Unreleased] - 2026-05-12
 
 ### 🛡️ Security & Protection (Bảo mật & Bảo vệ)

@@ -17,8 +17,10 @@ public class Post
     public string? Category { get; set; }
     public string? ThumbnailUrl { get; set; }
     
+    public string? Tags { get; set; } // vd: "Python,Beginner"
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public DateTime LastActivityAt { get; set; } = DateTime.Now;
     
     public int ViewCount { get; set; } = 0;
     public int VoteCount { get; set; } = 0;

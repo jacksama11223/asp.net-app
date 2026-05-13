@@ -143,6 +143,8 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Post> Posts { get; set; }
     public virtual DbSet<Comment> Comments { get; set; }
     public virtual DbSet<PostVote> PostVotes { get; set; }
+    public virtual DbSet<CommunityEvent> CommunityEvents { get; set; }
+    public virtual DbSet<CommunityResource> CommunityResources { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<DocumentPage> DocumentPages { get; set; }

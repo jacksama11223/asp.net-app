@@ -41,8 +41,10 @@
 - [ ] Tối ưu hóa hiệu năng SQL (Stored Procedures, Index tuning).
 
 ## Phase 6: Community Hub & Social Learning (Completed)
+- [x] **Group Learning Hub:** Khởi tạo Project `SmartLMS.Community` chuyên biệt trong thư mục `asp.net-group`.
+- [x] **Cross-App Data Sync:** Liên kết thư viện Models, Data và Business để đồng bộ dữ liệu người dùng và khóa học.
+- [x] **Dedicated API Gateway:** Cấu hình Nginx routing `/community` riêng cho phân hệ mới.
 - [x] **Notion-like Editor Integration:** Xây dựng trình soạn thảo khối cho Wiki/Community.
-- [x] **Social Extraction Module:** Cơ chế đẩy nội dung từ Main App sang Community App.
 - [x] **Tutor Feedback System:** Giao diện phản hồi chuyên sâu cho Mentor (AI Tutor Feedback).
 - [ ] **Collaborative Content:** Tính năng đồng chỉnh sửa và mời bạn bè đóng góp bài viết.
 - [ ] **Public Portfolio:** Cơ chế xuất bản Wiki cá nhân ra cộng đồng.
