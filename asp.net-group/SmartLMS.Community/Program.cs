@@ -14,6 +14,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<SmartLMSContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+builder.WebHost.UseUrls("http://*:8080");
+
 // 2. Security & Business Services
 builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
@@ -37,8 +39,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// BỎ HttpsRedirection vì Nginx đã xử lý SSL
+// app.UseHttpsRedirection(); 
 
+app.UseStaticFiles();
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
