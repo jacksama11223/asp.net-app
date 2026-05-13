@@ -20,7 +20,7 @@ public class CommunityService : ICommunityService
     public async Task<IEnumerable<Post>> GetLatestPostsAsync(int count)
     {
         return await _context.Posts
-            .Include(p => u.Author)
+            .Include(p => p.Author)
             .Where(p => p.IsPublished && !p.IsDeleted)
             .OrderByDescending(p => p.LastActivityAt)
             .Take(count)
