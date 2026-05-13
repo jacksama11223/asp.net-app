@@ -34,6 +34,25 @@ services:
     networks:
       - smartlms-worker-net
 
+  community:
+    build:
+      context: .
+      dockerfile: asp.net-group/SmartLMS.Community/Dockerfile
+    image: smartlms-community-worker
+    restart: always
+    mem_limit: 200m
+    deploy:
+      replicas: 1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=141.253.114.218;Port=3306;Database=SmartLMS;User=root;Password=YourStrongPassword123!;SslMode=None;
+      - Redis__ConnectionString=141.253.114.218:6379,password=YourRedisPass
+    ports:
+      - "5384:8080"
+    networks:
+      - smartlms-worker-net
+
 networks:
   smartlms-worker-net:
     driver: bridge
