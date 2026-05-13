@@ -150,7 +150,6 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<CommunityQuestion> CommunityQuestions { get; set; }
     public virtual DbSet<CommunityAnswer> CommunityAnswers { get; set; }
     public virtual DbSet<Repost> Reposts { get; set; }
-    public virtual DbSet<UserBadge> UserBadges { get; set; }
     public virtual DbSet<UserActivityPoint> UserActivityPoints { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
@@ -340,7 +339,7 @@ public partial class SmartLMSContext : DbContext
         });
 
         modelBuilder.Entity<UserBadge>(entity => {
-            entity.HasKey(e => e.UserBadgeId);
+            entity.HasKey(e => e.Id);
             entity.HasOne(d => d.User).WithMany(p => p.UserBadges).HasForeignKey(d => d.UserId);
         });
 
