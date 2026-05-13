@@ -56,9 +56,9 @@
                 <p class="text-slate-600 leading-relaxed mb-4">@post.Content</p>
 
                 <!-- Multimedia Placeholder (If any) -->
-                @if(post.Id % 3 == 0) {
+                @if(post.PostId % 3 == 0) {
                     <div class="w-full h-64 bg-slate-100 rounded-2xl mb-4 overflow-hidden border border-slate-200">
-                        <img src="https://source.unsplash.com/random/800x600?technology,coding&sig=@post.Id" class="w-full h-full object-cover" alt="Post media">
+                        <img src="https://source.unsplash.com/random/800x600?technology,coding&sig=@post.PostId" class="w-full h-full object-cover" alt="Post media">
                     </div>
                 }
 

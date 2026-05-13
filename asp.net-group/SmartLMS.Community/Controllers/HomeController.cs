@@ -15,9 +15,9 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var latestPosts = await _communityService.GetLatestPostsAsync(10);
-        var upcomingEvents = await _communityService.GetUpcomingEventsAsync();
-        var recentResources = await _communityService.GetRecentResourcesAsync();
+        var latestPosts = await _communityService.GetLatestPostsAsync();
+        var upcomingEvents = await _communityService.GetEventsAsync();
+        var recentResources = await _communityService.GetResourcesAsync();
         
         ViewBag.Events = upcomingEvents;
         ViewBag.Resources = recentResources;
