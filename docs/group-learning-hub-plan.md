@@ -32,7 +32,7 @@ Toàn bộ code phân hệ này sẽ nằm trong thư mục: `c:\code\asp.net\as
 1. **Database Schema:** Thêm các bảng `Posts`, `Comments`, `CommunityEvents`, `Resources`.
 2. **Project Setup:** Khởi tạo project `SmartLMS.Community` trong folder `asp.net-group`.
 3. **Internal Integration:** Cấu hình liên kết với `SmartLMS.Business` và `SmartLMS.Data`.
-4. **Nginx Routing:** Cấu hình Nginx để điều hướng `/community` sang phân hệ mới.
+4. **Nginx Routing:** Cấu hình Nginx để điều hướng `/hub` sang phân hệ mới.
 
 ---
 *Tài liệu được lập bởi Antigravity AI - Tuân thủ hiến pháp AGENTS.md.*
