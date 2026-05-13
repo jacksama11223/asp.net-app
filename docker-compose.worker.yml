@@ -1,6 +1,9 @@
 services:
   backend:
-    image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smartlms-backend-worker
     restart: always
     mem_limit: 250m
     deploy:
