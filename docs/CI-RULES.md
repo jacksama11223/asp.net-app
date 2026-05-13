@@ -72,5 +72,13 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **Tag Helper Directive:** Tệp này bắt buộc phải có dòng `@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers` để các thuộc tính `asp-action`, `asp-controller` hoạt động.
 - **Link Verification:** Nếu nút bấm không hoạt động (không có `href` khi soi mã nguồn), hãy kiểm tra ngay sự tồn tại của `_ViewImports.cshtml`.
 
+## 16. ĐỒNG BỘ HÓA THỰC THỂ (ENTITY SYNC)
+- **Module Consistency:** Khi thêm Class mới vào Models (vd: `CommunityResource`), phải đảm bảo bảng tương ứng đã được tạo trong DB Production.
+- **Migration Script:** Luôn đi kèm 1 file `.sql` chứa lệnh `CREATE TABLE IF NOT EXISTS` cho mọi thực thể mới để tránh lỗi `Table doesn't exist`.
+
+## 17. BẢO MẬT KHÓA (KEY INTEGRITY)
+- **AES-256 Standards:** Khóa mã hóa (`MasterKey`) PHẢI có độ dài chính xác là 32 ký tự. Thiếu hoặc thừa 1 ký tự sẽ gây lỗi `CryptographicException` toàn hệ thống.
+- **Environment Sync:** Khi thay đổi Key ở Local, phải cập nhật ngay cho VPS để tránh việc dữ liệu mã hóa ở máy này không thể giải mã ở máy kia.
+
 ---
-*Tài liệu được cập nhật ngày 14/05/2026 sau sự cố thiếu ViewImports tại Community Hub.*
+*Tài liệu được cập nhật ngày 14/05/2026 sau sự cố Schema & Encryption tại Community Hub.*
