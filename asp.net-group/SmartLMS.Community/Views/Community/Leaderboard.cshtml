@@ -1,0 +1,112 @@
+@model IEnumerable<SmartLMS.Models.UserActivityPoint>
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Leaderboard";
+}
+
+<div class="space-y-12">
+    <div class="text-center">
+        <h2 class="text-4xl font-black text-slate-800 mb-2">Honor Board</h2>
+        <p class="text-slate-500">Celebrating our top contributors and active learners.</p>
+    </div>
+
+    <!-- Top 3 Podium -->
+    @{
+        var top3 = Model.Take(3).ToList();
+    }
+    <div class="flex justify-center items-end gap-4 md:gap-12 pb-8">
+        @if(top3.Count > 1) {
+            <!-- 2nd Place -->
+            <div class="flex flex-col items-center">
+                <div class="relative mb-4">
+                    <div class="w-24 h-24 rounded-full border-4 border-slate-300 p-1 bg-white shadow-xl">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@top3[1].UserId" class="rounded-full bg-slate-100" alt="2nd">
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-slate-400 rounded-full flex items-center justify-center border-4 border-white text-white font-black">2</div>
+                </div>
+                <h4 class="font-bold text-slate-700">@top3[1].User?.FullName</h4>
+                <p class="text-slate-400 text-xs font-black uppercase">@top3[1].Points EXP</p>
+            </div>
+        }
+
+        @if(top3.Count > 0) {
+            <!-- 1st Place -->
+            <div class="flex flex-col items-center -translate-y-8">
+                <div class="relative mb-4 scale-125">
+                    <div class="w-24 h-24 rounded-full border-4 border-yellow-400 p-1 bg-white shadow-2xl">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@top3[0].UserId" class="rounded-full bg-slate-100" alt="1st">
+                    </div>
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2">
+                        <svg class="w-10 h-10 text-yellow-400 fill-current drop-shadow-md" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white text-white font-black">1</div>
+                </div>
+                <h4 class="font-black text-xl text-slate-800">@top3[0].User?.FullName</h4>
+                <p class="text-yellow-600 text-sm font-black uppercase">@top3[0].Points EXP</p>
+                <span class="mt-2 bg-yellow-100 text-yellow-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Top Contributor</span>
+            </div>
+        }
+
+        @if(top3.Count > 2) {
+            <!-- 3rd Place -->
+            <div class="flex flex-col items-center">
+                <div class="relative mb-4">
+                    <div class="w-24 h-24 rounded-full border-4 border-orange-300 p-1 bg-white shadow-xl">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@top3[2].UserId" class="rounded-full bg-slate-100" alt="3rd">
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-orange-400 rounded-full flex items-center justify-center border-4 border-white text-white font-black">3</div>
+                </div>
+                <h4 class="font-bold text-slate-700">@top3[2].User?.FullName</h4>
+                <p class="text-slate-400 text-xs font-black uppercase">@top3[2].Points EXP</p>
+            </div>
+        }
+    </div>
+
+    <!-- Ranking Table -->
+    <div class="glass-card rounded-3xl overflow-hidden shadow-xl">
+        <table class="w-full">
+            <thead class="bg-slate-50 border-b border-slate-100">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-black text-slate-400 uppercase tracking-widest">Rank</th>
+                    <th class="px-6 py-4 text-left text-xs font-black text-slate-400 uppercase tracking-widest">Member</th>
+                    <th class="px-6 py-4 text-center text-xs font-black text-slate-400 uppercase tracking-widest">Points (EXP)</th>
+                    <th class="px-6 py-4 text-center text-xs font-black text-slate-400 uppercase tracking-widest">Badges</th>
+                    <th class="px-6 py-4 text-right text-xs font-black text-slate-400 uppercase tracking-widest">Latest Achievement</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @{ int rank = 1; }
+                @foreach (var p in Model)
+                {
+                    <tr class="hover:bg-slate-50 transition-all cursor-pointer">
+                        <td class="px-6 py-4">
+                            <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-slate-500">@rank</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@p.UserId" alt="Member">
+                                </div>
+                                <span class="font-bold text-slate-800">@p.User?.FullName</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="text-cyan-600 font-black">@p.Points</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center -space-x-2">
+                                <div class="w-7 h-7 bg-blue-100 rounded-full border-2 border-white flex items-center justify-center text-[10px]" title="Fast Learner">🏃</div>
+                                <div class="w-7 h-7 bg-orange-100 rounded-full border-2 border-white flex items-center justify-center text-[10px]" title="Helper">🤝</div>
+                                <div class="w-7 h-7 bg-green-100 rounded-full border-2 border-white flex items-center justify-center text-[10px]" title="Top Post">🔥</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-xs font-bold text-slate-400">@p.ActivityType Earned</span>
+                        </td>
+                    </tr>
+                    rank++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

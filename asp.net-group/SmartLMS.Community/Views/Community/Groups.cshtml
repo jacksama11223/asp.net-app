@@ -1,0 +1,72 @@
+@model IEnumerable<SmartLMS.Models.StudyGroup>
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Study Groups";
+}
+
+<div class="space-y-6">
+    <div class="flex justify-between items-end">
+        <div>
+            <h2 class="text-3xl font-bold text-slate-800">Study Groups</h2>
+            <p class="text-slate-500">Join active squads and learn together in real-time.</p>
+        </div>
+        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Create New Study Group
+        </button>
+    </div>
+
+    <!-- Group Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @foreach (var g in Model)
+        {
+            <div class="glass-card rounded-2xl p-6 border-t-8 border-indigo-500 hover:shadow-xl transition-all">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h4 class="text-xl font-black text-slate-800">@g.Name</h4>
+                        <span class="bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full">@g.Subject</span>
+                    </div>
+                    <div class="bg-slate-100 px-3 py-1 rounded-lg text-center">
+                        <p class="text-xs font-bold text-slate-400">EXP</p>
+                        <p class="text-lg font-black text-slate-800">@g.EXP</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Progress Section -->
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span class="text-slate-400">GROUP PROGRESS</span>
+                            <span class="text-indigo-600">@g.ProgressPercentage%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-indigo-500 h-full rounded-full transition-all duration-1000 shadow-sm shadow-indigo-200" style="width: @g.ProgressPercentage%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Meta Info -->
+                    <div class="flex justify-between items-center text-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@g.LeaderId" alt="Leader">
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400">LEADER</p>
+                                <p class="font-bold text-slate-700">@(g.Leader?.FullName ?? "Member")</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-400">MEMBERS</p>
+                            <p class="font-bold text-slate-700">@g.Members.Count / 12</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex gap-3">
+                        <button class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">Join Group</button>
+                        <button class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold px-4 py-3 rounded-xl transition-all">View Details</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

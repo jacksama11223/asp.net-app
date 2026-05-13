@@ -6,14 +6,32 @@ namespace SmartLMS.Business;
 
 public interface ICommunityService
 {
-    // Forum
-    Task<IEnumerable<Post>> GetLatestPostsAsync(int count);
+    // === 1. FORUM & FEED ===
+    Task<IEnumerable<Post>> GetLatestPostsAsync();
     Task<Post?> GetPostByIdAsync(int id);
     Task<Post> CreatePostAsync(Post post);
+    Task<Comment> AddCommentAsync(Comment comment);
+    Task<Repost> RepostAsync(int userId, int originalPostId, string? customComment);
     
-    // Events
-    Task<IEnumerable<CommunityEvent>> GetUpcomingEventsAsync();
+    // === 2. RESOURCE SHARING ===
+    Task<IEnumerable<CommunityResource>> GetResourcesAsync(string? fileType = null, string? subject = null);
+    Task<CommunityResource> UploadResourceAsync(CommunityResource resource);
     
-    // Resources
-    Task<IEnumerable<CommunityResource>> GetRecentResourcesAsync();
+    // === 3. EVENT LISTINGS ===
+    Task<IEnumerable<CommunityEvent>> GetEventsAsync();
+    Task<bool> RSVPToEventAsync(int eventId, int userId);
+    
+    // === 4. Q&A SECTION ===
+    Task<IEnumerable<CommunityQuestion>> GetQuestionsAsync(string status = "All");
+    Task<CommunityQuestion> AskQuestionAsync(CommunityQuestion question);
+    Task<CommunityAnswer> AddAnswerAsync(CommunityAnswer answer);
+    
+    // === 5. STUDY GROUPS ===
+    Task<IEnumerable<StudyGroup>> GetStudyGroupsAsync();
+    Task<bool> JoinGroupAsync(int groupId, int userId);
+    
+    // === 6. MEMBER DIRECTORY & GAMIFICATION ===
+    Task<IEnumerable<User>> GetMembersAsync(string? role = null, string? skill = null);
+    Task<IEnumerable<UserActivityPoint>> GetLeaderboardAsync();
+    Task<IEnumerable<UserBadge>> GetUserBadgesAsync(int userId);
 }

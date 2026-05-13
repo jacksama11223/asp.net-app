@@ -1,0 +1,60 @@
+@model IEnumerable<SmartLMS.Models.CommunityEvent>
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Event Listings";
+}
+
+<div class="space-y-6">
+    <div class="flex justify-between items-end">
+        <div>
+            <h2 class="text-3xl font-bold text-slate-800">Community Events</h2>
+            <p class="text-slate-500">Workshops, Coding Sessions, and Webinars.</p>
+        </div>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Propose an Event
+        </button>
+    </div>
+
+    <!-- Event List -->
+    <div class="space-y-4">
+        @foreach (var ev in Model)
+        {
+            <div class="glass-card rounded-2xl p-6 flex items-center gap-6 hover:shadow-lg transition-all">
+                <!-- Date Badge -->
+                <div class="w-20 h-20 bg-slate-800 rounded-2xl flex flex-col items-center justify-center text-white shadow-xl">
+                    <span class="text-xs font-bold uppercase opacity-70">@ev.EventDate.ToString("MMM")</span>
+                    <span class="text-3xl font-black">@ev.EventDate.ToString("dd")</span>
+                </div>
+
+                <!-- Event Details -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="bg-blue-100 text-blue-700 text-[10px] font-black uppercase px-2 py-0.5 rounded">@ev.EventType</span>
+                        <span class="text-slate-400 text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            @ev.EventDate.ToString("hh:mm tt")
+                        </span>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800">@ev.Title</h4>
+                    <p class="text-slate-500 text-sm mt-1 flex items-center gap-1">
+                        <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        @ev.Location
+                    </p>
+                </div>
+
+                <!-- Stats & Actions -->
+                <div class="flex items-center gap-8">
+                    <div class="text-center">
+                        <p class="text-2xl font-black text-slate-800">@ev.Participants.Count</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">RSVP</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold px-6 py-2 rounded-xl transition-all shadow-md">RSVP</button>
+                        <button class="border border-slate-200 hover:bg-slate-50 font-bold px-4 py-2 rounded-xl transition-all">View Details</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

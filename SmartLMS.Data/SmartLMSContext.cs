@@ -142,9 +142,16 @@ public partial class SmartLMSContext : DbContext
     // Community Module
     public virtual DbSet<Post> Posts { get; set; }
     public virtual DbSet<Comment> Comments { get; set; }
-    public virtual DbSet<PostVote> PostVotes { get; set; }
-    public virtual DbSet<CommunityEvent> CommunityEvents { get; set; }
     public virtual DbSet<CommunityResource> CommunityResources { get; set; }
+    public virtual DbSet<CommunityEvent> CommunityEvents { get; set; }
+    public virtual DbSet<EventParticipant> EventParticipants { get; set; }
+    public virtual DbSet<StudyGroup> StudyGroups { get; set; }
+    public virtual DbSet<StudyGroupMember> StudyGroupMembers { get; set; }
+    public virtual DbSet<CommunityQuestion> CommunityQuestions { get; set; }
+    public virtual DbSet<CommunityAnswer> CommunityAnswers { get; set; }
+    public virtual DbSet<Repost> Reposts { get; set; }
+    public virtual DbSet<UserBadge> UserBadges { get; set; }
+    public virtual DbSet<UserActivityPoint> UserActivityPoints { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<DocumentPage> DocumentPages { get; set; }
@@ -152,6 +159,26 @@ public partial class SmartLMSContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        // Many-to-Many: Event Participants
+        modelBuilder.Entity<EventParticipant>()
+            .HasKey(ep => new { ep.EventId, ep.UserId });
+
+        modelBuilder.Entity<EventParticipant>()
+            .HasOne(ep => ep.Event)
+            .WithMany(e => e.Participants)
+            .HasForeignKey(ep => ep.EventId);
+
+        // Many-to-Many: Study Group Members
+        modelBuilder.Entity<StudyGroupMember>()
+            .HasKey(sgm => new { sgm.GroupId, sgm.UserId });
+
+        modelBuilder.Entity<StudyGroupMember>()
+            .HasOne(sgm => sgm.Group)
+            .WithMany(g => g.Members)
+            .HasForeignKey(sgm => sgm.GroupId);
+
         // Value Converters for Encryption
         var encryptionConverter = new ValueConverter<string, string>(
             v => _encryptionService != null ? _encryptionService.Encrypt(v) : v,

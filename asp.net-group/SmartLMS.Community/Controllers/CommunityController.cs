@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
 using SmartLMS.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Community.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class CommunityController : ControllerBase
+[Route("hub")]
+public class CommunityController : Controller
 {
     private readonly ICommunityService _communityService;
 
@@ -17,33 +15,59 @@ public class CommunityController : ControllerBase
         _communityService = communityService;
     }
 
-    [HttpGet("posts/latest")]
-    public async Task<ActionResult<IEnumerable<Post>>> GetLatestPosts(int count = 10)
+    // 1. Discussion Forum (Default)
+    [HttpGet("")]
+    public async Task<IActionResult> Index()
     {
-        var posts = await _communityService.GetLatestPostsAsync(count);
-        return Ok(posts);
+        var posts = await _communityService.GetLatestPostsAsync();
+        return View(posts);
     }
 
-    [HttpGet("events/upcoming")]
-    public async Task<ActionResult<IEnumerable<CommunityEvent>>> GetUpcomingEvents()
+    // 2. Resource Sharing
+    [HttpGet("resources")]
+    public async Task<IActionResult> Resources(string? fileType, string? subject)
     {
-        var events = await _communityService.GetUpcomingEventsAsync();
-        return Ok(events);
+        var resources = await _communityService.GetResourcesAsync(fileType, subject);
+        return View(resources);
     }
 
-    [HttpGet("resources/recent")]
-    public async Task<ActionResult<IEnumerable<CommunityResource>>> GetRecentResources()
+    // 3. Event Listings
+    [HttpGet("events")]
+    public async Task<IActionResult> Events()
     {
-        var resources = await _communityService.GetRecentResourcesAsync();
-        return Ok(resources);
+        var events = await _communityService.GetEventsAsync();
+        return View(events);
     }
 
-    [HttpPost("posts")]
-    public async Task<ActionResult<Post>> CreatePost([FromBody] Post post)
+    // 4. Member Directory
+    [HttpGet("members")]
+    public async Task<IActionResult> Members(string? role, string? skill)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-        
-        var createdPost = await _communityService.CreatePostAsync(post);
-        return CreatedAtAction(nameof(GetLatestPosts), new { id = createdPost.PostId }, createdPost);
+        var members = await _communityService.GetMembersAsync(role, skill);
+        return View(members);
+    }
+
+    // 5. Q&A Section
+    [HttpGet("qa")]
+    public async Task<IActionResult> QA(string status = "All")
+    {
+        var questions = await _communityService.GetQuestionsAsync(status);
+        return View(questions);
+    }
+
+    // 6. Study Groups
+    [HttpGet("groups")]
+    public async Task<IActionResult> Groups()
+    {
+        var groups = await _communityService.GetStudyGroupsAsync();
+        return View(groups);
+    }
+
+    // 7. Leaderboard
+    [HttpGet("leaderboard")]
+    public async Task<IActionResult> Leaderboard()
+    {
+        var topUsers = await _communityService.GetLeaderboardAsync();
+        return View(topUsers);
     }
 }
