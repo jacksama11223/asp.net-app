@@ -62,5 +62,10 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **Mapping Tiên quyết:** Luôn sử dụng `[ForeignKey("TênCộtThựcTế")]` trên Navigation Property để tránh việc EF Core tự suy luận sai tên cột trên môi trường Production.
 - **SQL Patch:** Nếu đã Deploy mà bị lỗi "Unknown Column" do mapping, hãy dùng SQL Patch để thêm cột "bí danh" vào DB thay vì build lại toàn bộ để tiết kiệm tài nguyên.
 
+## 14. ĐỊNH TUYẾN ĐA TẦNG & TAG HELPERS
+- **Flexible Routes:** Controller phải hỗ trợ cả Route tuyệt đối (vd: `[Route("hub")]`) và Route mặc định (`[Route("")]`) để tương thích với cả Nginx Proxy và Standalone Port.
+- **No Hardcoded Links:** Tuyệt đối không viết `href="/hub/action"` trong View. Phải sử dụng ASP.NET Tag Helpers (`asp-action`, `asp-controller`) hoặc đường dẫn tương đối để ứng dụng tự động sinh URL phù hợp với môi trường hiện tại.
+- **Relative Paths:** Nếu dùng thẻ `<a>` thuần, hãy dùng `href="action"` (tương đối) thay vì `/action` (tuyệt đối từ gốc) để đảm bảo tính di động của module.
+
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố Mapping VerifiedCommentCommentId.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố 404 Links trên port 3080.*

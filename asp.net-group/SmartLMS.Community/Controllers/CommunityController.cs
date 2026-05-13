@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace SmartLMS.Community.Controllers;
 
+[Route("hub")]
+[Route("")]
 public class CommunityController : Controller
 {
     private readonly ICommunityService _communityService;

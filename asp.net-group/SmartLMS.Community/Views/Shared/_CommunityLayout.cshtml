@@ -35,13 +35,13 @@
     <!-- Main Navigation Tabs -->
     <nav class="bg-white border-b border-slate-200 sticky top-[65px] z-40">
         <div class="container mx-auto px-4 flex gap-8">
-            <a href="/hub" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "tab-active" : "")">Discussion Forum</a>
-            <a href="/hub/resources" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Resources" ? "tab-active" : "")">Resource Sharing</a>
-            <a href="/hub/events" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Events" ? "tab-active" : "")">Event Listings</a>
-            <a href="/hub/members" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Members" ? "tab-active" : "")">Member Directory</a>
-            <a href="/hub/qa" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "QA" ? "tab-active" : "")">Q&A Section</a>
-            <a href="/hub/groups" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Groups" ? "tab-active" : "")">Study Groups</a>
-            <a href="/hub/leaderboard" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Leaderboard" ? "tab-active" : "")">Leaderboard</a>
+            <a asp-action="Index" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "tab-active" : "")">Discussion Forum</a>
+            <a asp-action="Resources" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Resources" ? "tab-active" : "")">Resource Sharing</a>
+            <a asp-action="Events" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Events" ? "tab-active" : "")">Event Listings</a>
+            <a asp-action="Members" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Members" ? "tab-active" : "")">Member Directory</a>
+            <a asp-action="QA" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "QA" ? "tab-active" : "")">Q&A Section</a>
+            <a asp-action="Groups" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Groups" ? "tab-active" : "")">Study Groups</a>
+            <a asp-action="Leaderboard" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Leaderboard" ? "tab-active" : "")">Leaderboard</a>
         </div>
     </nav>
 
