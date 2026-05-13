@@ -26,9 +26,19 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 3. `dotnet build SmartLMS.Business/SmartLMS.Business.csproj`
 4. `node system_integrity_check.cjs`
 
-## 5. QUY TRÌNH DEPLOY PHÂN TÁN
-- **Mở cổng Cloud:** Khi thêm cổng mới (vd: 5384), phải cập nhật vào mục Security List trên Oracle Cloud Console trước khi Build.
-- **Sync Code:** Build đồng thời trên cả VPS-A và VPS-B để tránh lệch phiên bản logic giữa các node Load Balancer.
+## 6. QUY TẮC TẦNG HIỂN THỊ (VIEW & CONTROLLER)
+- **Đồng bộ View:** Khi đổi tên trường trong Model (vd: `PostId`), phải chạy lệnh `grep` trên toàn bộ thư mục `Views/` để cập nhật các tham chiếu `@item.Id` sang tên mới.
+- **Service Signature:** Khi thay đổi Interface trong tầng Business, phải cập nhật ngay các Controller đang inject Service đó. Tuyệt đối không để sai lệch tham số (Overload mismatch).
+- **Multimedia References:** Luôn sử dụng đúng thuộc tính khóa chính cho các logic phụ trợ như sinh ảnh ngẫu nhiên (vd: `sig=@post.PostId`).
+
+## 7. QUY TRÌNH KIỂM ĐỊNH (BỔ SUNG)
+Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trước khi `git push`:
+1. `dotnet build SmartLMS.Models/SmartLMS.Models.csproj`
+2. `dotnet build SmartLMS.Data/SmartLMS.Data.csproj`
+3. `dotnet build SmartLMS.Business/SmartLMS.Business.csproj`
+4. **MỚI:** `dotnet build asp.net-group/SmartLMS.Community/SmartLMS.Community.csproj`
+5. `node system_integrity_check.cjs`
+6. `node hub_reference_audit.cjs`
 
 ---
-*Lưu ý: Vi phạm các quy tắc trên sẽ dẫn đến lỗi hệ thống nghiêm trọng. Hãy đọc kỹ trước khi bắt tay vào code.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố biên dịch Hub.*
