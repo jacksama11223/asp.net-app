@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -89,6 +89,18 @@ public class StudentApiController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("mistakes")]
+    public async Task<ActionResult> GetMistakes()
+    {
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        int userId = int.Parse(userIdStr);
+
+        var mistakes = await _studentService.GetMistakeNotebookAsync(userId, null);
+        Response.Headers.Add("X-Server-Node", Environment.MachineName);
+        return Ok(mistakes);
+    }
+
     [HttpGet("mistakes/{courseId}")]
     public async Task<ActionResult> GetMistakes(int courseId)
     {
@@ -97,6 +109,7 @@ public class StudentApiController : ControllerBase
         int userId = int.Parse(userIdStr);
 
         var mistakes = await _studentService.GetMistakeNotebookAsync(userId, courseId);
+        Response.Headers.Add("X-Server-Node", Environment.MachineName);
         return Ok(mistakes);
     }
 

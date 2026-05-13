@@ -77,16 +77,10 @@ namespace SmartLMS.Web.Controllers.Api.Public
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
             };
 
-            // 🚀 Trả về dữ liệu kèm theo định danh máy chủ để kiểm tra Load Balance
-            var response = new
-            {
-                ServerNode = Environment.MachineName, // Trả về ID của Container
-                Data = courses
-            };
-
             await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(courses), cacheOptions);
+            Response.Headers.Add("X-Server-Node", Environment.MachineName);
 
-            return Ok(response);
+            return Ok(courses);
         }
 
         [HttpGet("performance")]
