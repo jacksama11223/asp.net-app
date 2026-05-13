@@ -40,5 +40,10 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 5. `node system_integrity_check.cjs`
 6. `node hub_reference_audit.cjs`
 
+## 8. QUY TẮC ĐỊNH TUYẾN NGINX (DIAGNOSIS)
+- **Triệu chứng Mất Header:** Nếu `curl -I` không hiển thị header `X-Server-Node`, nghĩa là request **CHƯA** chạm tới upstream. Nginx đang tự trả về file tĩnh hoặc bị lỗi cấu hình `location`.
+- **Độ ưu tiên (Priority):** Luôn sử dụng `location ^~ /path` cho các phân hệ quan trọng để đảm bảo Nginx không bị nhầm lẫn với các `location /` hoặc biểu thức chính quy (Regex) khác.
+- **Upstream Connection:** Khi proxy tới ASP.NET Hub, luôn bổ sung `proxy_http_version 1.1` và `proxy_set_header Connection ""` để tối ưu hóa kết nối.
+
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố biên dịch Hub.*
+*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố định tuyến Hub sang Frontend.*
