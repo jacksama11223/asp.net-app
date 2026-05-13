@@ -67,5 +67,10 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **No Hardcoded Links:** Tuyệt đối không viết `href="/hub/action"` trong View. Phải sử dụng ASP.NET Tag Helpers (`asp-action`, `asp-controller`) hoặc đường dẫn tương đối để ứng dụng tự động sinh URL phù hợp với môi trường hiện tại.
 - **Relative Paths:** Nếu dùng thẻ `<a>` thuần, hãy dùng `href="action"` (tương đối) thay vì `/action` (tuyệt đối từ gốc) để đảm bảo tính di động của module.
 
+## 15. KÍCH HOẠT VIEW ENGINE (TAG HELPER ACTIVATION)
+- **Mandatory _ViewImports:** Mọi thư mục `Views` của module MVC mới PHẢI chứa tệp `_ViewImports.cshtml`.
+- **Tag Helper Directive:** Tệp này bắt buộc phải có dòng `@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers` để các thuộc tính `asp-action`, `asp-controller` hoạt động.
+- **Link Verification:** Nếu nút bấm không hoạt động (không có `href` khi soi mã nguồn), hãy kiểm tra ngay sự tồn tại của `_ViewImports.cshtml`.
+
 ---
-*Tài liệu được cập nhật ngày 13/05/2026 sau sự cố 404 Links trên port 3080.*
+*Tài liệu được cập nhật ngày 14/05/2026 sau sự cố thiếu ViewImports tại Community Hub.*
