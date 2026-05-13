@@ -339,7 +339,7 @@ public partial class SmartLMSContext : DbContext
         });
 
         modelBuilder.Entity<UserBadge>(entity => {
-            entity.HasKey(e => e.Id);
+            entity.HasKey(e => e.BadgeId);
             entity.HasOne(d => d.User).WithMany(p => p.UserBadges).HasForeignKey(d => d.UserId);
         });
 

@@ -15,12 +15,12 @@ public class Repost
 
 public class UserBadge
 {
-    public int Id { get; set; }
+    public int BadgeId { get; set; }
     public int UserId { get; set; }
     public User? User { get; set; }
     public string BadgeName { get; set; } = string.Empty; // Top Mentor, Fast Learner, Code Ninja
     public string BadgeIcon { get; set; } = string.Empty;
-    public DateTime EarnedAt { get; set; } = DateTime.UtcNow;
+    public DateTime EarnedDate { get; set; } = DateTime.UtcNow;
 }
 
 public class UserActivityPoint

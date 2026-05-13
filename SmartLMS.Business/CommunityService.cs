@@ -31,7 +31,7 @@ public class CommunityService : ICommunityService
         return await _context.Posts
             .Include(p => p.Author)
             .Include(p => p.Comments).ThenInclude(c => c.Author)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.PostId == id);
     }
 
     public async Task<Post> CreatePostAsync(Post post)
