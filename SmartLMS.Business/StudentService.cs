@@ -134,12 +134,19 @@ namespace SmartLMS.Business;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(int userId, int courseId)
+        public async Task<IEnumerable<MistakeLog>> GetMistakeNotebookAsync(int userId, int? courseId)
         {
-            return await _context.MistakeLogs
+            var query = _context.MistakeLogs
                 .Include(m => m.Lesson)
-                .Where(m => m.UserId == userId && m.Lesson.Module.CourseId == courseId)
-                .ToListAsync();
+                .Where(m => m.UserId == userId);
+
+            if (courseId.HasValue)
+            {
+                // Lọc theo khóa học nếu có ID
+                query = query.Where(m => m.Lesson != null && m.Lesson.Module.CourseId == courseId.Value);
+            }
+
+            return await query.OrderByDescending(m => m.CreatedAt).ToListAsync();
         }
 
         public async Task AskQuestionAsync(LessonQuestion question)
