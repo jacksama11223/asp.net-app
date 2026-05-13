@@ -1,31 +1,52 @@
-const axios = require('axios');
+const mysql = require('mysql2/promise');
+const redis = require('redis');
 
-const URL_VPSB_PERF = 'http://145.241.160.156:5381/api/public/courses/performance';
+// 🔍 Cấu hình lấy từ docker-compose của ngài
+const DB_CONFIG = {
+    host: '141.253.114.218', // IP VPS-A
+    port: 3306,
+    user: 'root',
+    password: 'YourStrongPassword123!',
+    database: 'SmartLMS'
+};
 
-async function trackError() {
+const REDIS_URL = 'redis://:YourRedisPass@141.253.114.218:6379';
+
+async function checkConnectivity() {
     console.log(`======================================================`);
-    console.log(`🕵️ TRUY TÌM NGUYÊN NHÂN LỖI 500 & TRẮNG MÀN HÌNH`);
-    console.log(`======================================================`);
+    console.log(`🕵️ KIỂM TRA HẠ TẦNG TRƯỚC KHI BUILD (MARIADB MODE)`);
+    console.log(`======================================================\n`);
 
-    console.log(`\n📡 Đang gọi tới VPS-B để 'Nội soi' kết nối Database...`);
-    const start = Date.now();
+    // 1. Kiểm tra MariaDB
+    console.log(`📡 Đang thử kết nối MariaDB (${DB_CONFIG.host})...`);
     try {
-        const res = await axios.get(URL_VPSB_PERF, { timeout: 30000 });
-        console.log(`✅ Thành công! (Điều này không nên xảy ra nếu ngài đang bị lỗi)`);
-    } catch (e) {
-        const duration = Date.now() - start;
-        console.log(`❌ THẤT BẠI sau ${duration}ms`);
-        
-        if (e.response) {
-            console.log(`📩 Server VPS-B trả về lỗi 500. `);
-            console.log(`💡 PHÂN TÍCH: Nếu mất > 15s mới báo lỗi, chắc chắn là do Database Timeout.`);
-            console.log(`💡 GỢI Ý: Ngài cần mở cổng 3306 trên Security List của VPS-A cho VPS-B vào.`);
-        } else {
-            console.log(`⚠️ Lỗi Network: ${e.message}`);
-        }
+        const connection = await mysql.createConnection(DB_CONFIG);
+        console.log(`   ✅ KẾT NỐI MARIADB THÀNH CÔNG!`);
+        const [rows] = await connection.execute('SELECT VERSION() as version');
+        console.log(`   📦 Phiên bản: ${rows[0].version}`);
+        await connection.end();
+    } catch (err) {
+        console.log(`   ❌ LỖI KẾT NỐI MARIADB: ${err.message}`);
     }
 
-    console.log(`\n======================================================`);
+    console.log(`------------------------------------------------------`);
+
+    // 2. Kiểm tra Redis
+    console.log(`📡 Đang thử kết nối Redis...`);
+    const client = redis.createClient({ url: REDIS_URL });
+    client.on('error', (err) => console.log(`   ❌ LỖI KẾT NỐI REDIS: ${err.message}`));
+    
+    try {
+        await client.connect();
+        console.log(`   ✅ KẾT NỐI REDIS THÀNH CÔNG!`);
+        await client.ping();
+        await client.quit();
+    } catch (err) {
+        // Lỗi đã được bắt ở sự kiện 'error'
+    }
+
+    console.log(`\n🏁 HOÀN TẤT KIỂM TRA.`);
+    console.log(`======================================================`);
 }
 
-trackError();
+checkConnectivity();
