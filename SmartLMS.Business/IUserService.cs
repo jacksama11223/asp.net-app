@@ -13,4 +13,5 @@ public interface IUserService
     Task<IEnumerable<User>> GetUsersByHierarchyAsync(int requesterHierarchyLevel, int? requesterDepartmentId);
     Task<bool> UpdateUserStatusAsync(int userId, int status);
     Task<bool> SetPasswordAsync(int userId, string newPassword);
+    Task<IEnumerable<AuditLog>> GetAuditTrailAsync(int? userId = null);
 }

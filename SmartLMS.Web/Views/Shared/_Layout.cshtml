@@ -370,12 +370,35 @@
                         }
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
+                <!-- Navbar Search -->
+        <li class="nav-item">
+            <div class="input-group input-group-sm glass-panel ml-3" style="width: 250px;">
+                <input class="form-control form-control-navbar border-0 bg-transparent text-white" type="search" placeholder="Tìm khóa học AI..." id="globalSearch">
+                <div class="input-group-append">
+                    <button class="btn btn-navbar text-info" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </div>
-            <!-- /.sidebar -->
-        </aside>
+        </li>
 
-        <!-- Content Wrapper. Contains page content -->
+        <!-- Notifications Dropdown Menu -->
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-bell"></i>
+                <span class="badge badge-warning navbar-badge" id="notif-count">0</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right glass-panel" id="notif-drawer">
+                <span class="dropdown-item dropdown-header text-white">Thông báo mới</span>
+                <div class="dropdown-divider"></div>
+                <div id="notif-list">
+                    <a href="#" class="dropdown-item text-white-50 small">
+                        Chưa có thông báo nào.
+                    </a>
+                </div>
+            </div>
+        </li>
+     <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @RenderBody()
         </div>
@@ -470,6 +493,46 @@
             lucide.createIcons();
         });
     </script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/gamificationHub")
+            .build();
+
+        connection.on("ReceiveAchievement", function (data) {
+            // 1. Cập nhật Badge chuông
+            let count = parseInt($('#notif-count').text()) + 1;
+            $('#notif-count').text(count);
+            
+            // 2. Thêm vào List thông báo
+            $('#notif-list').prepend(`
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-trophy mr-2 text-warning"></i> ${data.message} (+${data.xp} XP)
+                </a>
+                <div class="dropdown-divider"></div>
+            `);
+
+            // 3. Pháo hoa chúc mừng
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            
+            // 4. Thông báo SweetAlert
+            Swal.fire({
+                title: 'Thành tựu mới!',
+                text: data.message,
+                icon: 'success',
+                timer: 3000
+            });
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+
+        // Global Search Logic
+        $('#globalSearch').on('keypress', function(e) {
+            if(e.which == 13) {
+                window.location.href = '/Course/Search?q=' + $(this).val();
+            }
+        });
+    </script>
 </body>
 </html>

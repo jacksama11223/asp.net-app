@@ -1,52 +1,39 @@
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using SmartLMS.Business.Events;
-using SmartLMS.Data;
-using SmartLMS.Models;
+using SmartLMS.Web.Hubs;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SmartLMS.Business.Handlers;
 
-/// <summary>
-/// Handler thuộc Module Notification.
-/// Lắng nghe sự kiện "Đặt lịch mới" từ Module Booking,
-/// rồi TỰ ĐỘNG ghi thông báo vào DB - không cần BookingService phải biết.
-/// </summary>
-public class NotificationEventHandler : INotificationHandler<BookingCreatedEvent>
+public class NotificationEventHandler : INotificationHandler<AssessmentCompletedEvent>
 {
-    private readonly SmartLMSContext _context;
+    private readonly IEmailService _emailService;
+    private readonly IWebhookService _webhookService;
+    private readonly IHubContext<GamificationHub> _hubContext;
 
-    public NotificationEventHandler(SmartLMSContext context)
+    public NotificationEventHandler(IEmailService emailService, IWebhookService webhookService, IHubContext<GamificationHub> hubContext)
     {
-        _context = context;
+        _emailService = emailService;
+        _webhookService = webhookService;
+        _hubContext = hubContext;
     }
 
-    public async Task Handle(BookingCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(AssessmentCompletedEvent notification, CancellationToken cancellationToken)
     {
-        // Gửi thông báo cho Giảng viên
-        _context.Notifications.Add(new Notification
-        {
-            UserId = notification.TutorId,
-            Title = "Yêu cầu đặt lịch mới",
-            Message = $"Sinh viên yêu cầu học lúc {notification.StartTime:dd/MM/yyyy HH:mm}.",
-            Type = "Booking",
-            IsRead = false,
-            CreatedAt = DateTime.UtcNow
+        // 1. Gửi Email thông báo
+        await _emailService.SendEmailAsync("student@example.com", "Chúc mừng hoàn thành bài thi!", $"Bạn đã nhận được {notification.XPEarned} XP.");
+
+        // 2. Bắn SignalR Real-time (Hiện popup pháo hoa trên UI)
+        await _hubContext.Clients.User(notification.UserId.ToString()).SendAsync("ReceiveAchievement", new {
+            xp = notification.XPEarned,
+            message = "Tuyệt vời! Bạn vừa thăng hạng!"
         });
 
-        // Gửi thông báo cho Sinh viên (nếu có link Zoom)
-        if (!string.IsNullOrEmpty(notification.JoinUrl))
-        {
-            _context.Notifications.Add(new Notification
-            {
-                UserId = notification.StudentId,
-                Title = "Lịch học đã được xác nhận",
-                Message = $"Lịch học lúc {notification.StartTime:dd/MM HH:mm} đã được xác nhận.",
-                Link = notification.JoinUrl,
-                Type = "Booking",
-                IsRead = false,
-                CreatedAt = DateTime.UtcNow
-            });
-        }
-
-        await _context.SaveChangesAsync(cancellationToken);
+        // 3. Bắn Webhook ra hệ thống bên ngoài (VD: Discord Server của lớp)
+        await _webhookService.SendPayloadAsync("https://discord.com/api/webhooks/dummy", new {
+            content = $"🚀 Học viên ID {notification.UserId} vừa hoàn thành bài thi với {notification.XPEarned} XP!"
+        });
     }
 }

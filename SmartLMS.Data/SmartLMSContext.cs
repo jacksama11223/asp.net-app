@@ -14,15 +14,19 @@ namespace SmartLMS.Data;
 public partial class SmartLMSContext : DbContext
 {
     private readonly IEncryptionService _encryptionService;
+    private readonly ICurrentUserService? _currentUserService;
 
     public SmartLMSContext()
     {
     }
 
-    public SmartLMSContext(DbContextOptions<SmartLMSContext> options, IEncryptionService encryptionService = null)
+    public SmartLMSContext(DbContextOptions<SmartLMSContext> options, 
+                          IEncryptionService encryptionService = null,
+                          ICurrentUserService currentUserService = null)
         : base(options)
     {
         _encryptionService = encryptionService;
+        _currentUserService = currentUserService;
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -59,7 +63,7 @@ public partial class SmartLMSContext : DbContext
             var auditEntry = new AuditEntry(entry)
             {
                 TableName = entry.Entity.GetType().Name,
-                UserId = null // Có thể tích hợp ICurrentUserService để lấy Id người dùng hiện tại
+                UserId = _currentUserService?.UserId
             };
             auditEntries.Add(auditEntry);
 

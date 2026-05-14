@@ -1,0 +1,138 @@
+@model SmartLMS.Models.CodingChallenge
+@{
+    ViewData["Title"] = "Thử Thách Lập Trình: " + Model.Title;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/premium-ui.css" />
+    <style>
+        .editor-header { background: var(--premium-bg); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .terminal-output { background: #000; color: #00ff00; font-family: 'Courier New', Courier, monospace; height: 150px; overflow-y: auto; padding: 15px; border-radius: 0 0 12px 12px; }
+        .test-case-card { border-left: 4px solid #6c757d; transition: all 0.3s; }
+        .test-case-card.passed { border-left-color: #28a745; background: rgba(40, 167, 69, 0.1); }
+        .test-case-card.failed { border-left-color: #dc3545; background: rgba(220, 53, 69, 0.1); }
+    </style>
+}
+
+<div class="container-fluid py-4 animate-in">
+    <div class="row">
+        <!-- Cột trái: Đề bài -->
+        <div class="col-lg-4">
+            <div class="glass-panel p-4 mb-4" style="height: calc(100vh - 120px); overflow-y: auto;">
+                <h3 class="text-info mb-3"><i class="fas fa-code mr-2"></i> @Model.Title</h3>
+                <div class="badge badge-primary mb-3">@Model.Language.ToUpper()</div>
+                <div class="badge badge-warning mb-3">@Model.Points XP</div>
+                
+                <hr class="border-secondary" />
+                
+                <div class="description text-white-50">
+                    @Html.Raw(Model.Description)
+                </div>
+
+                <h5 class="mt-4 text-white">Test Cases:</h5>
+                <div id="test-cases-summary">
+                    @foreach (var tc in Model.TestCases.Where(t => !t.IsHidden))
+                    {
+                        <div class="test-case-card p-2 mb-2 bg-dark rounded text-small">
+                            <small class="text-muted">Input: <code>@tc.Input</code></small><br/>
+                            <small class="text-muted">Expected: <code>@tc.ExpectedOutput</code></small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột phải: Editor -->
+        <div class="col-lg-8">
+            <div class="glass-panel neon-border overflow-hidden">
+                <div class="editor-header p-3 d-flex justify-content-between align-items-center">
+                    <span class="text-white-50 font-weight-bold">Solution.cs</span>
+                    <button class="btn btn-success btn-sm px-4" onclick="submitCode()" id="btnSubmit">
+                        <i class="fas fa-play mr-2"></i> Chạy & Nộp bài
+                    </button>
+                </div>
+                
+                <div id="monaco-container"></div>
+                
+                <div class="terminal-header p-2 bg-dark text-white-50 border-top border-secondary small">
+                    <i class="fas fa-terminal mr-2"></i> OUTPUT TERMINAL
+                </div>
+                <div id="terminal" class="terminal-output">
+                    > Sẵn sàng. Nhấn 'Chạy & Nộp bài' để kiểm tra kết quả...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' }});
+        let editor;
+
+        require(['vs/editor/editor.main'], function() {
+            editor = monaco.editor.create(document.getElementById('monaco-container'), {
+                value: `@Html.Raw(Model.TemplateCode ?? "// Viết code của bạn ở đây\n")`,
+                language: '@Model.Language',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: false }
+            });
+        });
+
+        async function submitCode() {
+            const btn = document.getElementById('btnSubmit');
+            const term = document.getElementById('terminal');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Đang biên dịch...';
+            term.innerHTML = '> Đang kết nối Sandbox...\n> Đang chạy Test Cases...';
+
+            try {
+                const response = await fetch('/CodingChallenge/Submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        challengeId: @Model.Id,
+                        code: editor.getValue()
+                    })
+                });
+
+                const result = await response.json();
+                renderResult(result);
+            } catch (error) {
+                term.innerHTML += '\n[LỖI] Không thể kết nối đến máy chủ.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-play mr-2"></i> Chạy & Nộp bài';
+            }
+        }
+
+        function renderResult(result) {
+            const term = document.getElementById('terminal');
+            term.innerHTML = `> KẾT QUẢ: ${result.message}\n`;
+            
+            if (result.success && result.testCaseResults.every(t => t.passed)) {
+                term.innerHTML += '> [CHÚC MỪNG] Bạn đã vượt qua tất cả bài kiểm tra!\n';
+                triggerConfetti();
+                Swal.fire('Thành công!', 'Bạn đã hoàn thành thử thách!', 'success');
+            } else {
+                term.innerHTML += '> [CẢNH BÁO] Một số bài kiểm tra bị thất bại.\n';
+                result.testCaseResults.forEach((tc, idx) => {
+                    if (!tc.passed) {
+                        term.innerHTML += `> Test Case ${idx + 1}: Thất bại. (Thực tế: ${tc.actualOutput})\n`;
+                    }
+                });
+            }
+        }
+
+        function triggerConfetti() {
+            if (window.confetti) {
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+}

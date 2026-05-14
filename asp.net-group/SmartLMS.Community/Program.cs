@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Business;
 using SmartLMS.Models.Security;
+using SmartLMS.Business.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,9 @@ builder.Services.AddDbContext<SmartLMSContext>(options =>
 
 builder.WebHost.UseUrls("http://*:8080");
 
-// 2.// Security & Encryption - Đồng bộ với dự án chính
+// 2. Security & Identity - Đồng bộ với dự án chính
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS.Business.Security.AesEncryptionService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
 

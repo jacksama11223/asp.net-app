@@ -15,12 +15,17 @@ Chào ngài! Tôi là Anti, coding assistant của ngài. Tôi sẽ tuân thủ 
 - **Security & Privacy:** 
   - Tuyệt đối không lưu dữ liệu nhạy cảm dưới dạng plain text. 
   - Luôn sử dụng `EncryptionService` cho các trường dữ liệu nhạy cảm trong `User`.
+  - Mọi thao tác thay đổi dữ liệu (CUD) PHẢI được ghi vào `AuditLog` tự động qua `SmartLMSContext`.
+- **Safe Execution:**
+  - Code của học viên PHẢI được chạy trong môi trường Sandbox (Microsoft.CodeAnalysis) với quyền hạn hạn chế tối đa.
+  - Mọi lỗi biên dịch/thực thi phải được ghi lại vào `MistakeLog` để phục vụ Learning Analytics.
 - **Premium UI Standards:** 
   - UI phải đạt chuẩn SaaS hiện đại: Dùng CSS hiện đại (Variables, Flexbox, Grid), Typography sang trọng (Inter/Outfit), và hiệu ứng mượt mà.
   - Ưu tiên dùng `generate_image` để tạo asset thay vì dùng placeholder.
 
 ## 3. Quy trình làm việc (Strict Workflow)
-- **Bước 1: Docs Update:** Nếu yêu cầu mới làm thay đổi logic/tính năng, phải cập nhật `BRD.md` và `master-plan.md` TRƯỚC khi viết code.
+- **Bước 0: Flow Validation:** Trước khi thêm tính năng, phải đối chiếu với [events-flow.md](file:///c:/code/asp.net/docs/events-flow.md) để tránh phá vỡ luồng sự kiện hiện tại.
+- **Bước 1: Docs Update:** Nếu yêu cầu mới làm thay đổi logic/tính năng, phải cập nhật `BRD.md`, `master-plan.md` và chạy `node system_audit.cjs` để cập nhật `module.md` TRƯỚC khi viết code.
 - **Bước 2: Implementation:** Viết code sạch, có comment tại các logic nghiệp vụ quan trọng.
 - **Bước 3: Verification:** Chạy `dotnet build` và dùng `verify_apis.js` để đảm bảo không có lỗi break-change.
 - **Bước 4: Changelog:** TỰ ĐỘNG cập nhật [CHANGELOG.md](file:///c:/code/asp.net/CHANGELOG.md) sau mỗi lần commit thành công. Ghi rõ Added/Fixed/Refactored.
@@ -30,3 +35,4 @@ Chào ngài! Tôi là Anti, coding assistant của ngài. Tôi sẽ tuân thủ 
 - **BRD (Chi tiết tính năng):** [BRD.md](file:///c:/code/asp.net/docs/BRD.md)
 - **Master Plan (Lộ trình):** [master-plan.md](file:///c:/code/asp.net/docs/plans/master-plan.md)
 - **Changelog (Nhật ký):** [CHANGELOG.md](file:///c:/code/asp.net/CHANGELOG.md)
+- **Module Map (Bản đồ tính năng):** [module.md](file:///c:/code/asp.net/docs/module.md)

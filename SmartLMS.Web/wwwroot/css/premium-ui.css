@@ -1,0 +1,102 @@
+/* 💎 Premium UI System - SmartLMS.AI 2026 */
+
+:root {
+    --premium-bg: #0f172a;
+    --premium-glass: rgba(30, 41, 59, 0.7);
+    --premium-accent: #38bdf8;
+    --premium-neon: 0 0 15px rgba(56, 189, 248, 0.5);
+    --audit-create: #10b981;
+    --audit-update: #f59e0b;
+    --audit-delete: #ef4444;
+}
+
+/* Glassmorphism Effect */
+.glass-panel {
+    background: var(--premium-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Neon Border Animation */
+.neon-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.neon-border::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 2px solid var(--premium-accent);
+    border-radius: 16px;
+    box-shadow: var(--premium-neon);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.neon-border:hover::after {
+    opacity: 1;
+}
+
+/* Audit Timeline Styles */
+.audit-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.audit-timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.audit-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.audit-item::before {
+    content: '';
+    position: absolute;
+    left: -25px; top: 5px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--premium-accent);
+    box-shadow: 0 0 8px var(--premium-accent);
+}
+
+.audit-badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.badge-added { background: var(--audit-create); color: white; }
+.badge-modified { background: var(--audit-update); color: white; }
+.badge-deleted { background: var(--audit-delete); color: white; }
+
+/* Code Editor Container */
+#monaco-container {
+    height: 500px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animations */
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    animation: fadeInSlide 0.5s ease forwards;
+}

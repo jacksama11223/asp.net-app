@@ -109,4 +109,18 @@ public class UserService : IUserService
         var affected = await _context.SaveChangesAsync();
         return affected > 0;
     }
+
+    public async Task<IEnumerable<AuditLog>> GetAuditTrailAsync(int? userId = null)
+    {
+        IQueryable<AuditLog> query = _context.AuditLogs;
+        
+        if (userId.HasValue)
+        {
+            query = query.Where(l => l.UserId == userId.Value);
+        }
+
+        return await query.OrderByDescending(l => l.Timestamp)
+                          .Take(100) // Giới hạn 100 bản ghi gần nhất để tối ưu hiệu năng
+                          .ToListAsync();
+    }
 }

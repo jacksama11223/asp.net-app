@@ -17,6 +17,8 @@ using MySqlConnector;
 using Hangfire.MySql;
 using System.IdentityModel.Tokens.Jwt;
 
+using SmartLMS.Business.Security;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // === XÓA MAPPING MẶC ĐỊNH CỦA JWT ĐỂ FIX LỖI USER ID ===
@@ -284,7 +286,9 @@ else
 builder.Services.AddHttpClient(); 
 builder.Services.AddHttpClient<SmartLMS.Business.IZoomIntegrationService, SmartLMS.Business.ZoomIntegrationService>();
 
-// Security & Encryption
+// Security & Identity
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS.Business.Security.AesEncryptionService>();
 
 builder.Services.AddScoped(typeof(SmartLMS.Data.Repositories.IRepository<>), typeof(SmartLMS.Data.Repositories.Repository<>));
@@ -303,6 +307,8 @@ builder.Services.AddScoped<SmartLMS.Business.INotificationService, SmartLMS.Web.
 builder.Services.AddScoped<SmartLMS.Business.IBookingService, SmartLMS.Business.BookingService>();
 builder.Services.AddScoped<SmartLMS.Business.IAssessmentService, SmartLMS.Business.AssessmentService>();
 builder.Services.AddScoped<SmartLMS.Business.ICompilerService, SmartLMS.Business.CompilerService>();
+builder.Services.AddScoped<SmartLMS.Business.IWebhookService, SmartLMS.Business.WebhookService>();
+builder.Services.AddScoped<SmartLMS.Business.Jobs.IIndexingJob, SmartLMS.Business.Jobs.IndexingJob>();
 if (builder.Environment.IsDevelopment())
 {
     // Lite Mode: Dùng RAM host làm Cache, không cần cài Redis
@@ -479,6 +485,11 @@ RecurringJob.AddOrUpdate<SmartLMS.Business.IPredictionService>(
 RecurringJob.AddOrUpdate<SmartLMS.Business.Jobs.IAuditCleanupJob>(
     "Weekly-Audit-Log-Cleanup", 
     service => service.CleanupOldLogsAsync(), 
-    Cron.Weekly(DayOfWeek.Sunday, 3)); // Chạy lúc 3h sáng
+    Cron.Weekly(DayOfWeek.Sunday, 3));
+
+RecurringJob.AddOrUpdate<SmartLMS.Business.Jobs.IIndexingJob>(
+    "Hourly-Search-Sync", 
+    service => service.SyncCoursesToSearchEngineAsync(), 
+    Cron.Hourly());
 
 app.Run();

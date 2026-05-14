@@ -1,22 +1,17 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SmartLMS.Business.Events;
-using SmartLMS.Data;
+using SmartLMS.Business.MessageBus;
+using SmartLMS.Models;
 
 namespace SmartLMS.Business.Handlers;
 
-/// <summary>
-/// Handler thuộc Module Gamification.
-/// Lắng nghe sự kiện "Bài kiểm tra hoàn thành" từ Module LMS,
-/// rồi TỰ ĐỘNG cộng XP - không cần Module LMS phải biết logic này tồn tại.
-/// </summary>
 public class GamificationEventHandler : INotificationHandler<AssessmentCompletedEvent>
 {
     private readonly SmartLMSContext _context;
+    private readonly IMessageBus _messageBus;
 
-    public GamificationEventHandler(SmartLMSContext context)
+    public GamificationEventHandler(SmartLMSContext context, IMessageBus messageBus)
     {
         _context = context;
+        _messageBus = messageBus;
     }
 
     public async Task Handle(AssessmentCompletedEvent notification, CancellationToken cancellationToken)
@@ -37,5 +32,25 @@ public class GamificationEventHandler : INotificationHandler<AssessmentCompleted
         }
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        // 2. Logic cấp Huy hiệu tự động (VD: Đạt mốc 1000 XP)
+        if (user.TotalXP >= 1000)
+        {
+            var badgeId = 1; // Giả sử Badge ID 1 là "Grand Master"
+            var alreadyHas = await _context.UserBadges.AnyAsync(ub => ub.UserId == user.UserId && ub.BadgeId == badgeId);
+            
+            if (!alreadyHas)
+            {
+                _context.UserBadges.Add(new UserBadge { UserId = user.UserId, BadgeId = badgeId, AcquiredDate = DateTime.Now });
+                await _context.SaveChangesAsync(cancellationToken);
+
+                // 3. Kích hoạt Social Loop: Đăng bài vinh danh tự động lên Community Hub
+                await _messageBus.PublishAsync("Community.AutoPost", new {
+                    UserId = user.UserId,
+                    Content = $"🏆 Chúc mừng **{user.FullName}** đã đạt mốc 1000 XP và nhận Huy hiệu Grand Master! 🚀",
+                    Type = "Achievement"
+                });
+            }
+        }
     }
 }

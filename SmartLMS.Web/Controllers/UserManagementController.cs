@@ -94,4 +94,11 @@ public class UserManagementController : Controller
             .Take(10);
         return Json(results);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAuditTrail(int? userId = null)
+    {
+        var logs = await _userService.GetAuditTrailAsync(userId);
+        return PartialView("_AuditTrailPartial", logs);
+    }
 }

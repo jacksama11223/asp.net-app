@@ -2,6 +2,13 @@
 @{
     ViewData["Title"] = "Quản lý Tài khoản người dùng";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/premium-ui.css" />
+    <style>
+        .audit-offcanvas { width: 500px !important; background: var(--premium-bg); border-left: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        .bg-primary-light { background: rgba(78,115,223,0.1); }
+    </style>
+}
 
 <div class="content-header">
     <div class="container-fluid">
@@ -10,6 +17,9 @@
                 <h1 class="m-0 font-weight-bold text-primary"><i class="fas fa-users-cog mr-2"></i>Quản lý Tài khoản</h1>
             </div>
             <div class="col-sm-6 text-right">
+                <button onclick="showGlobalAudit()" class="btn btn-outline-primary shadow-sm mr-2">
+                    <i class="fas fa-shield-alt mr-1"></i> Nhật ký hệ thống (Audit)
+                </button>
                 <a href="/UserManagement/ExportToExcel" class="btn btn-success shadow-sm">
                     <i class="fas fa-file-excel mr-1"></i> Xuất Excel (UC-16)
                 </a>
@@ -92,6 +102,9 @@
                                                 </button>
                                             }
                                             <button class="btn btn-sm btn-outline-primary" title="Sửa thông tin"><i class="fas fa-edit"></i></button>
+                                            <button onclick="showUserAudit(@user.UserId)" class="btn btn-sm btn-outline-info" title="Xem lịch sử thay đổi">
+                                                <i class="fas fa-history"></i>
+                                            </button>
                                         </div>
                                     }
                                     else 
@@ -108,7 +121,24 @@
     </div>
 </section>
 
+<!-- Offcanvas cho Audit Trail -->
+<div class="offcanvas offcanvas-end audit-offcanvas" tabindex="-1" id="auditOffcanvas">
+    <div class="offcanvas-header border-bottom border-secondary">
+        <h5 class="offcanvas-title text-info"><i class="fas fa-fingerprint mr-2"></i>Chi tiết Truy vết Audit</h5>
+        <button type="button" class="close text-white" data-dismiss="offcanvas" onclick="$('#auditOffcanvas').removeClass('show')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="offcanvas-body p-0" id="auditContent">
+        <div class="text-center p-5">
+            <div class="spinner-border text-info" role="status"></div>
+            <p class="mt-3 text-muted">Đang truy xuất dữ liệu từ máy chủ...</p>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#userTable').DataTable({
@@ -128,6 +158,18 @@
                 ]
             });
         });
+
+        function showUserAudit(userId) {
+            $('#auditOffcanvas').addClass('show');
+            $('#auditContent').html('<div class="text-center p-5"><div class="spinner-border text-info"></div></div>');
+            $('#auditContent').load('/UserManagement/GetAuditTrail?userId=' + userId);
+        }
+
+        function showGlobalAudit() {
+            $('#auditOffcanvas').addClass('show');
+            $('#auditContent').html('<div class="text-center p-5"><div class="spinner-border text-info"></div></div>');
+            $('#auditContent').load('/UserManagement/GetAuditTrail');
+        }
 
         function changeStatus(id, status) {
             let action = status === 2 ? "khóa" : "mở khóa";
