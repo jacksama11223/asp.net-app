@@ -80,5 +80,13 @@ Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trư
 - **AES-256 Standards:** Khóa mã hóa (`MasterKey`) PHẢI có độ dài chính xác là 32 ký tự. Thiếu hoặc thừa 1 ký tự sẽ gây lỗi `CryptographicException` toàn hệ thống.
 - **Environment Sync:** Khi thay đổi Key ở Local, phải cập nhật ngay cho VPS để tránh việc dữ liệu mã hóa ở máy này không thể giải mã ở máy kia.
 
+## 18. ĐỒNG BỘ HÓA DEPENDENCY INJECTION (DI SYNC)
+- **Multi-Project Consistency:** Khi cập nhật một Service (vd: `EncryptionService`) ở dự án chính, PHẢI kiểm tra và cập nhật đồng bộ ở các dự án con (vd: `Community Hub`).
+- **Scoped vs Singleton:** Luôn ưu tiên dùng `AddScoped` cho các dịch vụ xử lý dữ liệu để tránh lỗi tràn bộ nhớ hoặc xung đột trạng thái giữa các Request.
+
+## 19. XÁC THỰC TẬP TRUNG (AUTH UI STANDARDS)
+- **SaaS Aesthetics:** Các trang Đăng nhập/Đăng ký phải đạt chuẩn giao diện SaaS: Dark Mode, Glassmorphism, Animation mượt mà và Font chữ hiện đại (Outfit/Inter).
+- **Global Linkage:** Các nút bấm Auth trên toàn hệ thống phải trỏ về `/Auth/Login` và `/Auth/Register` để đảm bảo luồng người dùng nhất quán.
+
 ---
-*Tài liệu được cập nhật ngày 14/05/2026 sau sự cố Schema & Encryption tại Community Hub.*
+*Tài liệu được cập nhật ngày 14/05/2026 sau sự cố DI Mismatch & Database Schema tại Hub.*

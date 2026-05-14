@@ -399,7 +399,32 @@ public partial class SmartLMSContext : DbContext
             entity.HasKey(e => e.Id);
         });
 
-        // Community Module Configurations
+        // Community Module Configurations - Explicit Mapping
+        modelBuilder.Entity<CommunityResource>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("CommunityResources");
+        });
+
+        modelBuilder.Entity<CommunityEvent>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("CommunityEvents");
+        });
+
+        modelBuilder.Entity<CommunityQuestion>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("CommunityQuestions");
+        });
+
+        modelBuilder.Entity<CommunityAnswer>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("CommunityAnswers");
+        });
+
+        modelBuilder.Entity<StudyGroup>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("StudyGroups");
+        });
+
         modelBuilder.Entity<Post>(entity => {
             entity.HasKey(e => e.PostId);
             entity.Property(e => e.Title).HasMaxLength(255).IsRequired();

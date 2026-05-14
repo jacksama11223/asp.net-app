@@ -16,8 +16,8 @@ builder.Services.AddDbContext<SmartLMSContext>(options =>
 
 builder.WebHost.UseUrls("http://*:8080");
 
-// 2. Security & Business Services
-builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+// 2.// Security & Encryption - Đồng bộ với dự án chính
+builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS.Business.Security.AesEncryptionService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
 
 // 3. Redis Cache

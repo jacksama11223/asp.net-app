@@ -8,11 +8,14 @@ public class EncryptionService : IEncryptionService
     private readonly byte[] _key;
     private readonly byte[] _iv;
 
-    public EncryptionService()
+    public EncryptionService(Microsoft.Extensions.Configuration.IConfiguration configuration)
     {
-        // 🛡️ Trong thực tế, Key này nên được lấy từ appsettings.json hoặc Azure Key Vault
-        _key = Encoding.UTF8.GetBytes("SmartLMS_Secure_Key_2026_!@#$");
-        _iv = Encoding.UTF8.GetBytes("SmartLMS_Vector!");
+        var masterKey = configuration["Security:MasterKey"] ?? "SmartLMS_Super_Secure_Key_32Chr!";
+        var salt = configuration["Security:Salt"] ?? "SmartLMS_Vector!";
+
+        // Đảm bảo Key đủ 32 bytes cho AES-256
+        _key = Encoding.UTF8.GetBytes(masterKey.PadRight(32).Substring(0, 32));
+        _iv = Encoding.UTF8.GetBytes(salt.PadRight(16).Substring(0, 16));
     }
 
     public string Encrypt(string plainText)
