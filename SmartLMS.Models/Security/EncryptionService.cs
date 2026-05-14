@@ -8,14 +8,11 @@ public class EncryptionService : IEncryptionService
     private readonly byte[] _key;
     private readonly byte[] _iv;
 
-    public EncryptionService(Microsoft.Extensions.Configuration.IConfiguration configuration)
+    public EncryptionService()
     {
-        var masterKey = configuration["Security:MasterKey"] ?? "SmartLMS_Super_Secure_Key_32Chr!";
-        var salt = configuration["Security:Salt"] ?? "SmartLMS_Vector!";
-
-        // Đảm bảo Key đủ 32 bytes cho AES-256
-        _key = Encoding.UTF8.GetBytes(masterKey.PadRight(32).Substring(0, 32));
-        _iv = Encoding.UTF8.GetBytes(salt.PadRight(16).Substring(0, 16));
+        // 🛡️ Khóa mặc định chuẩn 32 bytes cho AES-256 (Dùng làm fallback)
+        _key = Encoding.UTF8.GetBytes("SmartLMS_Secure_Key_32_Chars_!!!");
+        _iv = Encoding.UTF8.GetBytes("SmartLMS_Vector!");
     }
 
     public string Encrypt(string plainText)
