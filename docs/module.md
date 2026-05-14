@@ -110,6 +110,7 @@
 - `NotificationEventHandler`
 ### 📂 Jobs
 - `AuditCleanupJob`
+- `IndexingJob`
 - `VideoTranscodeJob`
 ### 📂 MessageBus
 - `IMessageBus`
@@ -118,6 +119,7 @@
 ### 📂 obj
 ### 📂 Security
 - `AesEncryptionService`
+- `CurrentUserService`
 
 ## 🌐 Web Entry Points (Main)
 - [UI/API] `Account`
@@ -128,6 +130,7 @@
 - [UI/API] `AuthApi`
 - [UI/API] `Auth`
 - [UI/API] `Booking`
+- [UI/API] `CodingChallenge`
 - [UI/API] `CodingChallengeManagement`
 - [UI/API] `Cohort`
 - [UI/API] `Community`
