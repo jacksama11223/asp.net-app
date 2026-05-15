@@ -1,100 +1,110 @@
 @{
-    ViewData["Title"] = "AI Learning Analytics Dashboard";
+    ViewData["Title"] = "AI Prediction Analytics";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/premium-ui.css" />
-    <style>
-        .stat-card { transition: all 0.3s; border-radius: 20px; overflow: hidden; }
-        .stat-card:hover { transform: translateY(-10px); box-shadow: var(--premium-neon); }
-        .chart-container { height: 350px; }
-    </style>
-}
-
-<div class="container-fluid py-4 animate-in">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="text-white font-weight-bold"><i class="fas fa-brain text-info mr-2"></i> Trí Tuệ Đào Tạo (AI Insights)</h1>
-            <p class="text-muted">Phân tích hành vi học tập và dự báo rủi ro dựa trên dữ liệu thời gian thực.</p>
-        </div>
-    </div>
-
-    <!-- Hàng 1: Thẻ thống kê nhanh -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="glass-panel stat-card p-4 text-center">
-                <h6 class="text-white-50">Tỉ lệ rủi ro trung bình</h6>
-                <h2 class="text-danger font-weight-bold">14.2%</h2>
-                <small class="text-success"><i class="fas fa-arrow-down"></i> -2.1% so với tháng trước</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-panel stat-card p-4 text-center">
-                <h6 class="text-white-50">Số lỗi (Mistakes) hôm nay</h6>
-                <h2 class="text-warning font-weight-bold">1,204</h2>
-                <small class="text-danger"><i class="fas fa-arrow-up"></i> +12%</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-panel stat-card p-4 text-center">
-                <h6 class="text-white-50">Huy hiệu đã cấp</h6>
-                <h2 class="text-info font-weight-bold">458</h2>
-                <small class="text-white">Badge "Grand Master"</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-panel stat-card p-4 text-center">
-                <h6 class="text-white-50">Độ chính xác AI</h6>
-                <h2 class="text-success font-weight-bold">94.8%</h2>
-                <small class="text-white">ML.NET Engine</small>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hàng 2: Biểu đồ -->
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="glass-panel p-4 mb-4">
-                <h5 class="text-white mb-4"><i class="fas fa-chart-line mr-2"></i> Xu hướng rủi rớt môn (Predictive Risk Path)</h5>
-                <div id="riskChart" class="chart-container"></div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="glass-panel p-4 mb-4">
-                <h5 class="text-white mb-4"><i class="fas fa-bug mr-2"></i> Phân loại lỗi phổ biến</h5>
-                <div id="mistakeDonut" class="chart-container"></div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold"><i class="fas fa-brain mr-2 text-primary"></i>Phân tích Trí tuệ Nhân tạo (AI)</h1>
             </div>
         </div>
     </div>
 </div>
 
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Dropout Risk Forecasting -->
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 rounded-lg">
+                    <div class="card-header bg-white">
+                        <h3 class="card-title font-weight-bold"><i class="fas fa-user-graduate mr-2 text-danger"></i>Dự báo rủi ro rớt môn (ML.NET)</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Sinh viên</th>
+                                        <th>Khóa học</th>
+                                        <th>Tiến độ</th>
+                                        <th>Xác suất rủi ro</th>
+                                        <th>Cấp độ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="risk-tbody">
+                                    <tr><td colspan="5" class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Đang chạy mô hình AI...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Mistakes Analysis -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 rounded-lg">
+                    <div class="card-header bg-white">
+                        <h3 class="card-title font-weight-bold"><i class="fas fa-exclamation-triangle mr-2 text-warning"></i>Phân tích lỗi phổ biến</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="mistake-chart" style="min-height: 300px;"></div>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm border-0 rounded-lg mt-3 bg-gradient-info text-white">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-lightbulb fa-3x mb-3"></i>
+                        <h5>AI Recommendation</h5>
+                        <p class="small">Dựa trên dữ liệu, chúng tôi khuyên bạn nên bổ sung thêm bài tập cho các học viên có rủi ro "High".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
-        // Risk Chart
-        var riskOptions = {
-            series: [{
-                name: 'Rủi ro rớt môn (%)',
-                data: [15, 22, 18, 30, 25, 45, 38]
-            }],
-            chart: { height: 350, type: 'area', background: 'transparent', toolbar: { show: false } },
-            theme: { mode: 'dark' },
-            colors: ['#38bdf8'],
-            stroke: { curve: 'smooth' },
-            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } },
-            xaxis: { categories: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'] }
-        };
-        new ApexCharts(document.querySelector("#riskChart"), riskOptions).render();
+        $(document).ready(function() {
+            loadAnalyticsData();
 
-        // Mistake Donut
-        var mistakeOptions = {
-            series: [44, 32, 24],
-            labels: ['Lỗi cú pháp (Syntax)', 'Lỗi logic', 'Lỗi Timeout'],
-            chart: { type: 'donut', height: 350 },
-            theme: { mode: 'dark' },
-            colors: ['#ef4444', '#f59e0b', '#10b981'],
-            legend: { position: 'bottom' }
-        };
-        new ApexCharts(document.querySelector("#mistakeDonut"), mistakeOptions).render();
+            function loadAnalyticsData() {
+                $.get('/Dashboard/GetAnalyticsData', function(data) {
+                    // Risk Table
+                    let riskHtml = '';
+                    data.riskPredictions.forEach(p => {
+                        let badgeClass = p.riskLevel === 'High' ? 'badge-danger' : (p.riskLevel === 'Medium' ? 'badge-warning' : 'badge-success');
+                        riskHtml += `
+                            <tr>
+                                <td><strong>${p.studentName}</strong></td>
+                                <td>${p.courseName}</td>
+                                <td>
+                                    <div class="progress progress-xs" style="width: 100px;">
+                                        <div class="progress-bar bg-info" style="width: ${p.progress}%"></div>
+                                    </div>
+                                    <small>${p.progress}%</small>
+                                </td>
+                                <td>${p.probability}%</td>
+                                <td><span class="badge ${badgeClass} px-3 py-2">${p.riskLevel}</span></td>
+                            </tr>
+                        `;
+                    });
+                    $('#risk-tbody').html(riskHtml);
+
+                    // Mistake Chart
+                    const mistakeChart = new ApexCharts(document.querySelector("#mistake-chart"), {
+                        series: data.commonMistakes.map(m => m.count),
+                        labels: data.commonMistakes.map(m => m.type),
+                        chart: { type: 'pie', height: 350 },
+                        colors: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
+                        legend: { position: 'bottom' }
+                    });
+                    mistakeChart.render();
+                });
+            }
+        });
     </script>
 }

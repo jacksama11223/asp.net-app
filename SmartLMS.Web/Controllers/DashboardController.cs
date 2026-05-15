@@ -21,13 +21,15 @@ public class DashboardController : Controller
     private readonly IEmailService _emailService;
     private readonly IHubContext<SmartLMS.Web.Hubs.DashboardHub> _hubContext;
     private readonly SmartLMSContext _context;
+    private readonly IPredictionService _predictionService;
 
     public DashboardController(IReportingService reportingService, 
                                ISqlService sqlService, 
                                IConfiguration configuration,
                                IEmailService emailService,
                                IHubContext<SmartLMS.Web.Hubs.DashboardHub> hubContext,
-                               SmartLMSContext context)
+                               SmartLMSContext context,
+                               IPredictionService predictionService)
     {
         _reportingService = reportingService;
         _sqlService = sqlService;
@@ -35,6 +37,7 @@ public class DashboardController : Controller
         _emailService = emailService;
         _hubContext = hubContext;
         _context = context;
+        _predictionService = predictionService;
     }
 
     [HttpGet]
@@ -128,5 +131,44 @@ public class DashboardController : Controller
     {
         var data = await _reportingService.GetRoleDistributionAsync();
         return Json(data);
+    }
+    [HttpGet]
+    public IActionResult Analytics() => View();
+
+    [HttpGet]
+    public async Task<IActionResult> GetAnalyticsData()
+    {
+        var enrollments = await _context.Enrollments
+            .Include(e => e.User)
+            .Include(e => e.Course)
+            .Where(e => e.Progress != null && e.UserId > 0)
+            .OrderByDescending(e => e.EnrollmentId)
+            .Take(10)
+            .ToListAsync();
+
+        var riskPredictions = new List<object>();
+        foreach (var e in enrollments)
+        {
+            var prediction = await _predictionService.PredictDropoutAsync(e.UserId, e.CourseId, false);
+            riskPredictions.Add(new {
+                studentName = e.User?.FullName ?? "Unknown",
+                courseName = e.Course?.Title ?? "N/A",
+                probability = Math.Round(prediction.Probability * 100, 1),
+                riskLevel = prediction.Probability > 0.6 ? "High" : (prediction.Probability > 0.3 ? "Medium" : "Low"),
+                progress = e.Progress
+            });
+        }
+
+        var commonMistakes = await _context.MistakeLogs
+            .GroupBy(m => m.MistakeType ?? "General")
+            .Select(g => new {
+                type = g.Key,
+                count = g.Count()
+            })
+            .OrderByDescending(x => x.count)
+            .Take(5)
+            .ToListAsync();
+
+        return Json(new { riskPredictions, commonMistakes });
     }
 }

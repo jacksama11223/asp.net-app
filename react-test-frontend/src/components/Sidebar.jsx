@@ -14,16 +14,16 @@ const studentNav = [
   { label: 'Kho khóa học', icon: LuBookOpen, path: '/my-learning', color: 'teal' },
   { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
   { label: 'Cộng đồng', icon: LuUsers, path: '/community', color: 'blue' },
-  { label: 'Bạn bè', icon: LuUsers, path: '/community/friends', color: 'pink' },
-  { label: 'Wiki cá nhân', icon: LuSparkles, path: '/wiki', color: 'violet' },
+  { label: 'Coding Sandbox', icon: LuPenTool, path: '/CodingChallenge/Solve/1', isExternal: true, color: 'orange' },
+  { label: 'Achievement Hub', icon: LuSparkles, path: '/Assessment/AchievementHub', isExternal: true, color: 'violet' }
 ];
 
 const instructorNav = [
   { label: 'Creator Studio', icon: LuLayoutDashboard, path: '/dashboard', color: 'indigo' },
   { label: 'Quản lý Khóa học', icon: LuPenTool, path: '/creator/courses', color: 'brand' },
-  { label: 'Trung tâm Tin nhắn', icon: LuSend, path: '/creator/messages', color: 'teal' },
-  { label: 'Analytics & Doanh thu', icon: LuZap, path: '/creator/analytics', color: 'orange' },
   { label: 'Học viên', icon: LuUsers, path: '/creator/students', color: 'violet' },
+  { label: 'AI Analytics', icon: LuZap, path: '/Dashboard/Analytics', isExternal: true, color: 'orange' },
+  { label: 'Nhật ký Hệ thống', icon: LuUsers, path: '/UserManagement', isExternal: true, color: 'red' }
 ];
 
 export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
@@ -72,9 +72,12 @@ export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
             const NavItem = (
               <NavLink
                 key={item.path}
-                component={Link}
-                to={item.path}
-                onClick={closeMobile}
+                component={item.isExternal ? 'a' : Link}
+                to={item.isExternal ? undefined : item.path}
+                href={item.isExternal ? item.path : undefined}
+                onClick={(e) => {
+                  if(!item.isExternal) closeMobile();
+                }}
                 label={item.label}
                 leftSection={
                   <ThemeIcon size="md" radius="md" variant={isActive ? 'filled' : 'light'} color={item.color}>

@@ -202,9 +202,15 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="/Dashboard" class="nav-link @(_ctrl == "Dashboard" ? "active" : "")">
+                            <a href="/Dashboard" class="nav-link @(_ctrl == "Dashboard" && _act == "Index" ? "active" : "")">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Dashboard/Analytics" class="nav-link @(_ctrl == "Dashboard" && _act == "Analytics" ? "active" : "")">
+                                <i class="nav-icon fas fa-brain text-info"></i>
+                                <p>AI Analytics</p>
                             </a>
                         </li>
                         <li class="nav-header text-uppercase text-xs opacity-50 ml-3 mt-2">Dữ liệu & Học tập</li>

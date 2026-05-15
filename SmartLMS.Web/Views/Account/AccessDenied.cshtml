@@ -1,0 +1,60 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Không có quyền truy cập";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Outfit:300,400,500,600,700&display=fallback">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+        }
+        .error-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .error-icon {
+            font-size: 5rem;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            background: #4e73df;
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="error-card animate__animated animate__fadeInUp">
+    <div class="error-icon"><i class="fas fa-user-lock"></i></div>
+    <h2 class="font-weight-bold text-dark mb-3">Truy Cập Bị Từ Chối</h2>
+    <p class="text-muted mb-4">Xin lỗi, bạn đang đăng nhập bằng tài khoản Student. Trang này (Admin/Enterprise) yêu cầu quyền Administrator để truy cập.</p>
+    <p class="small text-danger mb-4">Để thử nghiệm, vui lòng đăng xuất và đăng nhập bằng tài khoản: <b>admin</b> / <b>Admin@123456</b></p>
+    <a href="/Account/Logout" class="btn btn-danger btn-custom mr-2">Đăng Xuất</a>
+    <a href="/" class="btn btn-primary btn-custom">Về Trang Chủ</a>
+</div>
+
+</body>
+</html>
