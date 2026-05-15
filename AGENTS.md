@@ -15,6 +15,9 @@ Chào ngài! Tôi là Anti, coding assistant của ngài. Tôi sẽ tuân thủ 
   - Tuân thủ cấu trúc thư mục hiện tại: `SmartLMS.Business/Handlers` cho logic xử lý sự kiện.
 - **Bảo toàn Mã nguồn Gốc (No Overwrite):**
   - Không được tự ý ghi đè các Service đã có (như `PredictionService`) bằng logic giả lập nếu không kiểm tra Git History. Phải tôn trọng và kế thừa logic ML.NET hiện tại.
+- **Quy tắc Triển khai (DevOps & Docker):**
+  - Luôn sử dụng lệnh `docker compose down` trước khi chạy `up -d --build` trên Server để tránh lỗi trùng lặp tên Container (Name Conflict).
+  - Mọi View trong MVC nếu có dùng `@section Scripts` bắt buộc phải chắc chắn file Layout có `@await RenderSectionAsync("Scripts", required: false)`.
 - **Security & Privacy:** 
   - Tuyệt đối không lưu dữ liệu nhạy cảm dưới dạng plain text. 
   - Luôn sử dụng `EncryptionService` cho các trường dữ liệu nhạy cảm trong `User`.
@@ -30,7 +33,7 @@ Chào ngài! Tôi là Anti, coding assistant của ngài. Tôi sẽ tuân thủ 
 - **Bước 0: Flow Validation:** Trước khi thêm tính năng, phải đối chiếu với [events-flow.md](file:///c:/code/asp.net/docs/events-flow.md) để tránh phá vỡ luồng sự kiện hiện tại.
 - **Bước 1: Docs Update:** Nếu yêu cầu mới làm thay đổi logic/tính năng, phải cập nhật `BRD.md`, `master-plan.md` và chạy `node system_audit.cjs` để cập nhật `module.md` TRƯỚC khi viết code.
 - **Bước 2: Implementation:** Viết code sạch, có comment tại các logic nghiệp vụ quan trọng.
-- **Bước 3: Verification:** Chạy `dotnet build` và dùng `verify_apis.js` để đảm bảo không có lỗi break-change.
+- **Bước 3: Verification:** Chạy `dotnet build SmartLMS.sln` và `node check_architecture.js` để đảm bảo không có lỗi biên dịch và không vi phạm kiến trúc (Business không được gọi Web).
 - **Bước 4: Changelog:** TỰ ĐỘNG cập nhật [CHANGELOG.md](file:///c:/code/asp.net/CHANGELOG.md) sau mỗi lần commit thành công. Ghi rõ Added/Fixed/Refactored.
 
 ## 4. Danh mục tài liệu tham chiếu (Context)
