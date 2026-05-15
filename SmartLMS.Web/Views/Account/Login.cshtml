@@ -166,6 +166,10 @@
     }
 
     <form action="/Account/Login" method="post">
+        @if (!string.IsNullOrEmpty(ViewBag.ReturnUrl as string))
+        {
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        }
         <div class="form-group">
             <label class="text-white-50 small mb-1">Tên đăng nhập</label>
             <div class="input-group">

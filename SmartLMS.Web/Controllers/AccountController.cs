@@ -19,14 +19,19 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string returnUrl = null)
     {
-        if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Dashboard");
+        ViewBag.ReturnUrl = returnUrl;
+        if (User.Identity?.IsAuthenticated == true) 
+        {
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index", "Dashboard");
+        }
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(string username, string password)
+    public async Task<IActionResult> Login(string username, string password, string returnUrl = null)
     {
         var user = await _userService.AuthenticateAsync(username, password);
         if (user != null)
@@ -44,9 +49,14 @@ public class AccountController : Controller
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Index", "Dashboard");
         }
 
+        ViewBag.ReturnUrl = returnUrl;
         ViewBag.Error = "Tài khoản hoặc mật khẩu không chính xác.";
         return View();
     }
