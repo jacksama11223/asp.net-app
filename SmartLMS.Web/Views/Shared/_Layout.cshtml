@@ -114,6 +114,34 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                <!-- Navbar Search -->
+                <li class="nav-item">
+                    <div class="input-group input-group-sm glass-panel mt-1 ml-3" style="width: 250px;">
+                        <input class="form-control form-control-navbar border-0 bg-transparent" type="search" placeholder="Tìm khóa học AI..." id="globalSearch">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar text-info" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge" id="notif-count">0</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right glass-panel" id="notif-drawer">
+                        <span class="dropdown-item dropdown-header">Thông báo mới</span>
+                        <div class="dropdown-divider"></div>
+                        <div id="notif-list">
+                            <a href="#" class="dropdown-item text-muted small">
+                                Chưa có thông báo nào.
+                            </a>
+                        </div>
+                    </div>
+                </li>
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     <!-- User Profile Dropdown -->
@@ -370,35 +398,11 @@
                         }
                     </ul>
                 </nav>
-                <!-- Navbar Search -->
-        <li class="nav-item">
-            <div class="input-group input-group-sm glass-panel ml-3" style="width: 250px;">
-                <input class="form-control form-control-navbar border-0 bg-transparent text-white" type="search" placeholder="Tìm khóa học AI..." id="globalSearch">
-                <div class="input-group-append">
-                    <button class="btn btn-navbar text-info" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
             </div>
-        </li>
+            <!-- /.sidebar -->
+        </aside>
 
-        <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge" id="notif-count">0</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right glass-panel" id="notif-drawer">
-                <span class="dropdown-item dropdown-header text-white">Thông báo mới</span>
-                <div class="dropdown-divider"></div>
-                <div id="notif-list">
-                    <a href="#" class="dropdown-item text-white-50 small">
-                        Chưa có thông báo nào.
-                    </a>
-                </div>
-            </div>
-        </li>
-     <!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @RenderBody()
         </div>
