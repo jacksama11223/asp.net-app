@@ -1,6 +1,12 @@
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using SmartLMS.Business.Events;
 using SmartLMS.Business.MessageBus;
+using SmartLMS.Data;
 using SmartLMS.Models;
-
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 namespace SmartLMS.Business.Handlers;
 
 public class GamificationEventHandler : INotificationHandler<AssessmentCompletedEvent>
@@ -41,7 +47,7 @@ public class GamificationEventHandler : INotificationHandler<AssessmentCompleted
             
             if (!alreadyHas)
             {
-                _context.UserBadges.Add(new UserBadge { UserId = user.UserId, BadgeId = badgeId, AcquiredDate = DateTime.Now });
+                _context.UserBadges.Add(new UserBadge { UserId = user.UserId, BadgeId = badgeId, EarnedDate = DateTime.Now });
                 await _context.SaveChangesAsync(cancellationToken);
 
                 // 3. Kích hoạt Social Loop: Đăng bài vinh danh tự động lên Community Hub

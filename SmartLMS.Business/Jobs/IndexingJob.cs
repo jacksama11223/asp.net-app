@@ -29,7 +29,7 @@ public class IndexingJob : IIndexingJob
         _logger.LogInformation("🔍 Starting Background Sync to Search Engine...");
         
         var courses = await _context.Courses
-            .Where(c => c.Status == 1 && !c.IsDeleted)
+            .Where(c => c.Status == "Published" && !c.IsDeleted)
             .ToListAsync();
 
         foreach (var course in courses)
@@ -39,6 +39,6 @@ public class IndexingJob : IIndexingJob
             _logger.LogInformation("Indexed course: {Title}", course.Title);
         }
 
-        _logger.LogInformation("✅ Search Engine Indexing Completed. Total: {Count} items.", courses.Count);
+        _logger.LogInformation($"✅ Search Engine Indexing Completed. Total: {courses.Count} items.");
     }
 }

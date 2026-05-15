@@ -9,6 +9,7 @@ namespace SmartLMS.Business;
 public interface IWebhookService
 {
     Task SendPayloadAsync(string url, object payload);
+    Task NotifyAsync(string eventType, object payload, int? organizationId = null);
 }
 
 public class WebhookService : IWebhookService
@@ -45,5 +46,14 @@ public class WebhookService : IWebhookService
         {
             _logger.LogError(ex, "❌ Error sending Webhook to {Url}", url);
         }
+    }
+
+    public async Task NotifyAsync(string eventType, object payload, int? organizationId = null)
+    {
+        // Giả lập lấy URL Webhook từ cấu hình dựa trên eventType và organizationId
+        var dummyUrl = "https://webhook.site/dummy-endpoint";
+        var fullPayload = new { Event = eventType, Data = payload, OrgId = organizationId };
+        
+        await SendPayloadAsync(dummyUrl, fullPayload);
     }
 }
