@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using MySqlConnector;
 using Hangfire.MySql;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
 
 using SmartLMS.Business.Security;
 using SmartLMS.Models.Security;
@@ -216,6 +218,9 @@ builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.C
     .AddCookie(options => {
         options.LoginPath = "/Account/Login";
         options.Cookie.Name = "SmartLMS_Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Quan trọng: Để chạy được cả HTTP IP và HTTPS Cloudflare
         options.Events.OnRedirectToLogin = context =>
         {
             if (context.Request.Path.StartsWithSegments("/api"))
@@ -319,11 +324,20 @@ if (builder.Environment.IsDevelopment())
 else
 {
     // Production: Dùng Redis Cluster để đảm bảo tính sẵn sàng cao
+    var redisConn = builder.Configuration["Redis:ConnectionString"] ?? "localhost:6379";
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = builder.Configuration["Redis:ConnectionString"] ?? "localhost:6379";
+        options.Configuration = redisConn;
         options.InstanceName = "SmartLMS_";
     });
+
+    // === FIX LỖI LOGIN LOOP (DATA PROTECTION) ===
+    // Đồng bộ chìa khóa mã hóa Cookie giữa các Replicas qua Redis
+    var redis = ConnectionMultiplexer.Connect(redisConn);
+    builder.Services.AddDataProtection()
+        .PersistKeysToStackExchangeRedis(redis, "SmartLMS-DataProtection-Keys")
+        .SetApplicationName("SmartLMS-AI");
+    // =============================================
 }
 
 // Enterprise SaaS Core Services
@@ -446,7 +460,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
-    app.UseHttpsRedirection();
+    // Bỏ HttpsRedirection vì Nginx/Cloudflare đã xử lý, tránh lỗi Mixed Content/Login Loop
+    // app.UseHttpsRedirection(); 
 }
 
 app.UseResponseCompression();
