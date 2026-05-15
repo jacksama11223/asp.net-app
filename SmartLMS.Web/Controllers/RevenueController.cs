@@ -15,35 +15,35 @@ namespace SmartLMS.Web.Controllers;
 public class RevenueController : Controller
 {
     private readonly SmartLMSContext _context;
+    private readonly Microsoft.Extensions.Caching.Distributed.IDistributedCache _cache;
 
-    public RevenueController(SmartLMSContext context)
+    public RevenueController(SmartLMSContext context, Microsoft.Extensions.Caching.Distributed.IDistributedCache cache)
     {
         _context = context;
+        _cache = cache;
         // Fix for EPPlus 8.0 License Exception
         ExcelPackage.License.SetNonCommercialPersonal("SmartLMS Admin");
     }
 
-    [HttpGet]
-    public IActionResult PaymentConfig()
+    public async Task<IActionResult> PaymentConfig()
     {
-        var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
         var model = new BankConfigModel();
+        var cachedData = await _cache.GetStringAsync("BankConfig");
         
-        if (System.IO.File.Exists(configPath))
+        if (!string.IsNullOrEmpty(cachedData))
         {
-            var json = System.IO.File.ReadAllText(configPath);
-            model = JsonSerializer.Deserialize<BankConfigModel>(json) ?? new BankConfigModel();
+            model = JsonSerializer.Deserialize<BankConfigModel>(cachedData) ?? new BankConfigModel();
         }
+
         
         return View(model);
     }
 
     [HttpPost]
-    public IActionResult PaymentConfig(BankConfigModel model)
+    public async Task<IActionResult> PaymentConfig(BankConfigModel model)
     {
-        var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
         var json = JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true });
-        System.IO.File.WriteAllText(configPath, json);
+        await _cache.SetStringAsync("BankConfig", json);
         
         ViewBag.Success = "Đã lưu cấu hình tài khoản ngân hàng thành công!";
         return View(model);

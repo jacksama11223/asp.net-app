@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartLMS.Data;
 using SmartLMS.Models;
@@ -16,20 +16,21 @@ namespace SmartLMS.Web.Controllers.Api.Public
     public class PublicPaymentApiController : ControllerBase
     {
         private readonly SmartLMSContext _context;
+        private readonly Microsoft.Extensions.Caching.Distributed.IDistributedCache _cache;
 
-        public PublicPaymentApiController(SmartLMSContext context)
+        public PublicPaymentApiController(SmartLMSContext context, Microsoft.Extensions.Caching.Distributed.IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         [HttpGet("config")]
-        public IActionResult GetPaymentConfig()
+        public async Task<IActionResult> GetPaymentConfig()
         {
-            var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
-            if (System.IO.File.Exists(configPath))
+            var cachedData = await _cache.GetStringAsync("BankConfig");
+            if (!string.IsNullOrEmpty(cachedData))
             {
-                var json = System.IO.File.ReadAllText(configPath);
-                return Content(json, "application/json");
+                return Content(cachedData, "application/json");
             }
 
             // Fallback
@@ -52,11 +53,10 @@ namespace SmartLMS.Web.Controllers.Api.Public
             
             // Äá»c sá»‘ tiá»n test tá»« config
             int testAmount = 3000;
-            var configPath = Path.Combine(Directory.GetCurrentDirectory(), "bank_config.json");
-            if (System.IO.File.Exists(configPath))
+            var cachedData = await _cache.GetStringAsync("BankConfig");
+            if (!string.IsNullOrEmpty(cachedData))
             {
-                var json = System.IO.File.ReadAllText(configPath);
-                using var doc = JsonDocument.Parse(json);
+                using var doc = JsonDocument.Parse(cachedData);
                 if (doc.RootElement.TryGetProperty("TestAmount", out var amountProp))
                 {
                     testAmount = amountProp.GetInt32();

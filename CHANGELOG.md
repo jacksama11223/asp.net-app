@@ -1,5 +1,13 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-15] - Infra & Auth Stabilization
+- **Fixed:** Lỗi 502 Bad Gateway do Nginx giữ DNS Cache cũ của Docker container (Cần restart LB khi rebuild backend).
+- **Fixed:** Lỗi Login Loop (văng ra màn hình đăng nhập) do thiếu đồng bộ Data Protection keys giữa các bản sao Backend.
+- **Added:** Tích hợp `Microsoft.AspNetCore.DataProtection.StackExchangeRedis` để lưu chìa khóa bảo mật vào Redis.
+- **Improved:** Cấu hình Cookie `Lax` và `SameAsRequest` để tương thích tốt với cả HTTP IP và HTTPS Cloudflare.
+
+### [2026-04-29] - UI/UX Modernization
+
 ## [2026-05-13] - Community Hub v2 & System Stabilization
 ### Added
 - Hoàn thiện 100% module **Community Engagement Hub** (Resources, Events, Q&A, Study Groups, Leaderboard).
@@ -25,7 +33,11 @@ Tất cả các thay đổi quan trọng đối với dự án này sẽ đượ
 - Bổ sung Model `CommunityEvent` và `CommunityResource` hỗ trợ chia sẻ tài liệu và tổ chức sự kiện.
 - Cập nhật Model `Post` với thuộc tính `Tags` và `LastActivityAt` để tối ưu hóa Forum.
 - Triển khai `ICommunityService` và `CommunityController` với kiến trúc Modular Monolith.
-- Cấu hình kết nối Database và Redis đồng bộ cho phân hệ Cộng đồng.
+- **Cấu hình Cổng:** Mọi container Backend phải bind vào cổng nội bộ `8080` để đồng bộ với cấu hình Nginx.
+- **Distributed Auth (Cực kỳ quan trọng):** 
+    - Khi chạy Replicas > 1, PHẢI cấu hình `AddDataProtection().PersistKeysToStackExchangeRedis(...)`.
+    - Thiếu cấu hình này sẽ gây lỗi văng session (Login Loop) do các instance không dùng chung chìa khóa giải mã Cookie.
+- **Nginx DNS Resilience:** Sau khi rebuild Backend/Frontend, PHẢI chạy `docker restart smartlms-lb` để Nginx cập nhật lại IP nội bộ mới của các container.
 
 ## [Unreleased] - 2026-05-12
 
