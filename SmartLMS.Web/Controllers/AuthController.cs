@@ -19,7 +19,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(string username, string password)
+    public IActionResult Login(string username, string password)
     {
         // 🛡️ Logic xác thực sẽ được tích hợp tại đây
         // Tạm thời trả về View để ngài thấy giao diện
@@ -28,7 +28,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(User user)
+    public IActionResult Register(User user)
     {
         // 🛡️ Logic đăng ký sẽ được tích hợp tại đây
         ViewBag.Message = "Đang khởi tạo tài khoản mới...";

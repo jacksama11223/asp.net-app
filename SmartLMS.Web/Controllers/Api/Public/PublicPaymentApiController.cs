@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Linq;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace SmartLMS.Web.Controllers.Api.Public
 {

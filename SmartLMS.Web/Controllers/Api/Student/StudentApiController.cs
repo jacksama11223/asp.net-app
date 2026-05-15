@@ -97,7 +97,7 @@ public class StudentApiController : ControllerBase
         int userId = int.Parse(userIdStr);
 
         var mistakes = await _studentService.GetMistakeNotebookAsync(userId, null);
-        Response.Headers.Add("X-Server-Node", Environment.MachineName);
+        Response.Headers.Append("X-Server-Node", Environment.MachineName);
         return Ok(mistakes);
     }
 
@@ -109,7 +109,7 @@ public class StudentApiController : ControllerBase
         int userId = int.Parse(userIdStr);
 
         var mistakes = await _studentService.GetMistakeNotebookAsync(userId, courseId);
-        Response.Headers.Add("X-Server-Node", Environment.MachineName);
+        Response.Headers.Append("X-Server-Node", Environment.MachineName);
         return Ok(mistakes);
     }
 

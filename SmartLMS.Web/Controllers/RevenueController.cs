@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using System;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace SmartLMS.Web.Controllers;
 

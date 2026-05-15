@@ -19,7 +19,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(string username, string password)
+    public IActionResult Login(string username, string password)
     {
         // 🛡️ Logic xác thực cho Hub
         ViewBag.Message = "Đang xác thực vào Community Hub...";
@@ -27,7 +27,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(User user)
+    public IActionResult Register(User user)
     {
         // 🛡️ Logic đăng ký cho Hub
         ViewBag.Message = "Đang khởi tạo tài khoản thành viên...";

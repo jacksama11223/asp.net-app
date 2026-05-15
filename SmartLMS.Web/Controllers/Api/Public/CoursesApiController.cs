@@ -78,7 +78,7 @@ namespace SmartLMS.Web.Controllers.Api.Public
             };
 
             await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(courses), cacheOptions);
-            Response.Headers.Add("X-Server-Node", Environment.MachineName);
+            Response.Headers.Append("X-Server-Node", Environment.MachineName);
 
             return Ok(courses);
         }

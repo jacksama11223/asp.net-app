@@ -22,7 +22,8 @@ public class ScoringEngine : IScoringEngine
         {
             if (userAnswers.TryGetValue(question.QuestionId, out var answer))
             {
-                if (string.Equals(answer.Trim(), question.CorrectAnswer.Trim(), System.StringComparison.OrdinalIgnoreCase))
+                var correctAnswer = question.CorrectAnswer ?? "";
+                if (string.Equals(answer?.Trim(), correctAnswer.Trim(), System.StringComparison.OrdinalIgnoreCase))
                 {
                     correctCount++;
                 }
@@ -39,7 +40,8 @@ public class ScoringEngine : IScoringEngine
         {
             if (userAnswers.TryGetValue(question.QuestionId, out var answer))
             {
-                if (string.Equals(answer.Trim(), question.CorrectAnswer.Trim(), System.StringComparison.OrdinalIgnoreCase))
+                var correctAnswer = question.CorrectAnswer ?? "";
+                if (string.Equals(answer?.Trim(), correctAnswer.Trim(), System.StringComparison.OrdinalIgnoreCase))
                 {
                     totalXP += question.XPValue;
                 }

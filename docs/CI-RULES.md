@@ -18,10 +18,12 @@ Tài liệu này quy định các quy tắc bắt buộc phải tuân thủ khi 
     - Ứng dụng ASP.NET Core chạy trong Docker BẮT BUỘC phải tắt `app.UseHttpsRedirection()`.
     - Nginx Load Balancer phải gọi Service qua Docker DNS (vd: `http://community:8080`) thay vì `127.0.0.1`.
 - **Cấu hình Cổng:** Mọi container Backend phải bind vào cổng nội bộ `8080` để đồng bộ với cấu hình Nginx.
-- **Distributed Auth (CỰC KỲ QUAN TRỌNG):** 
+- **Distributed Auth & State (CỰC KỲ QUAN TRỌNG):** 
     - Khi chạy Replicas > 1, BẮT BUỘC cấu hình `AddDataProtection().PersistKeysToStackExchangeRedis(...)`.
-    - Nếu thiếu, các bản sao Backend sẽ không giải mã được Cookie của nhau, gây ra lỗi văng Session (Login Loop).
-- **Nginx DNS Resilience:** Sau khi rebuild Backend hoặc Frontend, PHẢI chạy lệnh `docker restart smartlms-lb` để Nginx xóa DNS Cache và nhận diện đúng IP mới của các container.
+    - TUYỆT ĐỐI KHÔNG lưu cấu hình động (như tài khoản ngân hàng, settings) vào file cục bộ (JSON/XML) vì sẽ gây mất đồng bộ giữa các bản sao. Phải dùng **Redis** hoặc **Database**.
+- **Nginx DNS & Route Resilience:** 
+    - Khi thêm Controller MVC mới, phải khai báo Path vào `nginx-lb.conf`.
+    - Sau khi rebuild Backend hoặc Frontend, PHẢI chạy lệnh `docker restart smartlms-lb` để cập nhật IP và Route mới.
 
 ## 4. QUY TRÌNH KIỂM ĐỊNH (BẮT BUỘC TRƯỚC KHI PUSH)
 Mọi AI Assistant hoặc Developer phải thực hiện chuỗi lệnh sau trước khi `git push`:

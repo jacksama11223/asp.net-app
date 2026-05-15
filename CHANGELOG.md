@@ -1,10 +1,12 @@
 # Changelog - SmartLMS.AI Distributed System
 
 ### [2026-05-15] - Infra & Auth Stabilization
-- **Fixed:** Lỗi 502 Bad Gateway do Nginx giữ DNS Cache cũ của Docker container (Cần restart LB khi rebuild backend).
-- **Fixed:** Lỗi Login Loop (văng ra màn hình đăng nhập) do thiếu đồng bộ Data Protection keys giữa các bản sao Backend.
-- **Added:** Tích hợp `Microsoft.AspNetCore.DataProtection.StackExchangeRedis` để lưu chìa khóa bảo mật vào Redis.
-- **Improved:** Cấu hình Cookie `Lax` và `SameAsRequest` để tương thích tốt với cả HTTP IP và HTTPS Cloudflare.
+- **Fixed:** Lỗi 502 Bad Gateway do Nginx giữ DNS Cache cũ của Docker container.
+- **Fixed:** Lỗi Login Loop bằng cách đồng bộ Data Protection keys qua Redis.
+- **Fixed:** Lỗi văng ra trang chủ khi truy cập phân hệ Enterprise (UserManagement, Dashboard...) do thiếu cấu hình Routing trên Nginx LB.
+- **Fixed:** Lỗi không đồng bộ cấu hình ngân hàng giữa các bản sao bằng cách chuyển từ lưu file JSON sang Redis Cache.
+- **Added:** Tích hợp `Microsoft.AspNetCore.DataProtection.StackExchangeRedis` cho Distributed Auth.
+- **Improved:** Cấu hình Nginx hỗ trợ WebSockets (Upgrade/Connection headers) cho các tính năng Real-time.
 
 ### [2026-04-29] - UI/UX Modernization
 
