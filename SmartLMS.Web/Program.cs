@@ -18,6 +18,7 @@ using Hangfire.MySql;
 using System.IdentityModel.Tokens.Jwt;
 
 using SmartLMS.Business.Security;
+using SmartLMS.Models.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 

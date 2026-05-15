@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SmartLMS.Business;
 using SmartLMS.Models;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartLMS.Web.Controllers;
@@ -49,7 +51,7 @@ public class CodingChallengeController : Controller
                 CourseId = challenge.CourseId ?? 0,
                 LessonId = challenge.LessonId ?? 0,
                 MistakeType = "CodingError",
-                Details = result.Message,
+                CorrectionNote = result.Message,
                 CreatedAt = System.DateTime.Now
             });
             await _context.SaveChangesAsync();
