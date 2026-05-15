@@ -1,65 +1,24 @@
 # Business Requirements Document (BRD) - SmartLMS.AI
 
-## 1. Hệ thống chức năng chi tiết (Detailed Feature Modules)
+## 🏛️ Enterprise Features (New)
 
-### 1.1 Hệ thống Quản lý Học tập (LMS & Content)
-- **Curriculum:** Quản lý Course -> Module -> Lesson. Hỗ trợ nhiều loại nội dung (Video, Document).
-- **Interactive Workspace:** Hệ thống Flashcards (Spaced Repetition), Mistake Notebook (Sổ tay lỗi sai), Bookmark & Resume, và phân tích điểm yếu bằng AI.
-- **Creator Studio (Instructor Dashboard):** Giao diện quản trị dành riêng cho Giảng viên với Sidebar co giãn, theo dõi học viên, doanh thu (Analytics Charts) và tiến độ thực tế.
-- **Tutor Dashboard:** Bảng điều khiển cho Mentor/Gia sư quản lý lịch hẹn 1:1 và trả lời câu hỏi khẩn cấp.
-- **Self Quiz Builder:** Công cụ AI cho phép học viên tự tạo bộ câu hỏi và Flashcard từ chủ đề bất kỳ.
-- **Direct Messaging:** Hệ thống Inbox tập trung, Glassmorphism UI, hỗ trợ trao đổi 2 chiều.
-- **Live Classes:** Tích hợp Zoom API để tổ chức các buổi học trực tuyến đồng bộ.
-- **Coding Challenge:** Engine thực thi code (CompilerService) hỗ trợ làm bài tập lập trình trực tiếp, kiểm tra qua TestCases.
-- **Mistake Notebook (Sổ tay lỗi sai):** Tự động lưu vết và phân loại lỗi sai từ các bài kiểm tra để học viên soi xét và ghi chú lại.
-- **Notion-like Editor:** Trình soạn thảo khối (Block-based) cho phép tùy biến Icon, Title và kéo thả linh hoạt cho trang Wiki/Cộng đồng.
+### 1. Luồng Giám sát An ninh (Audit Trail Flow)
+- **Mục tiêu**: Theo dõi mọi thay đổi dữ liệu nhạy cảm (User, Course, Enrollment).
+- **Hành động**: Tự động ghi lại UserId, Thời gian, Dữ liệu cũ/mới vào bảng `AuditLogs`.
+- **UI**: Sidebar Timeline tại trang Quản lý người dùng.
 
-### 1.6 Trải nghiệm Người dùng Di động (Mobile Optimization)
-- **Responsive Navigation:** Hệ thống Sidebar tự động chuyển sang Drawer (ngăn kéo) trên màn hình dọc (< 768px).
-- **Safe Viewport:** Đảm bảo 100% các thành phần UI (Search, User Profile, Badges) không bị tràn viền (Overflow) trên iPhone/Android.
-- **Micro-interactions:** Tối ưu hóa kích thước nút bấm và cử chỉ chạm (Touch-friendly) cho người dùng di động.
+### 2. Luồng Chấm điểm Tự động (Automated Grading Flow)
+- **Mục tiêu**: Hỗ trợ học viên thực hành lập trình thực tế.
+- **Tính năng**: 
+  - Monaco Editor (VS Code Web).
+  - Terminal hiển thị kết quả biên dịch.
+  - Tự động ghi lại lỗi (`MistakeLog`) để AI phân tích.
 
-### 1.7 Hệ thống Tương tác Tác giả & Cộng đồng
-- **Donation System:** Cơ chế ủng hộ trực tiếp cho giảng viên (Author Support).
-- **Social Extraction:** Một click để trích xuất nội dung lỗi sai hoặc bài học sang trang cộng đồng (`145.241.160.156`) để hỏi đáp.
-- **Collaborative Posts:** Mời bạn bè cùng tham gia đóng góp và phản hồi trên một bài viết.
-- **Smart Study Timer:** Hệ thống theo dõi thời gian học tập tập trung (Deep Work) tích hợp Pomodoro.
-- **AI Shadow Tutor:** Trợ lý ảo hiểu rõ lịch sử lỗi sai (Mistake Notebook) để giải thích kiến thức cá nhân hóa.
-- **Public Portfolio:** Chuyển đổi các bài viết Wiki và chứng chỉ thành trang hồ sơ năng lực công khai.
+### 3. Luồng AI Analytics (Learning Prediction)
+- **Mục tiêu**: Dự báo rủi ro học viên và gợi ý lộ trình học.
+- **Input**: Dữ liệu từ `MistakeLog`, `ActivityLog`, `QuizAttempt`.
+- **Output**: Heatmap rủi ro và Dashboard thống kê rủi rớt môn.
 
-### 1.2 Hệ thống Đánh giá & Gamification
-- **Assessment Engine:** Chấm điểm trắc nghiệm, tự động cộng XP, cấp Badge (Huy hiệu) dựa trên thành tích.
-- **Leaderboard:** Bảng xếp hạng thời gian thực (tối ưu hóa bằng Redis Cache).
-- **Certificates:** Tự động tạo và cấp chứng chỉ số sau khi hoàn thành khóa học.
-
-### 1.3 Hệ thống Tài chính & Kinh doanh
-- **Billing & Payment:** Tích hợp VNPay Gateway, quản lý Invoices, Coupons.
-- **Affiliate:** Theo dõi link giới thiệu, tính toán hoa hồng (Commission) cho đối tác.
-- **Subscription/Single Purchase:** Hỗ trợ nhiều mô hình kinh doanh khóa học.
-
-### 1.4 Hệ thống AI & Analytics
-- **Predictive Analytics:** Dự đoán tỷ lệ Dropout (ML.NET).
-- **Item Analysis:** Đánh giá độ khó và chất lượng của câu hỏi kiểm tra.
-- **Reporting:** Hệ thống báo cáo sâu về tiến độ học tập và doanh thu.
-
-### 1.5 Bảo mật & Vận hành (Enterprise Security)
-- **Data Encryption:** Mã hóa Email, KYC, DOB ngay trong DB (EncryptionService).
-- **Blind Indexing:** Hỗ trợ tìm kiếm dữ liệu đã mã hóa qua EmailHash.
-- **Audit Logs:** Theo dõi 100% lịch sử thay đổi dữ liệu (Who, When, What changed).
-- **Webhooks:** Đẩy dữ liệu sự kiện ra hệ thống bên thứ 3.
-
-## 2. Kiến trúc & Công nghệ (Tech Stack Detail)
-- **Core:** ASP.NET Core 8.0 (C#).
-- **Database:** MariaDB (MySQL compatible).
-- **Caching & Queue:** Redis (Leaderboard), Hangfire (Emails, Background tasks).
-- **Communication:** MediatR (In-process Event Bus) cho Modular Monolith.
-- **Frontend:** React + Vite, Mantine UI, Framer Motion, react-icons/lu (SafeIcons only), Axios.
-- **DevOps:** Docker (Multi-stage build), Nginx Reverse Proxy, `verify_frontend.js` (pre-build static analysis).
-
-## 3. Quy tắc phát triển (Do's & Don'ts)
-- **DO:** Luôn sử dụng `_mediator.Publish()` khi một hành động ở module này cần tác động đến module khác.
-- **DO:** Sử dụng claim `UserId` (ưu tiên) hoặc `NameIdentifier` (có kiểm tra kiểu số) để định danh người dùng.
-- **DO:** Cấu hình `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()` để tránh xung đột claim `sub`.
-- **DO:** Cập nhật Audit Log cho mọi entity quan trọng.
-- **DON'T:** Không viết logic nghiệp vụ phức tạp trực tiếp trong Controller.
-- **DON'T:** Không lưu mật khẩu hoặc dữ liệu nhạy cảm dạng text thuần.
+### 4. Luồng Tương tác Đa kênh (Omnichannel)
+- **Cộng đồng**: Tự động vinh danh học viên lên Community Hub (Auto-Post).
+- **Thông báo**: SignalR (Real-time Popup) và Webhook (Discord/Slack Integration).
