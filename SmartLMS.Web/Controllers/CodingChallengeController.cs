@@ -64,7 +64,7 @@ public class CodingChallengeController : Controller
             int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
             if (userId > 0)
             {
-                await _mediator.Publish(new SmartLMS.Business.Events.AssessmentCompletedEvent(userId, challenge.Points ?? 50));
+                await _mediator.Publish(new SmartLMS.Business.Events.AssessmentCompletedEvent(userId, challenge.Points));
             }
         }
 
