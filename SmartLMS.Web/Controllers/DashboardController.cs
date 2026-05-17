@@ -150,7 +150,8 @@ public class DashboardController : Controller
         var riskPredictions = new List<object>();
         foreach (var e in enrollments)
         {
-            var prediction = await _predictionService.PredictDropoutAsync(e.UserId, e.CourseId, false);
+            if (e.UserId == null || e.CourseId == null) continue;
+            var prediction = await _predictionService.PredictDropoutAsync(e.UserId.Value, e.CourseId.Value, false);
             riskPredictions.Add(new {
                 studentName = e.User?.FullName ?? "Unknown",
                 courseName = e.Course?.Title ?? "N/A",
