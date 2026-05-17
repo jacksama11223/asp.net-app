@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using Dapper;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
 using SmartLMS.Data;
 using SmartLMS.Models;
@@ -172,5 +174,58 @@ public class DashboardController : Controller
             .ToListAsync();
 
         return Json(new { riskPredictions, commonMistakes });
+    }
+
+    /// <summary>
+    /// API dành cho React Student Page — lấy dữ liệu phân tích cá nhân hóa của học viên hiện tại
+    /// GET /Dashboard/MyAnalytics
+    /// </summary>
+    [HttpGet]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public async Task<IActionResult> MyAnalytics()
+    {
+        var userIdStr = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out int userId))
+            return Unauthorized(new { message = "Không xác định được người dùng." });
+
+        // Lấy danh sách khóa học mà học viên đang học
+        var enrollments = await _context.Enrollments
+            .Include(e => e.Course)
+            .Where(e => e.UserId == userId)
+            .Take(5)
+            .ToListAsync();
+
+        var myRisk = new List<object>();
+        foreach (var e in enrollments)
+        {
+            if (e.CourseId == null) continue;
+            var pred = await _predictionService.PredictDropoutAsync(userId, e.CourseId.Value, false);
+            myRisk.Add(new {
+                courseId = e.CourseId,
+                courseName = e.Course?.Title ?? "N/A",
+                progress = e.Progress,
+                riskProbability = Math.Round(pred.Probability * 100, 1),
+                riskLevel = pred.Probability > 0.6 ? "High" : (pred.Probability > 0.3 ? "Medium" : "Low"),
+                recommendation = pred.Probability > 0.6
+                    ? "⚠️ Hãy tăng tần suất học tập ngay!"
+                    : (pred.Probability > 0.3 ? "📚 Duy trì thói quen học tốt." : "✅ Bạn đang học rất tốt!")
+            });
+        }
+
+        // Lấy thành tích của học viên
+        var user = await _context.Users.FindAsync(userId);
+        var badges = await (from ub in _context.UserBadges
+                           join b in _context.Badges on ub.BadgeId equals b.BadgeId
+                           where ub.UserId == userId
+                           select new { b.Name, b.IconUrl, b.Rarity, ub.EarnedDate }).ToListAsync();
+
+        return Json(new {
+            totalXP = user?.TotalXP ?? 0,
+            level = ((user?.TotalXP ?? 0) / 1000) + 1,
+            progressToNextLevel = ((user?.TotalXP ?? 0) % 1000) / 10.0,
+            currentStreak = user?.CurrentStreak ?? 0,
+            badges,
+            courseRisks = myRisk
+        });
     }
 }

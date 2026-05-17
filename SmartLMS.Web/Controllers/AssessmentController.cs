@@ -113,7 +113,8 @@ namespace SmartLMS.Web.Controllers
         [Authorize]
         public async Task<IActionResult> AchievementHub()
         {
-            var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
+            // Ưu tiên lấy từ NameIdentifier (đây là claim chuẩn ASP.NET Identity)
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (int.TryParse(userIdStr, out int userId))
             {
                 var achievements = await _assessmentService.GetMyAchievementsAsync(userId);

@@ -4,6 +4,8 @@ using SmartLMS.Business;
 using SmartLMS.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -81,12 +83,59 @@ namespace SmartLMS.Web.Controllers
         [HttpPost("submit")]
         public async Task<IActionResult> SubmitQuiz([FromBody] QuizSubmissionRequest request)
         {
-            var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdStr, out var userId)) 
                 return Unauthorized();
 
             var result = await _assessmentService.SubmitQuizAsync(userId, request.ExamId, request.Answers);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// API cho React frontend gọi vào lấy thành tích (XP, Huy hiệu, Level) của học viên hiện tại
+        /// GET /api/assessment/my-achievements
+        /// </summary>
+        [HttpGet("my-achievements")]
+        public async Task<IActionResult> GetMyAchievements()
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out var userId))
+                return Unauthorized(new { message = "Không xác định được người dùng." });
+
+            var achievements = await _assessmentService.GetMyAchievementsAsync(userId);
+            return Ok(achievements);
+        }
+
+        /// <summary>
+        /// API lấy danh sách bài tập coding theo khóa học — cho React gọi vào tích hợp Sandbox
+        /// GET /api/assessment/coding-challenges?courseId=1
+        /// </summary>
+        [HttpGet("coding-challenges")]
+        public async Task<IActionResult> GetCodingChallengesByCourse([FromQuery] int? courseId)
+        {
+            try
+            {
+                using var scope = HttpContext.RequestServices.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<SmartLMS.Data.SmartLMSContext>();
+                
+                var query = context.CodingChallenges.AsQueryable();
+                if (courseId.HasValue)
+                    query = query.Where(c => c.CourseId == courseId.Value);
+
+                var challenges = await query
+                    .Select(c => new {
+                        c.Id, c.Title, c.Language, c.Points, c.CourseId,
+                        description = c.Description,
+                        testCaseCount = c.TestCases.Count(t => !t.IsHidden)
+                    })
+                    .ToListAsync();
+
+                return Ok(challenges);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 
