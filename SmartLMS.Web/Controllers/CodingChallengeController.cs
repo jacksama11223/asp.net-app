@@ -13,11 +13,13 @@ public class CodingChallengeController : Controller
 {
     private readonly ICompilerService _compilerService;
     private readonly SmartLMS.Data.SmartLMSContext _context;
+    private readonly MediatR.IMediator _mediator;
 
-    public CodingChallengeController(ICompilerService compilerService, SmartLMS.Data.SmartLMSContext context)
+    public CodingChallengeController(ICompilerService compilerService, SmartLMS.Data.SmartLMSContext context, MediatR.IMediator mediator)
     {
         _compilerService = compilerService;
         _context = context;
+        _mediator = mediator;
     }
 
     public async Task<IActionResult> Solve(int id)
@@ -55,6 +57,15 @@ public class CodingChallengeController : Controller
                 CreatedAt = System.DateTime.Now
             });
             await _context.SaveChangesAsync();
+        }
+        else 
+        {
+            // Luồng Gamification: Nếu ĐÚNG, thưởng XP và Badge thông qua EventBus
+            int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+            if (userId > 0)
+            {
+                await _mediator.Publish(new SmartLMS.Business.Events.AssessmentCompletedEvent(userId, challenge.Points ?? 50));
+            }
         }
 
         return Json(result);
