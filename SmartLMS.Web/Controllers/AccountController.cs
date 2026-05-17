@@ -24,8 +24,8 @@ public class AccountController : Controller
         ViewBag.ReturnUrl = returnUrl;
         if (User.Identity?.IsAuthenticated == true) 
         {
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
-            return RedirectToAction("Index", "Dashboard");
+            if (!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+            return Redirect("/Dashboard");
         }
         return View();
     }
@@ -49,11 +49,11 @@ public class AccountController : Controller
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            if (!string.IsNullOrEmpty(returnUrl))
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Dashboard");
+            return Redirect("/Dashboard");
         }
 
         ViewBag.ReturnUrl = returnUrl;

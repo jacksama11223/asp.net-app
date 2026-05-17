@@ -133,6 +133,7 @@ public class DashboardController : Controller
         return Json(data);
     }
     [HttpGet]
+    [Route("Dashboard/Analytics")]
     public IActionResult Analytics() => View();
 
     [HttpGet]
