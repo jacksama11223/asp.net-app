@@ -1,6 +1,6 @@
 # Báo cáo Chẩn đoán API & Tính năng Nút bấm (Enterprise UI Button API Mapping)
 
-*Thời gian quét:* 17:47:10 18/5/2026
+*Thời gian quét:* 17:49:57 18/5/2026
 *Tổng số tệp UI đã phân tích:* **91**
 
 ## DANH SÁCH KHẢO SÁT CHI TIẾT THEO TỪNG TRANG (PAGE-BY-PAGE API MAP)
@@ -12,9 +12,9 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\components*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 63 | `{collapsed ? : }` | `Toggle Sidebar` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 63 | `{collapsed ? : }` | `Toggle Sidebar` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -44,10 +44,10 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 86 | `{ setSelectedTutor(tutor); ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 140 | `Confirm Booking` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 86 | `{ setSelectedTutor(tutor); ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 140 | `Confirm Booking` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -63,13 +63,13 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 5)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 206 | `{copied ? : }` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 223 | `{copied ? : }` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 234 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** |
-| 248 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** |
-| 264 | `navigate('/my-learning')} className="w-full s` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 206 | `{copied ? : }` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 223 | `{copied ? : }` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 234 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 248 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 264 | `navigate('/my-learning')} className="w-full s` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -83,10 +83,10 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 113 | `{loading ? ( ` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: ${BASE_URL}/api/compiler/execute`** |
-| 136 | `setActiveTab("output")} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 113 | `{loading ? ( ` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: ${BASE_URL}/api/compiler/execute`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 136 | `setActiveTab("output")} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -100,10 +100,10 @@
 * **Mô tả tính năng trang:** *Diễn đàn thảo luận và học tập cộng đồng tích hợp Q&A và mạng xã hội học tập.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 246 | `navigate('/leaderboard')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 268 | `navigate('/community/friends')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 246 | `navigate('/leaderboard')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 268 | `navigate('/community/friends')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -120,10 +120,10 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 91 | `navigate(`/profile/${user.id}`)}>Hồ sơ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 149 | `navigate(`/profile/${friend.id}`)}>Hồ sơ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 91 | `navigate(`/profile/${user.id}`)}>Hồ sơ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 149 | `navigate(`/profile/${friend.id}`)}>Hồ sơ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -142,9 +142,9 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 196 | `navigate('/community')}>Hủy` | `Không có` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 196 | `navigate('/community')}>Hủy` | `Không có` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -181,11 +181,11 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 3)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 136 | `setDonateModal(false)}> Tôi đã ch` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 323 | `navigate(`/checkout/${id}`)} > ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 372 | `setFollowing(!following)} > ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 136 | `setDonateModal(false)}> Tôi đã ch` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 323 | `navigate(`/checkout/${id}`)} > ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 372 | `setFollowing(!following)} > ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -204,15 +204,15 @@
 * **Mô tả tính năng trang:** *Quản lý khóa học, thiết lập bài học và biên soạn đề bài thực hành C# Roslyn Sandbox cho Giảng viên.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 7)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 324 | `{ setCourseForm({ ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 473 | `setCourseModalOpen(false)}>H\u1ee7y` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 474 | `L\u01b0u l\u1ea1i` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/courses/save`** |
-| 537 | `setStudioOpen(false)}>Ho\u00e0n t\u1ea5t` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 646 | `handleRemoveTestCase(index)}> ` | `Không có` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | **`Không gọi API (Nút giao diện)`** |
-| 659 | `setChallengeModalOpen(false)}>H\u1ee7y` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 660 | `L\u01b0u & \u00c1p d\u1ee5ng` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/challenges/save`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 324 | `{ setCourseForm({ ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 473 | `setCourseModalOpen(false)}>H\u1ee7y` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 474 | `L\u01b0u l\u1ea1i` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/courses/save`** | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 537 | `setStudioOpen(false)}>Ho\u00e0n t\u1ea5t` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 646 | `handleRemoveTestCase(index)}> ` | `Không có` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 659 | `setChallengeModalOpen(false)}>H\u1ee7y` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 660 | `L\u01b0u & \u00c1p d\u1ee5ng` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/challenges/save`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 8)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -235,12 +235,12 @@
 * **Mô tả tính năng trang:** *Danh sách thư viện khóa học công khai trên hệ thống dành cho mọi đối tượng học viên.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 4)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 89 | `navigate('/my-learning')}>My Learning` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 90 | `setSearch('')}>Browse Categories` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 180 | `navigate(`/course/${course.courseId}`)} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 201 | `setSearch('')}>Clear Search` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 89 | `navigate('/my-learning')}>My Learning` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 90 | `setSearch('')}>Browse Categories` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 180 | `navigate(`/course/${course.courseId}`)} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 201 | `setSearch('')}>Clear Search` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -256,12 +256,12 @@
 * **Mô tả tính năng trang:** *Bảng thống kê hiệu năng, tỷ lệ hoàn thành khóa học và phân tích rủi ro thất nghiệp bằng trí tuệ nhân tạo (AI Predictor).*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 4)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 127 | `navigate('/creator/courses')}>Xem tất cả` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 153 | `openChat(2, c.courseId)} title="Nhắn tin cho ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 175 | `navigate('/creator/courses')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 209 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /api/messages/send`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 127 | `navigate('/creator/courses')}>Xem tất cả` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 153 | `openChat(2, c.courseId)} title="Nhắn tin cho ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 175 | `navigate('/creator/courses')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 209 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /api/messages/send`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -321,9 +321,9 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 37 | `navigate(-1)}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 37 | `navigate(-1)}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -339,9 +339,9 @@
 * **Mô tả tính năng trang:** *Cửa ngõ đăng nhập hệ thống phân quyền đa vai trò (Học viên, Giảng viên, Admin).*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 106 | `Log In` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 106 | `Log In` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -357,9 +357,9 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 138 | `setMessage('')} className="sh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 138 | `setMessage('')} className="sh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -375,10 +375,10 @@
 * **Mô tả tính năng trang:** *Sổ tay lưu vết các lỗi biên dịch, lỗi logic C# và gợi ý hướng khắc phục tự động bằng AI học máy.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 81 | `navigate(-1)}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 249 | `handleResolve(m.mistakeLogId, v)} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 81 | `navigate(-1)}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 249 | `handleResolve(m.mistakeLogId, v)} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -395,10 +395,10 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 143 | `navigate('/courses')}> Khám phá` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 157 | `navigate('/courses')}> Đến da` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 143 | `navigate('/courses')}> Khám phá` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 157 | `navigate('/courses')}> Đến da` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -416,9 +416,9 @@
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 48 | `{/* Add New Page */}}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 48 | `{/* Add New Page */}}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -453,9 +453,9 @@
 * **Mô tả tính năng trang:** *Trang đăng ký tài khoản học viên mới, mã hóa mật khẩu bảo mật qua EncryptionService.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 149 | `Register Now` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 149 | `Register Now` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -471,10 +471,10 @@
 * **Mô tả tính năng trang:** *Không gian học tập tích hợp trình chiếu giáo trình và nhúng Monaco IDE thực hành biên dịch code trực tiếp cho Học viên.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 447 | `Nút Icon/Hình ảnh` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: /api/compiler/execute`** |
-| 536 | `selectedLesson?.videoUrl && window.open(selec` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 447 | `Nút Icon/Hình ảnh` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: /api/compiler/execute`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 536 | `selectedLesson?.videoUrl && window.open(selec` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 6)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -515,10 +515,10 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Account*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 55 | `Đăng Xuất` | `Không có` | Đăng xuất phiên làm việc của người dùng hiện tại | **`Liên kết: /Account/Logout`** |
-| 56 | `Về Trang Chủ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 55 | `Đăng Xuất` | `Không có` | Đăng xuất phiên làm việc của người dùng hiện tại | **`Liên kết: /Account/Logout`** | N/A - *Nút giao diện/Điều hướng* |
+| 56 | `Về Trang Chủ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -532,9 +532,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Account*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 187 | `Đăng Nhập ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 187 | `Đăng Nhập ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -548,9 +548,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Account*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 109 | `Đăng Ký Tài Khoản ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 109 | `Đăng Ký Tài Khoản ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -616,9 +616,9 @@
 * **Mô tả tính năng trang:** *Hệ thống tự động biên soạn đề thi, trắc nghiệm và quản lý ngân hàng câu hỏi.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 27 | `Copy to clipboard` | `Copy to clipboard` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 27 | `Copy to clipboard` | `Copy to clipboard` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -634,9 +634,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 17 | ` Trải nghiệm Quiz Wizard (Demo)` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Assessment/QuizWizard`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 17 | ` Trải nghiệm Quiz Wizard (Demo)` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Assessment/QuizWizard`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -650,11 +650,11 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 3)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 25 | ` Thêm câu hỏi mới` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Liên kết: /Assessment/CreateQuestion`** |
-| 70 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 71 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 25 | ` Thêm câu hỏi mới` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Liên kết: /Assessment/CreateQuestion`** | N/A - *Nút giao diện/Điều hướng* |
+| 70 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 71 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -668,9 +668,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 27 | ` Hướng dẫn` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 27 | ` Hướng dẫn` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -686,9 +686,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Auth*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 168 | `Đăng nhập` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 168 | `Đăng nhập` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -702,9 +702,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Auth*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 186 | `Tạo tài khoản miễn phí` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 186 | `Tạo tài khoản miễn phí` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -718,9 +718,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallenge*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 50 | ` Chạy & Nộp bài` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /CodingChallenge/Submit`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 50 | ` Chạy & Nộp bài` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /CodingChallenge/Submit`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -734,9 +734,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallengeManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 60 | `Tạo & Tiếp tục cấu hình Test Case` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 60 | `Tạo & Tiếp tục cấu hình Test Case` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -752,10 +752,10 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallengeManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 60 | `Cập nhật thông tin` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
-| 83 | `Thêm bộ test` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 60 | `Cập nhật thông tin` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
+| 83 | `Thêm bộ test` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -788,12 +788,12 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Cohort*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 4)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 60 | `Quản lý ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Cohort/Members/@cohort.CohortId`** |
-| 94 | `Lưu Thông Tin` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /Cohort/Update`** |
-| 116 | `Chọn file Excel` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 123 | `Bắt đầu Import` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 60 | `Quản lý ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Cohort/Members/@cohort.CohortId`** | N/A - *Nút giao diện/Điều hướng* |
+| 94 | `Lưu Thông Tin` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /Cohort/Update`** | N/A - *Nút giao diện/Điều hướng* |
+| 116 | `Chọn file Excel` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 123 | `Bắt đầu Import` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 5)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -813,10 +813,10 @@
 * **Mô tả tính năng trang:** *Quản lý thành viên lớp học, thêm học viên vào khóa học/cohort cụ thể.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 59 | `Xóa khỏi lớp` | `Xóa khỏi lớp` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | **`Gọi API: /Cohort/RemoveStudent`** |
-| 90 | `Xác nhận thêm` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gọi API: /Cohort/AddStudent`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 59 | `Xóa khỏi lớp` | `Xóa khỏi lớp` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | **`Gọi API: /Cohort/RemoveStudent`** | N/A - *Nút giao diện/Điều hướng* |
+| 90 | `Xác nhận thêm` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gọi API: /Cohort/AddStudent`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -835,10 +835,10 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Community*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 13 | `Khám phá ngay` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: #feed`** |
-| 26 | `Mới nhất` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 13 | `Khám phá ngay` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: #feed`** | N/A - *Nút giao diện/Điều hướng* |
+| 26 | `Mới nhất` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -857,9 +857,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Coupon*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 55 | `Lưu Coupon` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 55 | `Lưu Coupon` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -892,9 +892,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 177 | ` Hoàn tất &amp; Lưu khóa học` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 177 | ` Hoàn tất &amp; Lưu khóa học` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -933,9 +933,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 159 | `Lưu thay đổi` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 159 | `Lưu thay đổi` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -954,11 +954,11 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 3)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 285 | `Thanh toán VNPay` | `Thanh toán VNPay` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Payment/Checkout?courseId=${id}`** |
-| 286 | `Sửa` | `Sửa` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement/Edit/${id}`** |
-| 287 | `Đề cương` | `Đề cương` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement/Curriculum/${id}`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 285 | `Thanh toán VNPay` | `Thanh toán VNPay` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Payment/Checkout?courseId=${id}`** | N/A - *Nút giao diện/Điều hướng* |
+| 286 | `Sửa` | `Sửa` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement/Edit/${id}`** | N/A - *Nút giao diện/Điều hướng* |
+| 287 | `Đề cương` | `Đề cương` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement/Curriculum/${id}`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 6)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -979,9 +979,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 63 | ` Chỉnh sửa toàn bộ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement/Edit/@Model.CourseId`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 63 | ` Chỉnh sửa toàn bộ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement/Edit/@Model.CourseId`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -995,9 +995,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Dashboard*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 243 | ` Chi tiết` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 243 | ` Chi tiết` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1015,9 +1015,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Dashboard*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 145 | `Quản lý Background Jobs` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /hangfire`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 145 | `Quản lý Background Jobs` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /hangfire`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1049,12 +1049,12 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục IAM*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 4)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 15 | `Tạo API Key mới` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Không gọi API (Nút giao diện)`** |
-| 30 | ` Sao chép` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 76 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** |
-| 109 | `Tạo ngay` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 15 | `Tạo API Key mới` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 30 | ` Sao chép` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 76 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
+| 109 | `Tạo ngay` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1087,9 +1087,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Marketing*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 67 | ` Xem trước` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /Marketing/PreviewPdf`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 67 | ` Xem trước` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /Marketing/PreviewPdf`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1138,10 +1138,10 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Payment*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 19 | `Quay lại danh sách` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement`** |
-| 20 | `Thử lại` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: javascript:history.back()`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 19 | `Quay lại danh sách` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement`** | N/A - *Nút giao diện/Điều hướng* |
+| 20 | `Thử lại` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: javascript:history.back()`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -1155,11 +1155,11 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Payment*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 3)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 19 | `Bắt đầu học ngay` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Dashboard`** |
-| 46 | `Quay lại danh sách` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement`** |
-| 47 | `Thử lại` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: javascript:history.back()`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 19 | `Bắt đầu học ngay` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Dashboard`** | N/A - *Nút giao diện/Điều hướng* |
+| 46 | `Quay lại danh sách` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /CourseManagement`** | N/A - *Nút giao diện/Điều hướng* |
+| 47 | `Thử lại` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: javascript:history.back()`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -1173,9 +1173,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Payment*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 19 | `Vào kho khóa học` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /my-learning`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 19 | `Vào kho khóa học` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /my-learning`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -1189,11 +1189,11 @@
 * **Mô tả tính năng trang:** *Lịch sử dòng tiền, doanh thu và kiểm toán thanh toán.*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 3)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 56 | ` Làm mới` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 57 | ` Xuất Báo Cáo` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Revenue/ExportExcel`** |
-| 102 | ` Confirm` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /Revenue/ManualConfirm`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 56 | ` Làm mới` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 57 | ` Xuất Báo Cáo` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Revenue/ExportExcel`** | N/A - *Nút giao diện/Điều hướng* |
+| 102 | ` Confirm` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /Revenue/ManualConfirm`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1209,9 +1209,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Revenue*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 12 | ` Xuất báo cáo Excel` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Revenue/ExportExcel`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 12 | ` Xuất báo cáo Excel` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Revenue/ExportExcel`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -1225,9 +1225,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Revenue*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 67 | ` Lưu cấu hình` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 67 | ` Lưu cấu hình` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1243,10 +1243,10 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Shared*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 101 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
-| 110 | `Bắt đầu ngay` | `Không có` | Xác thực tài khoản và chuyển hướng vào trang quản lý | **`Liên kết: /Account/Login`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 101 | `Nút Hành động` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 110 | `Bắt đầu ngay` | `Không có` | Xác thực tài khoản và chuyển hướng vào trang quản lý | **`Liên kết: /Account/Login`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -1260,9 +1260,9 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Shared*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 169 | ` Đăng nhập` | `Không có` | Xác thực tài khoản và chuyển hướng vào trang quản lý | **`Liên kết: /Account/Login`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 169 | ` Đăng nhập` | `Không có` | Xác thực tài khoản và chuyển hướng vào trang quản lý | **`Liên kết: /Account/Login`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -1313,14 +1313,14 @@
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục UserManagement*
 
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 6)
-| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |
-| :--- | :--- | :--- | :--- | :--- |
-| 20 | ` Nhật ký hệ thống (Audit)` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/GetAuditTrail`** |
-| 23 | ` Xuất Excel (UC-16)` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /UserManagement/ExportToExcel`** |
-| 94 | `Khóa tài khoản` | `Khóa tài khoản` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/UpdateStatus`** |
-| 100 | `Mở khóa tài khoản` | `Mở khóa tài khoản` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/UpdateStatus`** |
-| 105 | `Xem lịch sử thay đổi` | `Xem lịch sử thay đổi` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/GetAuditTrail`** |
-| 128 | `&times;` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** |
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 20 | ` Nhật ký hệ thống (Audit)` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/GetAuditTrail`** | N/A - *Nút giao diện/Điều hướng* |
+| 23 | ` Xuất Excel (UC-16)` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /UserManagement/ExportToExcel`** | N/A - *Nút giao diện/Điều hướng* |
+| 94 | `Khóa tài khoản` | `Khóa tài khoản` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/UpdateStatus`** | N/A - *Nút giao diện/Điều hướng* |
+| 100 | `Mở khóa tài khoản` | `Mở khóa tài khoản` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/UpdateStatus`** | N/A - *Nút giao diện/Điều hướng* |
+| 105 | `Xem lịch sử thay đổi` | `Xem lịch sử thay đổi` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /UserManagement/GetAuditTrail`** | N/A - *Nút giao diện/Điều hướng* |
+| 128 | `&times;` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |

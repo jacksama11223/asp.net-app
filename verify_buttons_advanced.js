@@ -480,8 +480,87 @@ function analyzeCshtmlFile(filePath) {
     }
 }
 
+async function pingApiEndpoint(apiUrl) {
+    let cleanPath = apiUrl;
+    if (!cleanPath.includes('/api/')) {
+        return { status: 'N/A', code: null, message: 'Nút giao diện/Điều hướng' };
+    }
+    
+    // Tìm phần dẫn /api/...
+    const apiMatch = cleanPath.match(/(\/api\/[a-zA-Z0-9_\-\/\{\}]+)/);
+    if (!apiMatch) {
+        return { status: 'N/A', code: null, message: 'Không thể phân tích dẫn API' };
+    }
+    
+    let endpoint = apiMatch[1];
+    endpoint = endpoint.replace(/\{[a-zA-Z0-9_-]+\}/g, '1');
+    const fullUrl = `${VPS_BASE_URL}${endpoint}`;
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        // Thử dùng OPTIONS trước để kiểm tra sự tồn tại của route
+        let response;
+        try {
+            response = await fetch(fullUrl, {
+                method: 'OPTIONS',
+                signal: controller.signal
+            });
+        } catch (e) {
+            // Fallback sang GET
+            response = await fetch(fullUrl, {
+                method: 'GET',
+                signal: controller.signal
+            });
+        }
+        
+        clearTimeout(timeoutId);
+        
+        const statusCode = response.status;
+        if (statusCode === 404) {
+            return { status: '🔴 Broken (404)', code: 404, message: 'API Route không tồn tại trên VPS Backend' };
+        } else if (statusCode === 502 || statusCode === 503 || statusCode === 504) {
+            return { status: '🔴 Broken (Gateway)', code: statusCode, message: `Lỗi Gateway VPS (${statusCode})` };
+        } else {
+            return { status: `🟢 Active (${statusCode})`, code: statusCode, message: 'API phản hồi từ Backend hợp lệ' };
+        }
+    } catch (err) {
+        if (err.name === 'AbortError') {
+            return { status: '🟡 Timeout (3s)', code: null, message: 'Không có phản hồi từ VPS' };
+        }
+        return { status: '🔴 Connection Failed', code: null, message: `Lỗi kết nối: ${err.message}` };
+    }
+}
+
+async function pingAllButtons(pages) {
+    console.log('\n🔗 Bắt đầu gửi API request thực tế để kiểm thử kết nối Backend trên VPS...');
+    const allWorkingButtons = [];
+    
+    Object.values(pages).forEach(page => {
+        page.working.forEach(btn => {
+            if (btn.api && btn.api.includes('/api/')) {
+                allWorkingButtons.push(btn);
+            }
+        });
+    });
+    
+    console.log(`- Tìm thấy ${allWorkingButtons.length} nút có liên kết API thực tế để ping kiểm thử.`);
+    
+    const BATCH_SIZE = 10;
+    for (let i = 0; i < allWorkingButtons.length; i += BATCH_SIZE) {
+        const batch = allWorkingButtons.slice(i, i + BATCH_SIZE);
+        await Promise.all(batch.map(async (btn) => {
+            const check = await pingApiEndpoint(btn.api);
+            btn.pingStatus = check.status;
+            btn.pingMessage = check.message;
+        }));
+        console.log(`  > Đã kiểm tra xong ${Math.min(i + BATCH_SIZE, allWorkingButtons.length)} / ${allWorkingButtons.length} API...`);
+    }
+}
+
 // Thực thi chính
-function run() {
+async function run() {
     console.log('⚡ Bắt đầu quét chẩn đoán API, Placeholder và Tính năng nút bấm toàn hệ thống...');
 
     const reactFiles = scanDirectory(REACT_DIR, ['.js', '.jsx', '.tsx']);
@@ -489,6 +568,9 @@ function run() {
 
     const cshtmlFiles = scanDirectory(CSHTML_DIR, ['.cshtml']);
     cshtmlFiles.forEach(analyzeCshtmlFile);
+
+    // Gửi API request thực tế để test liên kết
+    await pingAllButtons(resultsByPage);
 
     const reportPath = path.join(WORKSPACE_DIR, 'verify_buttons_advanced_report.md');
     let md = `# Báo cáo Chẩn đoán API & Tính năng Nút bấm (Enterprise UI Button API Mapping)\n\n`;
@@ -517,10 +599,11 @@ function run() {
         if (page.working.length === 0) {
             md += `*Không có nút nào được gán sự kiện hoặc kết nối.*\n\n`;
         } else {
-            md += `| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) |\n`;
-            md += `| :--- | :--- | :--- | :--- | :--- |\n`;
+            md += `| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |\n`;
+            md += `| :--- | :--- | :--- | :--- | :--- | :--- |\n`;
             page.working.forEach(b => {
-                md += `| ${b.line} | \`${b.label}\` | \`${b.placeholder}\` | ${b.feature} | **\`${b.api}\`** |\n`;
+                const liveStatus = b.pingStatus ? `${b.pingStatus} - *${b.pingMessage}*` : 'N/A - *Nút giao diện/Điều hướng*';
+                md += `| ${b.line} | \`${b.label}\` | \`${b.placeholder}\` | ${b.feature} | **\`${b.api}\`** | ${liveStatus} |\n`;
             });
             md += `\n`;
         }
