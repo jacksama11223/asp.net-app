@@ -435,6 +435,82 @@ using (var scope = app.Services.CreateScope())
                 logger.LogInformation("🔄 Reset Admin password to BCrypt format: Admin@123456");
             }
         }
+
+        // Tự động Seed dữ liệu khóa học mẫu cho Sandbox Lập trình
+        if (!db.Courses.Any())
+        {
+            var course = new SmartLMS.Models.Course
+            {
+                Title = "Lập trình C# cơ bản & Advanced",
+                Description = "Khóa học nền tảng về C# dành cho lập trình viên doanh nghiệp.",
+                Category = "Lập trình",
+                Status = "Published",
+                Price = 0,
+                IsFree = true,
+                ThumbnailUrl = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+            db.Courses.Add(course);
+            await db.SaveChangesAsync();
+            logger.LogInformation("✅ Seeded default Course");
+        }
+
+        var firstCourse = db.Courses.FirstOrDefault();
+        if (firstCourse != null && !db.CourseModules.Any(m => m.CourseId == firstCourse.CourseId))
+        {
+            var module = new SmartLMS.Models.CourseModule
+            {
+                CourseId = firstCourse.CourseId,
+                Title = "Chương 1: Nền tảng & Cấu trúc Middleware",
+                OrderIndex = 1
+            };
+            db.CourseModules.Add(module);
+            await db.SaveChangesAsync();
+            logger.LogInformation("✅ Seeded default CourseModule");
+        }
+
+        var firstModule = db.CourseModules.FirstOrDefault();
+        if (firstModule != null && !db.Lessons.Any(l => l.ModuleId == firstModule.ModuleId))
+        {
+            var lesson = new SmartLMS.Models.Lesson
+            {
+                ModuleId = firstModule.ModuleId,
+                Title = "Bài 1: Cấu trúc Middleware & Thử thách lập trình",
+                LessonType = "Code",
+                Content = "<p>Trong bài này chúng ta sẽ viết code để kiểm tra chẵn lẻ của một số nguyên được truyền vào dưới dạng chuỗi.</p>",
+                OrderIndex = 1,
+                Points = 100
+            };
+            db.Lessons.Add(lesson);
+            await db.SaveChangesAsync();
+            logger.LogInformation("✅ Seeded default Lesson");
+        }
+
+        var firstLesson = db.Lessons.FirstOrDefault();
+        if (firstLesson != null && firstCourse != null && !db.CodingChallenges.Any(c => c.LessonId == firstLesson.LessonId))
+        {
+            var challenge = new SmartLMS.Models.CodingChallenge
+            {
+                Title = "Kiểm tra số chẵn",
+                Description = "Viết code xử lý chuỗi 'input'. Trả về chuỗi \"True\" nếu input là số chẵn, ngược lại trả về \"False\".\nVí dụ: '4' -> 'True', '5' -> 'False'.",
+                TemplateCode = "// Sử dụng biến toàn cục 'input' (string) có sẵn\nint number = int.Parse(input);\nreturn (number % 2 == 0).ToString();",
+                Language = "csharp",
+                Points = 100,
+                CourseId = firstCourse.CourseId,
+                LessonId = firstLesson.LessonId,
+                CreatedAt = DateTime.Now
+            };
+            db.CodingChallenges.Add(challenge);
+            await db.SaveChangesAsync();
+
+            var testCase1 = new SmartLMS.Models.TestCase { CodingChallengeId = challenge.Id, Input = "4", ExpectedOutput = "True", IsHidden = false };
+            var testCase2 = new SmartLMS.Models.TestCase { CodingChallengeId = challenge.Id, Input = "5", ExpectedOutput = "False", IsHidden = false };
+            db.TestCases.Add(testCase1);
+            db.TestCases.Add(testCase2);
+            await db.SaveChangesAsync();
+            logger.LogInformation("✅ Seeded default CodingChallenge with Test Cases");
+        }
         
         // Vẫn thử chạy Migration cho các thay đổi phát sinh sau này
         if ((await db.Database.GetPendingMigrationsAsync()).Any()) {

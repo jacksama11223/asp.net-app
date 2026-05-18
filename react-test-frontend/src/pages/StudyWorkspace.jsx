@@ -85,6 +85,38 @@ export const StudyWorkspace = () => {
     }
   };
 
+  const [autoGenLoading, setAutoGenLoading] = useState(false);
+
+  const handleAutoGenChallenge = async () => {
+    if (!selectedLesson?.lessonId) return;
+    setAutoGenLoading(true);
+    try {
+      const response = await apiClient.post(`/api/compiler/challenges/auto-create/${selectedLesson.lessonId}`);
+      if (response.data.success) {
+        toast.success("AI đã khởi tạo thử thách thực hành C# thành công!");
+        const updatedLesson = {
+          ...selectedLesson,
+          hasChallenge: true,
+          challengeId: response.data.challengeId
+        };
+        setSelectedLesson(updatedLesson);
+        
+        if (content && content.modules) {
+          const updatedModules = content.modules.map(mod => ({
+            ...mod,
+            lessons: mod.lessons.map(l => l.lessonId === selectedLesson.lessonId ? updatedLesson : l)
+          }));
+          setContent({ ...content, modules: updatedModules });
+        }
+      }
+    } catch (err) {
+      console.error("Auto create challenge error", err);
+      toast.error("Lỗi khi khởi tạo thử thách tự động.");
+    } finally {
+      setAutoGenLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -228,7 +260,7 @@ export const StudyWorkspace = () => {
               </Paper>
 
               {/* Tabs bổ trợ: Exercises, Code, Articles */}
-              <SimpleGrid cols={3} spacing="lg">
+              <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg">
                 <Paper 
                   radius="xl" p="lg" withBorder 
                   className={`cursor-pointer transition-all border-2 ${activeTab === 'exercises' ? 'border-brand-500 bg-brand-50/50 shadow-md' : 'border-transparent hover:bg-white'}`}
@@ -472,11 +504,19 @@ export const StudyWorkspace = () => {
                             </Grid.Col>
                           </Grid>
                         ) : (
-                          <Box ta="center" py={50}>
-                            <LuPenTool size={48} className="text-slate-200 mb-4" />
-                            <Title order={4}>Bài học này chưa có thử thách thực hành code</Title>
-                            <Text c="dimmed" mt="xs">Giảng viên đang biên soạn các bài tập thực hành...</Text>
-                          </Box>
+                          <Card withBorder radius="xl" p="xl" ta="center" className="bg-slate-50/50">
+                            <LuSparkles size={48} className="text-brand-500 mx-auto mb-4 animate-pulse" />
+                            <Title order={4}>B\u00e0i h\u1ecdc n\u00e0i ch\u01b0a c\u00f3 th\u1eed th\u00e1ch th\u1ef1c h\u00e0nh code</Title>
+                            <Text c="dimmed" mt="xs" mb="lg">\u0110\u1eebng lo l\u1eafng! B\u1ea1n c\u00f3 th\u1ec3 \u0111\u1ec1 xu\u1ea5t AI c\u1ee7a h\u1ec7 th\u1ed1ng t\u1ef1 \u0111\u1ed9ng sinh m\u1ed9t th\u1eed th\u00e1ch l\u1eadp tr\u00ecnh C# Roslyn Sandbox d\u1ef1a tr\u00ean b\u00e0i h\u1ecdc n\u00e0i \u0111\u1ec3 th\u1ef1c h\u00e0nh ngay l\u1eadp t\u1ee9c.</Text>
+                            <Button
+                              variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md"
+                              leftSection={<LuSparkles size={16} />}
+                              loading={autoGenLoading}
+                              onClick={handleAutoGenChallenge}
+                            >
+                              AI t\u1ef1 \u0111\u1ed9ng t\u1ea1o th\u1eed th\u00e1ch th\u1ef1c h\u00e0nh Code
+                            </Button>
+                          </Card>
                         )}
                       </Box>
                     )}

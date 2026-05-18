@@ -10,6 +10,7 @@
 - `Dockerfile`
 
 ## 🛡️ Core Models (Entities)
+- `AchievementHubViewModel`
 - `ActivityLog`
 - `ApiKey`
 - `AuditLog`
@@ -168,6 +169,7 @@
 - `performance_tuning.sql`
 - `procedures.sql`
 - `repair_data.sql`
+- `seed.sql`
 - `setup_database.sql`
 - `sync_db_full_v4.sql`
 - `sync_db_schema.sql`

@@ -10,7 +10,7 @@ Tài liệu này hướng dẫn chi tiết các lệnh git commit, cách build d
 Trước khi pull lên VPS, hãy chắc chắn bạn đã commit toàn bộ code mới nhất tại local:
 ```bash
 git add .
-git commit -m "feat: embed coding sandbox in study workspace and build instructor course/challenge creator portal"
+git commit -m "feat: integrate premium global sandbox manager tab, C# compiler execute and AI automatic fallback challenge generator"
 git push origin main
 ```
 
@@ -37,38 +37,52 @@ docker compose up -d --build
 ## 2. Các lệnh kiểm thử tự động & thủ công (Testing Commands)
 
 ### A. Chạy Script kiểm thử tự động (Enterprise Integration Suite)
-Sau khi build và deploy thành công trên VPS, bạn có thể chạy script kiểm thử tự động `test_enterprise.cjs` trực tiếp từ máy local để quét toàn bộ luồng API, database, AI:
-```bash
-node test_enterprise.cjs
-```
-*Script sẽ kiểm thử tự động các module: Authentication, Audit Trail, AI Analytics, Coding Sandbox, Achievement Hub, SignalR, và Database Connectivity.*
+Sau khi build và deploy thành công trên VPS, bạn có thể chạy script kiểm thử tự động `test_enterprise.cjs` trực tiếp từ máy local để quét toàn bộ luồng API, database, AI, và Monaco Sandbox Compiler:
 
-### B. Kiểm thử thủ công trên trình duyệt (Manual Web UI Test)
+*   **Chạy mặc định (VPS production):**
+    ```bash
+    node test_enterprise.cjs
+    ```
+*   **Chạy với máy Local Development (nếu chạy local IIS/Kestrel):**
+    ```bash
+    node test_enterprise.cjs http://localhost:5000
+    ```
 
-#### 1. Học viên: Thực hành Coding Sandbox Nhúng (Embedded IDE)
-*   **Địa chỉ:** Đăng nhập tài khoản Học viên trên React frontend, truy cập danh sách khóa học -> chọn học khóa học bất kỳ (ví dụ: `http://141.253.114.218/study/1`).
-*   **Hành động:** 
-    *   Trong không gian học tập, click chọn bài học dạng thực hành Code.
+*Script sẽ quét qua 8 module lớn bao gồm: Đăng nhập/Session, Hệ thống Audit Trail lưu vết DB, Risk Predictor ML.NET, Coding Sandbox (Monaco Editor compiler), Creator Sandbox Banking & AI Fallback, Achievement Hub (XP & Badges), Negotiate SignalR real-time, và Database Integrity.*
+
+---
+
+## 3. Quy trình Kiểm thử UI/UX Thủ công trên Trình duyệt (Manual Browser Verification)
+
+### A. Dành cho Học viên (Student Workspace)
+1.  **Địa chỉ:** Đăng nhập tài khoản Học viên trên React frontend, truy cập không gian học tập tại `http://141.253.114.218/study/1`.
+2.  **Khám phá giao diện Tabs responsive mới:**
+    *   Phần dưới khung bài học đã được tái thiết kế thành 4 tab hiển thị song song tuyệt đẹp trên cùng 1 hàng: **Hệ thống Bài tập**, **Thực hành Code**, **Tài liệu mở rộng**, và **Điểm yếu của tôi**.
+3.  **Kiểm thử luồng AI Fallback (Auto-generate challenge):**
+    *   Chọn một bài học bất kỳ **chưa có bài thực hành lập trình** được thiết lập.
     *   Click vào tab **Thực hành Code**.
-    *   Thay vì chuyển trang hay mở tab mới, giao diện biên dịch code C# (Monaco Editor vs-dark) sẽ xuất hiện tuyệt đẹp ngay tại vùng làm việc chính bên phải.
-    *   Xem yêu cầu đề bài và danh sách test cases hiển thị trực quan ở cột trái.
-    *   Nhập mã nguồn C# và bấm nút **Chạy Code (Run)**.
-*   **Kết quả mong muốn:**
-    *   Server Roslyn biên dịch code thực tế và trả về kết quả dynamically dưới dạng bảng chi tiết từng testcase (Passed/Failed kèm Input, Actual Output và Expected Output).
-    *   Gamification: Tự động cộng điểm XP, mở khóa Huy hiệu của Achievement Hub ngay khi tất cả test cases đạt trạng thái `PASSED`.
+    *   Giao diện hiển thị Card AI premium với biểu tượng Sparkle lấp lánh và thông báo: *"Bài học này chưa có thử thách thực hành code..."*.
+    *   Click nút **AI tự động tạo thử thách thực hành Code**.
+    *   *Kết quả:* Hệ thống gọi API `/api/compiler/challenges/auto-create/{lessonId}`. Chỉ sau 0.5s, đề bài C# Roslyn Sandbox mẫu và 2 Test Cases tương thích sẽ được sinh tự động, màn hình cập nhật tức thì hiển thị Monaco Editor vs-dark mode sẵn sàng để gõ code!
+4.  **Thực hành biên dịch code trực tiếp:**
+    *   Chọn bài học **đã có thử thách code**.
+    *   Đọc đề bài và testcases ở cột trái. Nhập mã C# giải quyết bài tập (ví dụ: `return input;` hoặc `return (int.Parse(input) % 2 == 0).ToString();`).
+    *   Bấm **Chạy Code (Run)**.
+    *   *Kết quả:* Kết quả chấm bài hiển thị chi tiết (Passed/Failed) kèm so sánh Input, Actual Output và Expected Output cho từng testcase.
 
-#### 2. Giảng viên: Tạo Khóa học & Biên soạn Sandbox (Creator Course & Challenge Hub)
-*   **Địa chỉ:** Đăng nhập tài khoản Giảng viên (Instructor) trên React frontend, truy cập trang Quản lý khóa học (`http://141.253.114.218/creator/courses`).
-*   **Hành động 1 (Tạo khóa học):**
-    *   Bấm nút **Tạo khóa học** ở góc trên cùng bên phải.
-    *   Điền tên khóa học, danh mục, giá khóa học, chọn trạng thái và bấm **Lưu lại**.
-    *   *Kết quả:* Khóa học mới lập tức hiển thị động lên danh sách card.
-*   **Hành động 2 (Thiết kế Sandbox Lập trình):**
-    *   Tại card khóa học vừa tạo hoặc khóa học có sẵn, bấm nút **Studio**.
-    *   Hộp thoại Modal Studio hiển thị toàn bộ giáo trình (Modules/Lessons).
-    *   Bên cạnh mỗi Lesson, bấm nút **Cấu hình Code**.
-    *   Biên soạn: **Tiêu đề bài thực hành**, **Yêu cầu đề bài**, **Mã nguồn khung mẫu (Template code)**, **Điểm thưởng (XP)**, và thêm danh sách các **Test Cases** (nhập Input và Expected Output dự kiến).
-    *   Bấm **Lưu & Áp dụng**.
-*   **Kết quả mong muốn:**
-    *   Mọi thông tin cấu hình của compiler sandbox được lưu trực tiếp vào cơ sở dữ liệu qua API `POST /api/compiler/challenges/save`.
-    *   Học viên khi vào học bài học đó sẽ ngay lập tức được trải nghiệm đề bài và testcases do Giảng viên vừa thiết lập.
+---
+
+### B. Dành cho Giảng viên (Creator Studio & Sandbox Bank)
+1.  **Địa chỉ:** Đăng nhập tài khoản Instructor trên React frontend, truy cập `http://141.253.114.218/creator/courses`.
+2.  **Trải nghiệm Ngân hàng đề bài tập chung (Global Sandbox Bank):**
+    *   Trang quản lý được cấu hình thành 2 tab lớn: **Danh sách Khóa học** và **Ngân hàng bài tập Code (Sandbox)**.
+    *   Click chọn tab **Ngân hàng bài tập Code (Sandbox)**.
+    *   *Kết quả:* Bảng quản lý toàn bộ các bài tập Sandbox đang có trên hệ thống hiện ra, thể hiện rõ tên thử thách, thuộc khóa học nào, gắn với bài giảng nào, điểm XP thưởng và ngôn ngữ. Giảng viên có thể nhấn **Sửa** nhanh bất kỳ thử thách nào.
+3.  **Tạo bài tập Sandbox mới và liên kết động:**
+    *   Ở góc trên cùng, click nút **Tạo bài thực hành Code**.
+    *   Form tạo bài tập mở ra trong modal. Nhờ hệ thống loader động, giảng viên có thể:
+        1.  Chọn **Khóa học liên kết** trong dropdown.
+        2.  Dropdown **Bài giảng liên kết** sẽ tự động fetch danh sách bài giảng thuộc khóa học đó và hiển thị để chọn.
+    *   Nhập các thông số khác: Tiêu đề bài tập, mô tả đề bài, điểm thưởng XP, template code mẫu và hệ thống các Test Cases kiểm thử.
+    *   Nhấn **Lưu & Áp dụng**.
+    *   *Kết quả:* Thử thách code mới được lưu vào database và liên kết ngay lập tức với bài giảng được chọn!

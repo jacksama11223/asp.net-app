@@ -87,7 +87,16 @@ public class CompilerController : ControllerBase
     public async Task<IActionResult> GetChallenges()
     {
         var challenges = await _context.CodingChallenges
-            .Select(c => new { c.Id, c.Title, c.Points, c.Language })
+            .Select(c => new { 
+                c.Id, 
+                c.Title, 
+                c.Points, 
+                c.Language,
+                c.CourseId,
+                c.LessonId,
+                CourseTitle = c.Course != null ? c.Course.Title : "Ch\u01b0a g\u1eafn Kh\u00f3a h\u1ecdc",
+                LessonTitle = c.Lesson != null ? c.Lesson.Title : "Ch\u01b0a g\u1eafn B\u00e0i h\u1ecdc"
+            })
             .ToListAsync();
         return Ok(challenges);
     }
@@ -275,6 +284,51 @@ public class CompilerController : ControllerBase
         }
 
         await _context.SaveChangesAsync();
+        return Ok(new { success = true, challengeId = challenge.Id });
+    }
+
+    [HttpPost("challenges/auto-create/{lessonId}")]
+    public async Task<IActionResult> AutoCreateChallenge(int lessonId)
+    {
+        var lesson = await _context.Lessons
+            .Include(l => l.Module)
+            .FirstOrDefaultAsync(l => l.LessonId == lessonId);
+
+        if (lesson == null)
+        {
+            return NotFound("Kh\u00f4ng t\u00ecm th\u1ea5y b\u00e0i h\u1ecdc.");
+        }
+
+        var existingChallenge = await _context.CodingChallenges
+            .FirstOrDefaultAsync(c => c.LessonId == lessonId);
+
+        if (existingChallenge != null)
+        {
+            return Ok(new { success = true, challengeId = existingChallenge.Id });
+        }
+
+        var challenge = new CodingChallenge
+        {
+            Title = $"Th\u1eed th\u00e1ch: {lesson.Title}",
+            Description = $"[T\u1ef1 \u0111\u1ed9ng t\u1ea1o b\u1edfi AI] Vi\u1ebft ch\u01b0\u01a1ng tr\u00ecnh C# \u0111\u1ec3 x\u1eed l\u00fd chu\u1ed7i 'input'. Tr\u1ea3 v\u1ec1 k\u1ebft qu\u1ea3 chu\u1ed7i mong mu\u1ed1n.\n\nInput: chu\u1ed7i \u0111\u1ea7u v\u00e0o 'input'\nOutput mong \u0111\u1ee3i: gi\u00e1 tr\u1ecb tr\u1ea3 v\u1ec1 th\u00edch h\u1ee3p.",
+            TemplateCode = "// S\u1eed d\u1ee5ng bi\u1ebfn to\u00e0n c\u1ee5c 'input' (string) c\u00f3 s\u1eb5n\n// V\u00ed d\u1ee5: return input.ToUpper();\nreturn input;",
+            Language = "csharp",
+            Points = 100,
+            CourseId = lesson.Module != null ? lesson.Module.CourseId : (int?)null,
+            LessonId = lessonId,
+            CreatedAt = DateTime.Now
+        };
+
+        _context.CodingChallenges.Add(challenge);
+        await _context.SaveChangesAsync();
+
+        var tc1 = new TestCase { CodingChallengeId = challenge.Id, Input = "hello", ExpectedOutput = "hello", IsHidden = false };
+        var tc2 = new TestCase { CodingChallengeId = challenge.Id, Input = "world", ExpectedOutput = "world", IsHidden = false };
+        _context.TestCases.AddRange(tc1, tc2);
+
+        lesson.LessonType = "Code";
+        await _context.SaveChangesAsync();
+
         return Ok(new { success = true, challengeId = challenge.Id });
     }
 }

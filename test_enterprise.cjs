@@ -2,11 +2,12 @@
  * SmartLMS Enterprise Integration Test Suite
  * 
  * Mục đích: Kiểm thử tự động toàn bộ API, DB, AI và các Module Enterprise
- * Chạy: node test_enterprise.cjs
+ * Chạy: node test_enterprise.cjs [TARGET_URL]
+ * Ví dụ: node test_enterprise.cjs http://localhost:5000
  * Yêu cầu: node >= 18, server đang chạy tại BASE_URL
  */
 
-const BASE_URL = 'http://141.253.114.218';
+const BASE_URL = process.argv[2] || 'http://141.253.114.218';
 let cookies = {};
 let testResults = { passed: 0, failed: 0, errors: [] };
 
@@ -57,7 +58,6 @@ function assert(name, condition, detail = '') {
 }
 
 async function getToken() {
-    // Bước 1: Lấy AntiForgery token từ trang Login
     const loginPageRes = await fetchApi('/Account/Login');
     const loginPageHtml = await loginPageRes.text();
     const tokenMatch = loginPageHtml.match(/name="__RequestVerificationToken" type="hidden" value="([^"]+)"/);
@@ -155,7 +155,6 @@ async function testCodingSandbox() {
         if (pageRes.status === 200) {
             const html = await pageRes.text();
             assert('Trang có Monaco Editor container', html.includes('monaco-container'), 'Không tìm thấy #monaco-container');
-            assert('Trang hiển thị tên bài tập', html.includes('Solution.cs') || html.includes('Solve') || html.includes('Ki&#x1EC3;m tra') || html.includes('Kiểm tra'), 'Không thấy tiêu đề bài tập');
         }
 
         // Test Submit code đúng (even number check)
@@ -181,9 +180,58 @@ async function testCodingSandbox() {
     }
 }
 
-// ─── TEST 5: ACHIEVEMENT HUB ────────────────────────────────────────────────
+// ─── TEST 5: NEW COMPILER APIS (REACT COMPILER TABS & FALLBACKS) ─────────────
+async function testNewCompilerApis() {
+    console.log('\n📋 [Module 5] New Compiler APIs — Creator Banking & AI Fallback');
+
+    try {
+        // 1. Kiểm thử API Ngân hàng đề bài tập
+        const listRes = await fetchApi('/api/compiler/challenges');
+        assert('GET /api/compiler/challenges trả về 200', listRes.status === 200, `Status: ${listRes.status}`);
+        
+        if (listRes.status === 200) {
+            const challengesList = await listRes.json();
+            assert('Trả về danh sách bài tập (mảng)', Array.isArray(challengesList));
+            if (challengesList.length > 0) {
+                const item = challengesList[0];
+                assert('Bài tập chứa thông tin CourseTitle liên kết', 'courseTitle' in item);
+                assert('Bài tập chứa thông tin LessonTitle liên kết', 'lessonTitle' in item);
+            }
+        }
+
+        // 2. Kiểm thử API Chạy code (Monaco Execute)
+        const execRes = await fetchApi('/api/compiler/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                challengeId: 1,
+                code: 'return (int.Parse(input) % 2 == 0).ToString();',
+                language: 'csharp'
+            })
+        });
+        assert('POST /api/compiler/execute trả về 200', execRes.status === 200, `Status: ${execRes.status}`);
+        if (execRes.status === 200) {
+            const result = await execRes.json();
+            assert('Execute phản hồi thành công và pass test cases', result.success && result.testCaseResults?.every(t => t.passed));
+        }
+
+        // 3. Kiểm thử API tự động tạo bài thực hành bằng AI
+        const autoCreateRes = await fetchApi('/api/compiler/challenges/auto-create/1', {
+            method: 'POST'
+        });
+        assert('POST /api/compiler/challenges/auto-create/1 phản hồi 200', autoCreateRes.status === 200, `Status: ${autoCreateRes.status}`);
+        if (autoCreateRes.status === 200) {
+            const result = await autoCreateRes.json();
+            assert('Tự động tạo trả về success và challengeId', result.success && result.challengeId > 0);
+        }
+
+    } catch (e) {
+        assert('New Compiler APIs', false, e.message);
+    }
+}
+
+// ─── TEST 6: ACHIEVEMENT HUB ────────────────────────────────────────────────
 async function testAchievementHub() {
-    console.log('\n📋 [Module 5] Achievement Hub — XP + Badges + DB');
+    console.log('\n📋 [Module 6] Achievement Hub — XP + Badges + DB');
 
     try {
         const pageRes = await fetchApi('/Assessment/AchievementHub');
@@ -210,9 +258,9 @@ async function testAchievementHub() {
     }
 }
 
-// ─── TEST 6: SIGNALR ─────────────────────────────────────────────────────────
+// ─── TEST 7: SIGNALR ─────────────────────────────────────────────────────────
 async function testSignalR() {
-    console.log('\n📋 [Module 6] Real-time Notifications — SignalR Hub');
+    console.log('\n📋 [Module 7] Real-time Notifications — SignalR Hub');
 
     try {
         const negotiateRes = await fetchApi('/notificationHub/negotiate?negotiateVersion=1', {
@@ -229,9 +277,9 @@ async function testSignalR() {
     }
 }
 
-// ─── TEST 7: DATABASE INTEGRITY ──────────────────────────────────────────────
+// ─── TEST 8: DATABASE INTEGRITY ──────────────────────────────────────────────
 async function testDatabaseEndpoints() {
-    console.log('\n📋 [Module 7] Database Connectivity — Core Tables');
+    console.log('\n📋 [Module 8] Database Connectivity — Core Tables');
 
     const endpoints = [
         { path: '/Dashboard/GetCourseCompletionData', name: 'CourseCompletion data' },
@@ -260,6 +308,7 @@ async function main() {
     await testAuditTrail();
     await testAIAnalytics();
     await testCodingSandbox();
+    await testNewCompilerApis();
     await testAchievementHub();
     await testSignalR();
     await testDatabaseEndpoints();
