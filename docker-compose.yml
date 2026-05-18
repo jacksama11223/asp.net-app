@@ -29,7 +29,7 @@ services:
     volumes:
       - ./keys:/root/.aspnet/DataProtection-Keys
     networks:
-      - lms-network
+      - smartlms-net
 
   redis:
     image: redis:7-alpine
@@ -39,7 +39,7 @@ services:
         limits:
           memory: 256M
     networks:
-      - lms-network
+      - smartlms-net
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -48,7 +48,7 @@ services:
         limits:
           memory: 512M
     networks:
-      - lms-network
+      - smartlms-net
 
   tunnel:
     image: cloudflare/cloudflared:latest
@@ -56,8 +56,8 @@ services:
     deploy:
       replicas: 1
     networks:
-      - lms-network
+      - smartlms-net
 
 networks:
-  lms-network:
+  smartlms-net:
     driver: bridge # Chuyển sang bridge để chạy ổn định trên 1 node
