@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
 
 namespace SmartLMS.Web.Controllers;
 
@@ -37,5 +39,18 @@ namespace SmartLMS.Web.Controllers;
             // CourseId = 0 đại diện cho tổng quát toàn bộ khóa học
             var prediction = await _predictionService.PredictDropoutAsync(id, 0);
             return PartialView("_RiskAnalysisPartial", prediction);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportReport()
+        {
+            var students = await _studentService.GetAllStudentsAsync();
+            var csv = new StringBuilder();
+            csv.AppendLine("FullName,Email,CourseCount,AvgProgress,RiskLevel");
+            foreach (var s in students)
+            {
+                csv.AppendLine($"{s.FullName},{s.Email},{s.CourseCount},{s.AvgProgress},{s.RiskLevel}");
+            }
+            return File(Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "students_risk_report.csv");
         }
     }

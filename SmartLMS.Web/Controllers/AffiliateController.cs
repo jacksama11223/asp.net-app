@@ -24,4 +24,12 @@ public class AffiliateController : Controller
         ViewBag.QrCode = _affiliateService.GenerateQRCodeBase64("https://smartlms.ai/ref/admin");
         return View();
     }
+
+    [HttpPost]
+    public IActionResult GenerateLink()
+    {
+        var newLink = "https://smartlms.ai/ref/admin_" + System.Guid.NewGuid().ToString().Substring(0, 8);
+        var qrCode = _affiliateService.GenerateQRCodeBase64(newLink);
+        return Json(new { success = true, link = newLink, qr = qrCode });
+    }
 }

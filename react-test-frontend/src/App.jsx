@@ -25,6 +25,11 @@ import { ForumHome } from './pages/ForumHome';
 import { Leaderboard } from './pages/Leaderboard';
 import { PublicProfile } from './pages/PublicProfile';
 import { CreatorAnalytics } from './pages/CreatorAnalytics';
+import { TutorProfile } from './pages/TutorProfile';
+import { AICareerReport } from './pages/AICareerReport';
+import { CertificateView } from './pages/CertificateView';
+import { TutorSchedule } from './pages/TutorSchedule';
+import { TutorProfileEdit } from './pages/TutorProfileEdit';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
 
@@ -70,6 +75,12 @@ function App() {
         <Route path="/creator/courses" element={<ProtectedRoute><CourseManager /></ProtectedRoute>} />
         <Route path="/creator/messages" element={<ProtectedRoute><MessageCenter /></ProtectedRoute>} />
         <Route path="/creator/analytics" element={<ProtectedRoute><CreatorAnalytics /></ProtectedRoute>} />
+        {/* Tutor & Personal AI Career Routes */}
+        <Route path="/tutor-profile/:id" element={<ProtectedRoute><TutorProfile /></ProtectedRoute>} />
+        <Route path="/ai-career-analysis" element={<ProtectedRoute><AICareerReport /></ProtectedRoute>} />
+        <Route path="/certificate/:courseId" element={<ProtectedRoute><CertificateView /></ProtectedRoute>} />
+        <Route path="/tutor/availability" element={<ProtectedRoute><TutorSchedule /></ProtectedRoute>} />
+        <Route path="/tutor/profile/edit" element={<ProtectedRoute><TutorProfileEdit /></ProtectedRoute>} />
         <Route path="/tutor/dashboard" element={<ProtectedRoute><TutorDashboard /></ProtectedRoute>} />
         
         {/* Fallback */}

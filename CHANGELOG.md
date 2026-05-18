@@ -1,18 +1,22 @@
 # Changelog - SmartLMS.AI Distributed System
 
 ### [2026-05-18] - Coding Sandbox & UI Integration Hub
+- **Added:** Tích hợp tính năng xuất báo cáo rủi ro học tập của sinh viên (Export CSV) tại `StudentsController.cs` và ánh xạ thành công qua nút bấm "Xuất báo cáo" trên `Students/Index.cshtml`.
+- **Added:** Tạo mới luồng sinh liên kết giới thiệu động (Affiliate QR & Link Generator) qua Ajax POST `/Affiliate/GenerateLink` và đồng bộ tức thời trên giao diện `Affiliate/Index.cshtml`.
+- **Added:** Tích hợp tính năng lưu huy hiệu mới bằng form modal gửi dữ liệu trực tiếp tới action POST `SaveBadge` của `AssessmentController.cs` thông qua `AssessmentService`.
 - **Added:** Tích hợp giao diện Tab phân tách quản lý Khóa học và Ngân hàng bài tập Sandbox toàn cục trong Instructor Course Manager.
 - **Added:** Bổ sung dropdown liên kết động Khóa học và Bài giảng thông minh khi biên soạn/tạo bài tập lập trình mới.
 - **Added:** Nút "AI tự động tạo thử thách thực hành Code" dự phòng (Fallback) khi học viên truy cập bài học chưa có bài sandbox.
 - **Added:** Endpoint API `/api/compiler/challenges/auto-create/{lessonId}` trong `CompilerController.cs` tự động sinh thử thách C# Roslyn Sandbox.
 - **Added:** Tạo mới công cụ kiểm thử tĩnh nâng cao `verify_buttons_advanced.js` hỗ trợ tự động bóc tách placeholder/title và truy quét ngược thân hàm để ánh xạ chính xác API Endpoint Backend.
 - **Added:** Xuất báo cáo khảo sát tính toàn vẹn và ánh xạ API của 239 nút bấm hệ thống tại `verify_buttons_advanced_report.md`.
+- **Fixed:** Khắc phục lỗi chết nút bấm mở modal tạo lớp học (Cohort) mới do sai ID modal đích bằng cách chuyển đổi sang gọi hàm JS `openAddModal()`.
 - **Fixed:** Định dạng responsive grid 4 cột cho Tabs phụ trong Học viên Workspace để tránh gãy layout.
 - **Fixed:** Viết lại toàn bộ bộ kiểm thử tự động `test_enterprise.cjs` hỗ trợ tham số URL tùy chọn và test đầy đủ Monaco Sandbox + AI fallback generator.
 - **Fixed:** Khắc phục triệt để lỗi Roslyn CS0122 (inaccessible due to protection level) khi biên dịch code C# của học viên bằng cách sử dụng class `ScriptGlobals` public.
 - **Fixed:** Khắc phục lỗi EF Core `Unknown column 'BadgeId1'` bằng cách định nghĩa chính xác composite primary key và cấu hình ánh xạ navigation property cho `UserBadge` trong `SmartLMSContext`.
 - **Fixed:** Khắc phục lỗi crash khi gửi email/webhook thất bại do cấu hình SMTP sai bằng cách bọc khối xử lý trong `NotificationEventHandler` bằng `try-catch`.
-- **Improved:** Hoàn thành 100% bộ test tích hợp hệ thống `test_enterprise.cjs` đạt trạng thái Green Pass toàn diện.
+- **Improved:** Tăng tỷ lệ nút hoạt động tốt lên **108 nút** và đảm bảo toàn bộ hệ thống vượt qua bộ test tích hợp `test_enterprise.cjs` trạng thái Green Pass hoàn hảo.
 
 ### [2026-05-15] - Infra & Auth Stabilization
 - **Fixed:** Lỗi 502 Bad Gateway do Nginx giữ DNS Cache cũ của Docker container.

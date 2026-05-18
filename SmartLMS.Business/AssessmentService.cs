@@ -251,5 +251,18 @@ namespace SmartLMS.Business
                 XPNeeded = xpToNext
             };
         }
+
+        public async Task<bool> SaveBadgeAsync(Badge badge)
+        {
+            if (badge.BadgeId == 0)
+            {
+                _context.Badges.Add(badge);
+            }
+            else
+            {
+                _context.Badges.Update(badge);
+            }
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

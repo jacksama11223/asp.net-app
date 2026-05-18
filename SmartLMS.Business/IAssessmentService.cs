@@ -19,6 +19,7 @@ namespace SmartLMS.Business
 
         // Lấy thành tích cá nhân
         Task<dynamic> GetMyAchievementsAsync(int userId);
+        Task<bool> SaveBadgeAsync(Badge badge);
     }
 
     public class QuizResultDto

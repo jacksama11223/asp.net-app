@@ -5,10 +5,12 @@ import {
 } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { LuClock, LuUsers, LuPlay } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL, getTutors, createBooking, getStudentBookings } from '../api';
 
 export const BookingPage = () => {
+  const navigate = useNavigate();
   const [tutors, setTutors] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,7 +106,13 @@ export const BookingPage = () => {
             <Paper key={b.bookingId} p="md" radius="md" withBorder>
               <Group justify="space-between">
                 <Group>
-                  <ActionIcon size="xl" radius="md" variant="light" color="brand">
+                  <ActionIcon 
+                    size="xl" 
+                    radius="md" 
+                    variant="light" 
+                    color="brand"
+                    onClick={() => navigate(`/tutor-profile/${b.tutorId || b.tutor?.userId || 1}`)}
+                  >
                     <LuPlay size={20} />
                   </ActionIcon>
                   <div>

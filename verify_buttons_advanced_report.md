@@ -1,7 +1,7 @@
 # Báo cáo Chẩn đoán API & Tính năng Nút bấm (Enterprise UI Button API Mapping)
 
-*Thời gian quét:* 17:49:57 18/5/2026
-*Tổng số tệp UI đã phân tích:* **91**
+*Thời gian quét:* 18:13:50 18/5/2026
+*Tổng số tệp UI đã phân tích:* **96**
 
 ## DANH SÁCH KHẢO SÁT CHI TIẾT THEO TỪNG TRANG (PAGE-BY-PAGE API MAP)
 
@@ -37,22 +37,56 @@
 
 ---
 
+### 📄 Trang: [AICareerReport.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/AICareerReport.jsx)
+* **Đường dẫn tệp:** `react-test-frontend\src\pages\AICareerReport.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của AICareerReport)](http://141.253.114.218/ (Route mặc định / hoặc trang con của AICareerReport))
+* **Công nghệ:** `React`
+* **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
+
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 0)
+*Không có nút nào được gán sự kiện hoặc kết nối.*
+
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 54 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 161 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+
+---
+
 ### 📄 Trang: [BookingPage.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/BookingPage.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\BookingPage.jsx`
 * **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/booking](http://141.253.114.218/booking)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
-#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 3)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 86 | `{ setSelectedTutor(tutor); ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
-| 140 | `Confirm Booking` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 88 | `{ setSelectedTutor(tutor); ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 109 | `navigate(`/tutor-profile/${b.tutorId || b.tut` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+| 148 | `Confirm Booking` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
-#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
+
+---
+
+### 📄 Trang: [CertificateView.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CertificateView.jsx)
+* **Đường dẫn tệp:** `react-test-frontend\src\pages\CertificateView.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của CertificateView)](http://141.253.114.218/ (Route mặc định / hoặc trang con của CertificateView))
+* **Công nghệ:** `React`
+* **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
+
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 0)
+*Không có nút nào được gán sự kiện hoặc kết nối.*
+
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 107 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 58 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 143 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 154 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 
 ---
 
@@ -67,8 +101,8 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 206 | `{copied ? : }` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 223 | `{copied ? : }` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
-| 234 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
-| 248 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 234 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
+| 248 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: ${BASE_URL}/api/payment/create-invoice`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
 | 264 | `navigate('/my-learning')} className="w-full s` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
@@ -85,7 +119,7 @@
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 113 | `{loading ? ( ` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: ${BASE_URL}/api/compiler/execute`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 113 | `{loading ? ( ` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: ${BASE_URL}/api/compiler/execute`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
 | 136 | `setActiveTab("output")} ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 0)
@@ -208,11 +242,11 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 324 | `{ setCourseForm({ ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 473 | `setCourseModalOpen(false)}>H\u1ee7y` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
-| 474 | `L\u01b0u l\u1ea1i` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/courses/save`** | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 474 | `L\u01b0u l\u1ea1i` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/courses/save`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
 | 537 | `setStudioOpen(false)}>Ho\u00e0n t\u1ea5t` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 646 | `handleRemoveTestCase(index)}> ` | `Không có` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 659 | `setChallengeModalOpen(false)}>H\u1ee7y` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
-| 660 | `L\u01b0u & \u00c1p d\u1ee5ng` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/challenges/save`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 660 | `L\u01b0u & \u00c1p d\u1ee5ng` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /api/compiler/challenges/save`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 8)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -261,7 +295,7 @@
 | 127 | `navigate('/creator/courses')}>Xem tất cả` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 153 | `openChat(2, c.courseId)} title="Nhắn tin cho ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 175 | `navigate('/creator/courses')}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
-| 209 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /api/messages/send`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 209 | `Nút Icon/Hình ảnh` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gọi API: /api/messages/send`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
@@ -473,7 +507,7 @@
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 447 | `Nút Icon/Hình ảnh` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: /api/compiler/execute`** | 🟢 Active (405) - *API phản hồi từ Backend hợp lệ* |
+| 447 | `Nút Icon/Hình ảnh` | `Không có` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | **`Gọi API: /api/compiler/execute`** | 🔴 Broken (Gateway) - *Lỗi Gateway VPS (504)* |
 | 536 | `selectedLesson?.videoUrl && window.open(selec` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 
 #### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 6)
@@ -505,6 +539,63 @@
 | 125 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 | 129 | `Duyệt` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi | *Chưa cấu hình API (Cần liên kết API)* |
 | 159 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+
+---
+
+### 📄 Trang: [TutorProfile.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorProfile.jsx)
+* **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorProfile.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của TutorProfile)](http://141.253.114.218/ (Route mặc định / hoặc trang con của TutorProfile))
+* **Công nghệ:** `React`
+* **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
+
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 0)
+*Không có nút nào được gán sự kiện hoặc kết nối.*
+
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 62 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 99 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 109 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+
+---
+
+### 📄 Trang: [TutorProfileEdit.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorProfileEdit.jsx)
+* **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorProfileEdit.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của TutorProfileEdit)](http://141.253.114.218/ (Route mặc định / hoặc trang con của TutorProfileEdit))
+* **Công nghệ:** `React`
+* **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
+
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 106 | `navigate('/tutor/dashboard')}>Hủy` | `Không có` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 54 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 107 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+
+---
+
+### 📄 Trang: [TutorSchedule.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorSchedule.jsx)
+* **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorSchedule.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của TutorSchedule)](http://141.253.114.218/ (Route mặc định / hoặc trang con của TutorSchedule))
+* **Công nghệ:** `React`
+* **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
+
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 176 | `handleDelete(item.id)}> ` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
+
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 72 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 90 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 135 | `Nút Icon/Hình ảnh` | `Không có` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 
 ---
 
@@ -566,10 +657,11 @@
 #### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 0)
 *Không có nút nào được gán sự kiện hoặc kết nối.*
 
-#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 1)
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 2)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 93 | `Nút Hành động` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 93 | `Sao chép link` | `Sao chép link` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 96 | `Tạo link mới` | `Tạo link mới` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | *Chưa cấu hình API (Cần liên kết API)* |
 
 ---
 
@@ -579,17 +671,18 @@
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Hệ thống thiết kế huy hiệu, vinh danh thành tích và gamification điểm thưởng XP của admin.*
 
-#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 0)
-*Không có nút nào được gán sự kiện hoặc kết nối.*
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 115 | `Lưu huy hiệu` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
-#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 5)
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 21 | ` Tạo Huy hiệu mới` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | *Chưa cấu hình API (Cần liên kết API)* |
 | 44 | `Chỉnh sửa` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
-| 85 | `&times;` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
-| 112 | `Hủy` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | *Chưa cấu hình API (Cần liên kết API)* |
-| 113 | `Lưu huy hiệu` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | *Chưa cấu hình API (Cần liên kết API)* |
+| 86 | `&times;` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
+| 114 | `Hủy` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | *Chưa cấu hình API (Cần liên kết API)* |
 
 ---
 
@@ -787,18 +880,18 @@
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Cohort*
 
-#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 4)
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 5)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 13 | ` Tạo Lớp học mới` | `Không có` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | **`Gọi API: /Cohort/Update`** | N/A - *Nút giao diện/Điều hướng* |
 | 60 | `Quản lý ` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: /Cohort/Members/@cohort.CohortId`** | N/A - *Nút giao diện/Điều hướng* |
 | 94 | `Lưu Thông Tin` | `Không có` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | **`Gọi API: /Cohort/Update`** | N/A - *Nút giao diện/Điều hướng* |
 | 116 | `Chọn file Excel` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Không gọi API (Nút giao diện)`** | N/A - *Nút giao diện/Điều hướng* |
 | 123 | `Bắt đầu Import` | `Không có` | Thực thi sự kiện nghiệp vụ tương ứng của trang | **`Gửi dữ liệu Form (POST/PUT)`** | N/A - *Nút giao diện/Điều hướng* |
 
-#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 5)
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 13 | ` Tạo Lớp học mới` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | *Chưa cấu hình API (Cần liên kết API)* |
 | 79 | `&times;` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 | 93 | `Hủy bỏ` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | *Chưa cấu hình API (Cần liên kết API)* |
 | 106 | `&times;` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
@@ -1293,13 +1386,14 @@
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Students*
 
-#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 0)
-*Không có nút nào được gán sự kiện hoặc kết nối.*
+#### 🟢 Các nút HOẠT ĐỘNG TỐT (Working Buttons - 1)
+| Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Tính năng nút (Feature) | Endpoint API liên kết (Linked API) | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 25 | ` Xuất báo cáo` | `Không có` | Điều hướng người dùng sang trang liên kết chức năng | **`Liên kết: @Url.Action(`** | N/A - *Nút giao diện/Điều hướng* |
 
-#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 4)
+#### 🔴 Các nút CHƯA HOẠT ĐỘNG (Dead / Unhandled Buttons - 3)
 | Dòng | Nhãn hiển thị (Label) | Thuộc tính Placeholder/Title | Lỗi chi tiết | Tính năng dự kiến | Trạng thái API |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 25 | ` Xuất báo cáo` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 | 163 | `Gửi nhắc nhở` | `Gửi nhắc nhở` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 | 166 | `Phân tích rủi ro` | `Phân tích rủi ro` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
 | 218 | `&times;` | `Không có` | <span style="color:red">Thiếu sự kiện onclick / điều hướng MVC</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) | *Chưa cấu hình API (Cần liên kết API)* |
@@ -1333,6 +1427,6 @@
 
 | Chỉ số kiểm thử | Số lượng |
 | :--- | :--- |
-| ✅ Nút hoạt động tốt (Working Buttons) | **102** |
-| ❌ Nút chưa hoạt động (Dead Buttons) | **137** |
-| 📊 Tổng cộng nút bấm đã quét | **239** |
+| ✅ Nút hoạt động tốt (Working Buttons) | **108** |
+| ❌ Nút chưa hoạt động (Dead Buttons) | **147** |
+| 📊 Tổng cộng nút bấm đã quét | **255** |

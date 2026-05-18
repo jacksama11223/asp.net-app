@@ -79,39 +79,42 @@
 <!-- Modal Add -->
 <div class="modal fade" id="addBadgeModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-indigo text-white">
-                <h5 class="modal-title">Tạo Huy hiệu mới</h5>
-                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Tên huy hiệu</label>
-                    <input type="text" class="form-control" placeholder="Ví dụ: Cú đêm">
+        <form action="@Url.Action("SaveBadge", "Assessment")" method="post">
+            <div class="modal-content">
+                <div class="modal-header bg-indigo text-white">
+                    <h5 class="modal-title">Tạo Huy hiệu mới</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
                 </div>
-                <div class="form-group">
-                    <label>Tải lên Icon (PNG/SVG)</label>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="badgeFile">
-                        <label class="custom-file-label" for="badgeFile">Chọn file...</label>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tên huy hiệu</label>
+                        <input type="text" name="Name" class="form-control" placeholder="Ví dụ: Cú đêm" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả huy hiệu</label>
+                        <input type="text" name="Description" class="form-control" placeholder="Mô tả cách đạt huy hiệu..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Đường dẫn Icon (URL)</label>
+                        <input type="text" name="IconUrl" class="form-control" placeholder="Tự động sử dụng mặc định nếu để trống">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Độ hiếm</label>
+                            <select name="Rarity" class="form-control">
+                                <option value="Common">Common</option>
+                                <option value="Rare">Rare</option>
+                                <option value="Epic">Epic</option>
+                                <option value="Legendary">Legendary</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Độ hiếm</label>
-                        <select class="form-control">
-                            <option>Common</option>
-                            <option>Rare</option>
-                            <option>Epic</option>
-                            <option>Legendary</option>
-                        </select>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-indigo">Lưu huy hiệu</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-indigo">Lưu huy hiệu</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>

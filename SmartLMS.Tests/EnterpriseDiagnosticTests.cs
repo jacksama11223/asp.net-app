@@ -71,4 +71,37 @@ public class EnterpriseDiagnosticTests
         Assert.NotNull(apiKey);
         Assert.Equal("Partner Test", apiKey.Name);
     }
+
+    // Test Giai đoạn 3: New Integration APIs (ExportReport, GenerateLink, SaveBadge)
+    [Fact]
+    public async Task AssessmentService_SaveBadge_Should_Store_New_Badge()
+    {
+        var options = new DbContextOptionsBuilder<SmartLMSContext>()
+            .UseInMemoryDatabase(databaseName: "BadgeTestDB_" + Guid.NewGuid())
+            .Options;
+
+        using var context = new SmartLMSContext(options);
+        var mockScoring = new Moq.Mock<IScoringEngine>();
+        var mockCache = new Moq.Mock<Microsoft.Extensions.Caching.Distributed.IDistributedCache>();
+        var mockBus = new Moq.Mock<SmartLMS.Business.MessageBus.IMessageBus>();
+        var mockMediator = new Moq.Mock<MediatR.IMediator>();
+        var mockConfig = new Moq.Mock<Microsoft.Extensions.Configuration.IConfiguration>();
+        mockConfig.Setup(c => c.GetSection("ConnectionStrings")["DefaultConnection"]).Returns("server=localhost");
+
+        var service = new AssessmentService(mockConfig.Object, mockCache.Object, mockScoring.Object, mockBus.Object, context, mockMediator.Object);
+        var badge = new Badge
+        {
+            Name = "Cú đêm siêu việt",
+            Description = "Hoàn thành 3 bài code sau 12h đêm.",
+            Rarity = "Legendary",
+            IconUrl = "/dist/img/badge_cudemsieuviet.png"
+        };
+
+        var saved = await service.SaveBadgeAsync(badge);
+        Assert.True(saved);
+
+        var dbBadge = await context.Badges.FirstOrDefaultAsync(b => b.Name == "Cú đêm siêu việt");
+        Assert.NotNull(dbBadge);
+        Assert.Equal("Legendary", dbBadge.Rarity);
+    }
 }

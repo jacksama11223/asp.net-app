@@ -122,5 +122,17 @@ namespace SmartLMS.Web.Controllers
             }
             return RedirectToAction("Index", "Dashboard");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SaveBadge(Badge model)
+        {
+            if (string.IsNullOrEmpty(model.IconUrl))
+            {
+                model.IconUrl = "/dist/img/badge_default.png";
+            }
+            await _assessmentService.SaveBadgeAsync(model);
+            return RedirectToAction(nameof(BadgeStudio));
+        }
     }
 }
