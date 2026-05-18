@@ -101,6 +101,7 @@ const InstructorDashboard = ({ user, apiClient, navigate }) => {
             variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }} radius="md" size="lg"
             leftSection={<LuPlus size={20} />}
             className="shadow-xl shadow-indigo-500/30"
+            onClick={() => navigate('/creator/courses')}
           >
             Tạo Khóa Học Mới
           </Button>
@@ -123,7 +124,7 @@ const InstructorDashboard = ({ user, apiClient, navigate }) => {
                 <LuBookOpen size={20} className="text-indigo-600" />
                 <Title order={3} className="tracking-tight">Quản lý Khóa Học</Title>
               </Group>
-              <Button variant="light" size="xs">Xem tất cả</Button>
+              <Button variant="light" size="xs" onClick={() => navigate('/creator/courses')}>Xem tất cả</Button>
             </Group>
             
             <Table striped highlightOnHover verticalSpacing="sm">
@@ -171,7 +172,7 @@ const InstructorDashboard = ({ user, apiClient, navigate }) => {
               <Text size="sm" opacity={0.9}>
                 Studio tạo khóa học của SmartLMS tích hợp AI giúp bạn soạn giáo trình, tạo Quiz và Video dễ dàng hơn bao giờ hết.
               </Text>
-              <Button color="white" variant="white" c="indigo" mt="md" radius="md" size="md">
+              <Button color="white" variant="white" c="indigo" mt="md" radius="md" size="md" onClick={() => navigate('/creator/courses')}>
                 Bắt đầu Studio
               </Button>
             </Stack>
@@ -267,7 +268,7 @@ const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => 
                   </Group>
                   <Text size="xs" c="dimmed">Your engagement data over the last 30 days</Text>
                 </Box>
-                <Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />}>Export Analytics</Button>
+                <Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />} onClick={() => navigate('/creator/analytics')}>Export Analytics</Button>
               </Group>
 
               <Box h={300}>

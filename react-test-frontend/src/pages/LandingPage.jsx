@@ -121,6 +121,8 @@ export const LandingPage = () => {
                 radius="md" 
                 color="gray"
                 className="px-8 border-black/10 hover:bg-black/5"
+                component={Link}
+                to="/courses"
               >
                 Watch Demo
               </Button>

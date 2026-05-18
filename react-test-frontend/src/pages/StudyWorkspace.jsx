@@ -493,7 +493,7 @@ export const StudyWorkspace = () => {
                                <Text size="xs" c="dimmed">Định dạng: PDF • 1.2 MB</Text>
                             </Box>
                           </Group>
-                          <Button variant="light" size="xs">Xem / Tải xuống</Button>
+                          <Button variant="light" size="xs" onClick={() => selectedLesson?.videoUrl && window.open(selectedLesson.videoUrl, '_blank')}>Xem / Tải xuống</Button>
                         </Paper>
                         <Divider label="Tài liệu tham khảo" labelPosition="center" />
                         <Text size="sm" c="dimmed" ta="center">Không có tài liệu tham khảo bổ sung.</Text>
@@ -547,6 +547,7 @@ export const StudyWorkspace = () => {
                     variant="light" color="indigo" fullWidth radius="xl" size="md"
                     leftSection={<LuUsers size={16} />}
                     className="hover:shadow-md transition-shadow"
+                    onClick={() => navigate('/creator/messages')}
                   >
                     Hỏi giảng viên
                   </Button>
@@ -554,6 +555,7 @@ export const StudyWorkspace = () => {
                     variant="light" color="grape" fullWidth radius="xl" size="md"
                     leftSection={<LuPenTool size={16} />}
                     className="hover:shadow-md transition-shadow"
+                    onClick={() => navigate('/wiki')}
                   >
                     Ghi chú cá nhân (Wiki)
                   </Button>

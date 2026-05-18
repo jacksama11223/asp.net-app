@@ -105,7 +105,7 @@ export const MyLearning = () => {
                   <Text size="sm" c="dimmed" mb="md">
                     Hệ thống AI đã chọn ra các thẻ nhớ cần ôn tập để củng cố trí nhớ dài hạn của bạn.
                   </Text>
-                  <Button variant="light" color="blue" fullWidth rightSection={<LuPlay size={16} />}>
+                  <Button variant="light" color="blue" fullWidth rightSection={<LuPlay size={16} />} onClick={() => navigate('/mistakes')}>
                     Bắt đầu ôn tập
                   </Button>
                 </Box>
@@ -125,7 +125,7 @@ export const MyLearning = () => {
                   <Text size="sm" c="dimmed" mb="md">
                     Các bài tập được AI tự động tạo ra dựa trên những lỗi sai gần đây của bạn trong phần C# Basics.
                   </Text>
-                  <Button variant="light" color="orange" fullWidth rightSection={<LuPlay size={16} />}>
+                  <Button variant="light" color="orange" fullWidth rightSection={<LuPlay size={16} />} onClick={() => navigate('/mistakes')}>
                     Luyện tập ngay
                   </Button>
                 </Box>

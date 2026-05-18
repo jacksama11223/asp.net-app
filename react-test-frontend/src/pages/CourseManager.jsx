@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Box, Title, Text, Stack, Group, Button, SimpleGrid, Paper, Badge, 
   ActionIcon, Progress, Loader, Modal, TextInput, Textarea, NumberInput,
-  Select, Divider, Table, Checkbox, Card
+  Select, Divider, Table, Checkbox, Card, Grid
 } from '@mantine/core';
 import { 
   LuPlus, LuPenTool, LuSettings, LuUsers, LuClock, LuEye, LuZap, 
@@ -12,10 +12,12 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { BASE_URL } from '../api';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 export const CourseManager = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   
   // Course Modal States
   const [courseModalOpen, setCourseModalOpen] = useState(false);
@@ -251,8 +253,8 @@ export const CourseManager = () => {
               </Group>
 
               <Group grow mt="auto" pt="sm" className="border-t border-slate-100">
-                <Button variant="light" color="slate" size="xs" leftSection={<LuEye size={14} />}>
-                  Xem chi tiết
+                <Button variant="light" color="slate" size="xs" leftSection={<LuEye size={14} />} onClick={() => navigate(`/course/${course.courseId}`)}>
+                  Xem chi ti\u1ebft
                 </Button>
                 <Button variant="light" color="brand" size="xs" leftSection={<LuPenTool size={14} />} onClick={() => handleOpenStudio(course)}>
                   Studio

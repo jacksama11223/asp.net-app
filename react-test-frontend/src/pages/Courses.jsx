@@ -86,8 +86,8 @@ export const Courses = () => {
             <Text c="dimmed" size="sm" mt={4}>Choose from 150+ expert-led courses to boost your career.</Text>
           </Box>
           <Group gap="sm">
-            <Button variant="default" radius="md">My Learning</Button>
-            <Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" className="shadow-lg shadow-brand-500/20">Browse Categories</Button>
+            <Button variant="default" radius="md" onClick={() => navigate('/my-learning')}>My Learning</Button>
+            <Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" className="shadow-lg shadow-brand-500/20" onClick={() => setSearch('')}>Browse Categories</Button>
           </Group>
         </Group>
       </Box>
@@ -111,6 +111,7 @@ export const Courses = () => {
           radius="xl"
           style={{ flexGrow: 0 }}
           className="mr-2"
+          onClick={() => setSearch('')}
         >
           Filters
         </Button>
