@@ -549,7 +549,7 @@ export const CourseManager = () => {
               <Grid.Col span={6}>
                 <Select
                   label="Kh\u00f3a h\u1ecdc li\u00ean k\u1ebft"
-                  placeholder "Ch\u1ecdn kh\u00f3a h\u1ecdc..."
+                  placeholder="Ch\u1ecdn kh\u00f3a h\u1ecdc..."
                   data={courses.map(c => ({ value: String(c.courseId), label: c.title }))}
                   value={challengeForm.courseId ? String(challengeForm.courseId) : null}
                   onChange={(val) => setChallengeForm({ ...challengeForm, courseId: Number(val), lessonId: 0 })}
