@@ -14,6 +14,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
+import Editor from '@monaco-editor/react';
+import { toast } from 'sonner';
 
 export const StudyWorkspace = () => {
   const { courseId } = useParams();
@@ -25,11 +27,63 @@ export const StudyWorkspace = () => {
   const [bookmarked, setBookmarked] = useState(false);
   const [completionRate, setCompletionRate] = useState(45); // Mock completion rate
 
+  // Coding Sandbox States
+  const [challenge, setChallenge] = useState(null);
+  const [code, setCode] = useState("");
+  const [result, setResult] = useState(null);
+  const [runLoading, setRunLoading] = useState(false);
+  const [challengeLoading, setChallengeLoading] = useState(false);
+
   const token = localStorage.getItem('slms_token');
   const apiClient = axios.create({
     baseURL: BASE_URL,
     headers: { 'Authorization': `Bearer ${token}` }
   });
+
+  // Tự động tải thông tin Coding Challenge khi chọn bài học có thử thách code
+  useEffect(() => {
+    if (activeTab === 'code' && selectedLesson?.hasChallenge && selectedLesson?.challengeId) {
+      const fetchChallenge = async () => {
+        setChallengeLoading(true);
+        try {
+          const response = await apiClient.get(`/api/compiler/challenges/${selectedLesson.challengeId}`);
+          setChallenge(response.data);
+          setCode(response.data.templateCode || "// Viết code C# tại đây...\nusing System;\n\npublic class Program {\n    public static void Main() {\n        Console.WriteLine(\"Hello World\");\n    }\n}");
+          setResult(null);
+        } catch (error) {
+          console.error("Lỗi khi tải bài tập:", error);
+        } finally {
+          setChallengeLoading(false);
+        }
+      };
+      fetchChallenge();
+    } else {
+      setChallenge(null);
+    }
+  }, [selectedLesson, activeTab]);
+
+  const handleRunCode = async () => {
+    if (!selectedLesson?.challengeId) return;
+    setRunLoading(true);
+    try {
+      const response = await apiClient.post(`/api/compiler/execute`, {
+        challengeId: parseInt(selectedLesson.challengeId),
+        code: code,
+        language: "csharp"
+      });
+      setResult(response.data);
+      if (response.data.success && response.data.testCaseResults?.every(t => t.passed)) {
+        toast.success("Tuyệt vời! Tất cả test cases đã PASS!");
+      } else {
+        toast.error("Một số test cases không vượt qua. Hãy kiểm tra lại code.");
+      }
+    } catch (error) {
+      setResult({ success: false, message: "Lỗi kết nối server." });
+      toast.error("Lỗi kết nối server.");
+    } finally {
+      setRunLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -284,18 +338,145 @@ export const StudyWorkspace = () => {
 
                     {/* Code Panel */}
                     {activeTab === 'code' && (
-                       <Box ta="center" py={50}>
-                        <LuPenTool size={48} className="text-slate-200 mb-4" />
-                        <Title order={4}>{selectedLesson?.hasChallenge ? 'Sẵn sàng thử thách?' : 'Bài học này chưa có thử thách code'}</Title>
-                        {selectedLesson?.hasChallenge ? (
-                          <Button 
-                            mt="md" color="indigo" radius="md" size="lg"
-                            onClick={() => navigate(`/coding/${selectedLesson.challengeId}`)}
-                          >
-                            Mở IDE & Bắt đầu Code
-                          </Button>
+                      <Box>
+                        {challengeLoading ? (
+                          <Stack align="center" justify="center" py={50}>
+                            <Loader size="lg" color="indigo" />
+                            <Text size="sm" c="dimmed">Đang tải đề bài từ Compiler Sandbox...</Text>
+                          </Stack>
+                        ) : challenge ? (
+                          <Grid gutter="xl">
+                            {/* Cột trái: Đề bài & Hướng dẫn */}
+                            <Grid.Col span={{ base: 12, md: 5 }}>
+                              <Stack gap="md">
+                                <Group justify="space-between" align="center">
+                                  <Title order={3} className="text-slate-800 flex items-center gap-2">
+                                    <span className="w-2 h-6 bg-indigo-500 rounded-full"></span>
+                                    {challenge.title}
+                                  </Title>
+                                  <Badge size="lg" color="indigo" variant="light">{challenge.points} XP</Badge>
+                                </Group>
+                                
+                                <Paper p="md" radius="md" withBorder bg="slate.0">
+                                  <Text size="sm" style={{ whiteSpace: 'pre-line', lineHeight: '1.6' }} className="text-slate-700">
+                                    {challenge.description}
+                                  </Text>
+                                </Paper>
+
+                                {challenge.testCases && challenge.testCases.length > 0 && (
+                                  <Box>
+                                    <Text size="xs" fw={700} c="dimmed" mb="xs" tt="uppercase">Ví dụ mẫu (Test Cases)</Text>
+                                    <Stack gap="xs">
+                                      {challenge.testCases.map((tc, idx) => (
+                                        <Paper key={idx} p="xs" radius="md" withBorder bg="slate.50/50">
+                                          <Grid gutter="xs" className="text-xs">
+                                            <Grid.Col span={6}>
+                                              <Text fw={600} c="slate.5">Input:</Text>
+                                              <code className="text-indigo-600 bg-slate-100 px-1 rounded">{tc.input}</code>
+                                            </Grid.Col>
+                                            <Grid.Col span={6}>
+                                              <Text fw={600} c="slate.5">Expected Output:</Text>
+                                              <code className="text-emerald-600 bg-slate-100 px-1 rounded">{tc.expectedOutput}</code>
+                                            </Grid.Col>
+                                          </Grid>
+                                        </Paper>
+                                      ))}
+                                    </Stack>
+                                  </Box>
+                                )}
+                              </Stack>
+                            </Grid.Col>
+
+                            {/* Cột phải: Monaco Editor & Output */}
+                            <Grid.Col span={{ base: 12, md: 7 }}>
+                              <Stack gap="md">
+                                <Box style={{ border: '1px solid var(--mantine-color-slate-200)', borderRadius: '16px', overflow: 'hidden' }}>
+                                  <Box p="xs" bg="slate.900" className="flex justify-between items-center border-b border-slate-800">
+                                    <Badge color="blue" variant="filled">C# compiler</Badge>
+                                    <Text size="xs" c="slate.4">vs-dark mode</Text>
+                                  </Box>
+                                  <Editor
+                                    height="320px"
+                                    defaultLanguage="csharp"
+                                    theme="vs-dark"
+                                    value={code}
+                                    onChange={(val) => setCode(val || "")}
+                                    options={{
+                                      fontSize: 13,
+                                      minimap: { enabled: false },
+                                      scrollBeyondLastLine: false,
+                                      automaticLayout: true,
+                                      fontFamily: "'Fira Code', 'Cascadia Code', Consolas, monospace",
+                                    }}
+                                  />
+                                </Box>
+
+                                <Group justify="flex-end">
+                                  <Button 
+                                    onClick={handleRunCode}
+                                    disabled={runLoading}
+                                    color="indigo"
+                                    radius="md"
+                                    leftSection={
+                                      runLoading ? <Loader size="xs" color="white" /> : <LuPlay size={16} />
+                                    }
+                                  >
+                                    {runLoading ? "Đang chấm bài..." : "Chạy Code (Run)"}
+                                  </Button>
+                                </Group>
+
+                                {/* Bảng kết quả chấm bài */}
+                                {result && (
+                                  <Paper p="md" radius="xl" withBorder className={result.success ? "bg-green-50/20 border-green-200" : "bg-red-50/20 border-red-200"}>
+                                    <Title order={4} mb="xs" c={result.success ? "green.8" : "red.8"}>
+                                      {result.success ? "✅ Kết quả: Thành công!" : "❌ Kết quả: Lỗi biên dịch / Logic"}
+                                    </Title>
+                                    {result.message && (
+                                      <Text size="xs" c="dimmed" mb="sm" className="font-mono bg-slate-100 p-2 rounded">
+                                        {result.message}
+                                      </Text>
+                                    )}
+                                    {result.testCaseResults && (
+                                      <Stack gap="xs">
+                                        {result.testCaseResults.map((tc, idx) => (
+                                          <Paper key={idx} p="xs" radius="md" withBorder className={tc.passed ? "bg-green-100/30" : "bg-red-100/30"}>
+                                            <Group justify="space-between">
+                                              <Group gap="xs">
+                                                <ThemeIcon size="xs" color={tc.passed ? "green" : "red"}>
+                                                  {tc.passed ? "✓" : "✗"}
+                                                </ThemeIcon>
+                                                <Text size="xs" fw={700}>Test Case #{idx + 1}</Text>
+                                              </Group>
+                                              <Badge color={tc.passed ? "green" : "red"} size="xs">
+                                                {tc.passed ? "PASSED" : "FAILED"}
+                                              </Badge>
+                                            </Group>
+                                            <Grid gutter="xs" mt={4} className="text-[11px] font-mono">
+                                              <Grid.Col span={4}>
+                                                <Text c="dimmed">Input: {tc.input}</Text>
+                                              </Grid.Col>
+                                              <Grid.Col span={4}>
+                                                <Text c="dimmed">Output: {tc.output}</Text>
+                                              </Grid.Col>
+                                              <Grid.Col span={4}>
+                                                <Text c="dimmed">Expected: {tc.expected}</Text>
+                                              </Grid.Col>
+                                            </Grid>
+                                          </Paper>
+                                        ))}
+                                      </Stack>
+                                    )}
+                                  </Paper>
+                                )}
+                              </Stack>
+                            </Grid.Col>
+                          </Grid>
                         ) : (
-                          <Text c="dimmed" mt="xs">Giảng viên đang biên soạn bài tập thực hành...</Text>
+                          <Box ta="center" py={50}>
+                            <LuPenTool size={48} className="text-slate-200 mb-4" />
+                            <Title order={4}>Bài học này chưa có thử thách thực hành code</Title>
+                            <Text c="dimmed" mt="xs">Giảng viên đang biên soạn các bài tập thực hành...</Text>
+                          </Box>
                         )}
                       </Box>
                     )}

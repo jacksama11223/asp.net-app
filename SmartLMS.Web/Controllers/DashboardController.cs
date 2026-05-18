@@ -154,6 +154,9 @@ public class DashboardController : Controller
     public IActionResult Analytics() => View();
 
     [HttpGet]
+    [Route("Dashboard/GetAnalyticsData")]
+    [Route("api/dashboard/analytics-data")]
+    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = $"{Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme},{Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme}")]
     public async Task<IActionResult> GetAnalyticsData()
     {
         var enrollments = await _context.Enrollments
@@ -193,14 +196,16 @@ public class DashboardController : Controller
 
     /// <summary>
     /// API dành cho React Student Page — lấy dữ liệu phân tích cá nhân hóa của học viên hiện tại
-    /// GET /Dashboard/MyAnalytics
+    /// GET /Dashboard/MyAnalytics hoặc /api/dashboard/my-analytics
     /// </summary>
     [HttpGet]
-    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Route("Dashboard/MyAnalytics")]
+    [Route("api/dashboard/my-analytics")]
+    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = $"{Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme},{Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme}")]
     public async Task<IActionResult> MyAnalytics()
     {
-        var userIdStr = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
-        if (!int.TryParse(userIdStr, out int userId))
+        var userIdStr = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier) ?? User.FindFirst("sub")?.Value;
+        if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
             return Unauthorized(new { message = "Không xác định được người dùng." });
 
         // Lấy danh sách khóa học mà học viên đang học

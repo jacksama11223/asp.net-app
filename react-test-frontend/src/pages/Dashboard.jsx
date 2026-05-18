@@ -3,7 +3,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer 
 } from 'recharts';
 import { 
-  Paper, Grid, Title, Text, Group, SimpleGrid, Progress, Badge, ThemeIcon, Box, Stack, Button, Loader, Table, ActionIcon, Modal, Textarea, ScrollArea, Avatar
+  Paper, Grid, Title, Text, Group, SimpleGrid, Progress, Badge, ThemeIcon, Box, Stack, Button, Loader, Table, ActionIcon, Modal, Textarea, ScrollArea, Avatar, Tooltip as MantineTooltip
 } from '@mantine/core';
 import { LuSparkles, LuZap, LuClock, LuBookOpen, LuUsers, LuPlay, LuPlus, LuSend } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -216,12 +216,17 @@ const InstructorDashboard = ({ user, apiClient, navigate }) => {
 };
 
 // --- Student Dashboard (Giữ nguyên logic cũ) ---
-const StudentDashboard = ({ user, stats, chartData, navigate }) => {
+const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => {
   const formattedChartData = chartData.categories.map((cat, idx) => {
     const obj = { name: cat };
     chartData.series.forEach(s => { obj[s.name] = s.data[idx]; });
     return obj;
   });
+
+  // Tìm mức rủi ro trung bình của sinh viên từ courseRisks
+  const avgRisk = myAnalytics?.courseRisks && myAnalytics.courseRisks.length > 0
+    ? Math.round(myAnalytics.courseRisks.reduce((acc, cr) => acc + cr.riskProbability, 0) / myAnalytics.courseRisks.length)
+    : 0;
 
   return (
     <Stack gap="xl">
@@ -231,7 +236,10 @@ const StudentDashboard = ({ user, stats, chartData, navigate }) => {
             <Title order={1} fw={900} className="tracking-tighter text-4xl text-slate-900">
               Morning, <Text span variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} inherit>{user.fullName || 'Student'}</Text> ✨
             </Title>
-            <Text c="dimmed" size="sm" mt={4}>Your AI success probability is currently <Text span c="green.7" fw={700}>{stats?.dropoutRiskRate || '92.4'}%</Text>. Keep it up!</Text>
+            <Text c="dimmed" size="sm" mt={4}>
+              Your current average learning dropout risk is <Text span c={avgRisk > 50 ? "red.7" : "green.7"} fw={700}>{avgRisk}%</Text>.
+              {avgRisk > 50 ? " ⚠️ Please complete your pending coding exercises!" : " ✅ You are on track for success!"}
+            </Text>
           </Box>
           <Group>
             <Button variant="light" color="brand" radius="md" leftSection={<LuClock size={18} />} onClick={() => navigate('/booking')}>Book Tutor</Button>
@@ -241,64 +249,107 @@ const StudentDashboard = ({ user, stats, chartData, navigate }) => {
       </Box>
 
       <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} gap="lg">
-        <StatCard label="Total Students" value={stats?.totalStudents || 0} change="+2" color="brand" icon={LuUsers} />
-        <StatCard label="Avg Completion" value={`${stats?.avgCompletionRate || 0}%`} change="+14%" color="blue" icon={LuClock} />
-        <StatCard label="Dropout Risk" value={`${stats?.dropoutRiskRate || 0}%`} change="AI" color="orange" icon={LuZap} />
-        <StatCard label="Total Revenue" value={new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats?.totalRevenue || 0)} change="LIVE" color="teal" icon={LuZap} />
+        <StatCard label="My Level" value={`Level ${myAnalytics?.level || 1}`} change={`${myAnalytics?.totalXP || 0} XP Total`} color="brand" icon={LuSparkles} />
+        <StatCard label="Study Streak" value={`${myAnalytics?.currentStreak || 0} Days`} change="🔥 Daily Active" color="orange" icon={LuZap} />
+        <StatCard label="Avg Completion" value={`${stats?.avgCompletionRate || 0}%`} change="Across Courses" color="blue" icon={LuClock} />
+        <StatCard label="Active Enrolls" value={myAnalytics?.courseRisks?.length || 0} change="Enrolled Courses" color="teal" icon={LuUsers} />
       </SimpleGrid>
 
       <Grid gutter="xl">
         <Grid.Col span={{ base: 12, lg: 8 }}>
-          <CardWrapper>
-            <Group justify="space-between" mb="xl">
-              <Box>
-                <Group gap="xs" mb={4}>
-                  <LuSparkles size={20} color="var(--mantine-color-brand-600)" />
-                  <Title order={3} className="tracking-tight text-slate-800">Learning Momentum</Title>
-                </Group>
-                <Text size="xs" c="dimmed">Your engagement data over the last 30 days</Text>
-              </Box>
-              <Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />}>Export Analytics</Button>
-            </Group>
+          <Stack gap="xl">
+            <CardWrapper>
+              <Group justify="space-between" mb="xl">
+                <Box>
+                  <Group gap="xs" mb={4}>
+                    <LuSparkles size={20} color="var(--mantine-color-brand-600)" />
+                    <Title order={3} className="tracking-tight text-slate-800">Learning Momentum</Title>
+                  </Group>
+                  <Text size="xs" c="dimmed">Your engagement data over the last 30 days</Text>
+                </Box>
+                <Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />}>Export Analytics</Button>
+              </Group>
 
-            <Box h={300}>
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={COURSE_TRENDS}>
-                  <defs>
-                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
-                  <YAxis hide />
-                  <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderRadius: '16px' }} />
-                  <Area type="monotone" dataKey="enrollments" stroke="#6366f1" strokeWidth={4} fillOpacity={1} fill="url(#colorValue)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </Box>
-          </CardWrapper>
+              <Box h={300}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={COURSE_TRENDS}>
+                    <defs>
+                      <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
+                    <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                    <YAxis hide />
+                    <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderRadius: '16px' }} />
+                    <Area type="monotone" dataKey="enrollments" stroke="#6366f1" strokeWidth={4} fillOpacity={1} fill="url(#colorValue)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </Box>
+            </CardWrapper>
+
+            {/* Achievement Hub Component (Huy hiệu đã đạt) */}
+            <CardWrapper>
+              <Group gap="xs" mb="lg">
+                <LuSparkles size={20} color="#eab308" />
+                <Title order={3} className="tracking-tight text-slate-800">Achievement Hub (Unlocked Badges)</Title>
+              </Group>
+              
+              {myAnalytics?.badges && myAnalytics.badges.length > 0 ? (
+                <Group gap="md">
+                  {myAnalytics.badges.map((badge, idx) => (
+                    <MantineTooltip key={idx} label={`${badge.name} (${badge.rarity}) - Earned: ${new Date(badge.earnedDate).toLocaleDateString()}`} withArrow>
+                      <Paper 
+                        p="md" 
+                        withBorder 
+                        radius="lg" 
+                        className="hover:scale-105 transition-all text-center flex flex-col items-center justify-center bg-slate-50/50 hover:bg-white cursor-pointer hover:border-yellow-400"
+                        style={{ width: '100px', height: '100px' }}
+                      >
+                        <Text style={{ fontSize: '32px' }}>{badge.iconUrl || '🏆'}</Text>
+                        <Text size="xs" fw={700} c="slate.8" truncate style={{ width: '100%' }}>{badge.Name || badge.name}</Text>
+                        <Badge size="10px" color="yellow" variant="light" mt={4}>{badge.rarity}</Badge>
+                      </Paper>
+                    </MantineTooltip>
+                  ))}
+                </Group>
+              ) : (
+                <Box ta="center" py="lg">
+                  <Text size="sm" c="dimmed">You haven't unlocked any badges yet. Complete coding challenges to unlock your first badge!</Text>
+                </Box>
+              )}
+            </CardWrapper>
+          </Stack>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, lg: 4 }}>
-          <CardWrapper>
-            <Group gap="xs" mb="xl">
-              <LuZap size={20} color="orange" />
-              <Title order={3} className="tracking-tight text-slate-800">AI Success Insights</Title>
-            </Group>
-            <Stack gap="xl">
-              {AI_RISK_DATA.map((item) => (
-                <Box key={item.name}>
-                  <Group justify="space-between" mb="xs">
-                    <Text size="xs" fw={700} c="dimmed">{item.name}</Text>
-                    <Badge variant="light" color={item.color}>{item.value}% Probability</Badge>
-                  </Group>
-                  <Progress value={item.value} color={item.color} size="xl" radius="xl" className="bg-slate-100" />
-                </Box>
-              ))}
-            </Stack>
-          </CardWrapper>
+          <Stack gap="lg">
+            <CardWrapper>
+              <Group gap="xs" mb="xl">
+                <LuZap size={20} color="orange" />
+                <Title order={3} className="tracking-tight text-slate-800">AI Dropout Predictor</Title>
+              </Group>
+              <Stack gap="xl">
+                {myAnalytics?.courseRisks && myAnalytics.courseRisks.length > 0 ? (
+                  myAnalytics.courseRisks.map((item) => (
+                    <Box key={item.courseId}>
+                      <Group justify="space-between" mb="xs">
+                        <Text size="xs" fw={700} c="slate.8" truncate style={{ maxWidth: '60%' }}>{item.courseName}</Text>
+                        <Badge variant="light" color={item.riskLevel === 'High' ? 'red' : (item.riskLevel === 'Medium' ? 'orange' : 'green')}>
+                          {item.riskProbability}% Risk
+                        </Badge>
+                      </Group>
+                      <Progress value={item.progress || 0} color={item.riskLevel === 'High' ? 'red' : 'green'} size="lg" radius="xl" className="bg-slate-100" />
+                      <Text size="11px" c="dimmed" mt={6} style={{ fontStyle: 'italic' }}>{item.recommendation}</Text>
+                    </Box>
+                  ))
+                ) : (
+                  <Text size="sm" c="dimmed" ta="center" py="xl">No active course risk data available.</Text>
+                )}
+              </Stack>
+            </CardWrapper>
+          </Stack>
         </Grid.Col>
       </Grid>
     </Stack>
@@ -309,6 +360,7 @@ const StudentDashboard = ({ user, stats, chartData, navigate }) => {
 export const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [chartData, setChartData] = useState({ categories: [], series: [] });
+  const [myAnalytics, setMyAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('slms_user') || '{}');
@@ -322,12 +374,14 @@ export const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsData, engagementData] = await Promise.all([
+        const [statsData, engagementData, myAnalyticsData] = await Promise.all([
           getDashboardStats(apiClient),
-          getEngagementChart(apiClient)
+          getEngagementChart(apiClient),
+          apiClient.get('/api/dashboard/my-analytics').then(r => r.data).catch(() => null)
         ]);
         setStats(statsData);
         setChartData(engagementData);
+        setMyAnalytics(myAnalyticsData);
       } catch (err) {
         console.error("Failed to fetch dashboard data", err);
       } finally {
@@ -343,5 +397,5 @@ export const Dashboard = () => {
     return <InstructorDashboard user={user} apiClient={apiClient} navigate={navigate} />;
   }
 
-  return <StudentDashboard user={user} stats={stats} chartData={chartData} navigate={navigate} />;
+  return <StudentDashboard user={user} stats={stats} chartData={chartData} myAnalytics={myAnalytics} navigate={navigate} />;
 };
