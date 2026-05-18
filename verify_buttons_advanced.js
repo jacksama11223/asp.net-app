@@ -1,5 +1,5 @@
 /**
- * SmartLMS Enterprise Advanced Button API & Feature Audit Tool
+ * SmartLMS Enterprise Advanced Button API & Feature Audit Tool (Upgraded Tokenizer Edition)
  * 
  * Mục đích: Quét tĩnh nâng cao toàn bộ React & CSHTML, phân tích tên nhãn/placeholder của nút,
  * giải nghĩa tính năng của từng nút, và dò quét ngược hàm xử lý để trích xuất chính xác 
@@ -59,7 +59,12 @@ const REACT_COMPONENT_ROUTES = {
     'CourseManager': '/creator/courses',
     'MessageCenter': '/creator/messages',
     'CreatorAnalytics': '/creator/analytics',
-    'TutorDashboard': '/tutor/dashboard'
+    'TutorDashboard': '/tutor/dashboard',
+    'TutorProfile': '/tutor/profile/1',
+    'TutorProfileEdit': '/tutor/profile/edit',
+    'TutorSchedule': '/tutor/schedule',
+    'AICareerReport': '/ai-career-report',
+    'CertificateView': '/certificate/1'
 };
 
 const VPS_BASE_URL = 'http://141.253.114.218';
@@ -90,7 +95,7 @@ function getLiveUrl(filePath, fileName, type) {
     }
 }
 
-// Quét đệ quy
+// Quét đệ quy thư mục
 function scanDirectory(dir, extensions) {
     let files = [];
     if (!fs.existsSync(dir)) return files;
@@ -123,10 +128,8 @@ function traceApiEndpoint(fileContent, handlerName) {
         return null;
     }
 
-    // Tránh lỗi regex khi handlerName chứa ký tự đặc biệt như $, #, v.v.
     const escapedHandler = handlerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-    // Tìm định nghĩa hàm trong file
     const funcRegexes = [
         new RegExp(`const\\s+${escapedHandler}\\s*=\\s*(?:async\\s*)?\\([^)]*\\)\\s*=>`, 'i'),
         new RegExp(`async\\s+function\\s+${escapedHandler}\\b`, 'i'),
@@ -144,25 +147,21 @@ function traceApiEndpoint(fileContent, handlerName) {
     }
 
     if (foundIndex !== -1) {
-        // Cắt ra 40 dòng tiếp theo trong thân hàm để phân tích
         const bodyStart = foundIndex;
         const bodyEnd = Math.min(fileContent.length, bodyStart + 1500);
         const funcBody = fileContent.substring(bodyStart, bodyEnd);
 
-        // Tìm các chuỗi API dạng /api/... hoặc đường dẫn HTTP
         const apiMatch = funcBody.match(/['"`](\/api\/[^'"`\s]+)['"`]/i) || 
                          funcBody.match(/['"`](\/[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+)['"`]/i);
         if (apiMatch) {
             return apiMatch[1];
         }
         
-        // Dò các lệnh axios.get, axios.post
         const axiosMatch = funcBody.match(/axios\.(?:post|get|put|delete)\(\s*['"`]([^'"`\s]+)['"`]/i);
         if (axiosMatch) {
             return axiosMatch[1];
         }
 
-        // Dò fetch
         const fetchMatch = funcBody.match(/fetch\(\s*['"`]([^'"`\s]+)['"`]/i);
         if (fetchMatch) {
             return fetchMatch[1];
@@ -198,6 +197,71 @@ function resolveFeatureDescription(label, tag, apiCalled, issue) {
     return 'Thực thi sự kiện nghiệp vụ tương ứng của trang';
 }
 
+// Hàm phân tích thuộc tính của thẻ JSX nâng cao sử dụng Tokenizer cân bằng ngoặc
+function extractJsxTag(content, startIndex) {
+    let index = startIndex;
+    if (content[index] !== '<') return null;
+    
+    index++; // bỏ qua '<'
+    
+    // Đọc tên thẻ (Tag Name)
+    let tagName = '';
+    while (index < content.length && /[a-zA-Z0-9_.-]/.test(content[index])) {
+        tagName += content[index];
+        index++;
+    }
+    
+    // Đọc các thuộc tính cho đến khi gặp thẻ đóng thực sự
+    let attrs = '';
+    let inDoubleQuote = false;
+    let inSingleQuote = false;
+    let inBacktick = false;
+    let braceDepth = 0;
+    let parenDepth = 0;
+    let isSelfClosing = false;
+    
+    while (index < content.length) {
+        const char = content[index];
+        
+        if (char === '"' && !inSingleQuote && !inBacktick) {
+            inDoubleQuote = !inDoubleQuote;
+        } else if (char === "'" && !inDoubleQuote && !inBacktick) {
+            inSingleQuote = !inSingleQuote;
+        } else if (char === '`' && !inDoubleQuote && !inSingleQuote) {
+            inBacktick = !inBacktick;
+        } else if (!inDoubleQuote && !inSingleQuote && !inBacktick) {
+            if (char === '{') {
+                braceDepth++;
+            } else if (char === '}') {
+                braceDepth--;
+            } else if (char === '(') {
+                parenDepth++;
+            } else if (char === ')') {
+                parenDepth--;
+            } else if (braceDepth === 0 && parenDepth === 0) {
+                if (char === '/' && content[index + 1] === '>') {
+                    isSelfClosing = true;
+                    index += 2;
+                    break;
+                } else if (char === '>') {
+                    index++;
+                    break;
+                }
+            }
+        }
+        
+        attrs += char;
+        index++;
+    }
+    
+    return {
+        tagName,
+        attrs,
+        isSelfClosing,
+        endIndex: index
+    };
+}
+
 // Phân tích tệp React
 function analyzeReactFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -219,29 +283,64 @@ function analyzeReactFile(filePath) {
         };
     }
 
-    const btnRegex = /<(Button|ActionIcon|button)\b([^>]*?)(\/?>)/gi;
-    let match;
+    // Quét toàn bộ các thẻ mở JSX
+    let index = 0;
+    while ((index = content.indexOf('<', index)) !== -1) {
+        const nextChar = content[index + 1];
+        // Bỏ qua thẻ đóng </... hoặc comment <!... hoặc thẻ trống <>
+        if (nextChar === '/' || nextChar === '!' || nextChar === '>') {
+            index++;
+            continue;
+        }
 
-    while ((match = btnRegex.exec(content)) !== null) {
-        const fullTag = match[0];
-        const tagName = match[1];
-        const attrs = match[2];
-        const isSelfClosing = match[3] === '/>';
-        const line = getLineNumber(content, match.index);
+        const tagInfo = extractJsxTag(content, index);
+        if (!tagInfo) {
+            index++;
+            continue;
+        }
+
+        const { tagName, attrs, isSelfClosing, endIndex } = tagInfo;
+        index = endIndex; // dịch chuyển index tiếp tục
+
+        const tagNameLower = tagName.toLowerCase();
+        const hasOnClick = attrs.includes('onClick');
+        
+        // Kiểm tra xem đây có phải là Nút hoặc phần tử có tính tương tác cao (như Menu.Item, Tabs.Tab, NavLink) hay không
+        const isInteractiveTag = [
+            'button', 'button', 'actionicon', 'menu.item', 'tabs.tab', 'navlink', 'list.item'
+        ].includes(tagNameLower) || 
+        tagName === 'Button' || 
+        tagName === 'ActionIcon' || 
+        tagName.includes('Menu.Item') || 
+        tagName.includes('Tabs.Tab') || 
+        tagName.includes('NavLink') || 
+        tagName.includes('Table.Tr') ||
+        tagName.includes('Card') ||
+        tagName.includes('Paper');
+
+        const isClickableElement = hasOnClick;
+        const isStyledButton = attrs.includes('btn') || attrs.includes('cursor-pointer');
+
+        if (!isInteractiveTag && !isClickableElement && !isStyledButton) {
+            continue;
+        }
+
+        const line = getLineNumber(content, index - attrs.length - tagName.length - 2);
 
         // Trích xuất label/nội dung hiển thị
         let label = '';
         if (!isSelfClosing) {
-            const afterTagIndex = match.index + fullTag.length;
+            // Tìm nhãn văn bản hiển thị trong phần body của tag
+            const afterTagIndex = index;
             const closingTag = `</${tagName}>`;
             const closingIndex = content.indexOf(closingTag, afterTagIndex);
-            if (closingIndex !== -1) {
+            if (closingIndex !== -1 && closingIndex - afterTagIndex < 300) { // Giới hạn độ dài thẻ để tránh gom cụm lớn
                 const inner = content.substring(afterTagIndex, closingIndex).trim();
                 label = inner.replace(/<[^>]*>/g, '').substring(0, 45) || '';
             }
         }
 
-        // Ưu tiên trích xuất placeholder/title/aria-label/tooltip của nút nếu label trống
+        // Trích xuất placeholder/title/aria-label/tooltip
         let placeholder = 'Không có';
         const titleMatch = attrs.match(/title\s*=\s*["']([^"']+)["']/i) || attrs.match(/title\s*=\s*\{\s*["']([^"']+)["']\s*\}/i);
         const placeholderMatch = attrs.match(/placeholder\s*=\s*["']([^"']+)["']/i);
@@ -251,16 +350,21 @@ function analyzeReactFile(filePath) {
         else if (placeholderMatch) placeholder = placeholderMatch[1];
         else if (ariaMatch) placeholder = ariaMatch[1];
 
-        // Nếu label vẫn rỗng, đặt mặc định dựa theo placeholder hoặc tag
+        // Đặt label mặc định nếu trống
         if (!label) {
-            label = placeholder !== 'Không có' ? placeholder : 'Nút Icon/Hình ảnh';
+            label = placeholder !== 'Không có' ? placeholder : `Nút ${tagName}`;
+        }
+
+        // Loại bỏ các thẻ con hay dấu ngoặc ra khỏi hiển thị nhãn
+        label = label.replace(/\{[^}]*\}/g, '').trim();
+        if (!label) {
+            label = `Nút ${tagName}`;
         }
 
         let isWorking = true;
         let issue = '';
         let apiCalled = 'Không gọi API (Nút giao diện)';
 
-        const hasOnClick = attrs.includes('onClick');
         const isSubmit = attrs.match(/type=["']submit["']/i) || attrs.match(/type=\{\s*["']submit["']\s*\}/i);
         const isDisabled = attrs.includes('disabled') && !attrs.includes('disabled={false}');
 
@@ -284,9 +388,12 @@ function analyzeReactFile(filePath) {
             isWorking = true;
         } else if (isSubmit) {
             isWorking = true;
-            // Dò API của form submit nếu có hàm onSubmit ở thẻ form phía trên
             apiCalled = 'Gửi dữ liệu Form (POST/PUT)';
         } else if (!hasOnClick) {
+            // Đối với các thẻ trang trí hoặc Tabs.Tab, Card click mà không gán onClick thì bỏ qua
+            if (!['Button', 'button', 'ActionIcon', 'actionicon', 'Menu.Item'].includes(tagName)) {
+                continue; // Bỏ qua không báo cáo nút chết cho Card/Paper/Div rỗng
+            }
             isWorking = false;
             issue = 'Thiếu hoàn toàn thuộc tính onClick (Nút chết)';
             apiCalled = 'Chưa cấu hình API (Cần liên kết API)';
@@ -312,7 +419,7 @@ function analyzeReactFile(filePath) {
             }
         }
 
-        // Tiến hành dò tìm API endpoint thực tế từ hàm xử lý
+        // Dò tìm API endpoint thực tế từ hàm xử lý
         if (isWorking && handlerName) {
             const trackedApi = traceApiEndpoint(content, handlerName);
             if (trackedApi) {
@@ -320,13 +427,13 @@ function analyzeReactFile(filePath) {
             }
         }
 
-        const feature = resolveFeatureDescription(label, fullTag, apiCalled, issue);
+        const feature = resolveFeatureDescription(label, `<${tagName} ${attrs}>`, apiCalled, issue);
 
         const buttonDetail = {
             line,
             label: label.replace(/\s+/g, ' '),
             placeholder,
-            tag: fullTag.replace(/\s+/g, ' '),
+            tag: `<${tagName} ${attrs.replace(/\s+/g, ' ').trim()}>`,
             feature,
             api: apiCalled,
             issue
@@ -361,23 +468,52 @@ function analyzeCshtmlFile(filePath) {
         };
     }
 
-    const btnRegex = /<(button|a)\b([^>]*?)(\/?>)/gi;
-    let match;
+    // Tương tự, sử dụng tokenizer cho thẻ HTML trong CSHTML
+    let index = 0;
+    while ((index = content.indexOf('<', index)) !== -1) {
+        const nextChar = content[index + 1];
+        if (nextChar === '/' || nextChar === '!' || nextChar === '>') {
+            index++;
+            continue;
+        }
 
-    while ((match = btnRegex.exec(content)) !== null) {
-        const fullTag = match[0];
-        const tagName = match[1].toLowerCase();
-        const attrs = match[2];
-        const isSelfClosing = match[3] === '/>';
-        const line = getLineNumber(content, match.index);
+        const tagInfo = extractJsxTag(content, index);
+        if (!tagInfo) {
+            index++;
+            continue;
+        }
+
+        const { tagName, attrs, isSelfClosing, endIndex } = tagInfo;
+        index = endIndex;
+
+        const tagNameLower = tagName.toLowerCase();
+        const hasOnclick = attrs.includes('onclick') || attrs.includes('onclick=') || attrs.includes('asp-action');
+        const isButtonTag = ['button', 'a'].includes(tagNameLower);
+        const isClickableElement = hasOnclick || attrs.includes('cursor-pointer');
+        const isStyledButton = attrs.includes('btn ') || attrs.includes('btn-') || attrs.includes('class="btn"') || attrs.includes("class='btn'");
+
+        if (!isButtonTag && !isClickableElement && !isStyledButton) {
+            continue;
+        }
+
+        // Bỏ qua link không phải styled-btn hoặc không có click
+        if (tagNameLower === 'a') {
+            const classMatch = attrs.match(/class\s*=\s*["']([^"']+)["']/i);
+            const isBtnClass = classMatch && classMatch[1].split(' ').some(c => c.startsWith('btn'));
+            if (!isBtnClass && !hasOnclick) {
+                continue;
+            }
+        }
+
+        const line = getLineNumber(content, index - attrs.length - tagName.length - 2);
 
         // Trích xuất label
         let label = '';
         if (!isSelfClosing) {
-            const afterTagIndex = match.index + fullTag.length;
+            const afterTagIndex = index;
             const closingTag = `</${tagName}>`;
             const closingIndex = content.indexOf(closingTag, afterTagIndex);
-            if (closingIndex !== -1) {
+            if (closingIndex !== -1 && closingIndex - afterTagIndex < 300) {
                 const inner = content.substring(afterTagIndex, closingIndex).trim();
                 label = inner.replace(/<[^>]*>/g, '').substring(0, 45) || '';
             }
@@ -392,15 +528,12 @@ function analyzeCshtmlFile(filePath) {
         else if (placeholderMatch) placeholder = placeholderMatch[1];
 
         if (!label) {
-            label = placeholder !== 'Không có' ? placeholder : 'Nút Hành động';
+            label = placeholder !== 'Không có' ? placeholder : `Nút ${tagName}`;
         }
 
-        // Bỏ qua link không phải styled-btn
-        if (tagName === 'a') {
-            const classMatch = attrs.match(/class\s*=\s*["']([^"']+)["']/i);
-            if (!classMatch || !classMatch[1].split(' ').some(c => c.startsWith('btn'))) {
-                continue;
-            }
+        label = label.replace(/\{[^}]*\}/g, '').trim();
+        if (!label) {
+            label = `Nút ${tagName}`;
         }
 
         let isWorking = true;
@@ -408,7 +541,6 @@ function analyzeCshtmlFile(filePath) {
         let apiCalled = 'Không gọi API (Nút giao diện)';
 
         const isSubmit = attrs.match(/type=["']submit["']/i);
-        const hasOnclick = attrs.includes('onclick');
         
         // Dò API đường dẫn liên kết MVC
         const mvcController = attrs.match(/asp-controller\s*=\s*["']([^"']+)["']/i);
@@ -426,7 +558,7 @@ function analyzeCshtmlFile(filePath) {
             if (apiCalled === 'Không gọi API (Nút giao diện)') {
                 apiCalled = 'Gửi dữ liệu Form (POST/PUT)';
             }
-        } else if (tagName === 'a') {
+        } else if (tagNameLower === 'a') {
             if (!hrefMatch || hrefMatch[1] === '' || hrefMatch[1] === '#' || hrefMatch[1].startsWith('javascript:void')) {
                 if (!hasOnclick && !mvcController && !attrs.includes('data-bs-toggle')) {
                     isWorking = false;
@@ -434,7 +566,7 @@ function analyzeCshtmlFile(filePath) {
                     apiCalled = 'Chưa cấu hình API (Cần liên kết API)';
                 }
             }
-        } else if (tagName === 'button') {
+        } else if (tagNameLower === 'button') {
             const hasMvcAction = mvcController || mvcAction || attrs.includes('data-bs-toggle');
             
             if (!hasOnclick && !hasMvcAction) {
@@ -450,7 +582,6 @@ function analyzeCshtmlFile(filePath) {
                         issue = `onclick rỗng hoặc giả lập`;
                         apiCalled = 'Chưa cấu hình API (Cần liên kết API)';
                     } else {
-                        // Dò hàm JS trong cùng trang nếu có thể
                         const trackedApi = traceApiEndpoint(content, val.replace(/\([^)]*\)/, ''));
                         if (trackedApi) {
                             apiCalled = `Gọi API: ${trackedApi}`;
@@ -460,13 +591,13 @@ function analyzeCshtmlFile(filePath) {
             }
         }
 
-        const feature = resolveFeatureDescription(label, fullTag, apiCalled, issue);
+        const feature = resolveFeatureDescription(label, `<${tagName} ${attrs}>`, apiCalled, issue);
 
         const buttonDetail = {
             line,
             label: label.replace(/\s+/g, ' '),
             placeholder,
-            tag: fullTag.replace(/\s+/g, ' '),
+            tag: `<${tagName} ${attrs.replace(/\s+/g, ' ').trim()}>`,
             feature,
             api: apiCalled,
             issue
@@ -486,7 +617,6 @@ async function pingApiEndpoint(apiUrl) {
         return { status: 'N/A', code: null, message: 'Nút giao diện/Điều hướng' };
     }
     
-    // Tìm phần dẫn /api/...
     const apiMatch = cleanPath.match(/(\/api\/[a-zA-Z0-9_\-\/\{\}]+)/);
     if (!apiMatch) {
         return { status: 'N/A', code: null, message: 'Không thể phân tích dẫn API' };
@@ -500,7 +630,6 @@ async function pingApiEndpoint(apiUrl) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
         
-        // Thử dùng OPTIONS trước để kiểm tra sự tồn tại của route
         let response;
         try {
             response = await fetch(fullUrl, {
@@ -508,7 +637,6 @@ async function pingApiEndpoint(apiUrl) {
                 signal: controller.signal
             });
         } catch (e) {
-            // Fallback sang GET
             response = await fetch(fullUrl, {
                 method: 'GET',
                 signal: controller.signal
@@ -561,7 +689,7 @@ async function pingAllButtons(pages) {
 
 // Thực thi chính
 async function run() {
-    console.log('⚡ Bắt đầu quét chẩn đoán API, Placeholder và Tính năng nút bấm toàn hệ thống...');
+    console.log('⚡ Bắt đầu quét chẩn đoán API, Placeholder và Tính năng nút bấm toàn hệ thống (Upgraded Tokenizer)...');
 
     const reactFiles = scanDirectory(REACT_DIR, ['.js', '.jsx', '.tsx']);
     reactFiles.forEach(analyzeReactFile);
@@ -632,10 +760,10 @@ async function run() {
     md += `| 📊 Tổng cộng nút bấm đã quét | **${totalWorkingButtons + totalDeadButtons}** |\n`;
 
     fs.writeFileSync(reportPath, md, 'utf8');
-    console.log(`\n🎉 Đã nâng cấp thành công công cụ quét!`);
+    console.log(`\n🎉 Đã nâng cấp thành công công cụ quét và tạo báo cáo mới!`);
     console.log(`- Nút hoạt động tốt: ${totalWorkingButtons}`);
     console.log(`- Nút chưa hoạt động (Dead): ${totalDeadButtons}`);
-    console.log(`📝 Xem báo cáo nâng cấp tại: verify_buttons_advanced_report.md`);
+    console.log(`📝 Xem báo cáo tại: verify_buttons_advanced_report.md`);
 }
 
 run();
