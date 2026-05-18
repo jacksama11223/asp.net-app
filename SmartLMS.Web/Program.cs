@@ -491,6 +491,7 @@ app.MapControllerRoute(
 app.MapMetrics(); // Mở cổng để Grafana hút dữ liệu
 
 app.MapHub<SmartLMS.Web.Hubs.DashboardHub>("/dashboardHub");
+app.MapHub<SmartLMS.Web.Hubs.DashboardHub>("/notificationHub");
 app.MapHub<SmartLMS.Web.Hubs.GamificationHub>("/gamificationHub");
 
 // Schedule Hangfire Recurring Job for ML retrain

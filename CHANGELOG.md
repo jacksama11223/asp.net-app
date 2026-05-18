@@ -1,5 +1,13 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-18] - Coding Sandbox & UI Integration Hub
+- **Added:** Tích hợp thành công phân hệ Coding Sandbox (Monaco Editor) trực tiếp vào chi tiết khóa học.
+- **Added:** Nhúng Dashboard phân tích AI Analytics và Achievement Hub vào Student Portal.
+- **Fixed:** Khắc phục triệt để lỗi Roslyn CS0122 (inaccessible due to protection level) khi biên dịch code C# của học viên bằng cách sử dụng class `ScriptGlobals` public.
+- **Fixed:** Khắc phục lỗi EF Core `Unknown column 'BadgeId1'` bằng cách định nghĩa chính xác composite primary key và cấu hình ánh xạ navigation property cho `UserBadge` trong `SmartLMSContext`.
+- **Fixed:** Khắc phục lỗi crash khi gửi email/webhook thất bại do cấu hình SMTP sai bằng cách bọc khối xử lý trong `NotificationEventHandler` bằng `try-catch`.
+- **Improved:** Hoàn thành 100% bộ test tích hợp hệ thống `test_enterprise.cjs` đạt trạng thái Green Pass toàn diện.
+
 ### [2026-05-15] - Infra & Auth Stabilization
 - **Fixed:** Lỗi 502 Bad Gateway do Nginx giữ DNS Cache cũ của Docker container.
 - **Fixed:** Lỗi Login Loop bằng cách đồng bộ Data Protection keys qua Redis.

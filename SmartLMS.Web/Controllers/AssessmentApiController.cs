@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SmartLMS.Web.Controllers
 {
     [Authorize(AuthenticationSchemes = $"{CookieAuthenticationDefaults.AuthenticationScheme},{JwtBearerDefaults.AuthenticationScheme}")]
-    [Route("api/[controller]")]
+    [Route("api/assessment")]
     [ApiController]
     public class AssessmentApiController : ControllerBase
     {

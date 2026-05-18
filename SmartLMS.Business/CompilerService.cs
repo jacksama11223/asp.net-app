@@ -41,8 +41,8 @@ public class CompilerService : ICompilerService
                     // để xử lý input truyền vào. Ở đây tôi giả định code của học viên là một script
                     // và biến 'input' đã được định nghĩa sẵn.
                     
-                    var globals = new { input = testCase.Input };
-                    var executionResult = await CSharpScript.EvaluateAsync(code, scriptOptions, globals);
+                    var globals = new ScriptGlobals { input = testCase.Input };
+                    var executionResult = await CSharpScript.EvaluateAsync(code, scriptOptions, globals, typeof(ScriptGlobals));
                     
                     string actualOutput = executionResult?.ToString() ?? string.Empty;
                     tcResult.ActualOutput = actualOutput;
@@ -77,4 +77,9 @@ public class CompilerService : ICompilerService
 
         return result;
     }
+}
+
+public class ScriptGlobals
+{
+    public string input { get; set; } = string.Empty;
 }

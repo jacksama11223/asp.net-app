@@ -135,6 +135,21 @@ public class DashboardController : Controller
         return Json(data);
     }
     [HttpGet]
+    [Route("Dashboard/GetCourseCompletionData")]
+    public async Task<IActionResult> GetCourseCompletionData()
+    {
+        var data = await _context.Courses
+            .Select(c => new {
+                courseId = c.CourseId,
+                title = c.Title,
+                completionRate = _context.Enrollments.Where(e => e.CourseId == c.CourseId && e.IsCompleted == true).Count() * 100.0 / Math.Max(1, _context.Enrollments.Where(e => e.CourseId == c.CourseId).Count())
+            })
+            .Take(5)
+            .ToListAsync();
+
+        return Json(data);
+    }
+    [HttpGet]
     [Route("Dashboard/Analytics")]
     public IActionResult Analytics() => View();
 
@@ -164,7 +179,7 @@ public class DashboardController : Controller
         }
 
         var commonMistakes = await _context.MistakeLogs
-            .GroupBy(m => m.MistakeType ?? "General")
+            .GroupBy(m => m.ExerciseType ?? "General")
             .Select(g => new {
                 type = g.Key,
                 count = g.Count()

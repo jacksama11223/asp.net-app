@@ -343,8 +343,9 @@ public partial class SmartLMSContext : DbContext
         });
 
         modelBuilder.Entity<UserBadge>(entity => {
-            entity.HasKey(e => e.BadgeId);
+            entity.HasKey(e => new { e.UserId, e.BadgeId });
             entity.HasOne(d => d.User).WithMany(p => p.UserBadges).HasForeignKey(d => d.UserId);
+            entity.HasOne<Badge>().WithMany(b => b.UserBadges).HasForeignKey(ub => ub.BadgeId);
         });
 
         modelBuilder.Entity<CommissionRate>(entity => {

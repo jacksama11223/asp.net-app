@@ -52,6 +52,8 @@ public class CodingChallengeController : Controller
                 UserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0"),
                 CourseId = challenge.CourseId ?? 0,
                 LessonId = challenge.LessonId ?? 0,
+                ExerciseType = "Code",
+                UserAnswer = submission.Code ?? string.Empty,
                 MistakeType = "CodingError",
                 CorrectionNote = result.Message,
                 CreatedAt = System.DateTime.Now

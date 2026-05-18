@@ -239,11 +239,11 @@ namespace SmartLMS.Business
                                where ub.UserId == userId
                                select b).ToListAsync();
 
-            var totalXP = user.TotalXP;
+            var totalXP = user.TotalXP ?? 0;
             var level = (totalXP / 1000) + 1; // Công thức level đơn giản
             var xpToNext = 1000 - (totalXP % 1000);
 
-            return new {
+            return new AchievementHubViewModel {
                 User = user,
                 Badges = badges,
                 Level = level,

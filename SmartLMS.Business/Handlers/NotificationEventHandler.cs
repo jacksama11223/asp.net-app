@@ -18,13 +18,27 @@ public class NotificationEventHandler : INotificationHandler<AssessmentCompleted
 
     public async Task Handle(AssessmentCompletedEvent notification, CancellationToken cancellationToken)
     {
-        // 1. Gửi Email thông báo
-        await _emailService.SendEmailAsync("student@example.com", "Chúc mừng hoàn thành bài thi!", $"Bạn đã nhận được {notification.XPEarned} XP.");
+        // 1. Gửi Email thông báo (Bọc try-catch để tránh làm hỏng giao dịch chính)
+        try
+        {
+            await _emailService.SendEmailAsync("student@example.com", "Chúc mừng hoàn thành bài thi!", $"Bạn đã nhận được {notification.XPEarned} XP.");
+        }
+        catch (System.Exception ex)
+        {
+            System.Console.WriteLine($"[Warning] Không thể gửi email thông báo: {ex.Message}");
+        }
 
-        // 2. Bắn Webhook ra hệ thống bên ngoài (Discord/Slack)
-        await _webhookService.SendPayloadAsync("https://discord.com/api/webhooks/dummy", new {
-            content = $"🚀 Học viên ID {notification.UserId} vừa hoàn thành bài thi với {notification.XPEarned} XP!"
-        });
+        // 2. Bắn Webhook ra hệ thống bên ngoài (Discord/Slack - Bọc try-catch)
+        try
+        {
+            await _webhookService.SendPayloadAsync("https://discord.com/api/webhooks/dummy", new {
+                content = $"🚀 Học viên ID {notification.UserId} vừa hoàn thành bài thi với {notification.XPEarned} XP!"
+            });
+        }
+        catch (System.Exception ex)
+        {
+            System.Console.WriteLine($"[Warning] Không thể gửi webhook thông báo: {ex.Message}");
+        }
         
         // LƯU Ý: Việc đẩy SignalR Real-time sẽ được xử lý bởi WebNotificationHandler tại tầng SmartLMS.Web
         // để đảm bảo tính Modular Monolith (Business không tham chiếu Web).

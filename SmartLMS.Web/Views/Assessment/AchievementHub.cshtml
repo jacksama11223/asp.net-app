@@ -1,4 +1,4 @@
-@model dynamic
+@model SmartLMS.Models.AchievementHubViewModel
 @{
     ViewData["Title"] = "Trung Tâm Vinh Danh (Achievement Hub)";
     var user = Model.User;
@@ -133,7 +133,7 @@
                         @foreach (var badge in badges)
                         {
                             <div class="badge-item">
-                                <span class="badge-icon">@badge.Icon</span>
+                                <span class="badge-icon">@badge.IconUrl</span>
                                 <div class="badge-name">@badge.Name</div>
                                 <div class="text-xs text-muted mt-1">Đã nhận</div>
                             </div>
