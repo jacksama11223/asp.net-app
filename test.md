@@ -51,11 +51,11 @@ Sau khi build và deploy thành công trên VPS, bạn có thể chạy script k
 *Script sẽ quét qua 8 module lớn bao gồm: Đăng nhập/Session, Hệ thống Audit Trail lưu vết DB, Risk Predictor ML.NET, Coding Sandbox (Monaco Editor compiler), Creator Sandbox Banking & AI Fallback, Achievement Hub (XP & Badges), Negotiate SignalR real-time, và Database Integrity.*
 
 ### B. Quét chẩn đoán tính toàn vẹn của nút bấm (Button Integrity Verification)
-Để ngăn chặn các nút bấm "chết" (không gán sự kiện, trỏ đến link rỗng hoặc chỉ in log/alert giả lập), hãy chạy script chẩn đoán tĩnh:
+Để ngăn chặn các nút bấm "chết" (không gán sự kiện, trỏ đến link rỗng hoặc chỉ in log/alert giả lập), đồng thời bóc tách thuộc tính placeholder/title và truy vết các API Endpoint thực tế được liên kết, hãy chạy script chẩn đoán tĩnh nâng cao:
 ```bash
-node verify_buttons.js
+node verify_buttons_advanced.js
 ```
-*Script sẽ tự động phân tích tất cả các tệp React (`.js`, `.jsx`, `.tsx`) và tệp View ASP.NET Core (`.cshtml`), đồng thời xuất báo cáo chi tiết các nút khả nghi tại tệp [verify_buttons_report.md](file:///c:/code/asp.net/verify_buttons_report.md).*
+*Script sẽ tự động phân tích tất cả các tệp React (`.js`, `.jsx`, `.tsx`) và tệp View ASP.NET Core (`.cshtml`), đồng thời xuất báo cáo ánh xạ API & placeholder chi tiết tại tệp [verify_buttons_advanced_report.md](file:///c:/code/asp.net/verify_buttons_advanced_report.md).*
 
 ---
 

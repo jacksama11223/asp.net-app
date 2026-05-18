@@ -5,6 +5,8 @@
 - **Added:** Bổ sung dropdown liên kết động Khóa học và Bài giảng thông minh khi biên soạn/tạo bài tập lập trình mới.
 - **Added:** Nút "AI tự động tạo thử thách thực hành Code" dự phòng (Fallback) khi học viên truy cập bài học chưa có bài sandbox.
 - **Added:** Endpoint API `/api/compiler/challenges/auto-create/{lessonId}` trong `CompilerController.cs` tự động sinh thử thách C# Roslyn Sandbox.
+- **Added:** Tạo mới công cụ kiểm thử tĩnh nâng cao `verify_buttons_advanced.js` hỗ trợ tự động bóc tách placeholder/title và truy quét ngược thân hàm để ánh xạ chính xác API Endpoint Backend.
+- **Added:** Xuất báo cáo khảo sát tính toàn vẹn và ánh xạ API của 239 nút bấm hệ thống tại `verify_buttons_advanced_report.md`.
 - **Fixed:** Định dạng responsive grid 4 cột cho Tabs phụ trong Học viên Workspace để tránh gãy layout.
 - **Fixed:** Viết lại toàn bộ bộ kiểm thử tự động `test_enterprise.cjs` hỗ trợ tham số URL tùy chọn và test đầy đủ Monaco Sandbox + AI fallback generator.
 - **Fixed:** Khắc phục triệt để lỗi Roslyn CS0122 (inaccessible due to protection level) khi biên dịch code C# của học viên bằng cách sử dụng class `ScriptGlobals` public.

@@ -1,12 +1,12 @@
 # Kế hoạch Tái cấu trúc & Hoàn thiện Hệ thống Nút bấm (Button Refactoring & Feature Expansion Plan)
 
-Tài liệu này được biên soạn bởi Đội ngũ Lập trình viên Enterprise, dựa trên kết quả quét tĩnh từ [verify_buttons_report.md](file:///c:/code/asp.net/verify_buttons_report.md). Chúng tôi đưa ra lộ trình chi tiết để kết nối các sự kiện "nút chết", tối ưu hóa luồng dữ liệu (Data Flows) và đề xuất các trang/tính năng mới nhằm đưa **SmartLMS.AI** đạt chuẩn SaaS thương mại hoàn chỉnh.
+Tài liệu này được biên soạn bởi Đội ngũ Lập trình viên Enterprise, dựa trên kết quả quét tĩnh nâng cao từ [verify_buttons_advanced_report.md](file:///c:/code/asp.net/verify_buttons_advanced_report.md). Chúng tôi đưa ra lộ trình chi tiết để kết nối các sự kiện "nút chết", tối ưu hóa luồng dữ liệu (Data Flows) và đề xuất các trang/tính năng mới nhằm đưa **SmartLMS.AI** đạt chuẩn SaaS thương mại hoàn chỉnh.
 
 ---
 
 ## 🛠️ PHẦN 1: KẾ HOẠCH TÁI CẤU TRÚC CÁC LUỒNG SỰ KIỆN BỊ GIÁN ĐOẠN
 
-Chúng tôi chia 131 cảnh báo nút bấm bị gián đoạn thành 4 cụm tính năng chính để triển khai đồng bộ:
+Chúng tôi chia 137 cảnh báo nút bấm bị gián đoạn thành 4 cụm tính năng chính để triển khai đồng bộ:
 
 ### Cụm 1: Luồng Quản trị Giáo trình của Giảng viên (Creator Studio & Curriculum Flows)
 *   **Các tệp bị ảnh hưởng:** [CourseManager.jsx](file:///c:/code/asp.net/react-test-frontend/src/pages/CourseManager.jsx), [Curriculum.cshtml](file:///c:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Curriculum.cshtml), [Edit.cshtml](file:///c:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Edit.cshtml).
@@ -81,8 +81,8 @@ gantt
 ```
 
 ### Cách thức verify sau mỗi Phase:
-Sau khi hoàn thành từng Phase, nhà phát triển PHẢI chạy lại công cụ kiểm tra tính toàn vẹn:
+Sau khi hoàn thành từng Phase, nhà phát triển PHẢI chạy lại công cụ kiểm tra tính toàn vẹn tĩnh nâng cao:
 ```bash
-node verify_buttons.js
+node verify_buttons_advanced.js
 ```
-*Mục tiêu:* Giảm dần số lượng dead buttons từ **131** về **0** trước khi phát hành chính thức!
+*Mục tiêu:* Giảm dần số lượng dead buttons từ **137** về **0** trước khi phát hành chính thức!
