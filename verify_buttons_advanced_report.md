@@ -1,6 +1,6 @@
 # Báo cáo Chẩn đoán API & Tính năng Nút bấm (Enterprise UI Button API Mapping)
 
-*Thời gian quét:* 18:53:05 18/5/2026
+*Thời gian quét:* 18:54:36 18/5/2026
 *Tổng số tệp UI đã phân tích:* **96**
 
 ## DANH SÁCH KHẢO SÁT CHI TIẾT THEO TỪNG TRANG (PAGE-BY-PAGE API MAP)
