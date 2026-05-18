@@ -1,12 +1,13 @@
 # Báo cáo Chẩn đoán API & Tính năng Nút bấm (Enterprise UI Button API Mapping)
 
-*Thời gian quét:* 15:45:02 18/5/2026
+*Thời gian quét:* 17:47:10 18/5/2026
 *Tổng số tệp UI đã phân tích:* **91**
 
 ## DANH SÁCH KHẢO SÁT CHI TIẾT THEO TỪNG TRANG (PAGE-BY-PAGE API MAP)
 
 ### 📄 Trang: [Sidebar.jsx](file:///C:/code/asp.net/react-test-frontend/src/components/Sidebar.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\components\Sidebar.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của Sidebar)](http://141.253.114.218/ (Route mặc định / hoặc trang con của Sidebar))
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\components*
 
@@ -22,6 +23,7 @@
 
 ### 📄 Trang: [Topbar.jsx](file:///C:/code/asp.net/react-test-frontend/src/components/Topbar.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\components\Topbar.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của Topbar)](http://141.253.114.218/ (Route mặc định / hoặc trang con của Topbar))
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\components*
 
@@ -37,6 +39,7 @@
 
 ### 📄 Trang: [BookingPage.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/BookingPage.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\BookingPage.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/booking](http://141.253.114.218/booking)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -55,6 +58,7 @@
 
 ### 📄 Trang: [CheckoutQR.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CheckoutQR.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CheckoutQR.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/checkout/1](http://141.253.114.218/checkout/1)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -74,6 +78,7 @@
 
 ### 📄 Trang: [CodeWorkspace.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CodeWorkspace.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CodeWorkspace.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/coding/1](http://141.253.114.218/coding/1)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -90,6 +95,7 @@
 
 ### 📄 Trang: [Community.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/Community.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\Community.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/ (Route mặc định / hoặc trang con của Community)](http://141.253.114.218/ (Route mặc định / hoặc trang con của Community))
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Diễn đàn thảo luận và học tập cộng đồng tích hợp Q&A và mạng xã hội học tập.*
 
@@ -109,6 +115,7 @@
 
 ### 📄 Trang: [CommunityFriends.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CommunityFriends.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CommunityFriends.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/community/friends](http://141.253.114.218/community/friends)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -130,6 +137,7 @@
 
 ### 📄 Trang: [CommunityNewPost.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CommunityNewPost.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CommunityNewPost.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/community/post/new](http://141.253.114.218/community/post/new)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -149,6 +157,7 @@
 
 ### 📄 Trang: [CommunityQuizBuilder.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CommunityQuizBuilder.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CommunityQuizBuilder.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/community/quiz-builder](http://141.253.114.218/community/quiz-builder)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -167,6 +176,7 @@
 
 ### 📄 Trang: [CourseDetails.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CourseDetails.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CourseDetails.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/course/1](http://141.253.114.218/course/1)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -189,6 +199,7 @@
 
 ### 📄 Trang: [CourseManager.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CourseManager.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CourseManager.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/creator/courses](http://141.253.114.218/creator/courses)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Quản lý khóa học, thiết lập bài học và biên soạn đề bài thực hành C# Roslyn Sandbox cho Giảng viên.*
 
@@ -219,6 +230,7 @@
 
 ### 📄 Trang: [Courses.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/Courses.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\Courses.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/courses](http://141.253.114.218/courses)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Danh sách thư viện khóa học công khai trên hệ thống dành cho mọi đối tượng học viên.*
 
@@ -239,6 +251,7 @@
 
 ### 📄 Trang: [Dashboard.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/Dashboard.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\Dashboard.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/dashboard](http://141.253.114.218/dashboard)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Bảng thống kê hiệu năng, tỷ lệ hoàn thành khóa học và phân tích rủi ro thất nghiệp bằng trí tuệ nhân tạo (AI Predictor).*
 
@@ -262,6 +275,7 @@
 
 ### 📄 Trang: [ForumHome.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/ForumHome.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\ForumHome.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/community](http://141.253.114.218/community)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -281,6 +295,7 @@
 
 ### 📄 Trang: [LandingPage.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/LandingPage.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\LandingPage.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/](http://141.253.114.218/)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Trang chủ giới thiệu nền tảng SmartLMS.AI, tiếp thị các khóa học nổi bật và dẫn nhập đăng ký.*
 
@@ -301,6 +316,7 @@
 
 ### 📄 Trang: [Leaderboard.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/Leaderboard.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\Leaderboard.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/leaderboard](http://141.253.114.218/leaderboard)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -318,6 +334,7 @@
 
 ### 📄 Trang: [LoginPage.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/LoginPage.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\LoginPage.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/login](http://141.253.114.218/login)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Cửa ngõ đăng nhập hệ thống phân quyền đa vai trò (Học viên, Giảng viên, Admin).*
 
@@ -335,6 +352,7 @@
 
 ### 📄 Trang: [MessageCenter.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/MessageCenter.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\MessageCenter.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/creator/messages](http://141.253.114.218/creator/messages)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -352,6 +370,7 @@
 
 ### 📄 Trang: [MistakeNotebook.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/MistakeNotebook.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\MistakeNotebook.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/mistakes](http://141.253.114.218/mistakes)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Sổ tay lưu vết các lỗi biên dịch, lỗi logic C# và gợi ý hướng khắc phục tự động bằng AI học máy.*
 
@@ -371,6 +390,7 @@
 
 ### 📄 Trang: [MyLearning.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/MyLearning.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\MyLearning.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/my-learning](http://141.253.114.218/my-learning)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -391,6 +411,7 @@
 
 ### 📄 Trang: [PersonalWiki.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/PersonalWiki.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\PersonalWiki.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/wiki](http://141.253.114.218/wiki)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -409,6 +430,7 @@
 
 ### 📄 Trang: [PublicProfile.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/PublicProfile.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\PublicProfile.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/profile/1](http://141.253.114.218/profile/1)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Phân hệ giao diện chức năng của Học viên/Giảng viên tại react-test-frontend\src\pages*
 
@@ -426,6 +448,7 @@
 
 ### 📄 Trang: [RegisterPage.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/RegisterPage.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\RegisterPage.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/register](http://141.253.114.218/register)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Trang đăng ký tài khoản học viên mới, mã hóa mật khẩu bảo mật qua EncryptionService.*
 
@@ -443,6 +466,7 @@
 
 ### 📄 Trang: [StudyWorkspace.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/StudyWorkspace.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\StudyWorkspace.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/study/1](http://141.253.114.218/study/1)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Không gian học tập tích hợp trình chiếu giáo trình và nhúng Monaco IDE thực hành biên dịch code trực tiếp cho Học viên.*
 
@@ -466,6 +490,7 @@
 
 ### 📄 Trang: [TutorDashboard.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorDashboard.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorDashboard.jsx`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/tutor/dashboard](http://141.253.114.218/tutor/dashboard)
 * **Công nghệ:** `React`
 * **Mô tả tính năng trang:** *Bảng điều khiển của Gia sư quản lý lịch rảnh và duyệt các cuộc hẹn tư vấn từ học viên.*
 
@@ -485,6 +510,7 @@
 
 ### 📄 Trang: [AccessDenied.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Account/AccessDenied.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Account\AccessDenied.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Account/AccessDenied](http://141.253.114.218/Account/AccessDenied)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Account*
 
@@ -501,6 +527,7 @@
 
 ### 📄 Trang: [Login.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Account/Login.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Account\Login.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Account/Login](http://141.253.114.218/Account/Login)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Account*
 
@@ -516,6 +543,7 @@
 
 ### 📄 Trang: [Register.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Account/Register.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Account\Register.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Account/Register](http://141.253.114.218/Account/Register)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Account*
 
@@ -531,6 +559,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Affiliate/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Affiliate\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Affiliate](http://141.253.114.218/Affiliate)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Affiliate*
 
@@ -546,6 +575,7 @@
 
 ### 📄 Trang: [BadgeStudio.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/BadgeStudio.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\BadgeStudio.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Assessment/BadgeStudio](http://141.253.114.218/Assessment/BadgeStudio)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Hệ thống thiết kế huy hiệu, vinh danh thành tích và gamification điểm thưởng XP của admin.*
 
@@ -565,6 +595,7 @@
 
 ### 📄 Trang: [BulkImport.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/BulkImport.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\BulkImport.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Assessment/BulkImport](http://141.253.114.218/Assessment/BulkImport)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
@@ -580,6 +611,7 @@
 
 ### 📄 Trang: [ExamAssembler.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/ExamAssembler.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\ExamAssembler.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Assessment/ExamAssembler](http://141.253.114.218/Assessment/ExamAssembler)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Hệ thống tự động biên soạn đề thi, trắc nghiệm và quản lý ngân hàng câu hỏi.*
 
@@ -597,6 +629,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Assessment](http://141.253.114.218/Assessment)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
@@ -612,6 +645,7 @@
 
 ### 📄 Trang: [QuestionBuilder.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/QuestionBuilder.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\QuestionBuilder.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Assessment/QuestionBuilder](http://141.253.114.218/Assessment/QuestionBuilder)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
@@ -629,6 +663,7 @@
 
 ### 📄 Trang: [RuleEngine.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/RuleEngine.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\RuleEngine.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Assessment/RuleEngine](http://141.253.114.218/Assessment/RuleEngine)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Assessment*
 
@@ -646,6 +681,7 @@
 
 ### 📄 Trang: [Login.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Auth/Login.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Auth\Login.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Auth/Login](http://141.253.114.218/Auth/Login)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Auth*
 
@@ -661,6 +697,7 @@
 
 ### 📄 Trang: [Register.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Auth/Register.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Auth\Register.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Auth/Register](http://141.253.114.218/Auth/Register)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Auth*
 
@@ -676,6 +713,7 @@
 
 ### 📄 Trang: [Solve.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallenge/Solve.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallenge\Solve.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CodingChallenge/Solve](http://141.253.114.218/CodingChallenge/Solve)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallenge*
 
@@ -691,6 +729,7 @@
 
 ### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Create.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallengeManagement\Create.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CodingChallengeManagement/Create](http://141.253.114.218/CodingChallengeManagement/Create)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallengeManagement*
 
@@ -708,6 +747,7 @@
 
 ### 📄 Trang: [Edit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Edit.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallengeManagement\Edit.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CodingChallengeManagement/Edit](http://141.253.114.218/CodingChallengeManagement/Edit)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallengeManagement*
 
@@ -726,6 +766,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallengeManagement\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CodingChallengeManagement](http://141.253.114.218/CodingChallengeManagement)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CodingChallengeManagement*
 
@@ -742,6 +783,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Cohort/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Cohort\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Cohort](http://141.253.114.218/Cohort)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Cohort*
 
@@ -766,6 +808,7 @@
 
 ### 📄 Trang: [Members.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Cohort/Members.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Cohort\Members.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Cohort/Members](http://141.253.114.218/Cohort/Members)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Quản lý thành viên lớp học, thêm học viên vào khóa học/cohort cụ thể.*
 
@@ -787,6 +830,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Community/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Community\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Community](http://141.253.114.218/Community)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Community*
 
@@ -808,6 +852,7 @@
 
 ### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Coupon/Create.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Coupon\Create.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Coupon/Create](http://141.253.114.218/Coupon/Create)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Coupon*
 
@@ -825,6 +870,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Coupon/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Coupon\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Coupon](http://141.253.114.218/Coupon)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Coupon*
 
@@ -841,6 +887,7 @@
 
 ### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Create.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Create.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CourseManagement/Create](http://141.253.114.218/CourseManagement/Create)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
@@ -861,6 +908,7 @@
 
 ### 📄 Trang: [Curriculum.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Curriculum.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Curriculum.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CourseManagement/Curriculum](http://141.253.114.218/CourseManagement/Curriculum)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Thiết lập khung chương trình học, thêm bớt chương mục và thứ tự bài giảng ở trang quản trị MVC.*
 
@@ -880,6 +928,7 @@
 
 ### 📄 Trang: [Edit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Edit.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Edit.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CourseManagement/Edit](http://141.253.114.218/CourseManagement/Edit)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
@@ -900,6 +949,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CourseManagement](http://141.253.114.218/CourseManagement)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
@@ -924,6 +974,7 @@
 
 ### 📄 Trang: [_CourseDetailPartial.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/_CourseDetailPartial.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\_CourseDetailPartial.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/CourseManagement/_CourseDetailPartial](http://141.253.114.218/CourseManagement/_CourseDetailPartial)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục CourseManagement*
 
@@ -939,6 +990,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Dashboard/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Dashboard\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Dashboard](http://141.253.114.218/Dashboard)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Dashboard*
 
@@ -958,6 +1010,7 @@
 
 ### 📄 Trang: [Pulse.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Dashboard/Pulse.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Dashboard\Pulse.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Dashboard/Pulse](http://141.253.114.218/Dashboard/Pulse)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Dashboard*
 
@@ -975,6 +1028,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Home/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Home\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Home](http://141.253.114.218/Home)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Home*
 
@@ -990,6 +1044,7 @@
 
 ### 📄 Trang: [ApiKeys.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/IAM/ApiKeys.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\IAM\ApiKeys.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/IAM/ApiKeys](http://141.253.114.218/IAM/ApiKeys)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục IAM*
 
@@ -1011,6 +1066,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Integrations/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Integrations\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Integrations](http://141.253.114.218/Integrations)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Integrations*
 
@@ -1026,6 +1082,7 @@
 
 ### 📄 Trang: [CertificateManager.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Marketing/CertificateManager.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Marketing\CertificateManager.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Marketing/CertificateManager](http://141.253.114.218/Marketing/CertificateManager)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Marketing*
 
@@ -1044,6 +1101,7 @@
 
 ### 📄 Trang: [Designer.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Marketing/Designer.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Marketing\Designer.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Marketing/Designer](http://141.253.114.218/Marketing/Designer)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Marketing*
 
@@ -1059,6 +1117,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Marketing/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Marketing\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Marketing](http://141.253.114.218/Marketing)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Marketing*
 
@@ -1074,6 +1133,7 @@
 
 ### 📄 Trang: [Failure.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/Failure.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Payment\Failure.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Payment/Failure](http://141.253.114.218/Payment/Failure)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Payment*
 
@@ -1090,6 +1150,7 @@
 
 ### 📄 Trang: [PaymentResults.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/PaymentResults.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Payment\PaymentResults.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Payment/PaymentResults](http://141.253.114.218/Payment/PaymentResults)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Payment*
 
@@ -1107,6 +1168,7 @@
 
 ### 📄 Trang: [Success.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/Success.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Payment\Success.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Payment/Success](http://141.253.114.218/Payment/Success)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Payment*
 
@@ -1122,6 +1184,7 @@
 
 ### 📄 Trang: [Audit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Revenue/Audit.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Revenue\Audit.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Revenue/Audit](http://141.253.114.218/Revenue/Audit)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Lịch sử dòng tiền, doanh thu và kiểm toán thanh toán.*
 
@@ -1141,6 +1204,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Revenue/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Revenue\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Revenue](http://141.253.114.218/Revenue)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Revenue*
 
@@ -1156,6 +1220,7 @@
 
 ### 📄 Trang: [PaymentConfig.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Revenue/PaymentConfig.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Revenue\PaymentConfig.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Revenue/PaymentConfig](http://141.253.114.218/Revenue/PaymentConfig)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Revenue*
 
@@ -1173,6 +1238,7 @@
 
 ### 📄 Trang: [_CommunityLayout.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Shared/_CommunityLayout.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Shared/_CommunityLayout](http://141.253.114.218/Shared/_CommunityLayout)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Shared*
 
@@ -1189,6 +1255,7 @@
 
 ### 📄 Trang: [_Layout.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Shared/_Layout.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Shared\_Layout.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Shared/_Layout](http://141.253.114.218/Shared/_Layout)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Shared*
 
@@ -1206,6 +1273,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/SqlManagement/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\SqlManagement\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/SqlManagement](http://141.253.114.218/SqlManagement)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục SqlManagement*
 
@@ -1221,6 +1289,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Students/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Students\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/Students](http://141.253.114.218/Students)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục Students*
 
@@ -1239,6 +1308,7 @@
 
 ### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/UserManagement/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\UserManagement\Index.cshtml`
+* **Đường dẫn chạy thử trên VPS:** [http://141.253.114.218/UserManagement](http://141.253.114.218/UserManagement)
 * **Công nghệ:** `ASP.NET Core (CSHTML)`
 * **Mô tả tính năng trang:** *Giao diện quản lý MVC thuộc thư mục UserManagement*
 

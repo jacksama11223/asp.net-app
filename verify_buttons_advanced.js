@@ -36,6 +36,60 @@ const PAGE_DESCRIPTIONS = {
     'Audit.cshtml': 'Lịch sử dòng tiền, doanh thu và kiểm toán thanh toán.'
 };
 
+const REACT_COMPONENT_ROUTES = {
+    'LandingPage': '/',
+    'LoginPage': '/login',
+    'RegisterPage': '/register',
+    'Dashboard': '/dashboard',
+    'Courses': '/courses',
+    'CheckoutQR': '/checkout/1',
+    'CourseDetails': '/course/1',
+    'MyLearning': '/my-learning',
+    'ForumHome': '/community',
+    'CommunityFriends': '/community/friends',
+    'CommunityNewPost': '/community/post/new',
+    'CommunityQuizBuilder': '/community/quiz-builder',
+    'PersonalWiki': '/wiki',
+    'BookingPage': '/booking',
+    'StudyWorkspace': '/study/1',
+    'CodeWorkspace': '/coding/1',
+    'MistakeNotebook': '/mistakes',
+    'Leaderboard': '/leaderboard',
+    'PublicProfile': '/profile/1',
+    'CourseManager': '/creator/courses',
+    'MessageCenter': '/creator/messages',
+    'CreatorAnalytics': '/creator/analytics',
+    'TutorDashboard': '/tutor/dashboard'
+};
+
+const VPS_BASE_URL = 'http://141.253.114.218';
+
+function getLiveUrl(filePath, fileName, type) {
+    if (type === 'React') {
+        const compName = fileName.replace(/\.(jsx|js|tsx)$/, '');
+        const route = REACT_COMPONENT_ROUTES[compName];
+        if (route) {
+            return `${VPS_BASE_URL}${route}`;
+        }
+        return `${VPS_BASE_URL}/ (Route mặc định / hoặc trang con của ${compName})`;
+    } else {
+        const normalized = filePath.replace(/\\/g, '/');
+        const viewsIndex = normalized.indexOf('Views/');
+        if (viewsIndex !== -1) {
+            const pathParts = normalized.substring(viewsIndex + 6).replace(/\.cshtml$/, '').split('/');
+            if (pathParts.length >= 2) {
+                const controller = pathParts[0];
+                const action = pathParts[1];
+                if (action.toLowerCase() === 'index') {
+                    return `${VPS_BASE_URL}/${controller}`;
+                }
+                return `${VPS_BASE_URL}/${controller}/${action}`;
+            }
+        }
+        return `${VPS_BASE_URL}/Account/Login (Trang Quản trị yêu cầu phân quyền)`;
+    }
+}
+
 // Quét đệ quy
 function scanDirectory(dir, extensions) {
     let files = [];
@@ -159,6 +213,7 @@ function analyzeReactFile(filePath) {
             fileName,
             description: pageDesc,
             type: 'React',
+            liveUrl: getLiveUrl(relativePath, fileName, 'React'),
             working: [],
             dead: []
         };
@@ -300,6 +355,7 @@ function analyzeCshtmlFile(filePath) {
             fileName,
             description: pageDesc,
             type: 'ASP.NET Core (CSHTML)',
+            liveUrl: getLiveUrl(relativePath, fileName, 'CSHTML'),
             working: [],
             dead: []
         };
@@ -452,6 +508,7 @@ function run() {
 
         md += `### 📄 Trang: [${page.fileName}](file:///${path.join(WORKSPACE_DIR, page.filePath).replace(/\\/g, '/')})\n`;
         md += `* **Đường dẫn tệp:** \`${page.filePath}\`\n`;
+        md += `* **Đường dẫn chạy thử trên VPS:** [${page.liveUrl}](${page.liveUrl})\n`;
         md += `* **Công nghệ:** \`${page.type}\`\n`;
         md += `* **Mô tả tính năng trang:** *${page.description}*\n\n`;
 
