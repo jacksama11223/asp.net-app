@@ -22,3 +22,9 @@
 ### 4. Luồng Tương tác Đa kênh (Omnichannel)
 - **Cộng đồng**: Tự động vinh danh học viên lên Community Hub (Auto-Post).
 - **Thông báo**: SignalR (Real-time Popup) và Webhook (Discord/Slack Integration).
+
+### 5. Luồng Hợp nhất Giao diện & Trải nghiệm (Unified Navigation & Dead Buttons Integration)
+- **Giải cứu 25 trang mồ côi**: Thiết lập mối liên kết di chuyển tự nhiên giữa React (Học viên) và ASP.NET Core MVC (Quản trị), đưa chỉ số Orphan Pages về 0.
+- **Kích hoạt 85 nút chết**: Lập trình phản hồi sự kiện DOM (Form Wizard, Modal, SweetAlert2) và gọi API an toàn.
+- **4 mảnh ghép kiến trúc nâng cao**: Tích hợp trạng thái Loading (Anti-Spam), Axios Interceptors (Token Expiry & Error Toast), Controller Security [Authorize], và SignalR real-time chat/notification.
+
