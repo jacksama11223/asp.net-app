@@ -50,4 +50,5 @@ public partial class User
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
     public virtual ICollection<UserBadge> UserBadges { get; set; } = new List<UserBadge>();
     public virtual ICollection<DocumentPage> DocumentPages { get; set; } = new List<DocumentPage>();
+    public virtual ICollection<UserLesson> UserLessons { get; set; } = new List<UserLesson>();
 }

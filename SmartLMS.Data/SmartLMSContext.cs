@@ -142,6 +142,7 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Flashcard> Flashcards { get; set; }
     public virtual DbSet<MistakeLog> MistakeLogs { get; set; }
     public virtual DbSet<LessonQuestion> LessonQuestions { get; set; }
+    public virtual DbSet<UserLesson> UserLessons { get; set; }
     
     // Community Module
     public virtual DbSet<Post> Posts { get; set; }
@@ -457,6 +458,25 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Sender).WithMany().HasForeignKey(d => d.SenderId).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(d => d.Receiver).WithMany().HasForeignKey(d => d.ReceiverId).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UserLesson>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.LessonId });
+            entity.ToTable("UserLessons");
+            entity.Property(e => e.LastWatchedSecond).HasDefaultValue(0);
+            entity.Property(e => e.IsCompleted).HasDefaultValue(false);
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+            
+            entity.HasOne(d => d.User)
+                  .WithMany(p => p.UserLessons)
+                  .HasForeignKey(d => d.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+                  
+            entity.HasOne(d => d.Lesson)
+                  .WithMany()
+                  .HasForeignKey(d => d.LessonId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         OnModelCreatingPartial(modelBuilder);
