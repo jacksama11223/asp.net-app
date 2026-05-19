@@ -32,10 +32,11 @@ import { TutorSchedule } from './pages/TutorSchedule';
 import { TutorProfileEdit } from './pages/TutorProfileEdit';
 import { Box, Text } from '@mantine/core';
 import { Toaster } from 'sonner';
+import { useAuthStore } from './store/useAuthStore';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('slms_token');
+  const token = useAuthStore((state) => state.token);
   if (!token) return <Navigate to="/login" replace />;
   return <Layout>{children}</Layout>;
 };

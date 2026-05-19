@@ -16,6 +16,7 @@ import { BASE_URL } from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
 import Editor from '@monaco-editor/react';
 import { toast } from 'sonner';
+import { useAuthStore } from '../store/useAuthStore';
 
 export const StudyWorkspace = () => {
   const { courseId } = useParams();
@@ -112,6 +113,7 @@ export const StudyWorkspace = () => {
               seconds: currentTime,
               isCompleted: isCompleted
             });
+            useAuthStore.getState().setLessonProgress(selectedLesson.lessonId, currentTime);
             if (isCompleted) {
               toast.success("Chúc mừng! Bạn đã hoàn thành 90% video bài giảng này!");
               setCompletionRate(prev => Math.min(prev + 5, 100));

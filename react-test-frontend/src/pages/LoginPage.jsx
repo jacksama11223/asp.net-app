@@ -19,6 +19,7 @@ import { LuZap, LuSend, LuSettings, LuArrowLeft } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useAuthStore } from '../store/useAuthStore';
 
 import { BASE_URL } from '../api';
 export const LoginPage = () => {
@@ -37,8 +38,7 @@ export const LoginPage = () => {
         username,
         password
       });
-      localStorage.setItem('slms_token', response.data.token);
-      localStorage.setItem('slms_user', JSON.stringify(response.data));
+      useAuthStore.getState().login(response.data.token, response.data);
       toast.success('Login successful! Welcome back.');
       navigate('/dashboard');
     } catch (err) {
