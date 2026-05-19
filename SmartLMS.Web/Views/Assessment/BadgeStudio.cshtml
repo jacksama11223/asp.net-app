@@ -18,7 +18,7 @@
                 <h1 class="m-0 text-dark"><i class="fas fa-medal mr-2"></i>Badge Studio</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <button class="btn btn-indigo shadow-sm" data-toggle="modal" data-target="#addBadgeModal">
+                <button class="btn btn-indigo shadow-sm" data-toggle="modal" data-target="#addBadgeModal" onclick="$('#addBadgeModal').modal('show'); toastr.info('Đang mở form tạo huy hiệu mới...');">
                     <i class="fas fa-plus-circle mr-1"></i> Tạo Huy hiệu mới
                 </button>
             </div>
@@ -41,7 +41,7 @@
                             <span class="rarity-@badge.Rarity.ToLower()">@badge.Rarity</span>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <button class="btn btn-sm btn-outline-indigo btn-block">Chỉnh sửa</button>
+                            <button class="btn btn-sm btn-outline-indigo btn-block" onclick="toastr.info('Đang tải dữ liệu thiết kế huy hiệu để chỉnh sửa...');">Chỉnh sửa</button>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-indigo text-white">
                     <h5 class="modal-title">Tạo Huy hiệu mới</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                    <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#addBadgeModal').modal('hide');"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#addBadgeModal').modal('hide');">Hủy</button>
                     <button type="submit" class="btn btn-indigo">Lưu huy hiệu</button>
                 </div>
             </div>

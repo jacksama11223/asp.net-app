@@ -177,6 +177,10 @@ export const CommunityQuizBuilder = () => {
                           variant="light" color={i === quiz.correct ? 'teal' : 'gray'}
                           radius="md" size="md" justify="flex-start"
                           className="font-medium whitespace-normal h-auto py-3"
+                          onClick={function() {
+                            setGeneratedQuizzes(prev => prev.map((q, idx) => idx === index ? { ...q, correct: i } : q));
+                            toast.success('Đã chọn đáp án đúng cho câu hỏi trắc nghiệm này!');
+                          }}
                         >
                           {opt}
                         </Button>

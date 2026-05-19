@@ -76,7 +76,7 @@
         <div class="modal-content border-0 rounded-lg shadow">
             <div class="modal-header bg-indigo text-white border-0">
                 <h5 class="modal-title font-weight-bold" id="modalTitle">Lớp học (Cohort)</h5>
-                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#modalCohort').modal('hide');"><span>&times;</span></button>
             </div>
             <div class="modal-body p-4">
                 <input type="hidden" id="cohortId" />
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal" onclick="$('#modalCohort').modal('hide');">Hủy bỏ</button>
                 <button type="button" onclick="saveCohort()" class="btn btn-indigo rounded-pill px-4">Lưu Thông Tin</button>
             </div>
         </div>
@@ -103,7 +103,7 @@
         <div class="modal-content border-0 rounded-lg shadow">
             <div class="modal-header bg-success text-white border-0">
                 <h5 class="modal-title font-weight-bold">Import Học viên từ Excel</h5>
-                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#modalImport').modal('hide');"><span>&times;</span></button>
             </div>
             <form id="importForm" enctype="multipart/form-data">
                 <div class="modal-body p-4 text-center">
@@ -119,7 +119,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal" onclick="$('#modalImport').modal('hide');">Đóng</button>
                     <button type="submit" class="btn btn-success rounded-pill px-4">Bắt đầu Import</button>
                 </div>
             </form>

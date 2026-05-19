@@ -142,8 +142,8 @@ export const CommunityFriends = () => {
                                 </Box>
                                 <Text size="xs" c="dimmed">{user.sharedInterest}</Text>
                                 <Group grow w="100%" mt="md">
-                                  <Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>Hồ sơ</Button>
-                                  <Button radius="xl" color="brand" leftSection={<LuUsers size={16} />} onClick={() => handleSendFriendRequest(user.id, user.name)}>Kết bạn</Button>
+                                  <Button variant="light" radius="xl" color="gray" onClick={function() { navigate(`/profile/${user.id}`); }}>Hồ sơ</Button>
+                                  <Button radius="xl" color="brand" leftSection={<LuUsers size={16} />} onClick={function() { handleSendFriendRequest(user.id, user.name); }}>Kết bạn</Button>
                                 </Group>
                               </Stack>
                             </Paper>
@@ -174,8 +174,8 @@ export const CommunityFriends = () => {
                                 </Box>
                               </Group>
                               <Group>
-                                <Button variant="light" color="teal" size="md" radius="xl" onClick={() => handleAcceptRequest(req.id, req.name)}>Chấp nhận</Button>
-                                <ActionIcon variant="subtle" color="red" size="xl" radius="xl" onClick={() => handleDeclineRequest(req.id, req.name)}><LuLogOut size={20} /></ActionIcon>
+                                <Button variant="light" color="teal" size="md" radius="xl" onClick={function() { handleAcceptRequest(req.id, req.name); }}>Chấp nhận</Button>
+                                <ActionIcon variant="subtle" color="red" size="xl" radius="xl" onClick={function() { handleDeclineRequest(req.id, req.name); }}><LuLogOut size={20} /></ActionIcon>
                               </Group>
                             </Group>
                           </Paper>
@@ -207,7 +207,7 @@ export const CommunityFriends = () => {
                                  radius="xl" 
                                  size="xs" 
                                  leftSection={<LuSend size={14} />}
-                                 onClick={() => {
+                                 onClick={function() {
                                    toast.success(`Mở hộp thoại chat với ${friend.name}...`);
                                    navigate(`/creator/messages`);
                                  }}

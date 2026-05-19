@@ -1,6 +1,6 @@
 # Báo cáo Chẩn đoán Hệ thống: Luồng chuyển trang & Thiết lập Nút bấm (Unified UI Master Audit)
 
-*Thời gian quét:* 09:01:14 19/5/2026
+*Thời gian quét:* 09:15:09 19/5/2026
 *Tổng số tệp UI đã phân tích:* **80**
 *Địa chỉ VPS đích:* **http://141.253.114.218**
 
@@ -8,34 +8,19 @@
 
 | Chỉ số kiểm thử hệ thống | Số lượng | Trạng thái chẩn đoán |
 | :--- | :--- | :--- |
-| 🟢 Nút hoạt động tốt (Gọi API / Local) | **124** | Đạt chuẩn kết nối và nghiệp vụ |
-| 🔄 Nút Chuyển tiếp trang (Navigation) | **102** | Đã cấu hình chuyển hướng luồng đi |
-| 🔴 Nút Chưa hoạt động (Dead Buttons) | **67** | Cần gán API / onclick xử lý |
-| ⚠️ Trang mồ côi (Orphan Pages - Bị cô lập) | **15** | Chưa có nút bấm ở trang khác dẫn tới |
+| 🟢 Nút hoạt động tốt (Gọi API / Local) | **185** | Đạt chuẩn kết nối và nghiệp vụ |
+| 🔄 Nút Chuyển tiếp trang (Navigation) | **110** | Đã cấu hình chuyển hướng luồng đi |
+| 🔴 Nút Chưa hoạt động (Dead Buttons) | **0** | Cần gán API / onclick xử lý |
+| ⚠️ Trang mồ côi (Orphan Pages - Bị cô lập) | **0** | Chưa có nút bấm ở trang khác dẫn tới |
 
 --- 
 
-## ⚠️ DANH SÁCH CÁC TRANG MỒ CÔI (ORPHAN PAGES - 15)
+## ⚠️ DANH SÁCH CÁC TRANG MỒ CÔI (ORPHAN PAGES - 0)
 
 Các trang sau đang bị cô lập khỏi giao diện người dùng chính (không có nút bấm nào từ trang khác dẫn tới):
 
 | Tên Trang | Công nghệ | URL Route | Mô tả tính năng | Khắc phục đề xuất |
 | :--- | :--- | :--- | :--- | :--- |
-| `AccessDenied.cshtml` | `CSHTML` | `/Account/AccessDenied` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Account" asp-action="AccessDenied"` vào Sidebar Admin. |
-| `Solve.cshtml` | `CSHTML` | `/CodingChallenge/Solve` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CodingChallenge" asp-action="Solve"` vào Sidebar Admin. |
-| `Create.cshtml` | `CSHTML` | `/CodingChallengeManagement/Create` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CodingChallengeManagement" asp-action="Create"` vào Sidebar Admin. |
-| `Edit.cshtml` | `CSHTML` | `/CodingChallengeManagement/Edit` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CodingChallengeManagement" asp-action="Edit"` vào Sidebar Admin. |
-| `Members.cshtml` | `CSHTML` | `/Cohort/Members` | Quản lý thành viên lớp học, cohort cụ thể (Admin). | Tích hợp TagHelper `asp-controller="Cohort" asp-action="Members"` vào Sidebar Admin. |
-| `Create.cshtml` | `CSHTML` | `/Coupon/Create` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Coupon" asp-action="Create"` vào Sidebar Admin. |
-| `Create.cshtml` | `CSHTML` | `/CourseManagement/Create` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CourseManagement" asp-action="Create"` vào Sidebar Admin. |
-| `Curriculum.cshtml` | `CSHTML` | `/CourseManagement/Curriculum` | Thiết lập khung chương trình học, thêm bớt bài giảng (Admin). | Tích hợp TagHelper `asp-controller="CourseManagement" asp-action="Curriculum"` vào Sidebar Admin. |
-| `Edit.cshtml` | `CSHTML` | `/CourseManagement/Edit` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CourseManagement" asp-action="Edit"` vào Sidebar Admin. |
-| `Index.cshtml` | `CSHTML` | `/Home` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Home" asp-action="Index"` vào Sidebar Admin. |
-| `Designer.cshtml` | `CSHTML` | `/Marketing/Designer` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Marketing" asp-action="Designer"` vào Sidebar Admin. |
-| `Failure.cshtml` | `CSHTML` | `/Payment/Failure` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Payment" asp-action="Failure"` vào Sidebar Admin. |
-| `PaymentResults.cshtml` | `CSHTML` | `/Payment/PaymentResults` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Payment" asp-action="PaymentResults"` vào Sidebar Admin. |
-| `Success.cshtml` | `CSHTML` | `/Payment/Success` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Payment" asp-action="Success"` vào Sidebar Admin. |
-| `Error.cshtml` | `CSHTML` | `/Shared/Error` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Shared" asp-action="Error"` vào Sidebar Admin. |
 
 
 --- 
@@ -54,11 +39,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 54 | `Quay lại Dashboard` | `<Button variant="subtle" color="gray" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate(-1)} mb="lg">` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 161 | `Mở Sổ tay lỗi sai để` | `<Button variant="subtle" color="brand" size="xs" rightSection={<LuTrendingUp size={14} />} onClick={() => navigate('/mistakes')} className="w-fit p-0">` | **`/mistakes`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 3)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\Dashboard.jsx` | 246 | `Link` | `<Button variant="light" color="cyan" radius="md" leftSection={<LuSparkles size={18} />} onClick={() => navigate('/ai-career-analysis')}>AI Career Advisor</Button>` |
 | `react-test-frontend\src\pages\Dashboard.jsx` | 331 | `Link` | `<CardWrapper className="bg-gradient-to-br from-cyan-500 to-indigo-600 border-none text-white hover:scale-105 transition-all cursor-pointer" p="xl" onClick={() => navigate('/ai-career-analysis')}>` |
+| `react-test-frontend\src\pages\Dashboard.jsx` | 343 | `Link` | `<Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs" onClick={function(e) { e.stopPropagation(); navigate('/ai-career-analysis'); }}>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -188,29 +174,30 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 4)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 71 | `Đặt câu hỏi mới` | `<Button size="lg" radius="xl" color="brand" leftSection={<LuPlus size={20} />} onClick={() => navigate('/community/post/new')} className="shadow-xl shadow-brand-500/20 px-8">` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 152 | `Nút Card` | `<Card p={0} radius="2rem" withBorder className="hover:shadow-xl transition-all border-slate-100 group cursor-pointer bg-white overflow-hidden" onClick={() => navigate(`/community/${post.postId}`)}>` | **`/community/${post.postId}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 263 | `Xem tất cả` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` | **`/leaderboard`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 285 | `Kết nối bạn bè` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` | **`/community/friends`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 82 | `Đặt câu hỏi mới` | `<Button size="lg" radius="xl" color="brand" leftSection={<LuPlus size={20} />} onClick={() => navigate('/community/post/new')} className="shadow-xl shadow-brand-500/20 px-8">` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 163 | `Nút Card` | `<Card p={0} radius="2rem" withBorder className="hover:shadow-xl transition-all border-slate-100 group cursor-pointer bg-white overflow-hidden" onClick={() => navigate(`/community/${post.postId}`)}>` | **`/community/${post.postId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 274 | `Xem tất cả` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` | **`/leaderboard`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 296 | `Kết nối bạn bè` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` | **`/community/friends`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 7)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\components\Topbar.jsx` | 101 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5" onClick={() => navigate('/community')}>` |
 | `react-test-frontend\src\pages\CommunityNewPost.jsx` | 62 | `Link` | `navigate('/community');` |
 | `react-test-frontend\src\pages\CommunityNewPost.jsx` | 79 | `Link` | `onClick={() => navigate('/community')}` |
-| `react-test-frontend\src\pages\CommunityNewPost.jsx` | 196 | `Link` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>` |
+| `react-test-frontend\src\pages\CommunityNewPost.jsx` | 197 | `Link` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 188 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community'); }}><LuZap size={20} /></ActionIcon>` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 98 | `Link` | `<a class="navbar-brand fw-bold fs-4" href="/Community">` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 106 | `Link` | `<li class="nav-item"><a class="nav-link px-3" href="/Community">Khám phá</a></li>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 244 | `Nút Badge` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 171 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 255 | `Nút Badge` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 160 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="brand" size="lg">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -224,23 +211,24 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 132 | `{user` | `<Avatar size={80} radius="xl" color="brand" className="cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate(`/profile/${user.id}`)}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 145 | `Hồ sơ` | `<Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 145 | `Hồ sơ` | `<Button variant="light" radius="xl" color="gray" onClick={function() { navigate(`/profile/${user.id}`); }}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 168 | `{req.` | `<Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>` | **`/profile/${req.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 193 | `{frien` | `<Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>` | **`/profile/${friend.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 203 | `Hồ sơ` | `<Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>` | **`/profile/${friend.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 204 | `Chat` | `<Button variant="light" color="indigo" radius="xl" size="xs" leftSection={<LuSend size={14} />} onClick={() => { toast.success(`Mở hộp thoại chat với ${friend.name}...`); navigate(`/creator/messages`); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 204 | `Chat` | `<Button variant="light" color="indigo" radius="xl" size="xs" leftSection={<LuSend size={14} />} onClick={function() { toast.success(`Mở hộp thoại chat với ${friend.name}...`); navigate(`/creator/messages`); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Community.jsx` | 285 | `Link` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` |
+| `react-test-frontend\src\pages\Community.jsx` | 296 | `Link` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 189 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community/friends'); }}><LuUsers size={20} /></ActionIcon>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 146 | `Kết bạn` | `/api/friends/request` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
-| 177 | `Chấp nhận` | `/api/friends/accept` | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
-| 178 | `Nút ActionIcon` | `/api/friends/decline` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 146 | `Kết bạn` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 177 | `Chấp nhận` | `Không gọi API (Nút giao diện)` | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi | N/A - *Sự kiện cục bộ* |
+| 178 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
 #### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -257,24 +245,24 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 76 | `Quay lại Cộng đồng` | `<Button variant="subtle" color="gray" radius="xl" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate('/community')}>` | **`/community`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 196 | `Hủy` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>` | **`/community`** | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
-| 197 | `Đăng bài viết` | `<Button size="md" radius="xl" color="brand" leftSection={<LuSend size={16} />} loading={submitting} onClick={handleSubmit} className="shadow-xl shadow-brand-500/30 px-8">` | **`/community`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
+| 197 | `Hủy` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>` | **`/community`** | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
+| 198 | `Đăng bài viết` | `<Button size="md" radius="xl" color="brand" leftSection={<LuSend size={16} />} loading={submitting} onClick={handleSubmit} className="shadow-xl shadow-brand-500/30 px-8">` | **`/community`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Community.jsx` | 74 | `Link` | `onClick={() => navigate('/community/post/new')}` |
+| `react-test-frontend\src\pages\Community.jsx` | 85 | `Link` | `onClick={() => navigate('/community/post/new')}` |
 | `react-test-frontend\src\pages\ForumHome.jsx` | 82 | `Link` | `onClick={() => navigate('/community/post/new')}` |
 | `react-test-frontend\src\pages\MistakeNotebook.jsx` | 254 | `Link` | `onClick={() => navigate('/community/post/new', {` |
 | `react-test-frontend\src\pages\StudyWorkspace.jsx` | 585 | `Link` | `onClick={() => navigate('/community/post/new', {` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 111 | `Thay ảnh bìa` | `<Button variant="white" size="xs" radius="xl" className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity" leftSection={<LuSparkles size={14} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 111 | `Thay ảnh bìa` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -287,23 +275,22 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 195 | `Lưu vào Kho lưu trữ` | `<Button variant="subtle" color="gray" leftSection={<LuPlus size={16} />} onClick={handleSaveQuiz} loading={isSaving}>` | **`/coding/1`** | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
-| 196 | `Vào chế độ Thi thử` | `<Button color="brand" radius="xl" leftSection={<LuPlay size={16} />} onClick={handleStartExam}>` | **`/coding/1`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
+| 199 | `Lưu vào Kho lưu trữ` | `<Button variant="subtle" color="gray" leftSection={<LuPlus size={16} />} onClick={handleSaveQuiz} loading={isSaving}>` | **`/coding/1`** | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
+| 200 | `Vào chế độ Thi thử` | `<Button color="brand" radius="xl" leftSection={<LuPlay size={16} />} onClick={handleStartExam}>` | **`/coding/1`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\ForumHome.jsx` | 75 | `Link` | `onClick={() => navigate('/community/quiz-builder')}` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 133 | `{isGenerating ? 'AI đ` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 175 | `Nút Button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 175 | `Nút Button` | `<Button key={i} variant="light" color={i === quiz.correct ? 'teal' : 'gray'} radius="md" size="md" justify="flex-start" className="font-medium whitespace-normal h-auto py-3">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -393,11 +380,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 89 | `My Learning` | `<Button variant="default" radius="md" onClick={() => navigate('/my-learning')}>` | **`/my-learning`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 180 | `Xem Chi Tiết` | `<Button variant="light" color="brand" radius="md" onClick={() => navigate(`/course/${course.courseId}`)} rightSection={<LuBookOpen size={16} />} className="hover:bg-brand-600 hover:text-white transition-all shadow-md shadow-brand-500/10">` | **`/course/${course.courseId}`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\Dashboard.jsx` | 248 | `Link` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>Start Learning</Button>` |
-| `react-test-frontend\src\pages\LandingPage.jsx` | 125 | `Link` | `to="/courses"` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 127 | `Link` | `to="/courses"` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 128 | `Link` | `onClick={function() { navigate('/courses'); }}` |
 | `react-test-frontend\src\pages\MyLearning.jsx` | 143 | `Link` | `<Button variant="subtle" color="brand" onClick={() => navigate('/courses')}>` |
 | `react-test-frontend\src\pages\MyLearning.jsx` | 157 | `Link` | `<Button radius="md" color="brand" onClick={() => navigate('/courses')}>` |
 
@@ -441,7 +429,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Bảng thống kê học tập & phân tích rủi ro thất nghiệp bằng AI.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 9)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 10)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 100 | `Tạo Khóa Học Mới` | `<Button variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }} radius="md" size="lg" leftSection={<LuPlus size={20} />} className="shadow-xl shadow-indigo-500/30" onClick={() => navigate('/creator/courses')}>` | **`/creator/courses`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
@@ -453,12 +441,14 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 248 | `Start Learning` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>` | **`/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 272 | `Export Analytics` | `<Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />} onClick={() => navigate('/creator/analytics')}>` | **`/creator/analytics`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 331 | `Nút CardWrapper` | `<CardWrapper className="bg-gradient-to-br from-cyan-500 to-indigo-600 border-none text-white hover:scale-105 transition-all cursor-pointer" p="xl" onClick={() => navigate('/ai-career-analysis')}>` | **`/ai-career-analysis`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 343 | `Xem Phân Tích Sự Nghi` | `<Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs" onClick={function(e) { e.stopPropagation(); navigate('/ai-career-analysis'); }}>` | **`/ai-career-analysis`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 6)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\LoginPage.jsx` | 43 | `Link` | `navigate('/dashboard');` |
 | `SmartLMS.Web\Views\CourseManagement\Index.cshtml` | 30 | `Link` | `<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>` |
+| `SmartLMS.Web\Views\Home\Index.cshtml` | 34 | `Link` | `<button class="nav-link active" style="border: none; cursor: pointer;" onclick="window.location.href='/Dashboard'; toastr.info('Đang điều hướng đến Dashboard...');">View All</button>` |
 | `SmartLMS.Web\Views\Payment\PaymentResults.cshtml` | 19 | `Link` | `<a href="/Dashboard" class="btn btn-premium btn-lg w-100">` |
 | `SmartLMS.Web\Views\Revenue\PaymentConfig.cshtml` | 9 | `Link` | `<li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>` |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 205 | `Link` | `<a href="/Dashboard" class="nav-link @(_ctrl == "Dashboard" && _act == "Index" ? "active" : "")">` |
@@ -468,10 +458,8 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- | :--- |
 | 153 | `Nhắn tin cho học viên (Test)` | `/api/messages/history/${courseId}/${studentId}` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 343 | `Xem Phân Tích Sự Nghi` | `<Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -488,12 +476,14 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 79 | `Tạo chủ đề mới` | `<Button size="md" radius="xl" color="brand" leftSection={<LuPlus size={18} />} onClick={() => navigate('/community/post/new')}>` | **`/community/post/new`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
 | 130 | `Nút tr` | `<tr key={post.id} className="cursor-pointer hover:bg-slate-50/50" onClick={() => navigate(`/community/${post.id}`)}>` | **`/community/${post.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 7)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\components\Topbar.jsx` | 101 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5" onClick={() => navigate('/community')}>` |
 | `react-test-frontend\src\pages\CommunityNewPost.jsx` | 62 | `Link` | `navigate('/community');` |
 | `react-test-frontend\src\pages\CommunityNewPost.jsx` | 79 | `Link` | `onClick={() => navigate('/community')}` |
-| `react-test-frontend\src\pages\CommunityNewPost.jsx` | 196 | `Link` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>` |
+| `react-test-frontend\src\pages\CommunityNewPost.jsx` | 197 | `Link` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 188 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community'); }}><LuZap size={20} /></ActionIcon>` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 98 | `Link` | `<a class="navbar-brand fw-bold fs-4" href="/Community">` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 106 | `Link` | `<li class="nav-item"><a class="nav-link px-3" href="/Community">Khám phá</a></li>` |
 
@@ -516,15 +506,17 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Trang giới thiệu chính của LMS, tiếp thị khóa học.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 4)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 6)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 57 | `Log in` | `<Button component={Link} to="/login" variant="subtle" color="gray" radius="md">` | **`/login`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
-| 58 | `Get Started` | `<Button component={Link} to="/register" color="brand" radius="md" className="shadow-lg shadow-brand-500/20">` | **`/register`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
-| 107 | `Join 12,000+ Students` | `<Button component={Link} to="/register" size="xl" radius="md" color="brand" rightSection={<LuPlay size={20} />} className="px-8 shadow-xl shadow-brand-500/30">` | **`/register`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
-| 118 | `Watch Demo` | `<Button variant="outline" size="xl" radius="md" color="gray" className="px-8 border-black/10 hover:bg-black/5" component={Link} to="/courses">` | **`/courses`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
+| 58 | `Log in` | `<Button component={Link} to="/login" variant="subtle" color="gray" radius="md" onClick={function() { navigate('/login'); }}>` | **`/login`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 59 | `Get Started` | `<Button component={Link} to="/register" color="brand" radius="md" className="shadow-lg shadow-brand-500/20" onClick={function() { navigate('/register'); }}>` | **`/register`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 108 | `Join 12,000+ Students` | `<Button component={Link} to="/register" size="xl" radius="md" color="brand" rightSection={<LuPlay size={20} />} className="px-8 shadow-xl shadow-brand-500/30" onClick={function() { navigate('/register'); }}>` | **`/register`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 120 | `Watch Demo` | `<Button variant="outline" size="xl" radius="md" color="gray" className="px-8 border-black/10 hover:bg-black/5" component={Link} to="/courses" onClick={function() { navigate('/courses'); }}>` | **`/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 188 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community'); }}>` | **`/community`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 189 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community/friends'); }}>` | **`/community/friends`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 8)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 9)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\api.js` | 33 | `Link` | `window.location.href = '/';` |
@@ -532,6 +524,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `react-test-frontend\src\components\Sidebar.jsx` | 40 | `Link` | `navigate('/');` |
 | `react-test-frontend\src\components\Topbar.jsx` | 60 | `Link` | `navigate('/');` |
 | `react-test-frontend\src\pages\LoginPage.jsx` | 123 | `Link` | `to="/"` |
+| `react-test-frontend\src\pages\LoginPage.jsx` | 129 | `Link` | `onClick={function() { navigate('/'); }}` |
 | `react-test-frontend\src\pages\RegisterPage.jsx` | 166 | `Link` | `to="/"` |
 | `SmartLMS.Web\Views\Account\AccessDenied.cshtml` | 56 | `Link` | `<a href="/" class="btn btn-primary btn-custom">Về Trang Chủ</a>` |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 191 | `Link` | `<a href="/" class="brand-link">` |
@@ -539,11 +532,8 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 2)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 185 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="gray" size="lg">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 186 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="gray" size="lg">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -562,7 +552,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Community.jsx` | 263 | `Link` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` |
+| `react-test-frontend\src\pages\Community.jsx` | 274 | `Link` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -581,13 +571,13 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 121 | `Back to landing` | `<Button component={Link} to="/" variant="subtle" color="gray" leftSection={<LuArrowLeft size={16} />} size="xs" className="hover:bg-brand-50 hover:text-brand-600 rounded-full">` | **`/`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
+| 121 | `Back to landing` | `<Button component={Link} to="/" variant="subtle" color="gray" leftSection={<LuArrowLeft size={16} />} size="xs" className="hover:bg-brand-50 hover:text-brand-600 rounded-full" onClick={function() { navigate('/'); }}>` | **`/`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\App.jsx` | 39 | `Link` | `if (!token) return <Navigate to="/login" replace />;` |
-| `react-test-frontend\src\pages\LandingPage.jsx` | 57 | `Link` | `<Button component={Link} to="/login" variant="subtle" color="gray" radius="md">Log in</Button>` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 58 | `Link` | `<Button component={Link} to="/login" variant="subtle" color="gray" radius="md" onClick={function() { navigate('/login'); }}>Log in</Button>` |
 | `react-test-frontend\src\pages\RegisterPage.jsx` | 56 | `Link` | `setTimeout(() => navigate('/login'), 2000);` |
 | `react-test-frontend\src\pages\RegisterPage.jsx` | 157 | `Link` | `<Anchor component={Link} to="/login" size="sm" fw={700} color="brand">` |
 
@@ -619,16 +609,15 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `react-test-frontend\src\pages\TutorDashboard.jsx` | 201 | `Link` | `navigate(`/creator/messages`);` |
 | `react-test-frontend\src\pages\TutorProfile.jsx` | 115 | `Link` | `onClick={() => navigate(`/creator/messages`)}` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 47 | `Nút Box` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 138 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 48 | `Nút Box` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 89 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 139 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 88 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="gray">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -709,17 +698,18 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\StudyWorkspace.jsx` | 606 | `Link` | `onClick={() => navigate('/wiki')}` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 48 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 55 | `{page.titl` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 49 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 61 | `{page.titl` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 78 | `Thùng rác` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 82 | `Cài đặt không` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 98 | `Chia sẻ` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 99 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 2)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 92 | `Chia sẻ` | `<Button variant="light" color="gray" leftSection={<LuSend size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 93 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="gray" size="lg">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -735,11 +725,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 65 | `Quay lại` | `<Button variant="white" size="xs" radius="xl" className="absolute top-4 left-4" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 108 | `Gửi tin nhắn` | `<Button size="md" radius="xl" color="brand" className="shadow-lg shadow-brand-500/20" onClick={() => { toast.success(`Đang kết nối hộp thoại chat với ${userData.fullName}...`); navigate('/creator/messages'); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 6)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\components\Topbar.jsx` | 155 | `Link` | `<Menu.Item leftSection={<LuUsers size={16} />} onClick={() => navigate('/profile/1')}>Hồ sơ cá nhân</Menu.Item>` |
 | `react-test-frontend\src\pages\CommunityFriends.jsx` | 135 | `Link` | `onClick={() => navigate(`/profile/${user.id}`)}` |
-| `react-test-frontend\src\pages\CommunityFriends.jsx` | 145 | `Link` | `<Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>Hồ sơ</Button>` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 145 | `Link` | `<Button variant="light" radius="xl" color="gray" onClick={function() { navigate(`/profile/${user.id}`); }}>Hồ sơ</Button>` |
 | `react-test-frontend\src\pages\CommunityFriends.jsx` | 168 | `Link` | `<Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>` |
 | `react-test-frontend\src\pages\CommunityFriends.jsx` | 193 | `Link` | `<Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>` |
 | `react-test-frontend\src\pages\CommunityFriends.jsx` | 203 | `Link` | `<Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>Hồ sơ</Button>` |
@@ -765,11 +756,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- | :--- |
 | 164 | `Back to landing` | `<Button component={Link} to="/" variant="subtle" color="gray" leftSection={<LuArrowLeft size={16} />} size="xs" className="hover:bg-brand-50 hover:text-brand-600 rounded-full">` | **`/`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 3)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\LandingPage.jsx` | 58 | `Link` | `<Button component={Link} to="/register" color="brand" radius="md" className="shadow-lg shadow-brand-500/20">Get Started</Button>` |
-| `react-test-frontend\src\pages\LandingPage.jsx` | 109 | `Link` | `to="/register"` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 59 | `Link` | `<Button component={Link} to="/register" color="brand" radius="md" className="shadow-lg shadow-brand-500/20" onClick={function() { navigate('/register'); }}>Get Started</Button>` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 110 | `Link` | `to="/register"` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 116 | `Link` | `onClick={function() { navigate('/register'); }}` |
 | `react-test-frontend\src\pages\LoginPage.jsx` | 114 | `Link` | `<Anchor component={Link} to="/register" size="sm" fw={700} color="brand">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
@@ -832,7 +824,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 53 | `Sửa hồ sơ Tutor` | `<Button variant="light" color="orange" radius="xl" onClick={() => navigate('/tutor/profile/edit')}>` | **`/tutor/profile/edit`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 119 | `Quản lý lịch rảnh` | `<Button variant="light" color="orange" size="xs" radius="xl" onClick={() => navigate('/tutor/availability')}>` | **`/tutor/availability`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 119 | `Quản lý lịch rảnh` | `<Button variant="light" color="orange" size="xs" radius="xl" onClick={function() { navigate('/tutor/availability'); }}>` | **`/tutor/availability`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 193 | `Trả lời ngay` | `<Button fullWidth variant="light" color="blue" size="xs" leftSection={<LuSend size={14} />} onClick={() => { toast.success(`Đang chuyển tới câu hỏi của học viên ${q.student}...`); navigate(`/creator/messages`); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
@@ -895,9 +887,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 106 | `Hủy` | `<Button variant="default" radius="md" onClick={() => navigate('/tutor/dashboard')}>` | **`/tutor/dashboard`** | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
 | 107 | `Lưu Thay Đổi` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuSave size={18} />} onClick={handleSave} className="shadow-lg shadow-brand-500/20">` | **`/tutor/dashboard`** | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\components\Topbar.jsx` | 156 | `Link` | `<Menu.Item leftSection={<LuSettings size={16} />} onClick={() => navigate('/tutor/profile/edit')}>Cài đặt</Menu.Item>` |
 | `react-test-frontend\src\pages\TutorDashboard.jsx` | 53 | `Link` | `<Button variant="light" color="orange" radius="xl" onClick={() => navigate('/tutor/profile/edit')}>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
@@ -925,7 +918,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\TutorDashboard.jsx` | 119 | `Link` | `<Button variant="light" color="orange" size="xs" radius="xl" onClick={() => navigate('/tutor/availability')}>Quản lý lịch rảnh</Button>` |
+| `react-test-frontend\src\pages\TutorDashboard.jsx` | 119 | `Link` | `<Button variant="light" color="orange" size="xs" radius="xl" onClick={function() { navigate('/tutor/availability'); }}>Quản lý lịch rảnh</Button>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -935,7 +928,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [AccessDenied.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Account/AccessDenied.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [AccessDenied.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Account/AccessDenied.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Account\AccessDenied.cshtml`
 * **Đường dẫn Route:** `/Account/AccessDenied` (Chạy thử VPS: [http://141.253.114.218/Account/AccessDenied](http://141.253.114.218/Account/AccessDenied))
 * **Loại trang:** `CSHTML Page`
@@ -947,8 +940,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 55 | `Đăng Xuất` | `<a href="/Account/Logout" class="btn btn-danger btn-custom mr-2">` | **`/Account/Logout`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 56 | `Về Trang Chủ` | `<a href="/" class="btn btn-primary btn-custom">` | **`/`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 562 | `Link` | `<a href="/Account/AccessDenied">AccessDenied</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1022,14 +1017,14 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 392 | `Link` | `<a href="/Affiliate" class="nav-link @(_ctrl == "Affiliate" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 2)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 93 | `Sao chép link` | `<button class="btn btn-outline-primary btn-copy" data-clipboard-target="#refLink" title="Sao chép link">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 96 | `Tạo link mới` | `<button class="btn btn-outline-success btn-generate-link ml-1" title="Tạo link mới">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
+| 93 | `Sao chép link` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 96 | `Tạo link mới` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1069,19 +1064,18 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 366 | `Link` | `<a href="/Assessment/BadgeStudio" class="nav-link @(_act == "BadgeStudio" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 21 | `Tạo Huy hiệu mới` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
 | 34 | `Nút div` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 44 | `Chỉnh sửa` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 86 | `&times;` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 114 | `Hủy` | `Không gọi API (Nút giao diện)` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | N/A - *Sự kiện cục bộ* |
 | 115 | `Lưu huy hiệu` | `Gửi dữ liệu Form (POST/PUT)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 21 | `Tạo Huy hiệu mới` | `<button class="btn btn-indigo shadow-sm" data-toggle="modal" data-target="#addBadgeModal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 44 | `Chỉnh sửa` | `<button class="btn btn-sm btn-outline-indigo btn-block">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 86 | `&times;` | `<button type="button" class="close text-white" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 114 | `Hủy` | `<button type="button" class="btn btn-secondary" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1091,8 +1085,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `CSHTML Page`
 * **Tính năng chính:** *Phân hệ giao diện chức năng hệ thống.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
-*Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
+| :--- | :--- | :--- | :--- | :--- |
+| 47 | `Tải file E` | `<a href="/templates/sample_questions.xlsx" class="btn btn-outline-info btn-block shadow-sm" onclick="toastr.success('Bắt đầu tải xuống tệp Excel mẫu ngân hàng câu hỏi...!')">` | **`/templates/sample_questions.xlsx`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -1102,10 +1098,8 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 47 | `Tải file E` | `<a href="#" class="btn btn-outline-info btn-block shadow-sm">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Điều hướng người dùng sang trang liên kết chức năng |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1123,15 +1117,14 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 354 | `Link` | `<a href="/Assessment/ExamAssembler" class="nav-link @(_act == "ExamAssembler" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 27 | `Copy to clipboard` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 81 | `Lưu & Xuất bản đề thi` | `Không gọi API (Nút giao diện)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 81 | `Lưu & Xuất bản đề thi` | `<button class="btn btn-indigo btn-block shadow">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1270,15 +1263,14 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 360 | `Link` | `<a href="/Assessment/RuleEngine" class="nav-link @(_act == "RuleEngine" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 27 | `Hướng dẫn` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 58 | `Lưu cấu hình Rule` | `Không gọi API (Nút giao diện)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 58 | `Lưu cấu hình Rule` | `<button class="btn btn-indigo shadow" id="btn-get" data-step="4" data-intro="Đừng quên bấm Lưu để áp dụng luật mới vào hệ thống nhé!">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1334,7 +1326,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Solve.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallenge/Solve.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Solve.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallenge/Solve.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallenge\Solve.cshtml`
 * **Đường dẫn Route:** `/CodingChallenge/Solve` (Chạy thử VPS: [http://141.253.114.218/CodingChallenge/Solve](http://141.253.114.218/CodingChallenge/Solve))
 * **Loại trang:** `CSHTML Page`
@@ -1343,8 +1335,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 563 | `Link` | `<a href="/CodingChallenge/Solve">Solve</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1356,7 +1350,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Create.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Create.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallengeManagement\Create.cshtml`
 * **Đường dẫn Route:** `/CodingChallengeManagement/Create` (Chạy thử VPS: [http://141.253.114.218/CodingChallengeManagement/Create](http://141.253.114.218/CodingChallengeManagement/Create))
 * **Loại trang:** `CSHTML Page`
@@ -1365,8 +1359,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 564 | `Link` | `<a href="/CodingChallengeManagement/Create">CodingChallengeManagement/Create</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1380,7 +1376,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Edit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Edit.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Edit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CodingChallengeManagement/Edit.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CodingChallengeManagement\Edit.cshtml`
 * **Đường dẫn Route:** `/CodingChallengeManagement/Edit` (Chạy thử VPS: [http://141.253.114.218/CodingChallengeManagement/Edit](http://141.253.114.218/CodingChallengeManagement/Edit))
 * **Loại trang:** `CSHTML Page`
@@ -1389,21 +1385,22 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 565 | `Link` | `<a href="/CodingChallengeManagement/Edit">CodingChallengeManagement/Edit</a>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 4)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 25 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 60 | `Cập nhật thông tin` | `Gửi dữ liệu Form (POST/PUT)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 73 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 83 | `Thêm bộ test` | `Gửi dữ liệu Form (POST/PUT)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+| 104 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 104 | `Nút button` | `<button class="btn btn-xs btn-danger">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1449,28 +1446,27 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `SmartLMS.Web\Views\Cohort\Members.cshtml` | 11 | `Link` | `<a href="/Cohort" class="text-muted"><i class="fas fa-arrow-left mr-2"></i></a>` |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 266 | `Link` | `<a href="/Cohort" class="nav-link @(_ctrl == "Cohort" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 7)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 11)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 13 | `Tạo Lớp học mới` | `/Cohort/Update` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
 | 32 | `Nút a` | `/Cohort/Update` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
 | 35 | `Nút a` | `/Cohort/ImportExcel` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
 | 39 | `Nút a` | `/Cohort/Delete` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
+| 79 | `&times;` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 93 | `Hủy bỏ` | `Không gọi API (Nút giao diện)` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | N/A - *Sự kiện cục bộ* |
 | 94 | `Lưu Thông Tin` | `/Cohort/Update` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
+| 106 | `&times;` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 116 | `Chọn file Excel` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 122 | `Đóng` | `Không gọi API (Nút giao diện)` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | N/A - *Sự kiện cục bộ* |
 | 123 | `Bắt đầu Import` | `Gửi dữ liệu Form (POST/PUT)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 79 | `&times;` | `<button type="button" class="close text-white" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 93 | `Hủy bỏ` | `<button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
-| 106 | `&times;` | `<button type="button" class="close text-white" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 122 | `Đóng` | `<button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Members.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Cohort/Members.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Members.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Cohort/Members.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Cohort\Members.cshtml`
 * **Đường dẫn Route:** `/Cohort/Members` (Chạy thử VPS: [http://141.253.114.218/Cohort/Members](http://141.253.114.218/Cohort/Members))
 * **Loại trang:** `CSHTML Page`
@@ -1479,22 +1475,23 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 566 | `Link` | `<a href="/Cohort/Members">Cohort/Members</a>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 16 | `Thêm Sinh viên vào` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+| 45 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 59 | `Xóa khỏi lớp` | `/Cohort/RemoveStudent` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | N/A - *Sự kiện cục bộ* |
+| 78 | `&times;` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 89 | `Hủy` | `Không gọi API (Nút giao diện)` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | N/A - *Sự kiện cục bộ* |
 | 90 | `Xác nhận thêm` | `/Cohort/AddStudent` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 16 | `Thêm Sinh viên vào` | `<button type="button" class="btn btn-primary shadow-sm" data-toggle="modal" data-target="#modalAddMember">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 45 | `Nút button` | `<button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-toggle="modal" data-target="#modalAddMember">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 78 | `&times;` | `<button type="button" class="close" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 89 | `Hủy` | `<button type="button" class="btn btn-secondary" data-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1504,37 +1501,38 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `CSHTML Page`
 * **Tính năng chính:** *Phân hệ giao diện chức năng hệ thống.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 13 | `Khám phá ngay` | `<a href="#feed" class="btn btn-premium btn-lg">` | **`#feed`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 40 | `Tạo bài viết đầu tiên` | `<button class="btn btn-primary mt-3 px-4" onclick="location.href='/Community/NewPost'">` | **`/Community/NewPost`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 7)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\components\Topbar.jsx` | 101 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5" onClick={() => navigate('/community')}>` |
 | `react-test-frontend\src\pages\CommunityNewPost.jsx` | 62 | `Link` | `navigate('/community');` |
 | `react-test-frontend\src\pages\CommunityNewPost.jsx` | 79 | `Link` | `onClick={() => navigate('/community')}` |
-| `react-test-frontend\src\pages\CommunityNewPost.jsx` | 196 | `Link` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>` |
+| `react-test-frontend\src\pages\CommunityNewPost.jsx` | 197 | `Link` | `<Button variant="subtle" color="gray" radius="xl" onClick={() => navigate('/community')}>Hủy</Button>` |
+| `react-test-frontend\src\pages\LandingPage.jsx` | 188 | `Link` | `<ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community'); }}><LuZap size={20} /></ActionIcon>` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 98 | `Link` | `<a class="navbar-brand fw-bold fs-4" href="/Community">` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 106 | `Link` | `<li class="nav-item"><a class="nav-link px-3" href="/Community">Khám phá</a></li>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 14 | `Tìm hiểu thêm` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+| 26 | `Mới nhất` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 57 | `@post.Title` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 78 | `Đăng ký Creator` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 98 | `Gửi` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 5)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 14 | `Tìm hiểu thêm` | `<a href="#" class="btn btn-outline-light btn-lg rounded-pill px-4">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 26 | `Mới nhất` | `<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 40 | `Tạo bài viết đầu tiên` | `<button class="btn btn-primary mt-3 px-4">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 78 | `Đăng ký Creator` | `<button class="btn btn-premium w-100">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 98 | `Gửi` | `<button class="btn btn-primary">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Coupon/Create.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Coupon/Create.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Coupon\Create.cshtml`
 * **Đường dẫn Route:** `/Coupon/Create` (Chạy thử VPS: [http://141.253.114.218/Coupon/Create](http://141.253.114.218/Coupon/Create))
 * **Loại trang:** `CSHTML Page`
@@ -1543,8 +1541,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 567 | `Link` | `<a href="/Coupon/Create">Coupon/Create</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1572,19 +1572,18 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 244 | `Link` | `<a href="/Coupon" class="nav-link @(_ctrl == "Coupon" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 13 | `Tạo Mã Mới` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+| 49 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 49 | `Nút button` | `<button class="btn btn-xs btn-outline-danger btn-del" data-id="@item.CouponId">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Create.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Create.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Create.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Create.cshtml`
 * **Đường dẫn Route:** `/CourseManagement/Create` (Chạy thử VPS: [http://141.253.114.218/CourseManagement/Create](http://141.253.114.218/CourseManagement/Create))
 * **Loại trang:** `CSHTML Page`
@@ -1593,26 +1592,27 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 568 | `Link` | `<a href="/CourseManagement/Create">CourseManagement/Create</a>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 57 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 109 | `Tiếp theo` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 137 | `Quay lại` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 138 | `Tiếp theo` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 176 | `Quay lại` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 177 | `Nút button` | `Gửi dữ liệu Form (POST/PUT)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 109 | `Tiếp theo` | `<button type="button" class="btn btn-primary btn-next px-4" data-next="2">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 137 | `Quay lại` | `<button type="button" class="btn btn-outline-secondary btn-prev" data-prev="1">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 138 | `Tiếp theo` | `<button type="button" class="btn btn-primary btn-next px-4" data-next="3">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 176 | `Quay lại` | `<button type="button" class="btn btn-outline-secondary btn-prev" data-prev="2">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Curriculum.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Curriculum.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Curriculum.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Curriculum.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Curriculum.cshtml`
 * **Đường dẫn Route:** `/CourseManagement/Curriculum` (Chạy thử VPS: [http://141.253.114.218/CourseManagement/Curriculum](http://141.253.114.218/CourseManagement/Curriculum))
 * **Loại trang:** `CSHTML Page`
@@ -1621,24 +1621,26 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 569 | `Link` | `<a href="/CourseManagement/Curriculum">CourseManagement/Curriculum</a>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 5)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 23 | `Thêm Chương` | `<button class="btn btn-primary shadow-sm mr-2" id="btn-add-module">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 24 | `Lưu thứ tự` | `<button class="btn btn-success shadow-sm" id="btn-save-all">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
-| 61 | `Bài học` | `<button class="btn btn-xs btn-outline-primary btn-add-lesson" data-mod-id="${mod.id}">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 62 | `Nút button` | `<button class="btn btn-xs btn-outline-danger btn-del-node" data-id="${mod.id}">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 71 | `Nút button` | `<button class="btn btn-link btn-xs text-muted btn-preview-les" data-id="${les.id}">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 23 | `Thêm Chương` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+| 24 | `Lưu thứ tự` | `Không gọi API (Nút giao diện)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
+| 61 | `Bài học` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 62 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 71 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Edit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Edit.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Edit.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/CourseManagement/Edit.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\CourseManagement\Edit.cshtml`
 * **Đường dẫn Route:** `/CourseManagement/Edit` (Chạy thử VPS: [http://141.253.114.218/CourseManagement/Edit](http://141.253.114.218/CourseManagement/Edit))
 * **Loại trang:** `CSHTML Page`
@@ -1647,22 +1649,23 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 570 | `Link` | `<a href="/CourseManagement/Edit">CourseManagement/Edit</a>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 51 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 105 | `Tiếp theo` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 126 | `Quay lại` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 127 | `Tiếp theo` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 158 | `Quay lại` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 159 | `Lưu thay đổi` | `Gửi dữ liệu Form (POST/PUT)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 105 | `Tiếp theo` | `<button type="button" class="btn btn-primary btn-next px-4" data-next="2">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 126 | `Quay lại` | `<button type="button" class="btn btn-outline-secondary btn-prev" data-prev="1">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 127 | `Tiếp theo` | `<button type="button" class="btn btn-primary btn-next px-4" data-next="3">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 158 | `Quay lại` | `<button type="button" class="btn btn-outline-secondary btn-prev" data-prev="2">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1688,22 +1691,21 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `SmartLMS.Web\Views\Payment\PaymentResults.cshtml` | 46 | `Link` | `<a href="/CourseManagement" class="btn btn-outline-secondary w-100">Quay lại danh sách</a>` |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 218 | `Link` | `<a href="/CourseManagement" class="nav-link @(_ctrl == "CourseManagement" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 4)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 9)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 113 | `Reset` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 135 | `Xử` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 139 | `Nút a` | `Không gọi API (Nút giao diện)` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
 | 142 | `Nút a` | `Không gọi API (Nút giao diện)` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
 | 146 | `Nút a` | `Không gọi API (Nút giao diện)` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
+| 153 | `Export CSV` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 156 | `Thêm Mới` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
+| 240 | `$` | `Không gọi API (Nút giao diện)` | Điều hướng người dùng sang trang liên kết chức năng | N/A - *Sự kiện cục bộ* |
+| 288 | `Xóa` | `Không gọi API (Nút giao diện)` | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 5)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 113 | `Reset` | `<button id="btn-reset-filter" class="btn btn-sm btn-outline-secondary">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 135 | `Xử` | `<button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 153 | `Export CSV` | `<button id="btn-export-csv" class="btn btn-sm btn-outline-success mr-2" title="Xuất CSV">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 240 | `$` | `<a href="#" class="text-dark font-weight-bold btn-preview" data-id="${row.courseId}">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Điều hướng người dùng sang trang liên kết chức năng |
-| 288 | `Xóa` | `<button class="btn btn-xs btn-default btn-delete" data-id="${id}" title="Xóa">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Loại bỏ bản ghi vĩnh viễn hoặc chuyển trạng thái Soft Delete |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1738,26 +1740,26 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 6)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\LoginPage.jsx` | 43 | `Link` | `navigate('/dashboard');` |
 | `SmartLMS.Web\Views\CourseManagement\Index.cshtml` | 30 | `Link` | `<li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a></li>` |
+| `SmartLMS.Web\Views\Home\Index.cshtml` | 34 | `Link` | `<button class="nav-link active" style="border: none; cursor: pointer;" onclick="window.location.href='/Dashboard'; toastr.info('Đang điều hướng đến Dashboard...');">View All</button>` |
 | `SmartLMS.Web\Views\Payment\PaymentResults.cshtml` | 19 | `Link` | `<a href="/Dashboard" class="btn btn-premium btn-lg w-100">` |
 | `SmartLMS.Web\Views\Revenue\PaymentConfig.cshtml` | 9 | `Link` | `<li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>` |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 205 | `Link` | `<a href="/Dashboard" class="nav-link @(_ctrl == "Dashboard" && _act == "Index" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 4)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 13 | `Làm mới dữ liệu` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 130 | `&times;` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 155 | `Gửi Gmail Nhắc Nhở` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 243 | `Chi ti` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 3)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 13 | `Làm mới dữ liệu` | `<button type="button" id="btn-refresh" class="btn btn-outline-primary btn-sm shadow-sm">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 130 | `&times;` | `<button type="button" class="close text-white" data-dismiss="offcanvas" aria-label="Close">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 155 | `Gửi Gmail Nhắc Nhở` | `<button id="btn-nudge-real" class="btn btn-primary btn-block font-weight-bold">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1777,13 +1779,13 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 285 | `Link` | `<a href="/Dashboard/Pulse" class="nav-link @(_ctrl == "Dashboard" && _act == "Pulse" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 79 | `Nút button` | `<button type="button" class="btn btn-tool text-white" data-card-widget="collapse">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 79 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1809,25 +1811,27 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Home/Index.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Home/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Home\Index.cshtml`
 * **Đường dẫn Route:** `/Home` (Chạy thử VPS: [http://141.253.114.218/Home](http://141.253.114.218/Home))
 * **Loại trang:** `CSHTML Page`
 * **Tính năng chính:** *Phân hệ giao diện chức năng hệ thống.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
-*Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
+| :--- | :--- | :--- | :--- | :--- |
+| 34 | `View All` | `<button class="nav-link active" style="border: none; cursor: pointer;" onclick="window.location.href='/Dashboard'; toastr.info('Đang điều hướng đến Dashboard...');">` | **`/Dashboard`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 571 | `Link` | `<a href="/Home">Home</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 34 | `View All` | `<button class="nav-link active" style="border: none; cursor: pointer;">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1867,21 +1871,20 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 297 | `Link` | `<a href="/IAM/ApiKeys" class="nav-link @(_ctrl == "IAM" && _act == "ApiKeys" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 8)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 15 | `Tạo API Key mới` | `Không gọi API (Nút giao diện)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
 | 30 | `Sao chép` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 74 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 76 | `Nút button` | `Gửi dữ liệu Form (POST/PUT)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 97 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 99 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 108 | `Hủy` | `Không gọi API (Nút giao diện)` | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời | N/A - *Sự kiện cục bộ* |
 | 109 | `Tạo ngay` | `Gửi dữ liệu Form (POST/PUT)` | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 3)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 15 | `Tạo API Key mới` | `<button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#generateKeyModal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 97 | `Nút button` | `<button type="button" class="btn-close" data-bs-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 108 | `Hủy` | `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1921,13 +1924,13 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 398 | `Link` | `<a href="/Integrations" class="nav-link @(_ctrl == "Integrations" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 17 | `Test kết nối Zoom API` | `<button class="btn btn-outline-primary transition-hover">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 17 | `Test kết nối Zoom API` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1937,28 +1940,29 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `CSHTML Page`
 * **Tính năng chính:** *Phân hệ giao diện chức năng hệ thống.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
-*Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
+| :--- | :--- | :--- | :--- | :--- |
+| 44 | `Cấu hình Phôi bằng` | `<button class="btn btn-outline-light" onclick="window.location.href='/Marketing/Designer'; toastr.info('Đang mở Studio thiết kế phôi bằng...');">` | **`/Marketing/Designer`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Marketing\Index.cshtml` | 17 | `Link` | `<button class="btn btn-outline-pink transition-hover" onclick="window.location.href='/Marketing/CertificateManager'; toastr.info('Đang điều hướng đến kho quản lý chứng chỉ...');"><i class="fas fa-file-pdf"></i> Thiết kế Chứng chỉ</button>` |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 309 | `Link` | `<a href="/Marketing/CertificateManager" class="nav-link @(_ctrl == "Marketing" && _act == "CertificateManager" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 67 | `Xem trước` | `/Marketing/PreviewPdf` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 70 | `Gửi Mail` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 2)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 44 | `Cấu hình Phôi bằng` | `<button class="btn btn-outline-light">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 70 | `Gửi Mail` | `<button class="btn btn-sm btn-outline-success px-3">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Designer.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Marketing/Designer.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Designer.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Marketing/Designer.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Marketing\Designer.cshtml`
 * **Đường dẫn Route:** `/Marketing/Designer` (Chạy thử VPS: [http://141.253.114.218/Marketing/Designer](http://141.253.114.218/Marketing/Designer))
 * **Loại trang:** `CSHTML Page`
@@ -1967,16 +1971,19 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Marketing\CertificateManager.cshtml` | 44 | `Link` | `<button class="btn btn-outline-light" onclick="window.location.href='/Marketing/Designer'; toastr.info('Đang mở Studio thiết kế phôi bằng...');"><i class="fas fa-cog mr-2"></i> Cấu hình Phôi bằng</button>` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 572 | `Link` | `<a href="/Marketing/Designer">Marketing/Designer</a>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 65 | `Lưu Tọa Độ` | `<button class="btn btn-primary btn-block" id="btnSaveDesign">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
+| 65 | `Lưu Tọa Độ` | `Không gọi API (Nút giao diện)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -1986,8 +1993,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `CSHTML Page`
 * **Tính năng chính:** *Phân hệ giao diện chức năng hệ thống.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
-*Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
+| :--- | :--- | :--- | :--- | :--- |
+| 17 | `Thiết kế Chứng chỉ` | `<button class="btn btn-outline-pink transition-hover" onclick="window.location.href='/Marketing/CertificateManager'; toastr.info('Đang điều hướng đến kho quản lý chứng chỉ...');">` | **`/Marketing/CertificateManager`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -1997,14 +2006,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 17 | `Thiết kế Chứng chỉ` | `<button class="btn btn-outline-pink transition-hover">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Failure.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/Failure.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Failure.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/Failure.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Payment\Failure.cshtml`
 * **Đường dẫn Route:** `/Payment/Failure` (Chạy thử VPS: [http://141.253.114.218/Payment/Failure](http://141.253.114.218/Payment/Failure))
 * **Loại trang:** `CSHTML Page`
@@ -2016,8 +2023,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 19 | `Quay lại danh sách` | `<a href="/CourseManagement" class="btn btn-outline-secondary w-100">` | **`/CourseManagement`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 20 | `Thử lại` | `<a href="javascript:history.back()" class="btn btn-premium w-100">` | **`javascript:history.back()`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 573 | `Link` | `<a href="/Payment/Failure">Payment/Failure</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -2027,7 +2036,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [PaymentResults.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/PaymentResults.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [PaymentResults.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/PaymentResults.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Payment\PaymentResults.cshtml`
 * **Đường dẫn Route:** `/Payment/PaymentResults` (Chạy thử VPS: [http://141.253.114.218/Payment/PaymentResults](http://141.253.114.218/Payment/PaymentResults))
 * **Loại trang:** `CSHTML Page`
@@ -2040,8 +2049,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 46 | `Quay lại danh sách` | `<a href="/CourseManagement" class="btn btn-outline-secondary w-100">` | **`/CourseManagement`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 47 | `Thử lại` | `<a href="javascript:history.back()" class="btn btn-premium w-100">` | **`javascript:history.back()`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 574 | `Link` | `<a href="/Payment/PaymentResults">Payment/PaymentResults</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -2051,7 +2062,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Success.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/Success.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Success.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Payment/Success.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Payment\Success.cshtml`
 * **Đường dẫn Route:** `/Payment/Success` (Chạy thử VPS: [http://141.253.114.218/Payment/Success](http://141.253.114.218/Payment/Success))
 * **Loại trang:** `CSHTML Page`
@@ -2062,8 +2073,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- | :--- |
 | 19 | `Vào kho khóa họ` | `<a href="/my-learning" class="btn btn-premium btn-lg w-100">` | **`/my-learning`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 575 | `Link` | `<a href="/Payment/Success">Payment/Success</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -2141,20 +2154,19 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 238 | `Link` | `<a href="/Revenue/PaymentConfig" class="nav-link @(_ctrl == "Revenue" && _act == "PaymentConfig" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 17 | `Nút button` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 27 | `Nút form` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 67 | `Lưu cấu hình` | `Gửi dữ liệu Form (POST/PUT)` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 17 | `Nút button` | `<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [Error.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Shared/Error.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Error.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Shared/Error.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Shared\Error.cshtml`
 * **Đường dẫn Route:** `/Shared/Error` (Chạy thử VPS: [http://141.253.114.218/Shared/Error](http://141.253.114.218/Shared/Error))
 * **Loại trang:** `CSHTML Page`
@@ -2163,8 +2175,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 576 | `Link` | `<a href="/Shared/Error">Shared/Error</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -2188,19 +2202,18 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 272 | `Link` | `<a href="/SqlManagement" class="nav-link @(_ctrl == "SqlManagement" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
+| 27 | `Execute Query (Ctr` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 44 | `Clear Console` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 86 | `Xem lịch s` | `/SqlManagement/GetHealth` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 89 | `Sv rủi ro` | `/SqlManagement/GetHealth` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 92 | `Danh sách` | `/SqlManagement/GetHealth` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 95 | `Kiểm tra d` | `/SqlManagement/GetHealth` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 27 | `Execute Query (Ctr` | `<button class="btn btn-dark btn-sm rounded-pill px-3 shadow" id="btn-execute">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -2244,19 +2257,18 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 260 | `Link` | `<a href="/UserManagement" class="nav-link @(_ctrl == "UserManagement" ? "active" : "")">` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 20 | `Nhật ký hệ thống (` | `/UserManagement/GetAuditTrail` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 94 | `Khóa tài khoản` | `/UserManagement/UpdateStatus` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 100 | `Mở khóa tài khoản` | `/UserManagement/UpdateStatus` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 104 | `Sửa thông tin` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 105 | `Xem lịch sử thay đổi` | `/UserManagement/GetAuditTrail` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 128 | `&times;` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 104 | `Sửa thông tin` | `<button class="btn btn-sm btn-outline-primary" title="Sửa thông tin">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 

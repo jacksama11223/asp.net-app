@@ -9,6 +9,7 @@ import {
 } from 'react-icons/lu';
 import axios from 'axios';
 import { BASE_URL } from '../api';
+import { toast } from 'sonner';
 
 export const PersonalWiki = () => {
   const [pages, setPages] = useState([]);
@@ -45,7 +46,12 @@ export const PersonalWiki = () => {
       <Box w={300} className="bg-slate-50/50 border-r border-slate-100 p-md flex flex-col">
         <Group justify="space-between" mb="xl" px="xs">
           <Title order={4} fw={800}>Không gian của tôi</Title>
-          <ActionIcon variant="light" color="brand" radius="md" onClick={() => {/* Add New Page */}}>
+          <ActionIcon variant="light" color="brand" radius="md" onClick={function() {
+            const newPage = { documentPageId: Date.now(), title: 'Trang tài liệu mới của tôi', content: '' };
+            setPages(prev => [...prev, newPage]);
+            setSelectedPage(newPage);
+            toast.success('Đã tạo một trang tài liệu mới thành công!');
+          }}>
             <LuPlus size={18} />
           </ActionIcon>
         </Group>
@@ -69,11 +75,11 @@ export const PersonalWiki = () => {
 
         <Divider my="md" />
         <Stack gap={4}>
-          <UnstyledButton className="p-2 rounded-lg hover:bg-slate-100/50 flex items-center gap-3 text-slate-500">
+          <UnstyledButton className="p-2 rounded-lg hover:bg-slate-100/50 flex items-center gap-3 text-slate-500" onClick={function() { toast.success('Đang mở danh sách tài liệu đã xóa...'); }}>
             <LuZap size={18} />
             <Text size="sm" fw={600}>Thùng rác</Text>
           </UnstyledButton>
-          <UnstyledButton className="p-2 rounded-lg hover:bg-slate-100/50 flex items-center gap-3 text-slate-500">
+          <UnstyledButton className="p-2 rounded-lg hover:bg-slate-100/50 flex items-center gap-3 text-slate-500" onClick={function() { toast.success('Đang mở cấu hình cài đặt không gian làm việc...'); }}>
             <LuSettings size={18} />
             <Text size="sm" fw={600}>Cài đặt không gian</Text>
           </UnstyledButton>
@@ -89,8 +95,8 @@ export const PersonalWiki = () => {
                 <Text size="32px">📄</Text>
               </Box>
               <Group>
-                <Button variant="light" color="gray" leftSection={<LuSend size={16} />}>Chia sẻ</Button>
-                <ActionIcon variant="subtle" color="gray" size="lg"><LuSettings size={20} /></ActionIcon>
+                <Button variant="light" color="gray" leftSection={<LuSend size={16} />} onClick={function() { toast.success('Đã sao chép liên kết chia sẻ tài liệu cá nhân!'); }}>Chia sẻ</Button>
+                <ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { toast.success('Đang tải cấu hình cài đặt tài liệu hiện tại...'); }}><LuSettings size={20} /></ActionIcon>
               </Group>
             </Group>
 

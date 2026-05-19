@@ -118,7 +118,11 @@ export const CourseDetails = () => {
               { label: 'Bữa trưa', amount: '50k', icon: '🍱' },
               { label: 'Yêu quý', amount: '100k', icon: '❤️' },
             ].map((item, i) => (
-              <Paper key={i} p="sm" withBorder radius="md" className="cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all text-center">
+              <Paper 
+                key={i} p="sm" withBorder radius="md" 
+                className="cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all text-center"
+                onClick={() => toast.success(`Bạn đã chọn ủng hộ giảng viên mức: ${item.label} (${item.amount})!`)}
+              >
                 <Text size="xl">{item.icon}</Text>
                 <Text fw={700} size="sm">{item.label}</Text>
                 <Badge color="orange" variant="light">{item.amount}</Badge>

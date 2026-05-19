@@ -13,7 +13,7 @@
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-primary shadow-sm" data-toggle="modal" data-target="#modalAddMember">
+                <button type="button" class="btn btn-primary shadow-sm" data-toggle="modal" data-target="#modalAddMember" onclick="$('#modalAddMember').modal('show'); toastr.info('Đang mở form thêm sinh viên...');">
                     <i class="fas fa-user-plus mr-1"></i> Thêm Sinh viên vào lớp
                 </button>
             </div>
@@ -42,7 +42,7 @@
                                     <div id="lottie-empty" style="width: 200px; height: 200px; margin: 0 auto;"></div>
                                     <div class="text-muted mt-3">
                                         <p class="font-weight-bold">Lớp học này chưa có thành viên nào.</p>
-                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-toggle="modal" data-target="#modalAddMember">
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-toggle="modal" data-target="#modalAddMember" onclick="$('#modalAddMember').modal('show'); toastr.info('Đang mở form thêm sinh viên...');">
                                             <i class="fas fa-plus mr-1"></i> Thêm thành viên ngay
                                         </button>
                                     </div>
@@ -75,7 +75,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Thêm sinh viên vào lớp</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" onclick="$('#modalAddMember').modal('hide');"><span>&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalAddMember').modal('hide');">Hủy</button>
                 <button type="button" onclick="addMember()" class="btn btn-primary">Xác nhận thêm</button>
             </div>
         </div>

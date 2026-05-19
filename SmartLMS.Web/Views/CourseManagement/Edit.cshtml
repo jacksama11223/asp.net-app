@@ -102,7 +102,7 @@
                                     <textarea asp-for="Description" class="d-none" id="hidden-description"></textarea>
                                 </div>
                                 <div class="text-right">
-                                    <button type="button" class="btn btn-primary btn-next px-4" data-next="2">Tiếp theo</button>
+                                    <button type="button" class="btn btn-primary btn-next px-4" data-next="2" onclick="toastr.info('Đang chuyển sang cài đặt SEO & AI...')">Tiếp theo</button>
                                 </div>
                             </div>
 
@@ -123,8 +123,8 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-4">
-                                    <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="1">Quay lại</button>
-                                    <button type="button" class="btn btn-primary btn-next px-4" data-next="3">Tiếp theo</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="1" onclick="toastr.info('Quay lại thông tin cơ bản...')">Quay lại</button>
+                                    <button type="button" class="btn btn-primary btn-next px-4" data-next="3" onclick="toastr.info('Đang chuyển sang cài đặt Giá & Ảnh...')">Tiếp theo</button>
                                 </div>
                             </div>
 
@@ -155,7 +155,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-4 border-top pt-4">
-                                    <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="2">Quay lại</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-prev" data-prev="2" onclick="toastr.info('Quay lại cài đặt SEO & AI...')">Quay lại</button>
                                     <button type="submit" class="btn btn-success px-5 font-weight-bold shadow">Lưu thay đổi</button>
                                 </div>
                             </div>

@@ -126,6 +126,7 @@ export const LoginPage = () => {
             leftSection={<LuArrowLeft size={16} />}
             size="xs"
             className="hover:bg-brand-50 hover:text-brand-600 rounded-full"
+            onClick={function() { navigate('/'); }}
           >
             Back to landing
           </Button>

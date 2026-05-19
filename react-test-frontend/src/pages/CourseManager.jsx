@@ -316,7 +316,7 @@ export const CourseManager = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Paper p="lg" radius="xl" withBorder className="glass hover:border-brand-300 transition-colors cursor-pointer group">
+                <Paper p="lg" radius="xl" withBorder className="glass hover:border-brand-300 transition-colors cursor-pointer group" onClick={() => handleOpenStudio(course)}>
                   <Group justify="space-between" mb="md">
                     <Badge color={course.status === 'Published' ? 'green' : 'orange'} variant="light">
                       {course.status}

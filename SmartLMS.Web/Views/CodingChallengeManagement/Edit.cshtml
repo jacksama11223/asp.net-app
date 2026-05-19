@@ -101,7 +101,7 @@
                                             <td><code>@tc.Input</code></td>
                                             <td class="text-success font-weight-bold">@tc.ExpectedOutput</td>
                                             <td>
-                                                <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-xs btn-danger" onclick="toastr.info('Đang xóa test case...'); $.post('/CodingChallengeManagement/DeleteTestCase', { id: @tc.Id }, function() { toastr.success('Đã xóa test case thành công!'); location.reload(); })"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     }

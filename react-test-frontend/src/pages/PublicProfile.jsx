@@ -177,7 +177,7 @@ export const PublicProfile = () => {
                       <Tabs.Panel value="posts">
                          <Stack gap="md">
                             {userData.recentPosts.map(post => (
-                              <Paper key={post.id} p="lg" radius="xl" withBorder className="hover:border-brand-300 cursor-pointer transition-colors">
+                              <Paper key={post.id} p="lg" radius="xl" withBorder className="hover:border-brand-300 cursor-pointer transition-colors" onClick={() => navigate('/community')}>
                                  <Group justify="space-between">
                                     <Title order={4} size="md">{post.title}</Title>
                                     <Text size="xs" c="dimmed">{post.date}</Text>

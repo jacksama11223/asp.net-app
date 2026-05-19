@@ -308,6 +308,7 @@ const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => 
                         radius="lg" 
                         className="hover:scale-105 transition-all text-center flex flex-col items-center justify-center bg-slate-50/50 hover:bg-white cursor-pointer hover:border-yellow-400"
                         style={{ width: '100px', height: '100px' }}
+                        onClick={() => navigate('/leaderboard')}
                       >
                         <Text style={{ fontSize: '32px' }}>{badge.iconUrl || '🏆'}</Text>
                         <Text size="xs" fw={700} c="slate.8" truncate style={{ width: '100%' }}>{badge.Name || badge.name}</Text>
@@ -340,7 +341,7 @@ const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => 
                 <Text size="xs" opacity={0.9} c="white">
                   Phân tích kỹ năng, đề xuất lộ trình và cơ hội nghề nghiệp tương lai dựa trên dữ liệu học tập thực tế của bạn.
                 </Text>
-                <Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs">
+                <Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs" onClick={function(e) { e.stopPropagation(); navigate('/ai-career-analysis'); }}>
                   Xem Phân Tích Sự Nghiệp
                 </Button>
               </Stack>

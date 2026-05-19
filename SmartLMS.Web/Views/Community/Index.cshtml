@@ -11,7 +11,7 @@
         <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 700px;">Nơi hàng ngàn Creator và học viên cùng nhau xây dựng cộng đồng học tập văn minh, hiện đại và hoàn toàn miễn phí.</p>
         <div class="d-flex justify-content-center gap-3">
             <a href="#feed" class="btn btn-premium btn-lg">Khám phá ngay</a>
-            <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-4">Tìm hiểu thêm</a>
+            <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-4" onclick="toastr.info('Đang tải tài liệu giới thiệu hệ sinh thái...!')">Tìm hiểu thêm</a>
         </div>
     </div>
 </section>
@@ -23,10 +23,10 @@
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <h2 class="h3 fw-bold mb-0">Thảo luận nổi bật</h2>
                 <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Mới nhất</button>
+                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" onclick="toastr.info('Đang lọc các bài viết thảo luận...')">Mới nhất</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Mới nhất</a></li>
-                        <li><a class="dropdown-item" href="#">Phổ biến nhất</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="toastr.info('Đang áp dụng bộ lọc bài viết Mới nhất...!')">Mới nhất</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="toastr.info('Đang áp dụng bộ lọc bài viết Phổ biến nhất...!')">Phổ biến nhất</a></li>
                     </ul>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <div class="mb-4 text-muted"><i class="fas fa-feather fa-4x opacity-25"></i></div>
                     <h3 class="h5">Chưa có bài viết nào</h3>
                     <p class="text-muted">Hãy trở thành người đầu tiên đặt nền móng cho cộng đồng!</p>
-                    <button class="btn btn-primary mt-3 px-4">Tạo bài viết đầu tiên</button>
+                    <button class="btn btn-primary mt-3 px-4" onclick="location.href='/Community/NewPost'">Tạo bài viết đầu tiên</button>
                 </div>
             }
             else
@@ -75,17 +75,17 @@
             <div class="card community-card mb-4 overflow-hidden border-0 bg-dark text-white p-4" style="background: linear-gradient(45deg, #0f172a 0%, #1e293b 100%);">
                 <h4 class="fw-bold mb-3">Dành cho Creator</h4>
                 <p class="text-white-50 small mb-4">Chia sẻ kiến thức của bạn, xây dựng thương hiệu cá nhân và tạo ra thu nhập từ quảng cáo.</p>
-                <button class="btn btn-premium w-100">Đăng ký Creator</button>
+                <button class="btn btn-premium w-100" onclick="toastr.success('Yêu cầu đăng ký làm Creator đã được gửi thành công!')">Đăng ký Creator</button>
             </div>
 
             <div class="card community-card mb-4 border-0 p-4">
                 <h5 class="fw-bold mb-3">Chủ đề thịnh hành</h5>
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#dotnet8</a>
-                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#react_js</a>
-                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#ai_future</a>
-                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#clean_code</a>
-                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none">#web_security</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none" onclick="toastr.info('Đang lọc các bài thảo luận theo chủ đề #dotnet8...!')">#dotnet8</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none" onclick="toastr.info('Đang lọc các bài thảo luận theo chủ đề #react_js...!')">#react_js</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none" onclick="toastr.info('Đang lọc các bài thảo luận theo chủ đề #ai_future...!')">#ai_future</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none" onclick="toastr.info('Đang lọc các bài thảo luận theo chủ đề #clean_code...!')">#clean_code</a>
+                    <a href="#" class="badge rounded-pill bg-light text-dark p-2 px-3 text-decoration-none" onclick="toastr.info('Đang lọc các bài thảo luận theo chủ đề #web_security...!')">#web_security</a>
                 </div>
             </div>
 
@@ -95,7 +95,7 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text bg-white border-0">đ</span>
                     <input type="text" class="form-control border-0" placeholder="Số tiền...">
-                    <button class="btn btn-primary">Gửi</button>
+                    <button class="btn btn-primary" onclick="toastr.success('Cảm ơn bạn đã donate ủng hộ dự án SmartLMS.AI!')">Gửi</button>
                 </div>
             </div>
         </div>

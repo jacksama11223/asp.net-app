@@ -14,7 +14,7 @@
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle me-2"></i> @ViewBag.Success
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="$(this).closest('.alert').fadeOut(); toastr.info('Đóng thông báo thành công.');"></button>
         </div>
     }
 

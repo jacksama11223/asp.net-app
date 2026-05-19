@@ -14,7 +14,7 @@ import {
   Badge
 } from '@mantine/core';
 import { LuZap, LuBookOpen, LuUsers, LuSparkles, LuPlay, LuLayoutDashboard, LuPenTool } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const Feature = ({ icon: Icon, title, description }) => (
@@ -28,6 +28,7 @@ const Feature = ({ icon: Icon, title, description }) => (
 );
 
 export const LandingPage = () => {
+  const navigate = useNavigate();
   return (
     <Box className="min-h-screen bg-slate-50 text-slate-900 overflow-hidden selection:bg-brand-500/30">
       {/* Background Effects */}
@@ -54,8 +55,8 @@ export const LandingPage = () => {
             </Group>
 
             <Group gap="sm">
-              <Button component={Link} to="/login" variant="subtle" color="gray" radius="md">Log in</Button>
-              <Button component={Link} to="/register" color="brand" radius="md" className="shadow-lg shadow-brand-500/20">Get Started</Button>
+              <Button component={Link} to="/login" variant="subtle" color="gray" radius="md" onClick={function() { navigate('/login'); }}>Log in</Button>
+              <Button component={Link} to="/register" color="brand" radius="md" className="shadow-lg shadow-brand-500/20" onClick={function() { navigate('/register'); }}>Get Started</Button>
             </Group>
           </Group>
         </Container>
@@ -112,6 +113,7 @@ export const LandingPage = () => {
                 color="brand" 
                 rightSection={<LuPlay size={20} />}
                 className="px-8 shadow-xl shadow-brand-500/30"
+                onClick={function() { navigate('/register'); }}
               >
                 Join 12,000+ Students
               </Button>
@@ -123,6 +125,7 @@ export const LandingPage = () => {
                 className="px-8 border-black/10 hover:bg-black/5"
                 component={Link}
                 to="/courses"
+                onClick={function() { navigate('/courses'); }}
               >
                 Watch Demo
               </Button>
@@ -182,8 +185,8 @@ export const LandingPage = () => {
           <Group justify="space-between">
             <Text size="sm" c="dimmed">© 2026 SmartLMS.AI. All rights reserved.</Text>
             <Group gap="md">
-              <ActionIcon variant="subtle" color="gray" size="lg"><LuZap size={20} /></ActionIcon>
-              <ActionIcon variant="subtle" color="gray" size="lg"><LuUsers size={20} /></ActionIcon>
+              <ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community'); }}><LuZap size={20} /></ActionIcon>
+              <ActionIcon variant="subtle" color="gray" size="lg" onClick={function() { navigate('/community/friends'); }}><LuUsers size={20} /></ActionIcon>
             </Group>
           </Group>
         </Container>

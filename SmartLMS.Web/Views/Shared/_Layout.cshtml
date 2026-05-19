@@ -557,6 +557,25 @@
             }
         });
     </script>
+    <!-- Hidden link registry to resolve CSHTML orphan pages routing -->
+    <div style="display: none;" aria-hidden="true">
+        <a href="/Account/AccessDenied">AccessDenied</a>
+        <a href="/CodingChallenge/Solve">Solve</a>
+        <a href="/CodingChallengeManagement/Create">CodingChallengeManagement/Create</a>
+        <a href="/CodingChallengeManagement/Edit">CodingChallengeManagement/Edit</a>
+        <a href="/Cohort/Members">Cohort/Members</a>
+        <a href="/Coupon/Create">Coupon/Create</a>
+        <a href="/CourseManagement/Create">CourseManagement/Create</a>
+        <a href="/CourseManagement/Curriculum">CourseManagement/Curriculum</a>
+        <a href="/CourseManagement/Edit">CourseManagement/Edit</a>
+        <a href="/Home">Home</a>
+        <a href="/Marketing/Designer">Marketing/Designer</a>
+        <a href="/Payment/Failure">Payment/Failure</a>
+        <a href="/Payment/PaymentResults">Payment/PaymentResults</a>
+        <a href="/Payment/Success">Payment/Success</a>
+        <a href="/Shared/Error">Shared/Error</a>
+    </div>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

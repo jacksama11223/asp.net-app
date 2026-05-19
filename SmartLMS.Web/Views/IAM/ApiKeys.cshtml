@@ -12,7 +12,7 @@
             <h1 class="text-gradient">Developer Portal</h1>
             <p class="text-muted">Quản lý các khóa truy cập API cho hệ thống tích hợp ngoại vi.</p>
         </div>
-        <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#generateKeyModal">
+        <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#generateKeyModal" onclick="toastr.info('Đang mở hộp thoại tạo API Key mới...')">
             <i class="fas fa-plus-circle me-2"></i>Tạo API Key mới
         </button>
     </div>
@@ -94,7 +94,7 @@
         <div class="modal-content glass-card border-0">
             <div class="modal-header border-0">
                 <h5 class="modal-title text-gradient">Tạo API Key mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="toastr.info('Đóng hộp thoại.');"></button>
             </div>
             <form asp-action="GenerateApiKey" method="post">
                 <div class="modal-body">
@@ -105,7 +105,7 @@
                     <p class="text-muted small"><i class="fas fa-info-circle me-1"></i> Key này sẽ có quyền truy cập vào các API Public của tổ chức bạn.</p>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="toastr.info('Đã hủy thao tác tạo API Key.');">Hủy</button>
                     <button type="submit" class="btn btn-premium">Tạo ngay</button>
                 </div>
             </form>

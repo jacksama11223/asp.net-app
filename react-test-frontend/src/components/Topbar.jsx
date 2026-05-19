@@ -98,7 +98,7 @@ export const Topbar = ({ mobileOpened, toggleMobile }) => {
         <Popover width={320} position="bottom-end" shadow="xl" radius="lg">
           <Popover.Target>
             <Indicator color="red" offset={4} size={10} disabled={unreadCount === 0} label={unreadCount} withBorder processing>
-              <ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5">
+              <ActionIcon variant="subtle" color="gray" size="lg" radius="md" className="hover:bg-black/5" onClick={() => navigate('/community')}>
                 <LuZap size={20} className="text-slate-600" />
               </ActionIcon>
             </Indicator>
@@ -152,8 +152,8 @@ export const Topbar = ({ mobileOpened, toggleMobile }) => {
 
           <Menu.Dropdown className="glass border-black/5 p-2 bg-white/90">
             <Menu.Label>Hồ sơ & Cộng đồng</Menu.Label>
-            <Menu.Item leftSection={<LuUsers size={16} />}>Hồ sơ cá nhân</Menu.Item>
-            <Menu.Item leftSection={<LuSettings size={16} />}>Cài đặt</Menu.Item>
+            <Menu.Item leftSection={<LuUsers size={16} />} onClick={() => navigate('/profile/1')}>Hồ sơ cá nhân</Menu.Item>
+            <Menu.Item leftSection={<LuSettings size={16} />} onClick={() => navigate('/tutor/profile/edit')}>Cài đặt</Menu.Item>
             <Menu.Divider className="border-black/5" />
             <Menu.Item color="red" leftSection={<LuLogOut size={16} />} onClick={handleLogout}>
               Đăng xuất

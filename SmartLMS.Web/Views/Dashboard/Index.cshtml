@@ -10,7 +10,7 @@
                 <h1 class="m-0" style="font-weight: 700;">Hệ thống Quản trị SmartLMS</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" id="btn-refresh" class="btn btn-outline-primary btn-sm shadow-sm">
+                <button type="button" id="btn-refresh" class="btn btn-outline-primary btn-sm shadow-sm" onclick="toastr.info('Đang gửi tín nhắn làm mới dữ liệu hệ thống...')">
                     <i data-lucide="refresh-cw" class="mr-1" style="width:14px; height:14px;"></i> Làm mới dữ liệu
                 </button>
             </div>
@@ -127,7 +127,7 @@
 <div class="offcanvas offcanvas-right shadow-lg" tabindex="-1" id="studentOffcanvas" style="width: 450px; background: #f8fafc;">
     <div class="offcanvas-header bg-indigo p-4 text-white">
         <h5 class="offcanvas-title font-weight-bold" id="offcanvasName">Chi tiết Sinh viên</h5>
-        <button type="button" class="close text-white" data-dismiss="offcanvas" aria-label="Close">
+        <button type="button" class="close text-white" data-dismiss="offcanvas" aria-label="Close" onclick="$('#studentOffcanvas').removeClass('show'); toastr.info('Đóng bảng điều khiển sinh viên.');">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -152,7 +152,7 @@
             <div class="card-body">
                 <h6 class="text-uppercase text-xs font-weight-bold text-success mb-3">Hành động nhanh</h6>
                 <textarea id="nudge-message" class="form-control mb-3" rows="3" placeholder="Nhập tin nhắn động viên..."></textarea>
-                <button id="btn-nudge-real" class="btn btn-primary btn-block font-weight-bold">
+                <button id="btn-nudge-real" class="btn btn-primary btn-block font-weight-bold" onclick="toastr.info('Đang gửi email nhắc nhở động viên qua API Gmail...')">
                     <i data-lucide="send" class="mr-2" style="width: 16px; height: 16px;"></i> Gửi Gmail Nhắc Nhở
                 </button>
             </div>

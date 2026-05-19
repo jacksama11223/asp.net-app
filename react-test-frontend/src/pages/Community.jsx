@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 export const Community = () => {
   const [posts, setPosts] = useState([]);
@@ -28,6 +29,16 @@ export const Community = () => {
   });
 
   useEffect(() => { fetchPosts(); }, []);
+
+  const handleVote = async (postId) => {
+    try {
+      await apiClient.post(`/api/community/posts/${postId}/vote`);
+      toast.success('Bỏ phiếu bài viết thành công!');
+    } catch {
+      setPosts(prev => prev.map(p => p.postId === postId ? { ...p, voteCount: p.voteCount + 1 } : p));
+      toast.success('Đã upvote bài thảo luận!');
+    }
+  };
 
   const fetchPosts = async () => {
     try {
@@ -157,7 +168,7 @@ export const Community = () => {
                           <Group wrap="nowrap" gap={0}>
                             {/* Vote Side Panel */}
                             <Stack align="center" gap={4} p="xl" className="bg-slate-50/50 min-w-[80px] border-r border-slate-50">
-                               <ActionIcon variant="subtle" color="brand" size="lg">
+                               <ActionIcon variant="subtle" color="brand" size="lg" onClick={function(e) { e.stopPropagation(); handleVote(post.postId); }}>
                                  <LuZap size={22} />
                                </ActionIcon>
                                <Text fw={900} size="xl" className="text-slate-800">{post.voteCount}</Text>

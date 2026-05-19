@@ -112,6 +112,7 @@ export const CommunityNewPost = () => {
                 variant="white" size="xs" radius="xl" 
                 className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
                 leftSection={<LuSparkles size={14} />}
+                onClick={function() { toast.success('Đã tự động thay đổi ảnh bìa bài viết đẹp mắt bằng AI!'); }}
                >
                  Thay ảnh bìa
                </Button>
@@ -120,7 +121,11 @@ export const CommunityNewPost = () => {
             <Stack p="xl" gap="md" className="relative">
               {/* Emoji Icon Picker Placeholder */}
               <Box className="absolute -top-10 left-10">
-                <Paper radius="2rem" p="sm" shadow="xl" withBorder className="bg-white cursor-pointer hover:scale-105 transition-transform w-20 h-20 flex items-center justify-center text-4xl">
+                <Paper 
+                  radius="2rem" p="sm" shadow="xl" withBorder 
+                  className="bg-white cursor-pointer hover:scale-105 transition-transform w-20 h-20 flex items-center justify-center text-4xl"
+                  onClick={() => toast.info('Tính năng chọn biểu tượng bài viết tuỳ chỉnh bằng Emoji đang được phát triển!')}
+                >
                   {location.state?.lessonTitle ? '❓' : '📝'}
                 </Paper>
               </Box>

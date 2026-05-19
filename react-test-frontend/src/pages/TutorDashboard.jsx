@@ -116,7 +116,7 @@ export const TutorDashboard = () => {
               <Paper p="xl" radius="xl" withBorder className="glass bg-white">
                 <Group justify="space-between" mb="lg">
                   <Title order={3}>Lịch Mentoring 1:1</Title>
-                  <Button variant="light" color="orange" size="xs" radius="xl" onClick={() => navigate('/tutor/availability')}>Quản lý lịch rảnh</Button>
+                  <Button variant="light" color="orange" size="xs" radius="xl" onClick={function() { navigate('/tutor/availability'); }}>Quản lý lịch rảnh</Button>
                 </Group>
                 <Table verticalSpacing="md">
                   <Table.Thead>

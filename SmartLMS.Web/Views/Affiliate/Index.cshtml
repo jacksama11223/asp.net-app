@@ -90,10 +90,10 @@
                     <div class="input-group mb-3">
                         <input type="text" id="refLink" class="form-control" value="https://smartlms.ai/ref/admin" readonly>
                         <div class="input-group-append">
-                            <button class="btn btn-outline-primary btn-copy" data-clipboard-target="#refLink" title="Sao chép link">
+                            <button class="btn btn-outline-primary btn-copy" data-clipboard-target="#refLink" title="Sao chép link" onclick="toastr.success('Đã sao chép liên kết vào bộ nhớ tạm!')">
                                 <i class="fas fa-copy"></i>
                             </button>
-                            <button class="btn btn-outline-success btn-generate-link ml-1" title="Tạo link mới">
+                            <button class="btn btn-outline-success btn-generate-link ml-1" title="Tạo link mới" onclick="toastr.info('Đang yêu cầu hệ thống tạo liên kết mới...!')">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>

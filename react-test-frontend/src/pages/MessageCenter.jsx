@@ -4,6 +4,7 @@ import {
 } from '@mantine/core';
 import { LuSearch, LuSend, LuSettings, LuZap } from 'react-icons/lu';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 export const MessageCenter = () => {
   const [activeChat, setActiveChat] = useState(1);
@@ -85,7 +86,7 @@ export const MessageCenter = () => {
                 <Text size="xs" c="dimmed">Đang học: Lập trình Web với ASP.NET Core 8</Text>
               </Box>
             </Group>
-            <ActionIcon variant="subtle" color="gray">
+            <ActionIcon variant="subtle" color="gray" onClick={function() { toast.success('Đang tải cấu hình cài đặt cuộc trò chuyện này...'); }}>
               <LuSettings size={18} />
             </ActionIcon>
           </Group>

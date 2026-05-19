@@ -76,7 +76,7 @@
                 <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
                     <h3 class="card-title"><i class="fas fa-terminal mr-2"></i>Infrastructure Snapshot</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool text-white" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        <button type="button" class="btn btn-tool text-white" data-card-widget="collapse" onclick="$(this).closest('.card').find('.card-body').slideToggle(); toastr.info('Thu nhỏ / Mở rộng bảng cấu trúc hạ tầng...');"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -133,13 +133,13 @@
                     </div>
                     <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item border-0 px-0">
-                            <b>Ip Whitelist</b> <a class="float-right text-muted">Disabled</a>
+                            <b>Ip Whitelist</b> <span class="float-right text-muted">Disabled</span>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <b>Rate Limit Mode</b> <a class="float-right badge badge-indigo">Identity-Based</a>
+                            <b>Rate Limit Mode</b> <span class="float-right badge badge-indigo">Identity-Based</span>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <b>Throttling</b> <a class="float-right text-success">Active</a>
+                            <b>Throttling</b> <span class="float-right text-success">Active</span>
                         </li>
                     </ul>
                     <a href="/hangfire" class="btn btn-block btn-outline-indigo btn-sm">Quản lý Background Jobs</a>

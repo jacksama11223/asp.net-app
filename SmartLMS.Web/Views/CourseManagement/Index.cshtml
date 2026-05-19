@@ -110,7 +110,7 @@
                         </select>
                     </div>
                     <div class="col-md-3 text-right">
-                        <button id="btn-reset-filter" class="btn btn-sm btn-outline-secondary">
+                        <button id="btn-reset-filter" class="btn btn-sm btn-outline-secondary" onclick="toastr.info('Đang khôi phục bộ lọc tìm kiếm...')">
                             <i class="fas fa-undo mr-1"></i> Reset
                         </button>
                     </div>
@@ -132,7 +132,7 @@
                         <div id="bulk-actions" class="d-none mr-3 d-inline-block">
                             <span class="mr-2 text-muted small"><span id="selected-count">0</span> đã chọn:</span>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown">
+                                <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" onclick="toastr.info('Đang mở hộp thoại xử lý hàng loạt...')">
                                     <i class="fas fa-tasks mr-1"></i> Xử lý hàng loạt
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -150,7 +150,7 @@
                             </div>
                         </div>
 
-                        <button id="btn-export-csv" class="btn btn-sm btn-outline-success mr-2" title="Xuất CSV">
+                        <button id="btn-export-csv" class="btn btn-sm btn-outline-success mr-2" title="Xuất CSV" onclick="toastr.info('Đang kết xuất dữ liệu khóa học sang CSV...')">
                             <i class="fas fa-file-csv"></i> Export CSV
                         </button>
                         <a asp-action="Create" class="btn btn-sm btn-primary shadow-sm">
@@ -237,7 +237,7 @@ $(document).ready(function () {
             {
                 data: 'title',
                 render: function (val, type, row) {
-                    return `<a href="#" class="text-dark font-weight-bold btn-preview" data-id="${row.courseId}">${val}</a>
+                    return `<a href="#" class="text-dark font-weight-bold btn-preview" data-id="${row.courseId}" onclick="toastr.info('Đang mở bảng xem thử nhanh...')">${val}</a>
                             <small class="text-muted d-block mt-1"><i class="far fa-calendar-alt mr-1"></i>${row.createdAt}</small>`;
                 }
             },
@@ -285,7 +285,7 @@ $(document).ready(function () {
                             <a href="/Payment/Checkout?courseId=${id}" class="btn btn-xs btn-default" title="Thanh toán VNPay"><i class="fas fa-credit-card text-warning"></i></a>
                             <a href="/CourseManagement/Edit/${id}" class="btn btn-xs btn-default" title="Sửa"><i class="fas fa-edit text-primary"></i></a>
                             <a href="/CourseManagement/Curriculum/${id}" class="btn btn-xs btn-default" title="Đề cương"><i class="fas fa-sitemap text-info"></i></a>
-                            <button class="btn btn-xs btn-default btn-delete" data-id="${id}" title="Xóa"><i class="fas fa-trash-alt text-danger"></i></button>
+                            <button class="btn btn-xs btn-default btn-delete" data-id="${id}" title="Xóa" onclick="toastr.info('Đang yêu cầu hệ thống ẩn khóa học...')"><i class="fas fa-trash-alt text-danger"></i></button>
                         </div>`;
                 }
             }

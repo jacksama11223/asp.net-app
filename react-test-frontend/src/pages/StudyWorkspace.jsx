@@ -364,7 +364,11 @@ export const StudyWorkspace = () => {
                           <Text c="dimmed" ta="center" py="xl">Chưa có Flashcard cho bài học này.</Text>
                         )}
                         
-                        <Paper p="md" withBorder radius="md" className="hover:border-blue-500 cursor-pointer group">
+                        <Paper 
+                          p="md" withBorder radius="md" 
+                          className="hover:border-blue-500 cursor-pointer group"
+                          onClick={() => toast.info('Hệ thống AI đang tổng hợp kiến thức bài học và tạo đề trắc nghiệm nhanh cho bạn...!')}
+                        >
                           <Group>
                             <LuSparkles className="text-blue-500 group-hover:rotate-12 transition-transform" />
                             <Box>
