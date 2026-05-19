@@ -6,6 +6,7 @@ import {
 import { LuArrowLeft, LuDownload, LuShare2, LuAward, LuCircleCheck, LuFileText } from 'react-icons/lu';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'sonner';
 import { BASE_URL } from '../api';
 
 export const CertificateView = () => {
@@ -35,13 +36,62 @@ export const CertificateView = () => {
     }, 600);
   }, [courseId]);
 
+  const generatePDF = () => {
+    const element = document.getElementById('certificate-print-area');
+    if (!element) return;
+    
+    const { jsPDF } = window.jspdf;
+    
+    window.html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('l', 'mm', 'a4');
+      const width = pdf.internal.pageSize.getWidth();
+      const height = pdf.internal.pageSize.getHeight();
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+      pdf.save(`SmartLMS_Certificate_${cert.credentialId}.pdf`);
+      toast.success("Chứng chỉ số đã được tải xuống máy của bạn!");
+    }).catch(err => {
+      toast.error("Lỗi khi kết xuất PDF: " + err.message);
+    });
+  };
+
   const handleDownload = () => {
-    alert("Đang sinh file PDF chứng chỉ chất lượng cao... Tệp tin sẽ được tải xuống trong giây lát!");
+    if (window.html2canvas && window.jspdf) {
+       generatePDF();
+       return;
+    }
+
+    toast.info("Đang tải thư viện đóng gói PDF từ máy chủ CDN...");
+
+    const scriptHtml2Canvas = document.createElement('script');
+    scriptHtml2Canvas.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+    
+    scriptHtml2Canvas.onload = () => {
+      const scriptJsPDF = document.createElement('script');
+      scriptJsPDF.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+      scriptJsPDF.onload = () => {
+        toast.success("Tải thư viện PDF thành công!");
+        generatePDF();
+      };
+      scriptJsPDF.onerror = () => {
+        toast.error("Không thể kết nối mạng để tải jspdf. Kích hoạt chế độ in làm dự phòng!");
+        window.print();
+      };
+      document.body.appendChild(scriptJsPDF);
+    };
+    
+    scriptHtml2Canvas.onerror = () => {
+      toast.error("Mạng offline. Kích hoạt chế độ in của trình duyệt làm dự phòng!");
+      window.print();
+    };
+    
+    document.body.appendChild(scriptHtml2Canvas);
   };
 
   const handleShare = () => {
-    navigator.clipboard.writeText(`https://smartlms.ai/verify/${cert.credentialId}`);
-    alert("Đã sao chép liên kết chứng chỉ số! Bạn có thể nhúng trực tiếp vào hồ sơ LinkedIn của mình.");
+    navigator.clipboard.writeText(`http://141.253.114.218/verify/${cert.credentialId}`);
+    toast.success("Đã sao chép liên kết chứng chỉ số! Bạn có thể nhúng trực tiếp vào hồ sơ LinkedIn của mình.");
   };
 
   if (loading) {
@@ -68,6 +118,7 @@ export const CertificateView = () => {
       <Stack gap="xl" align="center">
         {/* Certificate Rendering Area (Stunning Premium Certificate style) */}
         <Paper 
+          id="certificate-print-area"
           radius="lg" 
           p={50} 
           style={{
