@@ -3,7 +3,7 @@ import {
   Container, Paper, Title, Text, Button, Group, Stack, Badge, 
   Box, SimpleGrid, Card, Checkbox, ActionIcon, Loader
 } from '@mantine/core';
-import { LuArrowLeft, LuSave, LuClock, LuCalendarRange, LuTrash2, LuPlus } from 'react-icons/lu';
+import { LuArrowLeft, LuSave, LuClock, LuCalendarRange, LuTrash, LuPlus } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
@@ -174,7 +174,7 @@ export const TutorSchedule = () => {
                             color="brand"
                           />
                           <ActionIcon variant="subtle" color="red" onClick={() => handleDelete(item.id)}>
-                            <LuTrash2 size={16} />
+                            <LuTrash size={16} />
                           </ActionIcon>
                         </Group>
                       </Group>
