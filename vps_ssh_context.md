@@ -31,7 +31,7 @@ ssh opc@141.253.114.218
 > [!IMPORTANT]
 > **Quy tắc vàng (Hiến pháp Antigravity):** Luôn sử dụng lệnh `docker compose down` trước khi chạy `up -d --build` trên Server để tránh lỗi trùng lặp tên Container (Name Conflict).
 
-Khi đã ở trong phiên SSH của VPS, ngài chạy chuỗi lệnh sau để cập nhật toàn diện hệ thống:
+Khi đã ở trong phiên SSH của VPS, ngài chạy chuỗi lệnh sau để cập nhật toàn diện và build ngầm tuyệt đối (sử dụng **nohup** để an toàn tắt Terminal đi về):
 
 ```bash
 # 1. Di chuyển vào thư mục dự án
@@ -43,10 +43,13 @@ git pull
 # 3. Hạ toàn bộ các container cũ xuống trước để tránh Name Conflict
 docker-compose -f docker-compose.prod.yml down || sudo docker compose -f docker-compose.prod.yml down
 
-# 4. Tiến hành Build và Khởi chạy ngầm toàn bộ dịch vụ (Background Mode)
-docker-compose -f docker-compose.prod.yml up -d --build || sudo docker compose -f docker-compose.prod.yml up -d --build
+# 4. Sử dụng nohup để chạy build ngầm tuyệt đối (nhấn Enter sau lệnh này rồi ngài có thể gõ exit tắt SSH ngay)
+nohup sudo docker compose -f docker-compose.prod.yml up -d --build > deploy.log 2>&1 &
 
-# 5. Restart Nginx Load Balancer để cập nhật cấu hình định tuyến mới
+# 5. [Tùy chọn] Kiểm tra tiến độ build ngầm bất kỳ lúc nào qua file Log:
+tail -f deploy.log
+
+# 6. [Sau khi build hoàn tất] Khởi động lại Nginx Load Balancer để áp dụng định tuyến mới
 sudo docker restart smartlms-lb 2>/dev/null
 ```
 
