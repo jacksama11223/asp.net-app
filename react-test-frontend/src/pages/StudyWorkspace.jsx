@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Container, Grid, Paper, Title, Text, Stack, 
   Group, Badge, ActionIcon, Box, SimpleGrid, 
@@ -39,6 +39,97 @@ export const StudyWorkspace = () => {
     baseURL: BASE_URL,
     headers: { 'Authorization': `Bearer ${token}` }
   });
+
+  const playerRef = useRef(null);
+  const progressInterval = useRef(null);
+
+  const getYouTubeId = (url) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  useEffect(() => {
+    if (selectedLesson?.lessonType === 'Video' && selectedLesson?.videoUrl) {
+      const videoId = getYouTubeId(selectedLesson.videoUrl);
+      if (videoId) {
+        if (!window.YT) {
+          const tag = document.createElement('script');
+          tag.src = "https://www.youtube.com/iframe_api";
+          const firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
+
+        const initYTPlayer = () => {
+          if (playerRef.current) {
+            try { playerRef.current.destroy(); } catch(e) {}
+          }
+          playerRef.current = new window.YT.Player('youtube-player-element', {
+            videoId: videoId,
+            height: '100%',
+            width: '100%',
+            playerVars: {
+              'autoplay': 0,
+              'controls': 1,
+              'rel': 0
+            },
+            events: {
+              'onStateChange': onPlayerStateChange
+            }
+          });
+        };
+
+        window.onYouTubeIframeAPIReady = () => {
+          initYTPlayer();
+        };
+
+        if (window.YT && window.YT.Player) {
+          initYTPlayer();
+        }
+      }
+    }
+
+    return () => {
+      if (progressInterval.current) {
+        clearInterval(progressInterval.current);
+      }
+    };
+  }, [selectedLesson]);
+
+  const onPlayerStateChange = (event) => {
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      progressInterval.current = setInterval(async () => {
+        if (playerRef.current && playerRef.current.getCurrentTime) {
+          const currentTime = Math.round(playerRef.current.getCurrentTime());
+          const duration = Math.round(playerRef.current.getDuration());
+          const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+          const isCompleted = progressPercent >= 90;
+
+          try {
+            await apiClient.post('/api/student/video-progress', {
+              lessonId: selectedLesson.lessonId,
+              seconds: currentTime,
+              isCompleted: isCompleted
+            });
+            if (isCompleted) {
+              toast.success("Chúc mừng! Bạn đã hoàn thành 90% video bài giảng này!");
+              setCompletionRate(prev => Math.min(prev + 5, 100));
+              if (progressInterval.current) {
+                clearInterval(progressInterval.current);
+              }
+            }
+          } catch (err) {
+            console.error("Lỗi khi đồng bộ tiến trình xem video:", err);
+          }
+        }
+      }, 5000);
+    } else {
+      if (progressInterval.current) {
+        clearInterval(progressInterval.current);
+      }
+    }
+  };
 
   // Tự động tải thông tin Coding Challenge khi chọn bài học có thử thách code
   useEffect(() => {
@@ -248,14 +339,8 @@ export const StudyWorkspace = () => {
 
                   {/* Vùng hiển thị Video hoặc Content */}
                   {selectedLesson?.lessonType === 'Video' && selectedLesson?.videoUrl ? (
-                    <AspectRatio ratio={16 / 9} radius="xl" className="overflow-hidden shadow-2xl border-4 border-slate-100">
-                      <iframe
-                        src={getEmbedUrl(selectedLesson.videoUrl)}
-                        title="Lesson Video"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                    <AspectRatio ratio={16 / 9} radius="xl" className="overflow-hidden shadow-2xl border-4 border-slate-100 bg-slate-950">
+                      <div id="youtube-player-element" style={{ width: '100%', height: '100%', border: 'none' }} />
                     </AspectRatio>
                   ) : (
                     <Paper p="xl" radius="xl" bg="slate.0" withBorder>
