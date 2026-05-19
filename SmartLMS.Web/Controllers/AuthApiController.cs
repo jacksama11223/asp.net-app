@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SmartLMS.Web.Controllers;
 
@@ -34,6 +36,20 @@ public class AuthApiController : ControllerBase
         {
             return Unauthorized(new { message = "Tài khoản hoặc mật khẩu không chính xác." });
         }
+
+        // Đồng thời đăng ký session Cookie cho các trang Razor View (Coding Sandbox, Achievement Hub)
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Username ?? ""),
+            new Claim("FullName", user.FullName ?? ""),
+            new Claim(ClaimTypes.Role, user.Role ?? "Student"),
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var authProperties = new AuthenticationProperties { IsPersistent = true };
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
         var token = CreateToken(user);
         return Ok(new { 
