@@ -3,7 +3,7 @@ import {
   Container, Paper, Title, Text, Button, Group, Stack, Badge, 
   Box, ThemeIcon, Loader, Image
 } from '@mantine/core';
-import { LuArrowLeft, LuDownload, LuShare2, LuAward, LuCheckCircle2, LuFileText } from 'react-icons/lu';
+import { LuArrowLeft, LuDownload, LuShare2, LuAward, LuCheckCircle, LuFileText } from 'react-icons/lu';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
@@ -127,7 +127,7 @@ export const CertificateView = () => {
                 <Text size="xs" fw={700} c="slate.8">{cert.credentialId}</Text>
               </Box>
               <Group gap="xs" align="center">
-                <LuCheckCircle2 size={16} className="text-emerald-500" />
+                <LuCheckCircle size={16} className="text-emerald-500" />
                 <Text size="xs" c="green" fw={700}>ĐÃ XÁC MINH TRÊN BACKEND</Text>
               </Group>
               <Box ta="right">
