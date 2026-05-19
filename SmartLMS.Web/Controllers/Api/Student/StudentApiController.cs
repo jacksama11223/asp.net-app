@@ -140,6 +140,77 @@ public class StudentApiController : ControllerBase
         await _studentService.AskQuestionAsync(question);
         return Ok();
     }
+
+    [HttpPost("video-progress")]
+    public async Task<ActionResult> SaveVideoProgress([FromBody] VideoProgressRequest model)
+    {
+        var userIdStr = User.FindFirstValue("UserId") ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _))?.Value;
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+        int userId = int.Parse(userIdStr);
+
+        var progress = await _context.UserLessons
+            .FirstOrDefaultAsync(ul => ul.UserId == userId && ul.LessonId == model.LessonId);
+
+        if (progress == null)
+        {
+            progress = new UserLesson
+            {
+                UserId = userId,
+                LessonId = model.LessonId,
+                LastWatchedSecond = model.Seconds,
+                IsCompleted = model.IsCompleted,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _context.UserLessons.Add(progress);
+        }
+        else
+        {
+            progress.LastWatchedSecond = model.Seconds;
+            if (model.IsCompleted)
+            {
+                progress.IsCompleted = true;
+            }
+            progress.UpdatedAt = DateTime.UtcNow;
+        }
+
+        await _context.SaveChangesAsync();
+
+        var lesson = await _context.Lessons
+            .Include(l => l.Module)
+            .FirstOrDefaultAsync(l => l.LessonId == model.LessonId);
+
+        if (lesson != null && lesson.Module != null)
+        {
+            var courseId = lesson.Module.CourseId;
+            var totalLessons = await _context.Lessons
+                .CountAsync(l => l.Module.CourseId == courseId);
+
+            if (totalLessons > 0)
+            {
+                var completedLessons = await _context.UserLessons
+                    .CountAsync(ul => ul.UserId == userId && ul.IsCompleted && ul.Lesson.Module.CourseId == courseId);
+
+                var enrollment = await _context.Enrollments
+                    .FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);
+
+                if (enrollment != null)
+                {
+                    enrollment.Progress = Math.Round(((double)completedLessons / totalLessons) * 100, 2);
+                    enrollment.LastAccessDate = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
+        return Ok(new { success = true, isCompleted = progress.IsCompleted });
+    }
+}
+
+public class VideoProgressRequest
+{
+    public int LessonId { get; set; }
+    public int Seconds { get; set; }
+    public bool IsCompleted { get; set; }
 }
 
 
