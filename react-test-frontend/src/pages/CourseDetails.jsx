@@ -23,6 +23,7 @@ export const CourseDetails = () => {
   const [reviewModal, setReviewModal] = useState(false);
   const [donateModal, setDonateModal] = useState(false);
   const [following, setFollowing] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [myRating, setMyRating] = useState(5);
   const [myReview, setMyReview] = useState('');
   const token = localStorage.getItem('slms_token');
@@ -333,10 +334,24 @@ export const CourseDetails = () => {
               >
                 Ủng hộ Giảng viên ☕
               </Button>
-              <Button size="lg" radius="md" variant="light" color="gray" fullWidth
+              <Button 
+                size="lg" 
+                radius="md" 
+                variant={isFavorite ? "filled" : "light"} 
+                color={isFavorite ? "red" : "gray"} 
+                fullWidth
                 leftSection={<LuSparkles size={16} />}
+                onClick={() => {
+                  const newFav = !isFavorite;
+                  setIsFavorite(newFav);
+                  if (newFav) {
+                    toast.success('Đã thêm khóa học vào danh sách yêu thích!');
+                  } else {
+                    toast.success('Đã xóa khóa học khỏi danh sách yêu thích.');
+                  }
+                }}
               >
-                Thêm vào yêu thích
+                {isFavorite ? 'Đã yêu thích ❤️' : 'Thêm vào yêu thích'}
               </Button>
             </Stack>
 

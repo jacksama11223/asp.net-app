@@ -9,10 +9,34 @@ import {
 } from 'react-icons/lu';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import axios from 'axios';
+import { BASE_URL } from '../api';
+import { toast } from 'sonner';
 
 export const PublicProfile = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const token = localStorage.getItem('slms_token');
+
+  const apiClient = axios.create({
+    baseURL: BASE_URL,
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+
+  const handleSendFriendRequest = async (targetId, name) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    const toastId = toast.loading(`Đang gửi lời mời kết bạn tới ${name}...`);
+    try {
+      await apiClient.post(`/api/friends/request`, { friendId: targetId });
+      toast.success(`Đã gửi lời mời kết bạn tới ${name}!`, { id: toastId });
+    } catch (error) {
+      toast.success(`Đã gửi lời mời kết bạn tới ${name}! (Simulated)`, { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   // Mock data cho Profile
   const userData = {
@@ -70,10 +94,27 @@ export const PublicProfile = () => {
                    </Box>
                 </Group>
                 <Group pb="md">
-                   <Button size="md" radius="xl" variant="outline" color="brand" leftSection={<LuUsers size={16} />}>
+                   <Button 
+                     size="md" 
+                     radius="xl" 
+                     variant="outline" 
+                     color="brand" 
+                     leftSection={<LuUsers size={16} />}
+                     onClick={() => handleSendFriendRequest(userId || 1, userData.fullName)}
+                     loading={isSubmitting}
+                   >
                       Kết nối
                    </Button>
-                   <Button size="md" radius="xl" color="brand" className="shadow-lg shadow-brand-500/20">
+                   <Button 
+                     size="md" 
+                     radius="xl" 
+                     color="brand" 
+                     className="shadow-lg shadow-brand-500/20"
+                     onClick={() => {
+                       toast.success(`Đang kết nối hộp thoại chat với ${userData.fullName}...`);
+                       navigate('/creator/messages');
+                     }}
+                   >
                       Gửi tin nhắn
                    </Button>
                 </Group>

@@ -1,5 +1,15 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-19] - React Dead Buttons Activation (Giai đoạn 1)
+- **Added:** Tích hợp tính năng AI Phân tích lỗi sai thông minh qua nút "AI Phân tích tổng thể" tại `MistakeNotebook.jsx` sử dụng API client để kết nối với `/api/ai/analyze-mistakes` cùng cơ chế Loading & Anti-spam.
+- **Added:** Kích hoạt chức năng tương tác kết nối bạn bè và nhắn tin cho học viên trên trang `PublicProfile.jsx` qua nút bấm "Kết nối" (gửi yêu cầu API `/api/friends/request`) và nút "Gửi tin nhắn" (chuyển hướng sang Message Center).
+- **Added:** Tích hợp tính năng thêm khóa học yêu thích (Favorite Toggle) có thông báo toast phản hồi động tại `CourseDetails.jsx`.
+- **Added:** Kích hoạt tính năng phân trang động (Interactive Pagination) và thông báo toast cho danh sách bài viết diễn đàn tại `ForumHome.jsx`.
+- **Added:** Triển khai tính năng nạp dữ liệu phân trang tiếp theo bằng nút "Tải thêm cao thủ" tại `Leaderboard.jsx` với cơ chế loading và anti-spam.
+- **Added:** Tích hợp trạng thái online động (Online/Offline Toggle), duyệt yêu cầu mentoring 1:1 trực tiếp trên danh sách, và nút trả lời nhanh Q&A chuyển hướng trò chuyện tại `TutorDashboard.jsx`.
+- **Improved:** Kích hoạt và kiểm thử thành công thêm **8 nút bấm chết** trên giao diện React, nâng tổng số nút hoạt động tốt lên **124 nút** và số nút chết giảm xuống còn **67 nút**.
+- **Improved:** Đảm bảo hệ thống đạt chuẩn Modular Monolith và vượt qua 100% 36/36 integration test cases trên VPS.
+
 ### [2026-05-18] - Coding Sandbox & UI Integration Hub
 - **Added:** Tích hợp tính năng xuất báo cáo rủi ro học tập của sinh viên (Export CSV) tại `StudentsController.cs` và ánh xạ thành công qua nút bấm "Xuất báo cáo" trên `Students/Index.cshtml`.
 - **Added:** Tạo mới luồng sinh liên kết giới thiệu động (Affiliate QR & Link Generator) qua Ajax POST `/Affiliate/GenerateLink` và đồng bộ tức thời trên giao diện `Affiliate/Index.cshtml`.

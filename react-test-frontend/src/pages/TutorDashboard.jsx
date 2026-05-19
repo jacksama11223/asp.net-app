@@ -8,9 +8,11 @@ import {
 } from 'react-icons/lu';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export const TutorDashboard = () => {
   const navigate = useNavigate();
+  const [isOnline, setIsOnline] = useState(false);
 
   // Mock data for Sprint 3
   const tutorStats = {
@@ -21,9 +23,13 @@ export const TutorDashboard = () => {
     upcomingSessions: 3
   };
 
-  const bookingRequests = [
+  const [bookings, setBookings] = useState([
     { id: 1, student: 'Trần Văn X', topic: 'Debug React Hooks', date: '12/05 14:00', status: 'Pending' },
     { id: 2, student: 'Lê Thị Y', topic: 'Setup Docker Compose', date: '13/05 10:00', status: 'Confirmed' }
+  ]);
+
+  const friendRequests = [
+    { id: 3, name: 'Lê Văn C', role: 'Premium Learner', message: 'Xin chào, mình cùng học khóa React nhé!' }
   ];
 
   const recentQuestions = [
@@ -43,9 +49,27 @@ export const TutorDashboard = () => {
               Bảng điều khiển dành riêng cho giảng viên hỗ trợ 1:1 và trả lời cộng đồng.
             </Text>
           </Box>
-          <Button color="orange" radius="xl" leftSection={<LuZap size={16} />}>
-            Bật trạng thái Online
-          </Button>
+          <Group>
+            <Button variant="light" color="orange" radius="xl" onClick={() => navigate('/tutor/profile/edit')}>
+              Sửa hồ sơ Tutor
+            </Button>
+            <Button 
+              color={isOnline ? 'green' : 'orange'} 
+              radius="xl" 
+              leftSection={<LuZap size={16} />}
+              onClick={() => {
+                const nextState = !isOnline;
+                setIsOnline(nextState);
+                if (nextState) {
+                  toast.success("Đã bật trạng thái Online. Bạn sẵn sàng nhận câu hỏi hỗ trợ!");
+                } else {
+                  toast.info("Đã tắt trạng thái Online.");
+                }
+              }}
+            >
+              {isOnline ? 'Đang Online' : 'Bật trạng thái Online'}
+            </Button>
+          </Group>
         </Group>
 
         {/* Thống kê hiệu suất */}
@@ -92,7 +116,7 @@ export const TutorDashboard = () => {
               <Paper p="xl" radius="xl" withBorder className="glass bg-white">
                 <Group justify="space-between" mb="lg">
                   <Title order={3}>Lịch Mentoring 1:1</Title>
-                  <Button variant="light" color="orange" size="xs" radius="xl">Quản lý lịch rảnh</Button>
+                  <Button variant="light" color="orange" size="xs" radius="xl" onClick={() => navigate('/tutor/availability')}>Quản lý lịch rảnh</Button>
                 </Group>
                 <Table verticalSpacing="md">
                   <Table.Thead>
@@ -105,7 +129,7 @@ export const TutorDashboard = () => {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
-                    {bookingRequests.map(b => (
+                    {bookings.map(b => (
                       <Table.Tr key={b.id}>
                         <Table.Td>
                           <Group gap="sm">
@@ -126,7 +150,17 @@ export const TutorDashboard = () => {
                               Vào phòng Google Meet
                             </Button>
                           ) : (
-                            <Button size="xs" variant="light" color="orange">Duyệt</Button>
+                            <Button 
+                              size="xs" 
+                              variant="light" 
+                              color="orange"
+                              onClick={() => {
+                                setBookings(prev => prev.map(item => item.id === b.id ? { ...item, status: 'Confirmed' } : item));
+                                toast.success("Đã phê duyệt lịch Mentoring thành công!");
+                              }}
+                            >
+                              Duyệt
+                            </Button>
                           )}
                         </Table.Td>
                       </Table.Tr>
@@ -156,7 +190,17 @@ export const TutorDashboard = () => {
                         <Text size="xs" c="dimmed">{q.time}</Text>
                       </Group>
                       <Text size="sm" fw={600} mb="md">{q.question}</Text>
-                      <Button fullWidth variant="light" color="blue" size="xs" leftSection={<LuSend size={14} />}>
+                      <Button 
+                        fullWidth 
+                        variant="light" 
+                        color="blue" 
+                        size="xs" 
+                        leftSection={<LuSend size={14} />}
+                        onClick={() => {
+                          toast.success(`Đang chuyển tới câu hỏi của học viên ${q.student}...`);
+                          navigate(`/creator/messages`);
+                        }}
+                      >
                         Trả lời ngay
                       </Button>
                     </Card>

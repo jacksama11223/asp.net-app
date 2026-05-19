@@ -321,6 +321,18 @@
                                 </a>
                                 <ul class="nav nav-treeview pl-3">
                                     <li class="nav-item">
+                                        <a href="/Assessment" class="nav-link @(_act == "Index" ? "active" : "")">
+                                            <i class="fas fa-file-alt nav-icon text-sm"></i>
+                                            <p>Ngân hàng Đề thi</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Assessment/AchievementHub" class="nav-link @(_act == "AchievementHub" ? "active" : "")">
+                                            <i class="fas fa-crown nav-icon text-sm"></i>
+                                            <p>Quản lý Thành tựu</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="/Assessment/Leaderboard" class="nav-link @(_act == "Leaderboard" ? "active" : "")">
                                             <i class="fas fa-medal nav-icon text-sm"></i>
                                             <p>Bảng xếp hạng</p>
@@ -417,6 +429,7 @@
         <!-- Main Footer -->
         <footer class="main-footer">
             <div class="float-right d-none d-sm-inline">
+                <a href="/Home/Privacy" class="text-muted mr-3">Điều khoản & Bảo mật</a>
                 AI Component Integrated
             </div>
             <strong>Copyright &copy; 2026 SmartLMS.</strong> All rights reserved.

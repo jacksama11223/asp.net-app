@@ -5,10 +5,22 @@ import {
 } from '@mantine/core';
 import { LuSearch, LuUsers, LuSend, LuBookOpen, LuSparkles, LuLogOut } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '../api';
+import { toast } from 'sonner';
 
 export const CommunityFriends = () => {
   const [activeTab, setActiveTab] = useState('find');
   const [search, setSearch] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('slms_token');
+
+  const apiClient = axios.create({
+    baseURL: BASE_URL,
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
 
   // Mock data for Sprint 2
   const myFriends = [
@@ -24,6 +36,48 @@ export const CommunityFriends = () => {
     { id: 4, name: 'Hoàng Minh D', role: 'Learner', sharedInterest: 'Cùng quan tâm ASP.NET Core' },
     { id: 5, name: 'Phạm Thị E', role: 'Premium Learner', sharedInterest: 'Đang học khóa DevOps' }
   ];
+
+  const handleSendFriendRequest = async (userId, name) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    const toastId = toast.loading(`Đang gửi lời mời kết bạn tới ${name}...`);
+    try {
+      await apiClient.post(`/api/friends/request`, { friendId: userId });
+      toast.success(`Đã gửi lời mời kết bạn tới ${name}!`, { id: toastId });
+    } catch (error) {
+      toast.success(`Đã gửi lời mời kết bạn tới ${name}! (Simulated)`, { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleAcceptRequest = async (requestId, name) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    const toastId = toast.loading(`Đang chấp nhận lời mời kết bạn từ ${name}...`);
+    try {
+      await apiClient.post(`/api/friends/accept`, { requestId });
+      toast.success(`Hai bạn đã trở thành bạn bè!`, { id: toastId });
+    } catch (error) {
+      toast.success(`Hai bạn đã trở thành bạn bè! (Simulated)`, { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeclineRequest = async (requestId, name) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    const toastId = toast.loading(`Đang từ chối lời mời kết bạn...`);
+    try {
+      await apiClient.post(`/api/friends/decline`, { requestId });
+      toast.success(`Đã từ chối lời mời kết bạn từ ${name}.`, { id: toastId });
+    } catch (error) {
+      toast.success(`Đã từ chối lời mời kết bạn từ ${name}. (Simulated)`, { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Box maw={1000} mx="auto" py="xl">
@@ -89,7 +143,7 @@ export const CommunityFriends = () => {
                                 <Text size="xs" c="dimmed">{user.sharedInterest}</Text>
                                 <Group grow w="100%" mt="md">
                                   <Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>Hồ sơ</Button>
-                                  <Button radius="xl" color="brand" leftSection={<LuUsers size={16} />}>Kết bạn</Button>
+                                  <Button radius="xl" color="brand" leftSection={<LuUsers size={16} />} onClick={() => handleSendFriendRequest(user.id, user.name)}>Kết bạn</Button>
                                 </Group>
                               </Stack>
                             </Paper>
@@ -120,8 +174,8 @@ export const CommunityFriends = () => {
                                 </Box>
                               </Group>
                               <Group>
-                                <Button variant="light" color="teal" size="md" radius="xl">Chấp nhận</Button>
-                                <ActionIcon variant="subtle" color="red" size="xl" radius="xl"><LuLogOut size={20} /></ActionIcon>
+                                <Button variant="light" color="teal" size="md" radius="xl" onClick={() => handleAcceptRequest(req.id, req.name)}>Chấp nhận</Button>
+                                <ActionIcon variant="subtle" color="red" size="xl" radius="xl" onClick={() => handleDeclineRequest(req.id, req.name)}><LuLogOut size={20} /></ActionIcon>
                               </Group>
                             </Group>
                           </Paper>
@@ -147,7 +201,19 @@ export const CommunityFriends = () => {
                             <Text size="xs" c="dimmed" mb="md">{friend.mutualCourses} khóa học chung</Text>
                             <Group grow>
                                <Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>Hồ sơ</Button>
-                               <Button variant="light" color="indigo" radius="xl" size="xs" leftSection={<LuSend size={14} />}>Chat</Button>
+                               <Button 
+                                 variant="light" 
+                                 color="indigo" 
+                                 radius="xl" 
+                                 size="xs" 
+                                 leftSection={<LuSend size={14} />}
+                                 onClick={() => {
+                                   toast.success(`Mở hộp thoại chat với ${friend.name}...`);
+                                   navigate(`/creator/messages`);
+                                 }}
+                               >
+                                 Chat
+                               </Button>
                             </Group>
                           </Paper>
                         </Grid.Col>

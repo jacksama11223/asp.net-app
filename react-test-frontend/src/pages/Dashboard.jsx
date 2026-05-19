@@ -243,6 +243,7 @@ const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => 
             </Text>
           </Box>
           <Group>
+            <Button variant="light" color="cyan" radius="md" leftSection={<LuSparkles size={18} />} onClick={() => navigate('/ai-career-analysis')}>AI Career Advisor</Button>
             <Button variant="light" color="brand" radius="md" leftSection={<LuClock size={18} />} onClick={() => navigate('/booking')}>Book Tutor</Button>
             <Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>Start Learning</Button>
           </Group>
@@ -326,6 +327,25 @@ const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => 
 
         <Grid.Col span={{ base: 12, lg: 4 }}>
           <Stack gap="lg">
+            {/* AI Career Advisor Premium Card */}
+            <CardWrapper className="bg-gradient-to-br from-cyan-500 to-indigo-600 border-none text-white hover:scale-105 transition-all cursor-pointer" p="xl" onClick={() => navigate('/ai-career-analysis')}>
+              <Stack gap="sm">
+                <Group justify="space-between">
+                  <ThemeIcon size="lg" radius="md" color="white" variant="light">
+                    <LuSparkles size={20} />
+                  </ThemeIcon>
+                  <Badge color="cyan" variant="filled">Premium AI</Badge>
+                </Group>
+                <Title order={3} className="tracking-tight text-white">AI Career Advisor</Title>
+                <Text size="xs" opacity={0.9} c="white">
+                  Phân tích kỹ năng, đề xuất lộ trình và cơ hội nghề nghiệp tương lai dựa trên dữ liệu học tập thực tế của bạn.
+                </Text>
+                <Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs">
+                  Xem Phân Tích Sự Nghiệp
+                </Button>
+              </Stack>
+            </CardWrapper>
+
             <CardWrapper>
               <Group gap="xs" mb="xl">
                 <LuZap size={20} color="orange" />

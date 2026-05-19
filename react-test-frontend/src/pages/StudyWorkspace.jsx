@@ -228,6 +228,14 @@ export const StudyWorkspace = () => {
                     </Box>
                     <Group>
                        <Button 
+                        variant="light" 
+                        color="indigo" 
+                        leftSection={<LuExternalLink size={16} />}
+                        onClick={() => navigate('/coding/1')}
+                      >
+                        Mở rộng IDE (Lab)
+                      </Button>
+                       <Button 
                         variant={bookmarked ? "filled" : "light"} 
                         color="orange" 
                         leftSection={<LuZap size={16} />}

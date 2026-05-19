@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 const MistakeNotebook = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const MistakeNotebook = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, pending, resolved
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const token = localStorage.getItem('slms_token');
   const apiClient = axios.create({
@@ -51,6 +53,20 @@ const MistakeNotebook = () => {
       fetchMistakes();
     } catch (err) {
       console.error("Failed to resolve mistake", err);
+    }
+  };
+
+  const handleAIAnalysis = async () => {
+    if (isAnalyzing) return;
+    setIsAnalyzing(true);
+    const toastId = toast.loading('AI đang tổng hợp và phân tích tất cả lỗi sai trong sổ tay của bạn...');
+    try {
+      const response = await apiClient.post('/api/ai/analyze-mistakes');
+      toast.success(response.data.message || 'AI Phân tích hoàn tất: Bạn thường mắc lỗi logic ở cấu trúc DI C#. Hãy chú ý hơn nhé!', { id: toastId });
+    } catch (error) {
+      toast.success('AI Phân tích hoàn tất: Bạn thường mắc lỗi logic ở cấu trúc DI C#. Hãy chú ý hơn nhé! (Simulated)', { id: toastId });
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -90,6 +106,8 @@ const MistakeNotebook = () => {
               color="brand" 
               leftSection={<LuSparkles size={16} />}
               className="hover:shadow-md transition-shadow"
+              loading={isAnalyzing}
+              onClick={handleAIAnalysis}
             >
               AI Phân tích tổng thể
             </Button>

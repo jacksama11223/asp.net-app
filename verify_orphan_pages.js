@@ -84,10 +84,10 @@ const REACT_COMPONENT_ROUTES = {
     'MessageCenter': '/creator/messages',
     'CreatorAnalytics': '/creator/analytics',
     'TutorDashboard': '/tutor/dashboard',
-    'TutorProfile': '/tutor/profile/1',
+    'TutorProfile': '/tutor-profile/1',
     'TutorProfileEdit': '/tutor/profile/edit',
-    'TutorSchedule': '/tutor/schedule',
-    'AICareerReport': '/ai-career-report',
+    'TutorSchedule': '/tutor/availability',
+    'AICareerReport': '/ai-career-analysis',
     'CertificateView': '/certificate/1'
 };
 

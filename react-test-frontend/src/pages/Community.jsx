@@ -18,6 +18,7 @@ export const Community = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('all');
+  const [selectedTag, setSelectedTag] = useState('');
   const navigate = useNavigate();
   const token = localStorage.getItem('slms_token');
 
@@ -47,6 +48,12 @@ export const Community = () => {
 
   const filteredPosts = posts.filter(p =>
     (activeTab === 'all' || p.category === activeTab) &&
+    (selectedTag === '' || 
+      (p.tags && p.tags.some(t => t.toLowerCase() === selectedTag.toLowerCase())) || 
+      p.title.toLowerCase().includes(selectedTag.toLowerCase().replace('#', '')) || 
+      p.category.toLowerCase().includes(selectedTag.toLowerCase().replace('#', '')) ||
+      (p.summary && p.summary.toLowerCase().includes(selectedTag.toLowerCase().replace('#', '')))
+    ) &&
     ((p.title || "").toLowerCase().includes(search.toLowerCase()) || p.summary?.toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -231,11 +238,21 @@ export const Community = () => {
                 <Paper p="xl" radius="2rem" withBorder className="glass">
                    <Title order={4} mb="md">Trending Topics</Title>
                    <Group gap="xs">
-                      {['#DotNet8', '#React19', '#AI_Assistant', '#Docker_Compose', '#Machine_Learning', '#UI_UX'].map(tag => (
-                        <Badge key={tag} variant="light" color="gray" size="lg" className="cursor-pointer hover:bg-slate-100 transition-colors">
-                          {tag}
-                        </Badge>
-                      ))}
+                      {['#DotNet8', '#React19', '#AI_Assistant', '#Docker_Compose', '#Machine_Learning', '#UI_UX'].map(tag => {
+                        const isSelected = selectedTag === tag;
+                        return (
+                          <Badge 
+                            key={tag} 
+                            variant={isSelected ? "filled" : "light"} 
+                            color={isSelected ? "brand" : "gray"} 
+                            size="lg" 
+                            className="cursor-pointer transition-all hover:scale-105"
+                            onClick={() => setSelectedTag(isSelected ? '' : tag)}
+                          >
+                            {tag}
+                          </Badge>
+                        );
+                      })}
                    </Group>
                 </Paper>
 

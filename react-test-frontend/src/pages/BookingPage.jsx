@@ -78,9 +78,24 @@ export const BookingPage = () => {
           {tutors.map((tutor) => (
             <Card key={tutor.userId} shadow="sm" padding="lg" radius="md" withBorder>
               <Group wrap="nowrap">
-                <Avatar size="lg" radius="xl" color="brand">{tutor.fullName?.charAt(0)}</Avatar>
+                <Avatar 
+                  size="lg" 
+                  radius="xl" 
+                  color="brand" 
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/tutor-profile/${tutor.userId}`)}
+                >
+                  {tutor.fullName?.charAt(0)}
+                </Avatar>
                 <div>
-                  <Text fw={700}>{tutor.fullName}</Text>
+                  <Text 
+                    fw={700} 
+                    style={{ cursor: 'pointer' }} 
+                    className="hover:text-brand-600 transition-colors"
+                    onClick={() => navigate(`/tutor-profile/${tutor.userId}`)}
+                  >
+                    {tutor.fullName}
+                  </Text>
                   <Text size="xs" c="dimmed">{tutor.email}</Text>
                   <Badge size="xs" color="blue" mt={4}>Expert</Badge>
                 </div>

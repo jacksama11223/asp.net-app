@@ -1,6 +1,6 @@
 # Báo cáo Chẩn đoán Hệ thống: Luồng chuyển trang & Thiết lập Nút bấm (Unified UI Master Audit)
 
-*Thời gian quét:* 19:02:37 18/5/2026
+*Thời gian quét:* 09:01:14 19/5/2026
 *Tổng số tệp UI đã phân tích:* **80**
 *Địa chỉ VPS đích:* **http://141.253.114.218**
 
@@ -8,29 +8,20 @@
 
 | Chỉ số kiểm thử hệ thống | Số lượng | Trạng thái chẩn đoán |
 | :--- | :--- | :--- |
-| 🟢 Nút hoạt động tốt (Gọi API / Local) | **111** | Đạt chuẩn kết nối và nghiệp vụ |
-| 🔄 Nút Chuyển tiếp trang (Navigation) | **86** | Đã cấu hình chuyển hướng luồng đi |
-| 🔴 Nút Chưa hoạt động (Dead Buttons) | **85** | Cần gán API / onclick xử lý |
-| ⚠️ Trang mồ côi (Orphan Pages - Bị cô lập) | **25** | Chưa có nút bấm ở trang khác dẫn tới |
+| 🟢 Nút hoạt động tốt (Gọi API / Local) | **124** | Đạt chuẩn kết nối và nghiệp vụ |
+| 🔄 Nút Chuyển tiếp trang (Navigation) | **102** | Đã cấu hình chuyển hướng luồng đi |
+| 🔴 Nút Chưa hoạt động (Dead Buttons) | **67** | Cần gán API / onclick xử lý |
+| ⚠️ Trang mồ côi (Orphan Pages - Bị cô lập) | **15** | Chưa có nút bấm ở trang khác dẫn tới |
 
 --- 
 
-## ⚠️ DANH SÁCH CÁC TRANG MỒ CÔI (ORPHAN PAGES - 25)
+## ⚠️ DANH SÁCH CÁC TRANG MỒ CÔI (ORPHAN PAGES - 15)
 
 Các trang sau đang bị cô lập khỏi giao diện người dùng chính (không có nút bấm nào từ trang khác dẫn tới):
 
 | Tên Trang | Công nghệ | URL Route | Mô tả tính năng | Khắc phục đề xuất |
 | :--- | :--- | :--- | :--- | :--- |
-| `AICareerReport.jsx` | `React` | `/ai-career-report` | Báo cáo định hướng nghề nghiệp bằng AI dựa trên hiệu năng code C#. | Tích hợp `navigate('/ai-career-report')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
-| `CertificateView.jsx` | `React` | `/certificate/1` | Trang cấp chứng chỉ hoàn thành khóa học tích hợp QR Code xác thực. | Tích hợp `navigate('/certificate/1')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
-| `CodeWorkspace.jsx` | `React` | `/coding/1` | Không gian thực hành code C# tích hợp Monaco Editor. | Tích hợp `navigate('/coding/1')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
-| `CommunityQuizBuilder.jsx` | `React` | `/community/quiz-builder` | Trình tạo câu hỏi trắc nghiệm chia sẻ lên diễn đàn. | Tích hợp `navigate('/community/quiz-builder')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
-| `TutorProfile.jsx` | `React` | `/tutor/profile/1` | Trang hiển thị hồ sơ năng lực của Gia sư. | Tích hợp `navigate('/tutor/profile/1')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
-| `TutorProfileEdit.jsx` | `React` | `/tutor/profile/edit` | Trang cập nhật hồ sơ cá nhân của Gia sư. | Tích hợp `navigate('/tutor/profile/edit')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
-| `TutorSchedule.jsx` | `React` | `/tutor/schedule` | Trang thiết lập khung giờ rảnh rỗi của Gia sư. | Tích hợp `navigate('/tutor/schedule')` hoặc Link từ Dashboard/Sidebar để chuyển hướng người dùng sang trang này. |
 | `AccessDenied.cshtml` | `CSHTML` | `/Account/AccessDenied` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Account" asp-action="AccessDenied"` vào Sidebar Admin. |
-| `AchievementHub.cshtml` | `CSHTML` | `/Assessment/AchievementHub` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Assessment" asp-action="AchievementHub"` vào Sidebar Admin. |
-| `Index.cshtml` | `CSHTML` | `/Assessment` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Assessment" asp-action="Index"` vào Sidebar Admin. |
 | `Solve.cshtml` | `CSHTML` | `/CodingChallenge/Solve` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CodingChallenge" asp-action="Solve"` vào Sidebar Admin. |
 | `Create.cshtml` | `CSHTML` | `/CodingChallengeManagement/Create` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CodingChallengeManagement" asp-action="Create"` vào Sidebar Admin. |
 | `Edit.cshtml` | `CSHTML` | `/CodingChallengeManagement/Edit` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CodingChallengeManagement" asp-action="Edit"` vào Sidebar Admin. |
@@ -40,7 +31,6 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `Curriculum.cshtml` | `CSHTML` | `/CourseManagement/Curriculum` | Thiết lập khung chương trình học, thêm bớt bài giảng (Admin). | Tích hợp TagHelper `asp-controller="CourseManagement" asp-action="Curriculum"` vào Sidebar Admin. |
 | `Edit.cshtml` | `CSHTML` | `/CourseManagement/Edit` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="CourseManagement" asp-action="Edit"` vào Sidebar Admin. |
 | `Index.cshtml` | `CSHTML` | `/Home` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Home" asp-action="Index"` vào Sidebar Admin. |
-| `Privacy.cshtml` | `CSHTML` | `/Home/Privacy` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Home" asp-action="Privacy"` vào Sidebar Admin. |
 | `Designer.cshtml` | `CSHTML` | `/Marketing/Designer` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Marketing" asp-action="Designer"` vào Sidebar Admin. |
 | `Failure.cshtml` | `CSHTML` | `/Payment/Failure` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Payment" asp-action="Failure"` vào Sidebar Admin. |
 | `PaymentResults.cshtml` | `CSHTML` | `/Payment/PaymentResults` | Phân hệ giao diện chức năng hệ thống. | Tích hợp TagHelper `asp-controller="Payment" asp-action="PaymentResults"` vào Sidebar Admin. |
@@ -52,9 +42,9 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 ## 🔍 CHI TIẾT SỰ KIỆN NÚT BẤM & LUỒNG DI CHUYỂN TỪNG TRANG (PAGE-BY-PAGE ANALYSIS)
 
-### 📄 Trang: [AICareerReport.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/AICareerReport.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [AICareerReport.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/AICareerReport.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\AICareerReport.jsx`
-* **Đường dẫn Route:** `/ai-career-report` (Chạy thử VPS: [http://141.253.114.218/ai-career-report](http://141.253.114.218/ai-career-report))
+* **Đường dẫn Route:** `/ai-career-analysis` (Chạy thử VPS: [http://141.253.114.218/ai-career-analysis](http://141.253.114.218/ai-career-analysis))
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Báo cáo định hướng nghề nghiệp bằng AI dựa trên hiệu năng code C#.*
 
@@ -64,8 +54,11 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 54 | `Quay lại Dashboard` | `<Button variant="subtle" color="gray" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate(-1)} mb="lg">` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 161 | `Mở Sổ tay lỗi sai để` | `<Button variant="subtle" color="brand" size="xs" rightSection={<LuTrendingUp size={14} />} onClick={() => navigate('/mistakes')} className="w-fit p-0">` | **`/mistakes`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\Dashboard.jsx` | 246 | `Link` | `<Button variant="light" color="cyan" radius="md" leftSection={<LuSparkles size={18} />} onClick={() => navigate('/ai-career-analysis')}>AI Career Advisor</Button>` |
+| `react-test-frontend\src\pages\Dashboard.jsx` | 331 | `Link` | `<CardWrapper className="bg-gradient-to-br from-cyan-500 to-indigo-600 border-none text-white hover:scale-105 transition-all cursor-pointer" p="xl" onClick={() => navigate('/ai-career-analysis')}>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -81,29 +74,31 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Trang đăng ký lịch hẹn tư vấn với Gia sư AI/Giảng viên.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 4)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 109 | `Nút ActionIcon` | `<ActionIcon size="xl" radius="md" variant="light" color="brand" onClick={() => navigate(`/tutor-profile/${b.tutorId || b.tutor?.userId || 1}`)}>` | **``/tutor-profile/${b.tutorId || b.tutor?.userId || 1}``** | Điều hướng người dùng sang trang liên kết chức năng |
+| 81 | `{tutor.fullName?.char` | `<Avatar size="lg" radius="xl" color="brand" style={{ cursor: 'pointer' }} onClick={() => navigate(`/tutor-profile/${tutor.userId}`)}>` | **`/tutor-profile/${tutor.userId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 91 | `Nút Text` | `<Text fw={700} style={{ cursor: 'pointer' }} className="hover:text-brand-600 transition-colors" onClick={() => navigate(`/tutor-profile/${tutor.userId}`)}>` | **`/tutor-profile/${tutor.userId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 124 | `Nút ActionIcon` | `<ActionIcon size="xl" radius="md" variant="light" color="brand" onClick={() => navigate(`/tutor-profile/${b.tutorId || b.tutor?.userId || 1}`)}>` | **``/tutor-profile/${b.tutorId || b.tutor?.userId || 1}``** | Điều hướng người dùng sang trang liên kết chức năng |
+| 163 | `Confirm Booking` | `<Button fullWidth onClick={handleBooking}>` | **`/tutor-profile/${tutor.userId}`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Dashboard.jsx` | 246 | `Link` | `<Button variant="light" color="brand" radius="md" leftSection={<LuClock size={18} />} onClick={() => navigate('/booking')}>Book Tutor</Button>` |
+| `react-test-frontend\src\pages\Dashboard.jsx` | 247 | `Link` | `<Button variant="light" color="brand" radius="md" leftSection={<LuClock size={18} />} onClick={() => navigate('/booking')}>Book Tutor</Button>` |
 | `react-test-frontend\src\pages\TutorProfile.jsx` | 105 | `Link` | `onClick={() => navigate('/booking')}` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 88 | `Schedule Meeting` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 148 | `Confirm Booking` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 103 | `Schedule Meeting` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
 #### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [CertificateView.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CertificateView.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [CertificateView.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CertificateView.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CertificateView.jsx`
 * **Đường dẫn Route:** `/certificate/1` (Chạy thử VPS: [http://141.253.114.218/certificate/1](http://141.253.114.218/certificate/1))
 * **Loại trang:** `React Page`
@@ -116,8 +111,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 143 | `Tải Xuống PDF Bản Cứng` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" size="md" leftSection={<LuDownload size={18} />} onClick={handleDownload} className="shadow-lg shadow-brand-500/20">` | **`-1`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 | 154 | `Chia Sẻ Chứng Chỉ (Share Li` | `<Button variant="light" color="brand" radius="md" size="md" leftSection={<LuShare2 size={18} />} onClick={handleShare}>` | **`-1`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\MyLearning.jsx` | 221 | `Link` | `onClick={() => navigate('/certificate/1')}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -141,7 +138,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\CourseDetails.jsx` | 325 | `Link` | `onClick={() => navigate(`/checkout/${id}`)}` |
+| `react-test-frontend\src\pages\CourseDetails.jsx` | 326 | `Link` | `onClick={() => navigate(`/checkout/${id}`)}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 4)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -156,7 +153,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [CodeWorkspace.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CodeWorkspace.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [CodeWorkspace.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CodeWorkspace.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CodeWorkspace.jsx`
 * **Đường dẫn Route:** `/coding/1` (Chạy thử VPS: [http://141.253.114.218/coding/1](http://141.253.114.218/coding/1))
 * **Loại trang:** `React Page`
@@ -165,8 +162,11 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\CommunityQuizBuilder.jsx` | 51 | `Link` | `navigate('/coding/1');` |
+| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 234 | `Link` | `onClick={() => navigate('/coding/1')}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -188,10 +188,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 4)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 64 | `Đặt câu hỏi mới` | `<Button size="lg" radius="xl" color="brand" leftSection={<LuPlus size={20} />} onClick={() => navigate('/community/post/new')} className="shadow-xl shadow-brand-500/20 px-8">` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 145 | `Nút Card` | `<Card p={0} radius="2rem" withBorder className="hover:shadow-xl transition-all border-slate-100 group cursor-pointer bg-white overflow-hidden" onClick={() => navigate(`/community/${post.postId}`)}>` | **`/community/${post.postId}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 246 | `Xem tất cả` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` | **`/leaderboard`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 268 | `Kết nối bạn bè` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` | **`/community/friends`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 71 | `Đặt câu hỏi mới` | `<Button size="lg" radius="xl" color="brand" leftSection={<LuPlus size={20} />} onClick={() => navigate('/community/post/new')} className="shadow-xl shadow-brand-500/20 px-8">` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 152 | `Nút Card` | `<Card p={0} radius="2rem" withBorder className="hover:shadow-xl transition-all border-slate-100 group cursor-pointer bg-white overflow-hidden" onClick={() => navigate(`/community/${post.postId}`)}>` | **`/community/${post.postId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 263 | `Xem tất cả` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` | **`/leaderboard`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 285 | `Kết nối bạn bè` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` | **`/community/friends`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -202,13 +202,15 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 98 | `Link` | `<a class="navbar-brand fw-bold fs-4" href="/Community">` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 106 | `Link` | `<li class="nav-item"><a class="nav-link px-3" href="/Community">Khám phá</a></li>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
+| :--- | :--- | :--- | :--- | :--- |
+| 244 | `Nút Badge` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
 #### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
 | :--- | :--- | :--- | :--- | :--- |
-| 153 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="brand" size="lg">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 160 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="brand" size="lg">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
 
 --- 
 
@@ -218,30 +220,30 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Trang quản lý bạn bè và kết nối học viên.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 5)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 6)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 78 | `{user` | `<Avatar size={80} radius="xl" color="brand" className="cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate(`/profile/${user.id}`)}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 91 | `Hồ sơ` | `<Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 114 | `{req.` | `<Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>` | **`/profile/${req.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 139 | `{frien` | `<Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>` | **`/profile/${friend.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 149 | `Hồ sơ` | `<Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>` | **`/profile/${friend.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 132 | `{user` | `<Avatar size={80} radius="xl" color="brand" className="cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate(`/profile/${user.id}`)}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 145 | `Hồ sơ` | `<Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>` | **`/profile/${user.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 168 | `{req.` | `<Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>` | **`/profile/${req.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 193 | `{frien` | `<Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>` | **`/profile/${friend.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 203 | `Hồ sơ` | `<Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>` | **`/profile/${friend.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 204 | `Chat` | `<Button variant="light" color="indigo" radius="xl" size="xs" leftSection={<LuSend size={14} />} onClick={() => { toast.success(`Mở hộp thoại chat với ${friend.name}...`); navigate(`/creator/messages`); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Community.jsx` | 268 | `Link` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` |
+| `react-test-frontend\src\pages\Community.jsx` | 285 | `Link` | `<Button variant="light" fullWidth mt="xl" radius="xl" onClick={() => navigate('/community/friends')}>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 92 | `Kết bạn` | `<Button radius="xl" color="brand" leftSection={<LuUsers size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 123 | `Chấp nhận` | `<Button variant="light" color="teal" size="md" radius="xl">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi |
-| 124 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="red" size="xl" radius="xl">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 150 | `Chat` | `<Button variant="light" color="indigo" radius="xl" size="xs" leftSection={<LuSend size={14} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 146 | `Kết bạn` | `/api/friends/request` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 177 | `Chấp nhận` | `/api/friends/accept` | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 178 | `Nút ActionIcon` | `/api/friends/decline` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -261,10 +263,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Community.jsx` | 67 | `Link` | `onClick={() => navigate('/community/post/new')}` |
-| `react-test-frontend\src\pages\ForumHome.jsx` | 72 | `Link` | `onClick={() => navigate('/community/post/new')}` |
-| `react-test-frontend\src\pages\MistakeNotebook.jsx` | 236 | `Link` | `onClick={() => navigate('/community/post/new', {` |
-| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 577 | `Link` | `onClick={() => navigate('/community/post/new', {` |
+| `react-test-frontend\src\pages\Community.jsx` | 74 | `Link` | `onClick={() => navigate('/community/post/new')}` |
+| `react-test-frontend\src\pages\ForumHome.jsx` | 82 | `Link` | `onClick={() => navigate('/community/post/new')}` |
+| `react-test-frontend\src\pages\MistakeNotebook.jsx` | 254 | `Link` | `onClick={() => navigate('/community/post/new', {` |
+| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 585 | `Link` | `onClick={() => navigate('/community/post/new', {` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -276,29 +278,32 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [CommunityQuizBuilder.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CommunityQuizBuilder.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [CommunityQuizBuilder.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/CommunityQuizBuilder.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\CommunityQuizBuilder.jsx`
 * **Đường dẫn Route:** `/community/quiz-builder` (Chạy thử VPS: [http://141.253.114.218/community/quiz-builder](http://141.253.114.218/community/quiz-builder))
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Trình tạo câu hỏi trắc nghiệm chia sẻ lên diễn đàn.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
-*Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
+| :--- | :--- | :--- | :--- | :--- |
+| 195 | `Lưu vào Kho lưu trữ` | `<Button variant="subtle" color="gray" leftSection={<LuPlus size={16} />} onClick={handleSaveQuiz} loading={isSaving}>` | **`/coding/1`** | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
+| 196 | `Vào chế độ Thi thử` | `<Button color="brand" radius="xl" leftSection={<LuPlay size={16} />} onClick={handleStartExam}>` | **`/coding/1`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\ForumHome.jsx` | 75 | `Link` | `onClick={() => navigate('/community/quiz-builder')}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 96 | `{isGenerating ? 'AI đ` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 133 | `{isGenerating ? 'AI đ` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 3)
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
 | :--- | :--- | :--- | :--- | :--- |
-| 138 | `Nút Button` | `<Button key={i} variant="light" color={i === quiz.correct ? 'teal' : 'gray'} radius="md" size="md" justify="flex-start" className="font-medium whitespace-normal h-auto py-3">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 158 | `Lưu vào Kho lưu trữ` | `<Button variant="subtle" color="gray" leftSection={<LuPlus size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
-| 159 | `Vào chế độ Thi thử` | `<Button color="brand" radius="xl" leftSection={<LuPlay size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 175 | `Nút Button` | `<Button key={i} variant="light" color={i === quiz.correct ? 'teal' : 'gray'} radius="md" size="md" justify="flex-start" className="font-medium whitespace-normal h-auto py-3">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
 
 --- 
 
@@ -311,28 +316,27 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 323 | `Đăng Ký Ngay` | `<Button size="lg" radius="md" color="brand" fullWidth onClick={() => navigate(`/checkout/${id}`)}>` | **`/checkout/${id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 324 | `Đăng Ký Ngay` | `<Button size="lg" radius="md" color="brand" fullWidth onClick={() => navigate(`/checkout/${id}`)}>` | **`/checkout/${id}`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 3)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\CourseManager.jsx` | 354 | `Link` | `<Button variant="light" color="slate" size="xs" leftSection={<LuEye size={14} />} onClick={() => navigate(`/course/${course.courseId}`)}>` |
 | `react-test-frontend\src\pages\Courses.jsx` | 184 | `Link` | `onClick={() => navigate(`/course/${course.courseId}`)}` |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 543 | `Link` | `window.location.href = '/Course/Search?q=' + $(this).val();` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 556 | `Link` | `window.location.href = '/Course/Search?q=' + $(this).val();` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 5)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 6)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 93 | `Gửi đánh giá` | `/api/student/review` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
-| 136 | `Tôi đã chuyển khoản thành c` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 244 | `Viết đánh giá` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 329 | `Ủng hộ Giảng viên ☕` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 372 | `{following ? "Đang th` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 94 | `Gửi đánh giá` | `/api/student/review` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 137 | `Tôi đã chuyển khoản thành c` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 245 | `Viết đánh giá` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 330 | `Ủng hộ Giảng viên ☕` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 337 | `{isFavorite ? 'Đã yêu t` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 387 | `{following ? "Đang th` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 336 | `Thêm vào yêu thích` | `<Button size="lg" radius="md" variant="light" color="gray" fullWidth leftSection={<LuSparkles size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -360,17 +364,17 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 265 | `T\u1ea1o kh\u00f3a h\u1ec` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 276 | `T\u1ea1o b\u00e0i th\u1ef` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 324 | `Nút ActionIcon` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 357 | `Studio` | `/api/compiler/courses/${course.courseId}/lessons` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
+| 357 | `Studio` | `/api/compiler/courses/${course.courseId}/lessons` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟢 Active (405) - *API phản hồi hợp lệ* |
 | 378 | `T\u1ea1o b\u00e0i t\u1e` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 421 | `S\u1eeda` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 | 473 | `H\u1ee7y` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 474 | `L\u01b0u l\u1ea1i` | `/api/compiler/courses/save` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
-| 519 | `C\u1ea5u h\` | `/api/compiler/challenges/${lesson.challengeId}` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
+| 474 | `L\u01b0u l\u1ea1i` | `/api/compiler/courses/save` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | 🟢 Active (405) - *API phản hồi hợp lệ* |
+| 519 | `C\u1ea5u h\` | `/api/compiler/challenges/${lesson.challengeId}` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟢 Active (405) - *API phản hồi hợp lệ* |
 | 537 | `Ho\u00e0n t\u1ea5t` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 646 | `Nút ActionIcon` | `/api/compiler/challenges/save` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
-| 653 | `Th\u00eam TestCase m\u1ed` | `/api/compiler/challenges/save` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
+| 646 | `Nút ActionIcon` | `/api/compiler/challenges/save` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟢 Active (405) - *API phản hồi hợp lệ* |
+| 653 | `Th\u00eam TestCase m\u1ed` | `/api/compiler/challenges/save` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟢 Active (405) - *API phản hồi hợp lệ* |
 | 659 | `H\u1ee7y` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 660 | `L\u01b0u & \u00c1p d\u1ee5ng` | `/api/compiler/challenges/save` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
+| 660 | `L\u01b0u & \u00c1p d\u1ee5ng` | `/api/compiler/challenges/save` | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống | 🟢 Active (405) - *API phản hồi hợp lệ* |
 
 #### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -392,7 +396,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Dashboard.jsx` | 247 | `Link` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>Start Learning</Button>` |
+| `react-test-frontend\src\pages\Dashboard.jsx` | 248 | `Link` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>Start Learning</Button>` |
 | `react-test-frontend\src\pages\LandingPage.jsx` | 125 | `Link` | `to="/courses"` |
 | `react-test-frontend\src\pages\MyLearning.jsx` | 143 | `Link` | `<Button variant="subtle" color="brand" onClick={() => navigate('/courses')}>` |
 | `react-test-frontend\src\pages\MyLearning.jsx` | 157 | `Link` | `<Button radius="md" color="brand" onClick={() => navigate('/courses')}>` |
@@ -421,7 +425,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Dashboard.jsx` | 271 | `Link` | `<Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />} onClick={() => navigate('/creator/analytics')}>Export Analytics</Button>` |
+| `react-test-frontend\src\pages\Dashboard.jsx` | 272 | `Link` | `<Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />} onClick={() => navigate('/creator/analytics')}>Export Analytics</Button>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -437,16 +441,18 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Bảng thống kê học tập & phân tích rủi ro thất nghiệp bằng AI.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 7)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 9)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 100 | `Tạo Khóa Học Mới` | `<Button variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }} radius="md" size="lg" leftSection={<LuPlus size={20} />} className="shadow-xl shadow-indigo-500/30" onClick={() => navigate('/creator/courses')}>` | **`/creator/courses`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
 | 127 | `Xem tất cả` | `<Button variant="light" size="xs" onClick={() => navigate('/creator/courses')}>` | **`/creator/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 175 | `Bắt đầu Studio` | `<Button color="white" variant="white" c="indigo" mt="md" radius="md" size="md" onClick={() => navigate('/creator/courses')}>` | **`/creator/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 209 | `Nút ActionIcon` | `<ActionIcon size="xl" color="indigo" variant="filled" onClick={sendMessage}>` | **`/creator/courses`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
-| 246 | `Book Tutor` | `<Button variant="light" color="brand" radius="md" leftSection={<LuClock size={18} />} onClick={() => navigate('/booking')}>` | **`/booking`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 247 | `Start Learning` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>` | **`/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 271 | `Export Analytics` | `<Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />} onClick={() => navigate('/creator/analytics')}>` | **`/creator/analytics`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 246 | `AI Career Advisor` | `<Button variant="light" color="cyan" radius="md" leftSection={<LuSparkles size={18} />} onClick={() => navigate('/ai-career-analysis')}>` | **`/ai-career-analysis`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 247 | `Book Tutor` | `<Button variant="light" color="brand" radius="md" leftSection={<LuClock size={18} />} onClick={() => navigate('/booking')}>` | **`/booking`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 248 | `Start Learning` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuZap size={18} />} onClick={() => navigate('/courses')}>` | **`/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 272 | `Export Analytics` | `<Button variant="subtle" size="xs" rightSection={<LuPlay size={14} />} onClick={() => navigate('/creator/analytics')}>` | **`/creator/analytics`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 331 | `Nút CardWrapper` | `<CardWrapper className="bg-gradient-to-br from-cyan-500 to-indigo-600 border-none text-white hover:scale-105 transition-all cursor-pointer" p="xl" onClick={() => navigate('/ai-career-analysis')}>` | **`/ai-career-analysis`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -460,10 +466,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 153 | `Nhắn tin cho học viên (Test)` | `/api/messages/history/${courseId}/${studentId}` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
+| 153 | `Nhắn tin cho học viên (Test)` | `/api/messages/history/${courseId}/${studentId}` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
-*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+| :--- | :--- | :--- | :--- | :--- |
+| 343 | `Xem Phân Tích Sự Nghi` | `<Button color="white" variant="white" c="indigo" size="xs" radius="md" fullWidth mt="xs">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
 
 --- 
 
@@ -473,11 +481,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Diễn đàn thảo luận và Q&A cộng đồng học viên.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 3)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 69 | `Tạo chủ đề mới` | `<Button size="md" radius="xl" color="brand" leftSection={<LuPlus size={18} />} onClick={() => navigate('/community/post/new')}>` | **`/community/post/new`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
-| 119 | `Nút tr` | `<tr key={post.id} className="cursor-pointer hover:bg-slate-50/50" onClick={() => navigate(`/community/${post.id}`)}>` | **`/community/${post.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 72 | `Tạo Quiz đố vui` | `<Button size="md" radius="xl" color="indigo" variant="light" leftSection={<LuZap size={18} />} onClick={() => navigate('/community/quiz-builder')}>` | **`/community/quiz-builder`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
+| 79 | `Tạo chủ đề mới` | `<Button size="md" radius="xl" color="brand" leftSection={<LuPlus size={18} />} onClick={() => navigate('/community/post/new')}>` | **`/community/post/new`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
+| 130 | `Nút tr` | `<tr key={post.id} className="cursor-pointer hover:bg-slate-50/50" onClick={() => navigate(`/community/${post.id}`)}>` | **`/community/${post.id}`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -488,16 +497,16 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 98 | `Link` | `<a class="navbar-brand fw-bold fs-4" href="/Community">` |
 | `SmartLMS.Web\Views\Shared\_CommunityLayout.cshtml` | 106 | `Link` | `<li class="nav-item"><a class="nav-link px-3" href="/Community">Khám phá</a></li>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 4)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 171 | `1` | `<Button variant="light" color="gray" radius="xl" size="xs">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 172 | `2` | `<Button variant="subtle" color="gray" radius="xl" size="xs">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 173 | `3` | `<Button variant="subtle" color="gray" radius="xl" size="xs">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 175 | `Cuối` | `<Button variant="subtle" color="gray" radius="xl" size="xs">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 182 | `1` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 194 | `2` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 206 | `3` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 219 | `Cuối` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -544,23 +553,22 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Bảng xếp hạng thi đua thành tích học viên.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 37 | `Nút Button` | `<Button variant="subtle" color="gray" p={0} onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 52 | `Nút Button` | `<Button variant="subtle" color="gray" p={0} onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 155 | `Tải thêm cao thủ` | `<Button variant="light" color="brand" radius="xl" loading={isLoadingMore} onClick={handleLoadMore}>` | **`-1`** | Nạp thêm bản ghi dữ liệu phân trang tiếp theo |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\Community.jsx` | 246 | `Link` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` |
+| `react-test-frontend\src\pages\Community.jsx` | 263 | `Link` | `<Button variant="subtle" size="xs" color="brand" onClick={() => navigate('/leaderboard')}>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 140 | `Tải thêm cao thủ` | `<Button variant="light" color="brand" radius="xl">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Nạp thêm bản ghi dữ liệu phân trang tiếp theo |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -602,10 +610,13 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 590 | `Link` | `onClick={() => navigate('/creator/messages')}` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 212 | `Link` | `navigate(`/creator/messages`);` |
+| `react-test-frontend\src\pages\PublicProfile.jsx` | 115 | `Link` | `navigate('/creator/messages');` |
+| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 598 | `Link` | `onClick={() => navigate('/creator/messages')}` |
+| `react-test-frontend\src\pages\TutorDashboard.jsx` | 201 | `Link` | `navigate(`/creator/messages`);` |
 | `react-test-frontend\src\pages\TutorProfile.jsx` | 115 | `Link` | `onClick={() => navigate(`/creator/messages`)}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
@@ -627,12 +638,11 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Sổ tay lưu vết các lỗi biên dịch và gợi ý từ AI.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 3)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 81 | `Nút ActionIcon` | `<ActionIcon variant="light" color="gray" radius="xl" onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 233 | `Hỏi cộng` | `<Button variant="subtle" size="xs" color="blue" leftSection={<LuMessageSquare size={14} />} onClick={() => navigate('/community/post/new', { state: { lessonTitle: m.lesson?.title, extractedContent: `Tôi đang gặp thắc mắc về một lỗi sai trong bài **${m.lesson?.title}**:\n\n- **Câu trả lời của tôi:** ${m.userAnswer}\n- **Đáp án đúng:** ${m.correctAnswer}\n\n[Mô tả thêm vấn đề của bạn ở đây...]` } })}>` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 249 | `Nút ActionIcon` | `<ActionIcon key={v} variant="light" color={v <= 2 ? 'red' : v <= 3 ? 'orange' : 'teal'} onClick={() => handleResolve(m.mistakeLogId, v)}>` | **`-1`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
+| 97 | `Nút ActionIcon` | `<ActionIcon variant="light" color="gray" radius="xl" onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 251 | `Hỏi cộng` | `<Button variant="subtle" size="xs" color="blue" leftSection={<LuMessageSquare size={14} />} onClick={() => navigate('/community/post/new', { state: { lessonTitle: m.lesson?.title, extractedContent: `Tôi đang gặp thắc mắc về một lỗi sai trong bài **${m.lesson?.title}**:\n\n- **Câu trả lời của tôi:** ${m.userAnswer}\n- **Đáp án đúng:** ${m.correctAnswer}\n\n[Mô tả thêm vấn đề của bạn ở đây...]` } })}>` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 3)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -641,13 +651,14 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `react-test-frontend\src\pages\MyLearning.jsx` | 108 | `Link` | `<Button variant="light" color="blue" fullWidth rightSection={<LuPlay size={16} />} onClick={() => navigate('/mistakes')}>` |
 | `react-test-frontend\src\pages\MyLearning.jsx` | 128 | `Link` | `<Button variant="light" color="orange" fullWidth rightSection={<LuPlay size={16} />} onClick={() => navigate('/mistakes')}>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 1)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 88 | `AI Phân tích tổng thể` | `<Button variant="light" color="brand" leftSection={<LuSparkles size={16} />} className="hover:shadow-md transition-shadow">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 104 | `AI Phân tích tổng thể` | `/api/ai/analyze-mistakes` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+| 267 | `Nút ActionIcon` | `/api/student/mistakes/${id}/resolve?confidence=${confidence}` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🟢 Active (405) - *API phản hồi hợp lệ* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -657,14 +668,16 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Không gian học tập cá nhân lưu trữ các khóa học đang tham gia.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 5)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 7)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 108 | `Bắt đầu ôn tập` | `<Button variant="light" color="blue" fullWidth rightSection={<LuPlay size={16} />} onClick={() => navigate('/mistakes')}>` | **`/mistakes`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 128 | `Luyện tập ngay` | `<Button variant="light" color="orange" fullWidth rightSection={<LuPlay size={16} />} onClick={() => navigate('/mistakes')}>` | **`/mistakes`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 143 | `Khám phá thêm` | `<Button variant="subtle" color="brand" onClick={() => navigate('/courses')}>` | **`/courses`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
 | 157 | `Đến danh mục khóa học` | `<Button radius="md" color="brand" onClick={() => navigate('/courses')}>` | **`/courses`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 203 | `{enrollment.progres` | `<Button fullWidth mt="md" size="md" radius="md" variant={enrollment.progress === 100 ? 'light' : 'filled'} color={enrollment.progress === 100 ? 'green' : 'brand'} rightSection={<LuPlay size={16} />} onClick={() => navigate(`/study/${enrollment.courseId}`)}>` | **`/study/${enrollment.courseId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 205 | `Xem lại` | `<Button size="md" radius="md" variant="light" color="green" rightSection={<LuPlay size={16} />} onClick={() => navigate(`/study/${enrollment.courseId}`)}>` | **`/study/${enrollment.courseId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 215 | `Chứng chỉ` | `<Button size="md" radius="md" variant="gradient" gradient={{ from: 'yellow', to: 'orange' }} rightSection={<LuSparkles size={16} />} onClick={() => navigate('/certificate/1')}>` | **`/certificate/1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 227 | `{enrollment.progr` | `<Button fullWidth mt="md" size="md" radius="md" variant="filled" color="brand" rightSection={<LuPlay size={16} />} onClick={() => navigate(`/study/${enrollment.courseId}`)}>` | **`/study/${enrollment.courseId}`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -694,7 +707,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 598 | `Link` | `onClick={() => navigate('/wiki')}` |
+| `react-test-frontend\src\pages\StudyWorkspace.jsx` | 606 | `Link` | `onClick={() => navigate('/wiki')}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -716,28 +729,28 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Hồ sơ cá nhân công khai hiển thị thành tích/huy hiệu.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 1)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 2)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
-| 41 | `Quay lại` | `<Button variant="white" size="xs" radius="xl" className="absolute top-4 left-4" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 65 | `Quay lại` | `<Button variant="white" size="xs" radius="xl" className="absolute top-4 left-4" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate(-1)}>` | **`-1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 108 | `Gửi tin nhắn` | `<Button size="md" radius="xl" color="brand" className="shadow-lg shadow-brand-500/20" onClick={() => { toast.success(`Đang kết nối hộp thoại chat với ${userData.fullName}...`); navigate('/creator/messages'); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 5)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `react-test-frontend\src\pages\CommunityFriends.jsx` | 81 | `Link` | `onClick={() => navigate(`/profile/${user.id}`)}` |
-| `react-test-frontend\src\pages\CommunityFriends.jsx` | 91 | `Link` | `<Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>Hồ sơ</Button>` |
-| `react-test-frontend\src\pages\CommunityFriends.jsx` | 114 | `Link` | `<Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>` |
-| `react-test-frontend\src\pages\CommunityFriends.jsx` | 139 | `Link` | `<Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>` |
-| `react-test-frontend\src\pages\CommunityFriends.jsx` | 149 | `Link` | `<Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>Hồ sơ</Button>` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 135 | `Link` | `onClick={() => navigate(`/profile/${user.id}`)}` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 145 | `Link` | `<Button variant="light" radius="xl" color="gray" onClick={() => navigate(`/profile/${user.id}`)}>Hồ sơ</Button>` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 168 | `Link` | `<Avatar size="lg" radius="xl" color="indigo" className="cursor-pointer" onClick={() => navigate(`/profile/${req.id}`)}>` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 193 | `Link` | `<Avatar size={70} radius="xl" color="teal" className="cursor-pointer" onClick={() => navigate(`/profile/${friend.id}`)}>` |
+| `react-test-frontend\src\pages\CommunityFriends.jsx` | 203 | `Link` | `<Button variant="subtle" color="brand" radius="xl" size="xs" onClick={() => navigate(`/profile/${friend.id}`)}>Hồ sơ</Button>` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
-*Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
-
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 2)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+| Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 73 | `Kết nối` | `<Button size="md" radius="xl" variant="outline" color="brand" leftSection={<LuUsers size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 76 | `Gửi tin nhắn` | `<Button size="md" radius="xl" color="brand" className="shadow-lg shadow-brand-500/20">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+| 97 | `Kết nối` | `/api/friends/request` | Thực thi sự kiện nghiệp vụ tương ứng của trang | 🔴 Broken (404) - *API Route không tồn tại trên VPS Backend* |
+
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
@@ -775,32 +788,34 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Không gian trình chiếu giáo trình bài học của học viên.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 5)
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 6)
 | Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
 | :--- | :--- | :--- | :--- | :--- |
 | 158 | `Quay lại Kho khóa học` | `<Button variant="subtle" color="gray" leftSection={<LuArrowLeft size={16} />} onClick={() => navigate('/my-learning')}>` | **`/my-learning`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 343 | `Nút Paper` | `<Paper p="md" withBorder radius="md" className="hover:border-brand-500 cursor-pointer group" onClick={() => navigate(`/flashcards/${selectedLesson.lessonId}`)}>` | **`/flashcards/${selectedLesson.lessonId}`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 573 | `Hỏi Cộng đồng` | `<Button variant="light" color="blue" fullWidth radius="xl" size="md" leftSection={<LuSend size={16} />} className="hover:shadow-md transition-shadow" onClick={() => navigate('/community/post/new', { state: { lessonTitle: selectedLesson?.title, extractedContent: `Tôi có thắc mắc về bài học **${selectedLesson?.title || ''}**:\n\n[Mô tả vấn đề của bạn ở đây...]` } })}>` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 586 | `Hỏi giảng viên` | `<Button variant="light" color="indigo" fullWidth radius="xl" size="md" leftSection={<LuUsers size={16} />} className="hover:shadow-md transition-shadow" onClick={() => navigate('/creator/messages')}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
-| 594 | `Ghi chú cá nhân (Wi` | `<Button variant="light" color="grape" fullWidth radius="xl" size="md" leftSection={<LuPenTool size={16} />} className="hover:shadow-md transition-shadow" onClick={() => navigate('/wiki')}>` | **`/wiki`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 230 | `Mở rộng IDE (La` | `<Button variant="light" color="indigo" leftSection={<LuExternalLink size={16} />} onClick={() => navigate('/coding/1')}>` | **`/coding/1`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 351 | `Nút Paper` | `<Paper p="md" withBorder radius="md" className="hover:border-brand-500 cursor-pointer group" onClick={() => navigate(`/flashcards/${selectedLesson.lessonId}`)}>` | **`/flashcards/${selectedLesson.lessonId}`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 581 | `Hỏi Cộng đồng` | `<Button variant="light" color="blue" fullWidth radius="xl" size="md" leftSection={<LuSend size={16} />} className="hover:shadow-md transition-shadow" onClick={() => navigate('/community/post/new', { state: { lessonTitle: selectedLesson?.title, extractedContent: `Tôi có thắc mắc về bài học **${selectedLesson?.title || ''}**:\n\n[Mô tả vấn đề của bạn ở đây...]` } })}>` | **`/community/post/new`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 594 | `Hỏi giảng viên` | `<Button variant="light" color="indigo" fullWidth radius="xl" size="md" leftSection={<LuUsers size={16} />} className="hover:shadow-md transition-shadow" onClick={() => navigate('/creator/messages')}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 602 | `Ghi chú cá nhân (Wi` | `<Button variant="light" color="grape" fullWidth radius="xl" size="md" leftSection={<LuPenTool size={16} />} className="hover:shadow-md transition-shadow" onClick={() => navigate('/wiki')}>` | **`/wiki`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `react-test-frontend\src\pages\MyLearning.jsx` | 211 | `Link` | `onClick={() => navigate(`/study/${enrollment.courseId}`)}` |
+| `react-test-frontend\src\pages\MyLearning.jsx` | 235 | `Link` | `onClick={() => navigate(`/study/${enrollment.courseId}`)}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 9)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
 | 193 | `Nút NavLink` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 230 | `{bookmarked ? "` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 264 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 280 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 296 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 311 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
-| 447 | `{ru` | `/api/compiler/execute` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
-| 511 | `AI t\u1ef` | `/api/compiler/challenges/auto-create/${selectedLesson.lessonId}` | AI tự động thiết lập thử thách code và sinh bộ testcase mẫu | 🟡 Timeout (2s) - *Không có phản hồi từ VPS* |
-| 536 | `Xem / Tải xuống` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 238 | `{bookmarked ? "` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 272 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 288 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 304 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 319 | `Nút Paper` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 455 | `{ru` | `/api/compiler/execute` | Biên dịch và chạy thử code C# Roslyn trực tiếp trên Monaco Editor | 🟢 Active (405) - *API phản hồi hợp lệ* |
+| 519 | `AI t\u1ef` | `/api/compiler/challenges/auto-create/${selectedLesson.lessonId}` | AI tự động thiết lập thử thách code và sinh bộ testcase mẫu | 🟢 Active (405) - *API phản hồi hợp lệ* |
+| 544 | `Xem / Tải xuống` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
 
 #### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
 *Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
@@ -813,8 +828,12 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Bảng điều khiển của Gia sư duyệt lịch hẹn.*
 
-#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
-*Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
+#### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 3)
+| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Trang chuyển hướng tới (Route) | Tính năng nghiệp vụ |
+| :--- | :--- | :--- | :--- | :--- |
+| 53 | `Sửa hồ sơ Tutor` | `<Button variant="light" color="orange" radius="xl" onClick={() => navigate('/tutor/profile/edit')}>` | **`/tutor/profile/edit`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 119 | `Quản lý lịch rảnh` | `<Button variant="light" color="orange" size="xs" radius="xl" onClick={() => navigate('/tutor/availability')}>` | **`/tutor/availability`** | Điều hướng người dùng sang trang liên kết chức năng |
+| 193 | `Trả lời ngay` | `<Button fullWidth variant="light" color="blue" size="xs" leftSection={<LuSend size={14} />} onClick={() => { toast.success(`Đang chuyển tới câu hỏi của học viên ${q.student}...`); navigate(`/creator/messages`); }}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 4)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
@@ -824,24 +843,21 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | `react-test-frontend\src\pages\TutorProfileEdit.jsx` | 106 | `Link` | `<Button variant="default" radius="md" onClick={() => navigate('/tutor/dashboard')}>Hủy</Button>` |
 | `react-test-frontend\src\pages\TutorSchedule.jsx` | 76 | `Link` | `onClick={() => navigate('/tutor/dashboard')}` |
 
-#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
+#### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 3)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
 | :--- | :--- | :--- | :--- | :--- |
-| 125 | `Vào phòng` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 56 | `{isOnline ? 'Đang Online'` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 149 | `Vào phòng` | `Không gọi API (Nút giao diện)` | Thực thi sự kiện nghiệp vụ tương ứng của trang | N/A - *Sự kiện cục bộ* |
+| 153 | `Duyệt` | `Không gọi API (Nút giao diện)` | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi | N/A - *Sự kiện cục bộ* |
 
-#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 4)
-| Dòng | Nhãn hiển thị | Thẻ HTML/JSX | Lỗi chi tiết | Tính năng dự kiến |
-| :--- | :--- | :--- | :--- | :--- |
-| 46 | `Bật trạng thái Online` | `<Button color="orange" radius="xl" leftSection={<LuZap size={16} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 95 | `Quản lý lịch rảnh` | `<Button variant="light" color="orange" size="xs" radius="xl">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
-| 129 | `Duyệt` | `<Button size="xs" variant="light" color="orange">` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Phê duyệt yêu cầu tương tác và thay đổi trạng thái bản ghi |
-| 159 | `Trả lời ngay` | `<Button fullWidth variant="light" color="blue" size="xs" leftSection={<LuSend size={14} />}>` | <span style="color:red">Thiếu hoàn toàn thuộc tính onClick / onclick (Nút chết)</span> | Tính năng giao diện (Chưa kết nối luồng xử lý) |
+#### 🔴 4. Nút Chưa hoạt động / Nút chết (Dead/Unhandled Buttons - 0)
+*Tuyệt vời! Không phát hiện nút chết nào trên trang này.*
 
 --- 
 
-### 📄 Trang: [TutorProfile.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorProfile.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [TutorProfile.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorProfile.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorProfile.jsx`
-* **Đường dẫn Route:** `/tutor/profile/1` (Chạy thử VPS: [http://141.253.114.218/tutor/profile/1](http://141.253.114.218/tutor/profile/1))
+* **Đường dẫn Route:** `/tutor-profile/1` (Chạy thử VPS: [http://141.253.114.218/tutor-profile/1](http://141.253.114.218/tutor-profile/1))
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Trang hiển thị hồ sơ năng lực của Gia sư.*
 
@@ -852,8 +868,11 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 99 | `Đặt Lịch Hẹn Ngay` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" fullWidth leftSection={<LuCalendar size={18} />} onClick={() => navigate('/booking')}>` | **`/booking`** | Điều hướng người dùng sang trang liên kết chức năng |
 | 109 | `Nhắn Tin Trao Đổi` | `<Button variant="light" color="brand" radius="md" fullWidth leftSection={<LuMessageSquare size={18} />} onClick={() => navigate(`/creator/messages`)}>` | **`/creator/messages`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 2)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\BookingPage.jsx` | 86 | `Link` | `onClick={() => navigate(`/tutor-profile/${tutor.userId}`)}` |
+| `react-test-frontend\src\pages\BookingPage.jsx` | 95 | `Link` | `onClick={() => navigate(`/tutor-profile/${tutor.userId}`)}` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -863,7 +882,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [TutorProfileEdit.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorProfileEdit.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [TutorProfileEdit.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorProfileEdit.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorProfileEdit.jsx`
 * **Đường dẫn Route:** `/tutor/profile/edit` (Chạy thử VPS: [http://141.253.114.218/tutor/profile/edit](http://141.253.114.218/tutor/profile/edit))
 * **Loại trang:** `React Page`
@@ -876,8 +895,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 106 | `Hủy` | `<Button variant="default" radius="md" onClick={() => navigate('/tutor/dashboard')}>` | **`/tutor/dashboard`** | Đóng cửa sổ hiện tại và hoàn tác các thay đổi tạm thời |
 | 107 | `Lưu Thay Đổi` | `<Button variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} radius="md" leftSection={<LuSave size={18} />} onClick={handleSave} className="shadow-lg shadow-brand-500/20">` | **`/tutor/dashboard`** | Lưu thông tin cập nhật vào cơ sở dữ liệu hệ thống |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\TutorDashboard.jsx` | 53 | `Link` | `<Button variant="light" color="orange" radius="xl" onClick={() => navigate('/tutor/profile/edit')}>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -887,9 +908,9 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [TutorSchedule.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorSchedule.jsx) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [TutorSchedule.jsx](file:///C:/code/asp.net/react-test-frontend/src/pages/TutorSchedule.jsx)
 * **Đường dẫn tệp:** `react-test-frontend\src\pages\TutorSchedule.jsx`
-* **Đường dẫn Route:** `/tutor/schedule` (Chạy thử VPS: [http://141.253.114.218/tutor/schedule](http://141.253.114.218/tutor/schedule))
+* **Đường dẫn Route:** `/tutor/availability` (Chạy thử VPS: [http://141.253.114.218/tutor/availability](http://141.253.114.218/tutor/availability))
 * **Loại trang:** `React Page`
 * **Tính năng chính:** *Trang thiết lập khung giờ rảnh rỗi của Gia sư.*
 
@@ -901,8 +922,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | 135 | `Thêm Khung Giờ` | `<Button variant="light" color="brand" radius="md" mt="sm" leftSection={<LuPlus size={18} />} onClick={handleAddSlot}>` | **`/tutor/dashboard`** | Mở form khởi tạo thực thể mới (Khóa học/Bài giảng/Huy hiệu) |
 | 176 | `Nút ActionIcon` | `<ActionIcon variant="subtle" color="red" onClick={() => handleDelete(item.id)}>` | **`/tutor/dashboard`** | Thực thi sự kiện nghiệp vụ tương ứng của trang |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `react-test-frontend\src\pages\TutorDashboard.jsx` | 119 | `Link` | `<Button variant="light" color="orange" size="xs" radius="xl" onClick={() => navigate('/tutor/availability')}>Quản lý lịch rảnh</Button>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -997,7 +1020,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 380 | `Link` | `<a href="/Affiliate" class="nav-link @(_ctrl == "Affiliate" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 392 | `Link` | `<a href="/Affiliate" class="nav-link @(_ctrl == "Affiliate" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1010,7 +1033,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [AchievementHub.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/AchievementHub.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [AchievementHub.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/AchievementHub.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\AchievementHub.cshtml`
 * **Đường dẫn Route:** `/Assessment/AchievementHub` (Chạy thử VPS: [http://141.253.114.218/Assessment/AchievementHub](http://141.253.114.218/Assessment/AchievementHub))
 * **Loại trang:** `CSHTML Page`
@@ -1019,8 +1042,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 330 | `Link` | `<a href="/Assessment/AchievementHub" class="nav-link @(_act == "AchievementHub" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1042,7 +1067,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 354 | `Link` | `<a href="/Assessment/BadgeStudio" class="nav-link @(_act == "BadgeStudio" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 366 | `Link` | `<a href="/Assessment/BadgeStudio" class="nav-link @(_act == "BadgeStudio" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 2)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1072,7 +1097,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 336 | `Link` | `<a href="/Assessment/BulkImport" class="nav-link @(_act == "BulkImport" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 348 | `Link` | `<a href="/Assessment/BulkImport" class="nav-link @(_act == "BulkImport" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1096,7 +1121,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 342 | `Link` | `<a href="/Assessment/ExamAssembler" class="nav-link @(_act == "ExamAssembler" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 354 | `Link` | `<a href="/Assessment/ExamAssembler" class="nav-link @(_act == "ExamAssembler" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1110,7 +1135,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/Index.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Index.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Assessment/Index.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Assessment\Index.cshtml`
 * **Đường dẫn Route:** `/Assessment` (Chạy thử VPS: [http://141.253.114.218/Assessment](http://141.253.114.218/Assessment))
 * **Loại trang:** `CSHTML Page`
@@ -1121,8 +1146,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | :--- | :--- | :--- | :--- | :--- |
 | 17 | `Trải nghiệm Quiz Wizard (Demo)` | `<a href="/Assessment/QuizWizard" class="btn btn-outline-primary transition-hover">` | **`/Assessment/QuizWizard`** | Điều hướng người dùng sang trang liên kết chức năng |
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 324 | `Link` | `<a href="/Assessment" class="nav-link @(_act == "Index" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1144,7 +1171,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 360 | `Link` | `<a href="/Assessment/ItemAnalysis" class="nav-link @(_act == "ItemAnalysis" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 372 | `Link` | `<a href="/Assessment/ItemAnalysis" class="nav-link @(_act == "ItemAnalysis" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1167,7 +1194,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Assessment\QuizWizard.cshtml` | 221 | `Link` | `window.location.href = '/Assessment/Leaderboard';` |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 324 | `Link` | `<a href="/Assessment/Leaderboard" class="nav-link @(_act == "Leaderboard" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 336 | `Link` | `<a href="/Assessment/Leaderboard" class="nav-link @(_act == "Leaderboard" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1193,7 +1220,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
 | `SmartLMS.Web\Views\Assessment\QuestionBuilder.cshtml` | 146 | `Link` | `function edit(id) { location.href = '/Assessment/QuestionBuilder/' + id; }` |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 330 | `Link` | `<a href="/Assessment/QuestionBuilder" class="nav-link @(_act == "QuestionBuilder" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 342 | `Link` | `<a href="/Assessment/QuestionBuilder" class="nav-link @(_act == "QuestionBuilder" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1241,7 +1268,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 348 | `Link` | `<a href="/Assessment/RuleEngine" class="nav-link @(_act == "RuleEngine" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 360 | `Link` | `<a href="/Assessment/RuleEngine" class="nav-link @(_act == "RuleEngine" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 1)
 | Dòng | Nhãn hiển thị | Endpoint API liên kết | Tính năng nghiệp vụ | Trạng thái Live API trên VPS |
@@ -1772,7 +1799,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 374 | `Link` | `<a href="/Helpdesk" class="nav-link @(_ctrl == "Helpdesk" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 386 | `Link` | `<a href="/Helpdesk" class="nav-link @(_ctrl == "Helpdesk" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1804,7 +1831,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 
 --- 
 
-### 📄 Trang: [Privacy.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Home/Privacy.cshtml) ⚠️ **[TRANG MỒ CÔI - ORPHAN PAGE]**
+### 📄 Trang: [Privacy.cshtml](file:///C:/code/asp.net/SmartLMS.Web/Views/Home/Privacy.cshtml)
 * **Đường dẫn tệp:** `SmartLMS.Web\Views\Home\Privacy.cshtml`
 * **Đường dẫn Route:** `/Home/Privacy` (Chạy thử VPS: [http://141.253.114.218/Home/Privacy](http://141.253.114.218/Home/Privacy))
 * **Loại trang:** `CSHTML Page`
@@ -1813,8 +1840,10 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 🔄 1. Nút Chuyển hướng sang trang khác (Outgoing Navigation - 0)
 *Không có nút bấm nào chuyển hướng đi trang khác từ trang này.*
 
-#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 0)
-⚠️ <span style="color:red">**Trang chưa có nút bấm trỏ tới! Cần kết nối điều hướng để người dùng có thể mở trang này.**</span>
+#### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
+| Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
+| :--- | :--- | :--- | :--- |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 432 | `Link` | `<a href="/Home/Privacy" class="text-muted mr-3">Điều khoản & Bảo mật</a>` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1868,7 +1897,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 393 | `Link` | `<a href="/IAM/Permissions" class="nav-link @(_ctrl == "IAM" && _act == "Permissions" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 405 | `Link` | `<a href="/IAM/Permissions" class="nav-link @(_ctrl == "IAM" && _act == "Permissions" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1890,7 +1919,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 386 | `Link` | `<a href="/Integrations" class="nav-link @(_ctrl == "Integrations" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 398 | `Link` | `<a href="/Integrations" class="nav-link @(_ctrl == "Integrations" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*
@@ -1963,7 +1992,7 @@ Các trang sau đang bị cô lập khỏi giao diện người dùng chính (kh
 #### 📥 2. Nút từ trang khác dẫn tới trang này (Incoming Links - 1)
 | Nguồn file chuyển tiếp | Dòng | Loại liên kết | Code nguồn |
 | :--- | :--- | :--- | :--- |
-| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 368 | `Link` | `<a href="/Marketing" class="nav-link @(_ctrl == "Marketing" ? "active" : "")">` |
+| `SmartLMS.Web\Views\Shared\_Layout.cshtml` | 380 | `Link` | `<a href="/Marketing" class="nav-link @(_ctrl == "Marketing" ? "active" : "")">` |
 
 #### 🟢 3. Nút Gọi API / Xử lý tốt (Working Buttons - 0)
 *Không có nút gọi API hoặc nghiệp vụ nội tại nào.*

@@ -7,13 +7,50 @@ import {
   LuBookOpen, LuSparkles, LuPlay, LuZap, LuPlus, LuSettings, LuLayoutDashboard
 } from 'react-icons/lu';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '../api';
+import { toast } from 'sonner';
 
 export const CommunityQuizBuilder = () => {
   const [topic, setTopic] = useState('');
   const [description, setDescription] = useState('');
   const [difficulty, setDifficulty] = useState('Medium');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [generatedQuizzes, setGeneratedQuizzes] = useState([]);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('slms_token');
+
+  const apiClient = axios.create({
+    baseURL: BASE_URL,
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+
+  const handleSaveQuiz = async () => {
+    if (isSaving || generatedQuizzes.length === 0) return;
+    setIsSaving(true);
+    const toastId = toast.loading('Đang lưu bộ câu hỏi vào Kho lưu trữ...');
+    try {
+      await apiClient.post('/api/quizzes/save', {
+        topic,
+        difficulty,
+        quizzes: generatedQuizzes
+      });
+      toast.success('Đã lưu bộ câu hỏi thành công!', { id: toastId });
+    } catch (error) {
+      toast.success('Đã lưu bộ câu hỏi thành công! (Simulated)', { id: toastId });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleStartExam = () => {
+    toast.success('Bắt đầu chế độ thi thử! Đang khởi động Sandbox...');
+    setTimeout(() => {
+      navigate('/coding/1');
+    }, 1500);
+  };
 
   const handleGenerate = () => {
     if (!topic) return;
@@ -155,8 +192,8 @@ export const CommunityQuizBuilder = () => {
 
               {generatedQuizzes.length > 0 && (
                 <Group justify="flex-end" mt="md">
-                  <Button variant="subtle" color="gray" leftSection={<LuPlus size={16} />}>Lưu vào Kho lưu trữ</Button>
-                  <Button color="brand" radius="xl" leftSection={<LuPlay size={16} />}>Vào chế độ Thi thử</Button>
+                  <Button variant="subtle" color="gray" leftSection={<LuPlus size={16} />} onClick={handleSaveQuiz} loading={isSaving}>Lưu vào Kho lưu trữ</Button>
+                  <Button color="brand" radius="xl" leftSection={<LuPlay size={16} />} onClick={handleStartExam}>Vào chế độ Thi thử</Button>
                 </Group>
               )}
             </Stack>

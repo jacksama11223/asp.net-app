@@ -200,18 +200,43 @@ export const MyLearning = () => {
                     </Box>
                   </Stack>
 
-                  <Button 
-                    fullWidth 
-                    mt="md" 
-                    size="md"
-                    radius="md"
-                    variant={enrollment.progress === 100 ? 'light' : 'filled'}
-                    color={enrollment.progress === 100 ? 'green' : 'brand'}
-                    rightSection={<LuPlay size={16} />}
-                    onClick={() => navigate(`/study/${enrollment.courseId}`)}
-                  >
-                    {enrollment.progress === 100 ? 'Xem lại' : (enrollment.progress > 0 ? 'Học tiếp' : 'Vào học ngay')}
-                  </Button>
+                  {enrollment.progress === 100 ? (
+                    <Group grow mt="md">
+                      <Button 
+                        size="md"
+                        radius="md"
+                        variant="light"
+                        color="green"
+                        rightSection={<LuPlay size={16} />}
+                        onClick={() => navigate(`/study/${enrollment.courseId}`)}
+                      >
+                        Xem lại
+                      </Button>
+                      <Button 
+                        size="md"
+                        radius="md"
+                        variant="gradient"
+                        gradient={{ from: 'yellow', to: 'orange' }}
+                        rightSection={<LuSparkles size={16} />}
+                        onClick={() => navigate('/certificate/1')}
+                      >
+                        Chứng chỉ
+                      </Button>
+                    </Group>
+                  ) : (
+                    <Button 
+                      fullWidth 
+                      mt="md" 
+                      size="md"
+                      radius="md"
+                      variant="filled"
+                      color="brand"
+                      rightSection={<LuPlay size={16} />}
+                      onClick={() => navigate(`/study/${enrollment.courseId}`)}
+                    >
+                      {enrollment.progress > 0 ? 'Học tiếp' : 'Vào học ngay'}
+                    </Button>
+                  )}
                 </Card>
               ))}
             </SimpleGrid>

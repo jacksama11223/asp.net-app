@@ -11,12 +11,14 @@ import { FiMoreVertical } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
+import { toast } from 'sonner';
 
 export const ForumHome = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const token = localStorage.getItem('slms_token');
   const apiClient = axios.create({
@@ -66,13 +68,22 @@ export const ForumHome = () => {
             </Title>
             <Text c="dimmed" size="sm">Cộng đồng chia sẻ tri thức và hỗ trợ kỹ thuật 24/7.</Text>
           </Box>
-          <Button 
-            size="md" radius="xl" color="brand" 
-            leftSection={<LuPlus size={18} />}
-            onClick={() => navigate('/community/post/new')}
-          >
-            Tạo chủ đề mới
-          </Button>
+          <Group>
+            <Button 
+              size="md" radius="xl" color="indigo" variant="light"
+              leftSection={<LuZap size={18} />}
+              onClick={() => navigate('/community/quiz-builder')}
+            >
+              Tạo Quiz đố vui
+            </Button>
+            <Button 
+              size="md" radius="xl" color="brand" 
+              leftSection={<LuPlus size={18} />}
+              onClick={() => navigate('/community/post/new')}
+            >
+              Tạo chủ đề mới
+            </Button>
+          </Group>
         </Group>
 
         {/* Search & Statistics */}
@@ -168,11 +179,55 @@ export const ForumHome = () => {
 
         {/* Pagination placeholder */}
         <Group justify="center">
-           <Button variant="light" color="gray" radius="xl" size="xs">1</Button>
-           <Button variant="subtle" color="gray" radius="xl" size="xs">2</Button>
-           <Button variant="subtle" color="gray" radius="xl" size="xs">3</Button>
+           <Button 
+             variant={currentPage === 1 ? "light" : "subtle"} 
+             color="brand" 
+             radius="xl" 
+             size="xs"
+             onClick={() => {
+               setCurrentPage(1);
+               toast.success("Đang tải trang 1...");
+             }}
+           >
+             1
+           </Button>
+           <Button 
+             variant={currentPage === 2 ? "light" : "subtle"} 
+             color="brand" 
+             radius="xl" 
+             size="xs"
+             onClick={() => {
+               setCurrentPage(2);
+               toast.success("Đang tải trang 2...");
+             }}
+           >
+             2
+           </Button>
+           <Button 
+             variant={currentPage === 3 ? "light" : "subtle"} 
+             color="brand" 
+             radius="xl" 
+             size="xs"
+             onClick={() => {
+               setCurrentPage(3);
+               toast.success("Đang tải trang 3...");
+             }}
+           >
+             3
+           </Button>
            <Text c="dimmed" size="xs">...</Text>
-           <Button variant="subtle" color="gray" radius="xl" size="xs">Cuối</Button>
+           <Button 
+             variant="subtle" 
+             color="gray" 
+             radius="xl" 
+             size="xs"
+             onClick={() => {
+               setCurrentPage(10);
+               toast.success("Đang tải trang cuối...");
+             }}
+           >
+             Cuối
+           </Button>
         </Group>
       </Stack>
     </Container>
