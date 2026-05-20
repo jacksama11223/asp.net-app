@@ -113,10 +113,10 @@ INSERT INTO Users (
     UserId, Username, Email, PasswordHash, Role, UserType, CreatedDate, 
     IsDeleted, Status, LecturerStatus, TotalXP, CurrentStreak, HierarchyLevel
 ) VALUES
-(1, 'admin', 'admin@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashAdmin...', 'Admin', 'Admin', NOW(), 0, 1, 0, 1000, 5, 1),
-(2, 'giangvien1', 'gv1@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashGV...', 'Instructor', 'Instructor', NOW(), 0, 1, 2, 500, 3, 2),
-(3, 'hocvien1', 'hv1@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashHV...', 'Student', 'Student', NOW(), 0, 1, 0, 120, 1, 3),
-(4, 'hocvien2', 'hv2@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashHV...', 'Student', 'Student', NOW(), 0, 1, 0, 0, 0, 3);
+(1, 'admin', 'admin@smartlms.ai', '$2a$11$S8mUf6Jk5hG88zV1F9T6Reo/jBv5J/0Qx5uXo/.8H0H8Yk.X.X.X.', 'Admin', 'Admin', NOW(), 0, 1, 0, 1000, 5, 1),
+(2, 'giangvien1', 'gv1@smartlms.ai', '$2a$11$S8mUf6Jk5hG88zV1F9T6Reo/jBv5J/0Qx5uXo/.8H0H8Yk.X.X.X.', 'Instructor', 'Instructor', NOW(), 0, 1, 2, 500, 3, 2),
+(3, 'hocvien1', 'hv1@smartlms.ai', '$2a$11$S8mUf6Jk5hG88zV1F9T6Reo/jBv5J/0Qx5uXo/.8H0H8Yk.X.X.X.', 'Student', 'Student', NOW(), 0, 1, 0, 120, 1, 3),
+(4, 'hocvien2', 'hv2@smartlms.ai', '$2a$11$S8mUf6Jk5hG88zV1F9T6Reo/jBv5J/0Qx5uXo/.8H0H8Yk.X.X.X.', 'Student', 'Student', NOW(), 0, 1, 0, 0, 0, 3);
 
 -- 2. SEED BẢNG COURSES
 TRUNCATE TABLE Courses;
