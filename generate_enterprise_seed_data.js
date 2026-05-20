@@ -46,7 +46,7 @@ console.log("🔍 BƯỚC 1: ĐANG NỘI SOI CẤU TRÚC CÁC BẢNG TRONG MARIA
 
 const tablesOutput = runMariaDBQuery("SHOW TABLES;");
 if (!tablesOutput) {
-    console.log("🚨 Không thể kết nối MariaDB. Tạo tệp dữ liệu mẫu mẫu dựa trên EF Core C# Models...");
+    console.log("🚨 Không thể kết nối MariaDB trực tiếp từ Docker Node. Tạo tệp dữ liệu mẫu mẫu dựa trên EF Core C# Models...");
 } else {
     const tables = tablesOutput.split('\n').slice(1).map(t => t.trim());
     console.log(`   ✅ Phát hiện ${tables.length} bảng trong Database: ${tables.join(', ')}\n`);
@@ -72,45 +72,45 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- 1. SEED BẢNG USERS (Học viên, Giảng viên, Admin)
 TRUNCATE TABLE Users;
-INSERT INTO Users (UserID, Username, Email, PasswordHash, Role, UserType, CreatedAt, UpdatedAt) VALUES
-(1, 'admin', 'admin@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashAdmin...', 'Admin', 'Admin', NOW(), NOW()),
-(2, 'giangvien1', 'gv1@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashGV...', 'Instructor', 'Instructor', NOW(), NOW()),
-(3, 'hocvien1', 'hv1@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashHV...', 'Student', 'Student', NOW(), NOW()),
-(4, 'hocvien2', 'hv2@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashHV...', 'Student', 'Student', NOW(), NOW());
+INSERT INTO Users (UserId, Username, Email, PasswordHash, Role, UserType, CreatedDate, IsDeleted) VALUES
+(1, 'admin', 'admin@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashAdmin...', 'Admin', 'Admin', NOW(), 0),
+(2, 'giangvien1', 'gv1@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashGV...', 'Instructor', 'Instructor', NOW(), 0),
+(3, 'hocvien1', 'hv1@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashHV...', 'Student', 'Student', NOW(), 0),
+(4, 'hocvien2', 'hv2@smartlms.ai', 'AQAAAAIAAYagAAAAEI1b/MockHashHV...', 'Student', 'Student', NOW(), 0);
 
 -- 2. SEED BẢNG COURSES
 TRUNCATE TABLE Courses;
-INSERT INTO Courses (CourseID, Title, Description, ImageUrl, Price, Status, IsDeleted, CreatedAt, UpdatedAt) VALUES
+INSERT INTO Courses (CourseId, Title, Description, ThumbnailUrl, Price, Status, IsDeleted, CreatedAt, UpdatedAt) VALUES
 (1, 'Lập trình C# ASP.NET Core Web API Enterprise', 'Khóa học thiết kế hệ thống Modular Monolith & Distributed System chuẩn doanh nghiệp.', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97', 1500000.00, 'Published', 0, NOW(), NOW()),
 (2, 'Làm chủ AI & Machine Learning với Python', 'Khóa học từ cơ bản đến nâng cao về ML.NET, TensorFlow và Python.', 'https://images.unsplash.com/photo-1527474305487-b87b222841cc', 2200000.00, 'Published', 0, NOW(), NOW()),
 (3, 'Kiến trúc Hệ thống Phân tán (Distributed Systems)', 'Tìm hiểu chi tiết về Docker, Kubernetes, Load Balancer, Redis và RabbitMQ.', 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31', 3500000.00, 'Published', 0, NOW(), NOW());
 
 -- 3. SEED BẢNG COURSEMODULES
 TRUNCATE TABLE CourseModules;
-INSERT INTO CourseModules (ModuleID, CourseID, Title, OrderNumber, CreatedAt, UpdatedAt) VALUES
-(1, 1, 'Chương 1: Tổng quan và Thiết lập Môi trường', 1, NOW(), NOW()),
-(2, 1, 'Chương 2: Xây dựng RESTful API và DB Context', 2, NOW(), NOW()),
-(3, 2, 'Chương 1: Giới thiệu ML và Học máy', 1, NOW(), NOW());
+INSERT INTO CourseModules (ModuleId, CourseId, Title, OrderIndex) VALUES
+(1, 1, 'Chương 1: Tổng quan và Thiết lập Môi trường', 1),
+(2, 1, 'Chương 2: Xây dựng RESTful API và DB Context', 2),
+(3, 2, 'Chương 1: Giới thiệu ML và Học máy', 1);
 
 -- 4. SEED BẢNG LESSONS
 TRUNCATE TABLE Lessons;
-INSERT INTO Lessons (LessonID, ModuleID, Title, Content, VideoUrl, LessonType, HasChallenge, ChallengeId, CreatedAt, UpdatedAt) VALUES
-(1, 1, 'Bài 1: Khởi tạo Project & Giải thích kiến trúc', '<p>Trong bài học này, chúng ta sẽ thiết lập khung Modular Monolith.</p>', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Video', 0, NULL, NOW(), NOW()),
-(2, 1, 'Bài 2: Làm quen với Entity Framework Core', '<p>Tìm hiểu Fluent API và cách map bảng Composite Key.</p>', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Video', 1, 1, NOW(), NOW()),
-(3, 2, 'Bài 3: Thực hành REST API Controller', '<p>Viết controller quản lý khóa học.</p>', '<p>Bài học văn bản</p>', 'Text', 0, NULL, NOW(), NOW());
+INSERT INTO Lessons (LessonId, ModuleId, Title, VideoUrl, Content, LessonType, OrderIndex, IsExercise, Points) VALUES
+(1, 1, 'Bài 1: Khởi tạo Project & Giải thích kiến trúc', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', '<p>Trong bài học này, chúng ta sẽ thiết lập khung Modular Monolith.</p>', 'Video', 1, 0, 10),
+(2, 1, 'Bài 2: Làm quen với Entity Framework Core', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', '<p>Tìm hiểu Fluent API và cách map bảng Composite Key.</p>', 'Video', 2, 1, 20),
+(3, 2, 'Bài 3: Thực hành REST API Controller', NULL, '<p>Viết controller quản lý khóa học.</p>', 'Text', 3, 0, 15);
 
 -- 5. SEED BẢNG ENROLLMENTS
 TRUNCATE TABLE Enrollments;
-INSERT INTO Enrollments (EnrollmentID, UserID, CourseID, Progress, Status, CreatedAt, UpdatedAt, LastAccessDate) VALUES
-(1, 3, 1, 45.00, 'Active', NOW(), NOW(), NOW()),
-(2, 4, 1, 10.00, 'Active', NOW(), NOW(), NOW()),
-(3, 3, 2, 85.00, 'Active', NOW(), NOW(), NOW());
+INSERT INTO Enrollments (EnrollmentId, UserId, CourseId, Progress, LastAccessDate, IsCompleted, IsDeleted) VALUES
+(1, 3, 1, 45.00, NOW(), 0, 0),
+(2, 4, 1, 10.00, NOW(), 0, 0),
+(3, 3, 2, 85.00, NOW(), 0, 0);
 
 -- 6. SEED BẢNG BADGES
 TRUNCATE TABLE Badges;
-INSERT INTO Badges (BadgeID, Name, Description, IconUrl, XpBonus, CreatedAt, UpdatedAt) VALUES
-(1, 'Học Giả Chăm Chỉ', 'Xem video bài học đầu tiên', 'LuZap', 100, NOW(), NOW()),
-(2, 'Chiến Thần Coding', 'Vượt qua bài tập Code Sandbox đầu tiên', 'LuAward', 200, NOW(), NOW());
+INSERT INTO Badges (BadgeId, Name, IconUrl, Description, Rarity, RequirementsJson) VALUES
+(1, 'Học Giả Chăm Chỉ', 'LuZap', 'Xem video bài học đầu tiên', 'Common', NULL),
+(2, 'Chiến Thần Coding', 'LuAward', 'Vượt qua bài tập Code Sandbox đầu tiên', 'Rare', NULL);
 
 -- 7. SEED BẢNG USERLESSONS
 TRUNCATE TABLE UserLessons;
@@ -121,40 +121,41 @@ INSERT INTO UserLessons (UserId, LessonId, LastWatchedSecond, IsCompleted, Updat
 
 -- 8. SEED BẢNG CODINGCHALLENGES & TESTCASES
 TRUNCATE TABLE CodingChallenges;
-INSERT INTO CodingChallenges (ChallengeID, Title, Description, Difficulty, TemplateCode, SolutionCode, CreatedAt, UpdatedAt) VALUES
-(1, 'Tìm tổng 2 số', 'Viết hàm Sum(int a, int b) trả về tổng 2 số nguyên.', 'Easy', 'using System;\n\npublic class Program {\n    public static int Sum(int a, int b) {\n        // Viết code tại đây\n        return 0;\n    }\n}', 'using System;\n\npublic class Program {\n    public static int Sum(int a, int b) {\n        return a + b;\n    }\n}', NOW(), NOW());
+INSERT INTO CodingChallenges (Id, Title, Description, TemplateCode, Language, Points, CourseId, LessonId, CreatedAt) VALUES
+(1, 'Tìm tổng 2 số', 'Viết hàm Sum(int a, int b) trả về tổng 2 số nguyên.', 'using System;\n\npublic class Program {\n    public static int Sum(int a, int b) {\n        // Viết code tại đây\n        return 0;\n    }\n}', 'csharp', 50, 1, 2, NOW());
 
 TRUNCATE TABLE TestCases;
-INSERT INTO TestCases (TestCaseID, ChallengeID, InputData, ExpectedOutput, IsHidden, CreatedAt) VALUES
-(1, 1, '1 2', '3', 0, NOW()),
-(2, 1, '5 7', '12', 0, NOW()),
-(3, 1, '-1 1', '0', 1, NOW());
+INSERT INTO TestCases (Id, CodingChallengeId, Input, ExpectedOutput, IsHidden) VALUES
+(1, 1, '1 2', '3', 0),
+(2, 1, '5 7', '12', 0),
+(3, 1, '-1 1', '0', 1);
 
 -- 9. SEED BẢNG MISTAKELOGS
 TRUNCATE TABLE MistakeLogs;
-INSERT INTO MistakeLogs (LogID, UserId, LessonId, CodeSubmitted, ErrorMessage, Solved, CreatedAt) VALUES
-(1, 3, 2, 'public int Sum() { return a; }', 'The name a does not exist in the current context', 0, NOW());
+INSERT INTO MistakeLogs (MistakeLogId, UserId, CourseId, LessonId, ExerciseType, UserAnswer, CorrectAnswer, CorrectionNote, MistakeType, NextReviewDate, ConfidenceLevel, CreatedAt, IsResolved) VALUES
+(1, 3, 1, 2, 'Code', 'public int Sum() { return a; }', 'public int Sum(int a, int b) { return a + b; }', 'Lỗi khai báo tham số', 'Logic', NOW(), 3, NOW(), 0);
 
 -- 10. SEED BẢNG COMMUNITY HUB
 TRUNCATE TABLE Posts;
-INSERT INTO Posts (PostID, UserID, Title, Content, Type, LikesCount, CreatedAt, UpdatedAt) VALUES
-(1, 3, 'Hỏi về lỗi đồng bộ Video Progress trong StudyWorkspace', 'Mình đang xem video tới phút thứ 2 thì trang web mất kết nối API, có bạn nào bị lỗi 404 này không?', 'QnA', 5, NOW(), NOW()),
-(2, 2, 'Tài liệu hướng dẫn học C# Advanced Enterprise', 'Chào các học viên, đây là link tài nguyên hữu ích phục vụ cho đồ án cuối khóa...', 'Resource', 15, NOW(), NOW());
+INSERT INTO Posts (PostId, Title, Content, Summary, Slug, AuthorId, Category, ThumbnailUrl, Tags, CreatedAt, UpdatedAt, LastActivityAt, ViewCount, VoteCount, VerifiedCommentId, IsPublished, IsDeleted) VALUES
+(1, 'Hỏi về lỗi đồng bộ Video Progress trong StudyWorkspace', 'Mình đang xem video tới phút thứ 2 thì trang web mất kết nối API, có bạn nào bị lỗi 404 này không?', 'Lỗi đồng bộ video progress', 'loi-dong-bo-video-progress', 3, 'QnA', NULL, 'Python,Beginner', NOW(), NOW(), NOW(), 12, 5, NULL, 1, 0),
+(2, 'Tài liệu hướng dẫn học C# Advanced Enterprise', 'Chào các học viên, đây là link tài nguyên hữu ích phục vụ cho đồ án cuối khóa...', 'Tài liệu C# Enterprise', 'tai-lieu-csharp-enterprise', 2, 'Resource', NULL, 'Csharp,Enterprise', NOW(), NOW(), NOW(), 154, 25, NULL, 1, 0);
 
-INSERT INTO Comments (CommentID, PostID, UserID, Content, CreatedAt) VALUES
-(1, 1, 2, 'Chào bạn, lỗi 404 này do container API chưa được kéo mã nguồn mới nhất trên VPS A. Bạn chạy lại lệnh build nohup nhé!', NOW());
+TRUNCATE TABLE Comments;
+INSERT INTO Comments (CommentId, PostId, AuthorId, Content, CreatedAt, ParentId, IsDeleted) VALUES
+(1, 1, 2, 'Chào bạn, lỗi 404 này do container API chưa được kéo mã nguồn mới nhất trên VPS A. Bạn chạy lại lệnh build nohup nhé!', NOW(), NULL, 0);
 
 -- 11. SEED BẢNG GAMIFICATION XP
 TRUNCATE TABLE UserActivityPoints;
-INSERT INTO UserActivityPoints (UserID, TotalPoints, CurrentStreak, Level, LastActiveDate) VALUES
-(3, 450, 5, 2, NOW()),
-(4, 80, 1, 1, NOW());
+INSERT INTO UserActivityPoints (Id, UserId, Points, ActivityType, LoggedAt) VALUES
+(1, 3, 100, 'Post', NOW()),
+(2, 3, 20, 'Comment', NOW());
 
 -- 12. SEED BẢNG NOTIFICATIONS
 TRUNCATE TABLE Notifications;
-INSERT INTO Notifications (NotificationID, UserID, Title, Message, IsRead, CreatedAt) VALUES
-(1, 3, 'Chứng chỉ mới', 'Chúc mừng bạn đã hoàn thành khóa học và mở khóa Chứng chỉ tốt nghiệp!', 0, NOW()),
-(2, 3, 'Huy hiệu đạt được', 'Bạn đã nhận được huy hiệu Học Giả Chăm Chỉ!', 1, NOW());
+INSERT INTO Notifications (NotificationId, UserId, Title, Message, Link, IsRead, CreatedAt, Type) VALUES
+(1, 3, 'Chứng chỉ mới', 'Chúc mừng bạn đã hoàn thành khóa học và mở khóa Chứng chỉ tốt nghiệp!', '/certificate/1', 0, NOW(), 'Achievement'),
+(2, 3, 'Huy hiệu đạt được', 'Bạn đã nhận được huy hiệu Học Giả Chăm Chỉ!', '/leaderboard', 1, NOW(), 'Achievement');
 
 SET FOREIGN_KEY_CHECKS = 1;
 `;
