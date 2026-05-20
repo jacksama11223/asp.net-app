@@ -1,5 +1,14 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-20] - Zustand Store, Video Progress Sync, System Diagnostic Suite & IDE Tweaks
+- **Added:** Thiết kế và triển khai Zustand Store (`useAuthStore.js`) quản lý tập trung reactive state cho JWT Token, thông tin người dùng và bộ nhớ đệm tiến trình video bài học hiện tại (`currentLessonProgress`).
+- **Added:** Tích hợp Zustand store kiểm tra quyền truy cập động trực tiếp vào bộ điều hướng bảo mật `ProtectedRoute` trong `App.jsx`, nâng cao tốc độ tải trang và tính nhất quán dữ liệu.
+- **Added:** Đồng bộ hóa logic đăng nhập trong `LoginPage.jsx` để tự động kích hoạt cập nhật trạng thái Zustand store ngay khi nhận token.
+- **Added:** Lập trình cơ chế ghi nhận giây xem video thực tế của bài học trong `StudyWorkspace.jsx` vào Zustand store toàn cục mỗi khi đồng bộ thành công lên backend API.
+- **Added:** Xây dựng siêu kịch bản `verify_full_system_integrity.js` giúp tự động rà soát tĩnh các trang bị thiếu import/routing trong `App.jsx`, kiểm tra xung đột package.json, quét lỗi toàn bộ API endpoints (Auth, Gamification, Community, Video Progress), và hướng dẫn kiểm tra cấu trúc bảng MariaDB.
+- **Fixed:** Sửa đổi hướng dẫn di trú dữ liệu CSDL MariaDB: Chuyển đổi lệnh nạp SQL từ `mysql` sang `mariadb` để thích ứng chính xác với các Docker image mới nhất trên VPS A.
+- **Fixed:** Vô hiệu hóa tính năng tự động cập nhật ngầm của Antigravity IDE trong `settings.json` bằng cách thiết lập `"update.mode": "none"` nhằm tối ưu hóa băng thông offline.
+
 ### [2026-05-19] - Zero Dead Buttons & Absolute UI Polish (Giai đoạn 2)
 - **Added:** Tích hợp các sự kiện click tương tác động trong phân hệ React SPA:
   - `Dashboard.jsx`: Kết nối Huy hiệu đạt được (Unlocked Badges) sang trang Bảng xếp hạng `/leaderboard`.
