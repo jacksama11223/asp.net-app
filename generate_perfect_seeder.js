@@ -190,7 +190,7 @@ INSERT INTO Comments (CommentId, PostId, AuthorId, Content, CreatedAt, ParentId,
 
 -- 11. SEED BẢNG GAMIFICATION XP
 TRUNCATE TABLE UserActivityPoints;
-INSERT INTO UserActivityPoints (Id, UserId, Points, ActivityType, LoggedAt) VALUES
+INSERT INTO UserActivityPoints (Id, UserId, Points, ActivityType, CreatedAt) VALUES
 (1, 3, 100, 'Post', NOW()),
 (2, 3, 20, 'Comment', NOW());
 
