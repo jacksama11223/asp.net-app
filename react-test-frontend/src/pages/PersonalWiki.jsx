@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Box, Grid, Paper, Stack, Title, Text, ActionIcon, 
-  UnstyledButton, Group, Divider, TextInput, Tooltip
+  UnstyledButton, Group, Divider, TextInput, Tooltip, ThemeIcon
 } from '@mantine/core';
 import { 
   LuPlus, LuBookOpen, LuSettings, 

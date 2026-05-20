@@ -7,7 +7,7 @@
 - **Added:** Lập trình cơ chế ghi nhận giây xem video thực tế của bài học trong `StudyWorkspace.jsx` vào Zustand store toàn cục mỗi khi đồng bộ thành công lên backend API.
 - **Added:** Xây dựng siêu kịch bản `verify_full_system_integrity.js` giúp tự động rà soát tĩnh các trang bị thiếu import/routing trong `App.jsx`, kiểm tra xung đột package.json, quét lỗi toàn bộ API endpoints (Auth, Gamification, Community, Video Progress), và hướng dẫn kiểm tra cấu trúc bảng MariaDB.
 - **Added:** Tạo script `test_community_api.js` tự động kiểm thử toàn diện API phân hệ Community và ghi báo cáo ra `community_api_test_report.md`.
-- **Fixed:** Sửa lỗi ReferenceError `ThemeIcon is not defined` gây lỗi trắng trang phân hệ Community bằng cách bổ sung import `ThemeIcon` từ `@mantine/core` vào `TutorSchedule.jsx`.
+- **Fixed:** Sửa lỗi ReferenceError `ThemeIcon is not defined` gây lỗi trắng trang phân hệ Community bằng cách bổ sung import `ThemeIcon` từ `@mantine/core` vào `TutorSchedule.jsx`, `ForumHome.jsx`, và `PersonalWiki.jsx`.
 - **Fixed:** Sửa đổi hướng dẫn di trú dữ liệu CSDL MariaDB: Chuyển đổi lệnh nạp SQL từ `mysql` sang `mariadb` để thích ứng chính xác với các Docker image mới nhất trên VPS A.
 - **Fixed:** Vô hiệu hóa tính năng tự động cập nhật ngầm của Antigravity IDE trong `settings.json` bằng cách thiết lập `"update.mode": "none"` nhằm tối ưu hóa băng thông offline.
 
