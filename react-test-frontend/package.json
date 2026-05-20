@@ -15,6 +15,7 @@
     "@mantine/dates": "9.1.1",
     "@mantine/hooks": "9.1.1",
     "@mantine/notifications": "9.1.1",
+    "@mantine/styles": "^6.0.22",
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/postcss": "^4.2.4",
     "axios": "^1.16.0",
