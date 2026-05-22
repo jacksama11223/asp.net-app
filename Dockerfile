@@ -4,17 +4,24 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-# Cài đặt các thư viện hệ thống cần thiết cho DinkToPdf và GDI+
-RUN apt-get update && apt-get install -y \
+# ✅ Chỉ cài thư viện tối thiểu – KHÔNG cài wkhtmltopdf qua apt
+# (wkhtmltopdf apt kéo theo 291 gói Qt/X11/GTK ~ 1.5GB, làm đầy đĩa VPS)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libgdiplus \
     libx11-6 \
-    libicu-dev \
-    libssl-dev \
     libfontconfig1 \
     libxrender1 \
     libxext6 \
     fontconfig \
-    wkhtmltopdf \
+    ca-certificates \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# ✅ Tải wkhtmltopdf binary tĩnh (~87MB) thay vì apt (1.5GB)
+RUN wget -q -O /tmp/wkhtmltopdf.deb \
+    https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
+    && apt-get update && apt-get install -y --no-install-recommends /tmp/wkhtmltopdf.deb \
+    && rm /tmp/wkhtmltopdf.deb \
     && rm -rf /var/lib/apt/lists/*
 
 # Stage 2: SDK Image để Build mã nguồn
