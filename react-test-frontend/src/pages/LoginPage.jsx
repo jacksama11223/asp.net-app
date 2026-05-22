@@ -116,7 +116,7 @@ export const LoginPage = () => {
 
               <Box mt="sm" className="flex justify-center">
                 <ReCAPTCHA
-                  sitekey="6LdGz_YsAAAAAPHYQ6ixDzM4agwbXU1wUWDvFd7C"
+                  sitekey="6Lft5fYsAAAAANdoT7nlQB2QXGzHwZMHuMnF4mC6"
                   onChange={handleCaptchaChange}
                 />
               </Box>
