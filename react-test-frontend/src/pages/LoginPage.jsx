@@ -20,23 +20,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/useAuthStore';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { BASE_URL } from '../api';
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [captchaToken, setCaptchaToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      setError('Vui lòng xác nhận bạn không phải là robot (reCAPTCHA).');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
       const response = await axios.post(`${BASE_URL}/api/auth/token`, {
         username,
-        password
+        password,
+        captchaToken
       });
       useAuthStore.getState().login(response.data.token, response.data);
       toast.success('Login successful! Welcome back.');
@@ -102,6 +113,13 @@ export const LoginPage = () => {
                 <Checkbox label="Remember me" size="xs" color="brand" />
                 <Anchor component="button" size="xs" color="brand" fw={700}>Forgot password?</Anchor>
               </Group>
+
+              <Box mt="sm" className="flex justify-center">
+                <ReCAPTCHA
+                  sitekey="6LdGz_YsAAAAAPHYQ6ixDzM4agwbXU1wUWDvFd7C"
+                  onChange={handleCaptchaChange}
+                />
+              </Box>
 
               <Button type="submit" fullWidth size="lg" radius="md" color="brand" loading={loading} className="mt-4 h-14 text-md shadow-xl shadow-brand-500/30 active:scale-95 transition-all">
                 Log In

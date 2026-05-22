@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace SmartLMS.Web.Controllers;
 
@@ -30,6 +32,11 @@ public class AuthApiController : ControllerBase
     [HttpPost("token")]
     public async Task<IActionResult> GenerateToken([FromBody] LoginRequest request)
     {
+        if (!await VerifyCaptchaTokenAsync(request.CaptchaToken))
+        {
+            return BadRequest(new { message = "Xác thực reCAPTCHA thất bại. Vui lòng thử lại." });
+        }
+
         var user = await _userService.AuthenticateAsync(request.Username, request.Password);
         
         if (user == null)
@@ -63,6 +70,11 @@ public class AuthApiController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
+        if (!await VerifyCaptchaTokenAsync(request.CaptchaToken))
+        {
+            return BadRequest(new { message = "Xác thực reCAPTCHA thất bại. Vui lòng thử lại." });
+        }
+
         // Check Email
         var existingEmail = await _userService.GetUserByEmailAsync(request.Email);
         if (existingEmail != null)
@@ -99,6 +111,20 @@ public class AuthApiController : ControllerBase
         return Ok(new { message = "Đăng ký thành công!" });
     }
 
+    private async Task<bool> VerifyCaptchaTokenAsync(string captchaToken)
+    {
+        if (string.IsNullOrEmpty(captchaToken)) return false;
+
+        var secretKey = _configuration["ReCaptcha:SecretKey"] ?? "6LdGz_YsAAAAAERqfXcclCpEbm96JQqDDnNdaRMu";
+        using var client = new HttpClient();
+        var response = await client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={captchaToken}", null);
+        if (!response.IsSuccessStatusCode) return false;
+
+        var jsonString = await response.Content.ReadAsStringAsync();
+        using var jsonDoc = JsonDocument.Parse(jsonString);
+        return jsonDoc.RootElement.GetProperty("success").GetBoolean();
+    }
+
     private string CreateToken(User user)
     {
         // ... (existing code remains same)
@@ -132,6 +158,7 @@ public class LoginRequest
 {
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public string CaptchaToken { get; set; } = string.Empty;
 }
 
 public class RegisterRequest
@@ -140,4 +167,5 @@ public class RegisterRequest
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string FullName { get; set; } = string.Empty;
+    public string CaptchaToken { get; set; } = string.Empty;
 }

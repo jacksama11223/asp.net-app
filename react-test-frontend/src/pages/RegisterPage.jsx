@@ -17,6 +17,7 @@ import { LuZap, LuSend, LuSettings, LuUsers, LuArrowLeft } from 'react-icons/lu'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { BASE_URL } from '../api';
 
@@ -28,13 +29,22 @@ export const RegisterPage = () => {
     password: '',
     confirmPassword: ''
   });
+  const [captchaToken, setCaptchaToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      setError('Vui lòng xác nhận bạn không phải là robot (reCAPTCHA).');
+      return;
+    }
     setLoading(true);
     setError('');
 
@@ -49,7 +59,8 @@ export const RegisterPage = () => {
         username: formData.username,
         email: formData.email,
         fullName: formData.fullName,
-        password: formData.password
+        password: formData.password,
+        captchaToken: captchaToken
       });
       setSuccess(true);
       toast.success('Đăng ký thành công! Đang chuyển hướng...');
@@ -145,6 +156,13 @@ export const RegisterPage = () => {
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                 className="transition-all focus:scale-[1.01]"
               />
+
+              <Box mt="sm" className="flex justify-center">
+                <ReCAPTCHA
+                  sitekey="6LdGz_YsAAAAAPHYQ6ixDzM4agwbXU1wUWDvFd7C"
+                  onChange={handleCaptchaChange}
+                />
+              </Box>
 
               <Button type="submit" fullWidth size="lg" radius="md" color="brand" loading={loading} className="mt-4 h-14 text-md shadow-xl shadow-brand-500/30 active:scale-95 transition-all">
                 Register Now
