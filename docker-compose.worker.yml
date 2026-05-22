@@ -19,6 +19,8 @@ services:
       - DOTNET_GCHeapHardLimitPercent=75
     ports:
       - "5381-5383:8080"
+    volumes:
+      - ./:/app/source-code:ro
     networks:
       - smartlms-worker-net
 
