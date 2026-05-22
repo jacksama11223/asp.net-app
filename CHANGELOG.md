@@ -1,5 +1,9 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-22] - Swagger API UI Exposition & Nginx LB Routing
+- **Added:** Định tuyến và phân phối Swagger API UI (`/swagger`) thông qua Nginx Load Balancer (`nginx-lb.conf`) cho phép truy cập trực tiếp tài liệu API toàn hệ thống từ cổng 80 (`http://141.253.114.218/swagger`).
+- **Added:** Viết script kiểm thử `test_swagger_lb.js` để tự động xác thực khả năng truy cập Swagger JSON Schema và giao diện Swagger UI thông qua Load Balancer từ máy local.
+
 ### [2026-05-20] - Zustand Store, Video Progress Sync, System Diagnostic Suite & IDE Tweaks
 - **Added:** Thiết kế và triển khai Zustand Store (`useAuthStore.js`) quản lý tập trung reactive state cho JWT Token, thông tin người dùng và bộ nhớ đệm tiến trình video bài học hiện tại (`currentLessonProgress`).
 - **Added:** Tích hợp Zustand store kiểm tra quyền truy cập động trực tiếp vào bộ điều hướng bảo mật `ProtectedRoute` trong `App.jsx`, nâng cao tốc độ tải trang và tính nhất quán dữ liệu.
