@@ -55,6 +55,8 @@ services:
         condition: service_started
     ports:
       - "5181-5182:8080"
+    volumes:
+      - ./:/app/source-code:ro
     networks:
       - smartlms-net
 
