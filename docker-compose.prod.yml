@@ -28,9 +28,6 @@ services:
       - smartlms-net
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
     restart: always
     mem_limit: 400m
@@ -59,9 +56,7 @@ services:
       - smartlms-net
 
   community:
-    build:
-      context: .
-      dockerfile: asp.net-group/SmartLMS.Community/Dockerfile
+    image: ghcr.io/jacksama11223/asp.net-app/smartlms-community:latest
     restart: always
     mem_limit: 250m
     environment:
@@ -79,9 +74,7 @@ services:
       - smartlms-net
 
   frontend:
-    build:
-      context: ./react-test-frontend
-      dockerfile: Dockerfile
+    image: ghcr.io/jacksama11223/asp.net-app/smartlms-frontend:latest
     container_name: smartlms-frontend-prod
     restart: always
     mem_limit: 30m

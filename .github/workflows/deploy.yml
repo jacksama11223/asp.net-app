@@ -7,34 +7,12 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
-        
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --no-restore
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-
-  build-and-push-image:
-    needs: build-and-test
+  build-and-push-images:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    outputs:
-      image_tag: ${{ steps.meta.outputs.tags }}
     steps:
     - uses: actions/checkout@v3
 
@@ -45,39 +23,50 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract Docker metadata
-      id: meta
+    - name: Extract metadata for Backend
+      id: meta-backend
       uses: docker/metadata-action@v5
       with:
         images: ghcr.io/${{ github.repository }}/smartlms-backend
         tags: |
-          type=sha,prefix=sha-
           type=raw,value=latest
 
-    - name: Build and push Docker image
+    - name: Build and push Backend image
       uses: docker/build-push-action@v5
       with:
         context: .
+        file: Dockerfile
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-
-  deploy-to-cloud:
-    needs: build-and-push-image
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-    - name: Deploy to Oracle Cloud via SSH
-      uses: appleboy/ssh-action@master
+        tags: ${{ steps.meta-backend.outputs.tags }}
+        
+    - name: Extract metadata for Community
+      id: meta-community
+      uses: docker/metadata-action@v5
       with:
-        host: ${{ secrets.ORACLE_CLOUD_IP }}
-        username: opc
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /home/opc/asp.net-app
-          git fetch origin
-          git reset --hard origin/main
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker compose -f docker-compose.prod.yml pull backend
-          docker compose -f docker-compose.prod.yml up -d --no-build
-          docker image prune -f
-          echo "✅ Deployed successfully at $(date)"
+        images: ghcr.io/${{ github.repository }}/smartlms-community
+        tags: |
+          type=raw,value=latest
+
+    - name: Build and push Community image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: asp.net-group/SmartLMS.Community/Dockerfile
+        push: true
+        tags: ${{ steps.meta-community.outputs.tags }}
+
+    - name: Extract metadata for Frontend
+      id: meta-frontend
+      uses: docker/metadata-action@v5
+      with:
+        images: ghcr.io/${{ github.repository }}/smartlms-frontend
+        tags: |
+          type=raw,value=latest
+
+    - name: Build and push Frontend image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./react-test-frontend
+        file: react-test-frontend/Dockerfile
+        push: true
+        tags: ${{ steps.meta-frontend.outputs.tags }}
