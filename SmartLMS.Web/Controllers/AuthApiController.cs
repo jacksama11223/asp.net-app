@@ -115,7 +115,7 @@ public class AuthApiController : ControllerBase
     {
         if (string.IsNullOrEmpty(captchaToken)) return false;
 
-        var secretKey = _configuration["ReCaptcha:SecretKey"] ?? "6Lft5fYsAAAAABisoWKU89jqpBLjFuGVexgraMcY";
+        var secretKey = _configuration["ReCaptcha:SecretKey"] ?? "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
         using var client = new HttpClient();
         var response = await client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={captchaToken}", null);
         if (!response.IsSuccessStatusCode) return false;
