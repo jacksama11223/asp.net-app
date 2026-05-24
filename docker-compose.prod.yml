@@ -12,9 +12,9 @@ services:
       - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
-    mem_limit: 600m
+    mem_limit: 300m
     command: >
-      --innodb-buffer-pool-size=512M
+      --innodb-buffer-pool-size=64M
       --innodb-log-file-size=128M
       --max-connections=5000
       --tmp-table-size=64M
@@ -30,7 +30,7 @@ services:
   backend:
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
     restart: always
-    mem_limit: 400m
+    mem_limit: 250m
     deploy:
       replicas: 1
     environment:
@@ -58,7 +58,7 @@ services:
   community:
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-community:latest
     restart: always
-    mem_limit: 250m
+    mem_limit: 200m
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
