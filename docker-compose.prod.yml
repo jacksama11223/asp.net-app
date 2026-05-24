@@ -51,14 +51,14 @@ services:
       redis:
         condition: service_started
     ports:
-      - "5181-5182:8080"
+      - "5181:8080"
     networks:
       - smartlms-net
 
   community:
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-community:latest
     restart: always
-    mem_limit: 200m
+    mem_limit: 150m
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
