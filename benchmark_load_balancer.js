@@ -1,6 +1,6 @@
 const http = require('http');
 
-const url = 'http://141.253.114.218/api/public/health'; // Thử một endpoint bất kỳ
+const url = 'http://141.253.114.218/swagger/index.html'; // Endpoint Backend có thật
 const totalRequests = 20;
 let results = {
     "VPS A (Local)": 0,
@@ -15,10 +15,10 @@ let completed = 0;
 
 for (let i = 0; i < totalRequests; i++) {
     const req = http.get(url, (res) => {
-        const upstream = res.headers['x-server-node'];
+        const upstream = res.headers['x-server-node'] || res.headers['X-Server-Node'];
         
         if (!upstream) {
-            console.log(`Request ${i+1}: Không lấy được thông tin Node (Lỗi HTTP ${res.statusCode})`);
+            console.log(`Request ${i+1}: Không lấy được thông tin Node (Lỗi HTTP ${res.statusCode}). Các header:`, Object.keys(res.headers).join(', '));
             results["Lỗi/Timeout"]++;
         } else if (upstream.includes('145.241.160.156')) {
             console.log(`Request ${i+1}: Đã chuyển hướng sang -> 🌐 VPS B (${upstream})`);
