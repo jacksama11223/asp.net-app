@@ -20,9 +20,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
-      - ConnectionStrings__DefaultConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YourStrongPassword123!;
-      - ConnectionStrings__ReadOnlyConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YourStrongPassword123!;
-      - Redis__ConnectionString=redis:6379,password=YourRedisPass
+      - ConnectionStrings__DefaultConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YOUR_DB_PASSWORD_HERE;
+      - ConnectionStrings__ReadOnlyConnection=Server=smartlms-db-prod;Database=SmartLMS;User Id=root;Password=YOUR_DB_PASSWORD_HERE;
+      - Redis__ConnectionString=redis:6379,password=YOUR_REDIS_PASSWORD_HERE
       - RabbitMQ__HostName=rabbitmq
     ports:
       - "5181:8080"
@@ -33,7 +33,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    command: redis-server --requirepass YourRedisPass
+    command: redis-server --requirepass YOUR_REDIS_PASSWORD_HERE
     deploy:
       resources:
         limits:
