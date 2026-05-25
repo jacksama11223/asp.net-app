@@ -116,6 +116,13 @@ public class AuthApiController : ControllerBase
         if (string.IsNullOrEmpty(captchaToken)) return false;
 
         var secretKey = _configuration["ReCaptcha:SecretKey"] ?? "YOUR_RECAPTCHA_SECRET_KEY_HERE";
+        
+        // [Bypass cho môi trường Public / Demo]
+        if (secretKey == "YOUR_RECAPTCHA_SECRET_KEY_HERE") 
+        {
+            return true;
+        }
+
         using var client = new HttpClient();
         var response = await client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={captchaToken}", null);
         if (!response.IsSuccessStatusCode) return false;
