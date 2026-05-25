@@ -10,7 +10,7 @@ const DB_CONFIG = {
     database: 'SmartLMS'
 };
 
-const REDIS_URL = 'redis://:YourRedisPass@141.253.114.218:6379';
+const REDIS_URL = 'redis://:YOUR_REDIS_PASSWORD_HERE@141.253.114.218:6379';
 
 async function checkConnectivity() {
     console.log(`======================================================`);
