@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SmartLms.Web.ViewModels;
 using SmartLMS.Data;
 using SmartLMS.Models;
 
@@ -18,34 +17,16 @@ namespace SmartLMS.Business
             _context = context;
         }
 
-        public async Task<ForumFeedViewModel> GetForumFeedAsync(int page = 1, int pageSize = 10)
+        public async Task<List<Post>> GetForumFeedAsync(int page = 1, int pageSize = 10)
         {
-            var posts = await _context.Posts
+            return await _context.Posts
                 .Include(p => p.Author)
+                .Include(p => p.Comments)
                 .Where(p => p.IsPublished && !p.IsDeleted)
                 .OrderByDescending(p => p.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new ForumPostViewModel
-                {
-                    Id = p.PostId.ToString(),
-                    Title = p.Title,
-                    Content = p.Summary ?? p.Content.Substring(0, Math.Min(p.Content.Length, 150)) + "...",
-                    Tag = p.Tags ?? "Thảo Luận",
-                    Category = p.Category ?? "Chung",
-                    AuthorName = p.Author.FullName,
-                    AuthorRole = "Học viên", // Hoặc map từ role thực tế
-                    AuthorAvatar = string.IsNullOrEmpty(p.Author.AvatarUrl) ? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(p.Author.FullName)}" : p.Author.AvatarUrl,
-                    CreatedAt = p.CreatedAt,
-                    Likes = p.VoteCount,
-                    CommentsCount = p.Comments.Count()
-                })
                 .ToListAsync();
-
-            return new ForumFeedViewModel
-            {
-                Posts = posts
-            };
         }
 
         public async Task<string> DraftAiResponseAsync(string prompt)
@@ -84,16 +65,18 @@ public class AiSolution {{
             if (user == null) return false;
 
             // Cộng 15 điểm XP Academic
-            user.Points += 15;
+            user.TotalXP = (user.TotalXP ?? 0) + 15;
             
             // Ghi log qua Audit (Tuân thủ Constitution)
             var log = new AuditLog
             {
                 UserId = userId,
-                Action = "Share_ForumPost",
-                Details = $"Shared Post ID: {postId} using format: {format}. Awarded +15 XP.",
-                Timestamp = DateTime.UtcNow,
-                IpAddress = "System"
+                ActionType = "POST",
+                ActionName = "Share_ForumPost",
+                EntityName = "Post",
+                EntityId = postId,
+                NewValues = $"Shared using format: {format}. Awarded +15 XP.",
+                Timestamp = DateTime.UtcNow
             };
             
             _context.AuditLogs.Add(log);

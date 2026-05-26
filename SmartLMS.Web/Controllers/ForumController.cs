@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,24 @@ namespace SmartLMS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1)
         {
-            var viewModel = await _forumService.GetForumFeedAsync(page);
+            var posts = await _forumService.GetForumFeedAsync(page);
+            var viewModel = new SmartLms.Web.ViewModels.ForumFeedViewModel
+            {
+                Posts = posts.Select(p => new SmartLms.Web.ViewModels.ForumPostViewModel
+                {
+                    Id = p.PostId.ToString(),
+                    Title = p.Title,
+                    Content = p.Summary ?? (p.Content.Length > 150 ? p.Content.Substring(0, 150) + "..." : p.Content),
+                    Tag = string.IsNullOrEmpty(p.Tags) ? "Thảo Luận" : p.Tags,
+                    Category = string.IsNullOrEmpty(p.Category) ? "Chung" : p.Category,
+                    AuthorName = p.Author?.FullName ?? "Ẩn danh",
+                    AuthorRole = "Học viên",
+                    AuthorAvatar = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(p.Author?.FullName ?? "User")}",
+                    CreatedAt = p.CreatedAt,
+                    Likes = p.VoteCount,
+                    CommentsCount = p.Comments?.Count ?? 0
+                }).ToList()
+            };
             return View(viewModel);
         }
 
