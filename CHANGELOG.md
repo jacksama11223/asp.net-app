@@ -1,5 +1,13 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-26] - Admin Moderation UI & Community Seed API
+- **Added:** Endpoint API `/api/seed-posts` trong `CommunityController` để tự động giả lập (seed) dữ liệu bài viết chuẩn Markdown vào cơ sở dữ liệu MariaDB mà không cần thông qua script NodeJS bên ngoài.
+- **Added:** Giao diện Trạm kiểm duyệt (`Admin/Moderation.cshtml`) với thiết kế hiện đại, giúp Admin và Moderator quản lý danh sách bài viết chờ duyệt (`IsPublished = false`).
+- **Added:** Xây dựng `AdminController` xử lý luồng (workflow) Duyệt (Approve) và Từ chối (Reject/Soft-delete) bài viết trực tiếp từ giao diện 3080.
+- **Added:** Lên kế hoạch chi tiết `admin-moderation-plan.md` cho các tính năng kiểm duyệt nội dung (Post Moderation, Comment Flagging, Bounty Dispute) của Community Hub.
+- **Fixed:** Sửa lỗi Validation bắt buộc cấu trúc `@gmail.com` trong Form Đăng nhập Cộng đồng. Bây giờ Admin (và các user khác) có thể đăng nhập bằng Username trực tiếp nhờ việc lược bỏ thuộc tính `[EmailAddress]` ở View Models và chuyển `type="email"` sang `type="text"`.
+- **Refactored:** Thay thế hoàn toàn file `CreatePostPage.jsx` dư thừa bằng `Create.cshtml` nguyên bản kết hợp Vanilla JS, giữ nguyên cấu trúc Split Preview và AI Mentor theo đúng định hướng kiến trúc Razor MVC.
+
 ### [2026-05-22] - Swagger API UI Exposition & Nginx LB Routing
 - **Added:** Định tuyến và phân phối Swagger API UI (`/swagger`) thông qua Nginx Load Balancer (`nginx-lb.conf`) cho phép truy cập trực tiếp tài liệu API toàn hệ thống từ cổng 80 (`http://141.253.114.218/swagger`).
 - **Added:** Viết script kiểm thử `test_swagger_lb.js` để tự động xác thực khả năng truy cập Swagger JSON Schema và giao diện Swagger UI thông qua Load Balancer từ máy local.

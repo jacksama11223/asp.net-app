@@ -4,8 +4,7 @@ namespace SmartLMS.Community.ViewModels;
 
 public class LoginViewModel
 {
-    [Required(ErrorMessage = "Vui lòng nhập email")]
-    [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
+    [Required(ErrorMessage = "Vui lòng nhập tài khoản / email")]
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]

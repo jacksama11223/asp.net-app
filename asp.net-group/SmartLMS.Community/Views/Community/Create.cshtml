@@ -1,0 +1,518 @@
+@{
+    ViewData["Title"] = "Biên soạn bài viết thảo luận mới";
+    Layout = "_CommunityLayout";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden min-h-[600px] flex flex-col justify-between font-sans">
+        
+        <!-- Header bar -->
+        <div class="px-6 py-4 bg-gradient-to-r from-slate-50 to-cyan-50/20 border-b border-slate-100 flex items-center justify-between select-none">
+            <div class="flex items-center gap-3">
+                <a href="/hub" class="w-10 h-10 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-all cursor-pointer">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                </a>
+                <div>
+                    <h2 class="text-sm font-black text-slate-800 tracking-tight leading-tight">Biên soạn bài viết thảo luận mới</h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Cộng cụ viết bài nâng cao hỗ trợ kiểm soát AI & Code Auditor</p>
+                </div>
+            </div>
+
+            <!-- Saved indicator and View Switcher -->
+            <div class="flex items-center gap-3">
+                <span id="draft-indicator" class="hidden sm:inline text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-1 rounded-lg"></span>
+
+                <div class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+                    <button type="button" onclick="setEditorMode('simple')" id="btn-mode-simple" class="px-3 py-1.5 text-[11px] font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 text-slate-500 hover:text-slate-800">
+                        <i data-lucide="edit-3" class="w-3 h-3"></i> Cơ bản
+                    </button>
+                    <button type="button" onclick="setEditorMode('split')" id="btn-mode-split" class="px-3 py-1.5 text-[11px] font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 bg-white text-cyan-600 shadow-sm">
+                        <i data-lucide="eye" class="w-3 h-3"></i> Giao diện split preview
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Space -->
+        <form id="post-form" action="/hub/post/new" method="POST" class="flex-1 p-6 flex flex-col lg:flex-row gap-6">
+            
+            <!-- Left side: Inputs form fields -->
+            <div class="flex-1 space-y-5">
+                
+                <!-- AI Trigger button bar to quickly assist draft -->
+                <div class="bg-gradient-to-r from-purple-500/10 to-indigo-500/5 p-4 rounded-xl border border-purple-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 select-none">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white shadow shadow-purple-200 shrink-0">
+                            <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                        </div>
+                        <div>
+                            <strong class="text-xs text-purple-900 font-extrabold block">Bí ý tưởng diễn đạt học thuật?</strong>
+                            <p class="text-[10px] text-purple-700 font-bold uppercase tracking-wide">Trợ lý AI Mentor việt hóa bản nháp tự động</p>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="toggleAiModal(true)" class="bg-purple-600 hover:bg-purple-700 text-white font-black text-[11px] px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-sm flex items-center gap-1 shrink-0 border-none">
+                        <i data-lucide="sparkles" class="w-3 h-3"></i> Khởi tạo bản nháp mẫu AI
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    
+                    <!-- Title field -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center select-none">
+                            <label class="text-xs font-black text-slate-700">Tiêu đề bài viết thảo luận:</label>
+                            <span id="title-counter" class="text-[10px] font-mono font-bold text-slate-400">0 / 100</span>
+                        </div>
+                        <input type="text" id="post-title" name="Title" required maxlength="100" placeholder="Ví dụ: Giúp giải đáp lỗi concurrency trong ASP.NET Core EF Core..." class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 placeholder-slate-400 text-slate-800 text-xs font-semibold focus:ring-1 focus:ring-cyan-500 focus:bg-white transition-all outline-none" />
+                    </div>
+
+                    <!-- Core Classification selectors -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 select-none">
+                        <div class="space-y-1">
+                            <label class="text-xs font-black text-slate-700">Khóa học / Phân hệ:</label>
+                            <select id="post-course" class="w-full bg-slate-50 border border-slate-100 text-xs px-3.5 py-3 rounded-xl text-slate-700 font-bold outline-none focus:ring-1 focus:ring-cyan-500">
+                                <option value="CS101">C# Fundamental Coding</option>
+                                <option value="CS202">Advanced C# Patterns</option>
+                                <option value="DB305">Distributed Databases & LINQ</option>
+                                <option value="WEB41">Enterprise Web Core API</option>
+                                <option value="SYS50">Distributed Systems Middleware</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-black text-slate-700">Chủ đề khóa học:</label>
+                            <select id="post-category" name="Category" class="w-full bg-slate-50 border border-slate-100 text-xs px-3.5 py-3 rounded-xl text-slate-700 font-bold outline-none focus:ring-1 focus:ring-cyan-500">
+                                <option value="StudyWorkspace">Thảo luận chung</option>
+                                <option value="C# Advanced">C# Advanced Techniques</option>
+                                <option value="Data Structures">Data Structures & Big-O</option>
+                                <option value="Database Systems">Database Systems Optimization</option>
+                                <option value="Web Development">Web Development MVC/API</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-black text-slate-700">Thẻ định hình bài viết:</label>
+                            <select id="post-tag" name="Tags" class="w-full bg-slate-50 border border-slate-100 text-xs px-3.5 py-3 rounded-xl text-slate-700 font-bold outline-none focus:ring-1 focus:ring-cyan-500">
+                                <option value="Discussion">Trao đổi thắc mắc</option>
+                                <option value="Bug Report">Báo lỗi & Nhờ gỡ code</option>
+                                <option value="Share Resource">Chia sẻ tài liệu</option>
+                                <option value="Study Tips">Kinh nghiệm lý thuyết</option>
+                                <option value="Recruitment">Mời tuyển học nhóm</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Markdown Text Area content -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center select-none">
+                            <label class="text-xs font-black text-slate-700">Nội dung chi tiết (Hỗ trợ Markdown):</label>
+                            <div class="flex items-center gap-1">
+                                <span class="text-[10px] text-slate-400 font-extrabold mr-1">Phím nhanh:</span>
+                                <button type="button" onclick="insertCodeBlock()" class="px-1.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[9px] font-mono font-bold cursor-pointer border-none">&lt;/&gt; Chèn Khối Code</button>
+                            </div>
+                        </div>
+                        <textarea id="post-content" name="Content" required rows="7" placeholder="Dán lỗi biên dịch, mô tả hoàn cảnh hoặc đặt các câu hỏi logic..." class="w-full bg-slate-50 border border-slate-100 rounded-xl p-4 placeholder-slate-400 text-slate-800 text-xs font-semibold focus:ring-1 focus:ring-cyan-500 focus:bg-white transition-all outline-none resize-none leading-relaxed font-sans"></textarea>
+                        <div class="flex justify-between items-center px-1 text-[10px] text-slate-400 font-bold font-mono">
+                            <span id="word-counter">Khoảng 0 từ</span>
+                            <span id="char-counter">0 ký tự</span>
+                        </div>
+                    </div>
+
+                    <!-- 1. EXTRA MODULE: XP BOUNTY CHALLENGE SETTER -->
+                    <div class="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
+                        <div class="flex items-center justify-between select-none">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="trophy" id="bounty-icon" class="w-4 h-4 text-slate-400"></i>
+                                <div>
+                                    <span class="text-xs font-black text-slate-800 block">Treo giải thưởng học học thuật bài viết (Bounty)</span>
+                                    <p class="text-[9.5px] text-slate-450 font-semibold font-sans">Kích thích tinh thần hiếu học bằng hạt giống XP của bạn</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="has-bounty" class="sr-only peer" />
+                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                            </label>
+                        </div>
+
+                        <div id="bounty-options" class="hidden pt-2 border-t border-dashed border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3.5 transition-all duration-300">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-black text-slate-600 block">Chọn dòng điểm XP trích thưởng từ quỹ:</span>
+                                <select id="bounty-points" class="w-full bg-white border border-slate-200 text-xs px-3 py-2 rounded-xl text-slate-700 font-bold outline-none">
+                                    <option value="20">20 XP (Bài tập cơ bản)</option>
+                                    <option value="50">50 XP (Học thuật cốt lõi)</option>
+                                    <option value="100">100 XP (Quan trọng / hóc búa)</option>
+                                </select>
+                            </div>
+                            <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-[10px] text-amber-800 font-semibold flex items-start gap-1.5 leading-relaxed">
+                                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 shrink-0 text-amber-600 mt-0.5"></i>
+                                <p>Treo thưởng sẽ khấu trừ tạm xu từ hũ điểm XP của bạn. Bạn có thể duyệt câu trả lời tâm đắc nhất của đồng học bất kỳ lúc nào.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. EXTRA MODULE: DISCORD-LIKE POLL SURVEY CREATOR -->
+                    <div class="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
+                        <div class="flex items-center justify-between select-none">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="bar-chart-2" id="poll-icon" class="w-4 h-4 text-slate-400"></i>
+                                <div>
+                                    <span class="text-xs font-black text-slate-800 block">Đính kèm khảo sát trưng cầu ý kiến đồng môn</span>
+                                    <p class="text-[9.5px] text-slate-450 font-semibold font-sans">Kêu gọi biểu quyết lựa chọn phương án tối ưu</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="has-poll" class="sr-only peer" />
+                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-pink-500"></div>
+                            </label>
+                        </div>
+
+                        <div id="poll-options-container" class="hidden pt-2.5 border-t border-dashed border-slate-200 space-y-3 transition-all duration-300">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-black text-slate-600 block">Câu hỏi trưng cầu / Biểu quyết mục tiêu:</span>
+                                <input type="text" id="poll-question" placeholder="Ví dụ: Theo bạn cấu hình Async hay ThreadPool tốt hơn?" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold outline-none text-slate-700" />
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <span class="text-[10px] font-black text-slate-600 block">Các phương pháp trả lời (Lựa chọn):</span>
+                                <div id="poll-items" class="space-y-1.5">
+                                    <!-- Sẽ render bằng JS -->
+                                </div>
+                                <button type="button" onclick="addPollOption()" class="text-[10px] text-pink-600 font-extrabold hover:underline flex items-center gap-1 mt-1 cursor-pointer border-none bg-transparent">
+                                    <i data-lucide="plus" class="w-3 h-3"></i> Thêm lựa chọn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. EXTRA MODULE: ATTACHMENT DRAG & DROP ZONE -->
+                    <div class="space-y-1.5 select-none">
+                        <span class="text-xs font-black text-slate-700 block">Đính kèm tập tin bổ trợ / Source Code ZIP:</span>
+                        <div id="drop-zone" class="border-2 border-dashed border-slate-200 bg-slate-50/40 hover:bg-slate-50 rounded-xl p-5 text-center transition-all cursor-pointer">
+                            <div id="drop-zone-empty" class="space-y-2">
+                                <div class="flex justify-center gap-3">
+                                    <button type="button" onclick="simulateAttach('image', 'Capture.png')" class="p-2 border border-slate-200 hover:border-cyan-300 bg-white hover:bg-cyan-50/10 rounded-xl text-slate-500 hover:text-cyan-600 transition-all flex items-center gap-1 text-[10px] font-bold cursor-pointer">
+                                        <i data-lucide="image" class="w-3.5 h-3.5 text-cyan-500"></i> Chèn Ảnh
+                                    </button>
+                                    <button type="button" onclick="simulateAttach('video', 'Demo.mp4')" class="p-2 border border-slate-200 hover:border-blue-300 bg-white hover:bg-blue-50/10 rounded-xl text-slate-500 hover:text-blue-600 transition-all flex items-center gap-1 text-[10px] font-bold cursor-pointer">
+                                        <i data-lucide="video" class="w-3.5 h-3.5 text-blue-500"></i> Đính Video
+                                    </button>
+                                    <button type="button" onclick="simulateAttach('file', 'Source.zip')" class="p-2 border border-slate-200 hover:border-indigo-300 bg-white hover:bg-indigo-50/10 rounded-xl text-slate-500 hover:text-indigo-600 transition-all flex items-center gap-1 text-[10px] font-bold cursor-pointer">
+                                        <i data-lucide="paperclip" class="w-3.5 h-3.5 text-indigo-500"></i> Đính Kèm ZIP
+                                    </button>
+                                </div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Hoặc Kéo & Thả tệp dữ liệu trực tiếp vào khu vực này</p>
+                            </div>
+                            <div id="drop-zone-filled" class="hidden flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </div>
+                                    <div class="text-left">
+                                        <span id="attached-filename" class="text-xs font-black text-slate-800 truncate block max-w-xs"></span>
+                                        <span class="text-[9.5px] text-slate-400 uppercase tracking-widest font-mono">Attached</span>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="clearAttachment()" class="text-slate-400 hover:text-rose-600 transition-colors cursor-pointer bg-transparent border-none">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right side: Split screen helper panels -->
+            <div id="split-view" class="w-full lg:w-96 p-5 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col justify-between space-y-5">
+                
+                <!-- Real-time Code Quality Auditor Score Meter -->
+                <div class="space-y-3.5">
+                    <div class="flex justify-between items-center select-none">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Chỉ số ưu học (Code Quality Auditor)</span>
+                        <span id="score-display" class="text-xs font-black bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded-full font-mono">30/100</span>
+                    </div>
+
+                    <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                        <div id="score-bar" class="h-full bg-gradient-to-r from-red-500 via-amber-400 to-emerald-500 transition-all duration-300" style="width: 30%"></div>
+                    </div>
+
+                    <div id="warnings-container" class="space-y-2 max-h-48 overflow-y-auto">
+                        <!-- Warnings render here -->
+                    </div>
+                </div>
+
+                <!-- Smart Live Preview Frame -->
+                <div class="flex-1 flex flex-col justify-between space-y-3">
+                    <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block select-none">Live Preview</span>
+                    
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-3 shadow-inner max-h-64 overflow-y-auto">
+                        <div class="space-y-1.5">
+                            <div class="flex gap-2 items-center flex-wrap">
+                                <span id="preview-category" class="text-[9px] bg-cyan-50 border border-cyan-100 text-cyan-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider leading-none">Chung</span>
+                                <span id="preview-tag" class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider leading-none">#Thảo Luận</span>
+                            </div>
+                            <h3 id="preview-title-display" class="text-xs font-black text-slate-800 leading-snug">Tiêu đề bài viết chưa nhập...</h3>
+                        </div>
+
+                        <div id="preview-content-display" class="text-[11px] font-medium text-slate-600 leading-relaxed max-w-full overflow-hidden break-words whitespace-pre-line font-sans border-t border-dashed border-slate-100 pt-2 shrink-0">
+                            Đồng học chưa nhập nội dung biên thảo...
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 select-none">
+                        <button type="button" onclick="clearDraft()" class="flex-1 py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 border border-slate-200">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Xóa Nháp
+                        </button>
+                        <button type="submit" class="flex-1 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-black rounded-xl transition-all shadow shadow-cyan-200 cursor-pointer flex items-center justify-center gap-1 border-none">
+                            <i data-lucide="check" class="w-3.5 h-3.5"></i> Đăng Lên Hub
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Simple Mode Actions (Hidden in split mode) -->
+            <div id="simple-actions" class="hidden px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3.5 select-none w-full">
+                <button type="button" onclick="clearDraft()" class="px-5 py-2.5 text-slate-500 hover:text-rose-600 text-xs font-bold bg-white border border-slate-200 hover:bg-rose-50 rounded-xl cursor-pointer">Xóa nháp</button>
+                <a href="/hub" class="px-5 py-2.5 text-slate-600 text-xs font-bold bg-white border border-slate-200 hover:bg-slate-100 rounded-xl cursor-pointer">Hủy bỏ</a>
+                <button type="submit" class="px-6 py-2.5 bg-cyan-600 text-white text-xs font-black rounded-xl cursor-pointer shadow-md hover:bg-cyan-700 border-none">Đăng Thảo Luận Mới</button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<!-- AI MENTOR MODAL -->
+<div id="ai-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-150 shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="ai-modal-content">
+        <div class="p-5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-between select-none">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                <div>
+                    <strong class="text-xs font-black block">Trợ lý AI Mentor: Nạp ý tưởng</strong>
+                    <span class="text-[9.5px] text-white/80 font-bold uppercase tracking-wider">Chọn hướng kết cấu tự động điền</span>
+                </div>
+            </div>
+            <button type="button" onclick="toggleAiModal(false)" class="text-white/80 hover:text-white bg-transparent border-none cursor-pointer"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <div class="p-5 space-y-4">
+            <p class="text-[11px] text-slate-500 font-medium">Chọn một kịch bản học thuật sau đây. AI sẽ tự động điền nháp:</p>
+            <div class="space-y-2.5" id="ai-options">
+                <button type="button" onclick="triggerAiDraft('debug')" class="w-full text-left p-3.5 bg-slate-50 hover:bg-purple-50 border border-slate-100 rounded-xl flex items-start gap-3 cursor-pointer group">
+                    <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600"><i data-lucide="code" class="w-4 h-4"></i></div>
+                    <div><strong class="text-xs text-slate-800 font-black block">1. Đệ trình gỡ lỗi code (Bug Debug)</strong><span class="text-[10px] text-slate-400">Tạo câu hỏi lỗi NullReferenceException.</span></div>
+                </button>
+                <button type="button" onclick="triggerAiDraft('memory')" class="w-full text-left p-3.5 bg-slate-50 hover:bg-purple-50 border border-slate-100 rounded-xl flex items-start gap-3 cursor-pointer group">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600"><i data-lucide="lightbulb" class="w-4 h-4"></i></div>
+                    <div><strong class="text-xs text-slate-800 font-black block">2. Chia sẻ kinh nghiệm tối ưu bộ nhớ</strong><span class="text-[10px] text-slate-400">Tạo bài viết về MemoryStream pool.</span></div>
+                </button>
+            </div>
+            <div id="ai-loading" class="hidden p-3 bg-purple-50 rounded-xl border border-purple-100 flex items-center justify-center gap-2">
+                <i data-lucide="refresh-cw" class="w-3 h-3 animate-spin text-purple-600"></i>
+                <span class="text-xs font-black text-purple-800">Trí tuệ nhân tạo đang phác thảo tư văn...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // State management
+    let editorMode = 'split';
+    let pollOptions = ['Lựa chọn A', 'Lựa chọn B'];
+    let attachedFile = null;
+
+    // DOM Elements
+    const titleEl = document.getElementById('post-title');
+    const contentEl = document.getElementById('post-content');
+    const categoryEl = document.getElementById('post-category');
+    const tagEl = document.getElementById('post-tag');
+    const splitViewEl = document.getElementById('split-view');
+    const simpleActionsEl = document.getElementById('simple-actions');
+
+    // Init Logic
+    document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        loadDraft();
+        renderPollOptions();
+        updatePreviewAndScore();
+
+        // Event listeners for live update
+        titleEl.addEventListener('input', updatePreviewAndScore);
+        contentEl.addEventListener('input', updatePreviewAndScore);
+        categoryEl.addEventListener('change', updatePreviewAndScore);
+        tagEl.addEventListener('change', updatePreviewAndScore);
+
+        // Checkboxes
+        document.getElementById('has-bounty').addEventListener('change', (e) => {
+            document.getElementById('bounty-options').classList.toggle('hidden', !e.target.checked);
+            document.getElementById('bounty-icon').className = e.target.checked ? "w-4 h-4 text-amber-500" : "w-4 h-4 text-slate-400";
+        });
+        document.getElementById('has-poll').addEventListener('change', (e) => {
+            document.getElementById('poll-options-container').classList.toggle('hidden', !e.target.checked);
+            document.getElementById('poll-icon').className = e.target.checked ? "w-4 h-4 text-pink-500" : "w-4 h-4 text-slate-400";
+        });
+
+        // Form Submit
+        document.getElementById('post-form').addEventListener('submit', (e) => {
+            // Let the form submit natively via POST to /hub/post/new
+            // Just clear draft before it redirects
+            clearDraft();
+        });
+    });
+
+    function setEditorMode(mode) {
+        editorMode = mode;
+        const btnSimple = document.getElementById('btn-mode-simple');
+        const btnSplit = document.getElementById('btn-mode-split');
+
+        if (mode === 'simple') {
+            btnSimple.className = "px-3 py-1.5 text-[11px] font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 bg-white text-slate-800 shadow-sm";
+            btnSplit.className = "px-3 py-1.5 text-[11px] font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 text-slate-500 hover:text-slate-800";
+            splitViewEl.classList.add('hidden');
+            simpleActionsEl.classList.remove('hidden');
+            contentEl.rows = 12;
+        } else {
+            btnSplit.className = "px-3 py-1.5 text-[11px] font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 bg-white text-cyan-600 shadow-sm";
+            btnSimple.className = "px-3 py-1.5 text-[11px] font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 text-slate-500 hover:text-slate-800";
+            splitViewEl.classList.remove('hidden');
+            simpleActionsEl.classList.add('hidden');
+            contentEl.rows = 7;
+        }
+    }
+
+    function insertCodeBlock() {
+        contentEl.value += '\n```csharp\n// Viết code C# tại đây\n\n```';
+        updatePreviewAndScore();
+    }
+
+    function updatePreviewAndScore() {
+        const title = titleEl.value;
+        const content = contentEl.value;
+        const tag = tagEl.value;
+
+        // Counters
+        document.getElementById('title-counter').innerText = `${title.length} / 100`;
+        document.getElementById('word-counter').innerText = `Khoảng ${content.trim() ? content.trim().split(/\\s+/).length : 0} từ`;
+        document.getElementById('char-counter').innerText = `${content.length} ký tự`;
+
+        // Previews
+        document.getElementById('preview-title-display').innerText = title || "Tiêu đề bài viết chưa nhập...";
+        document.getElementById('preview-content-display').innerText = content ? (content.length > 250 ? content.substring(0, 250) + '...' : content) : "Đồng học chưa nhập nội dung biên thảo...";
+        document.getElementById('preview-category').innerText = categoryEl.options[categoryEl.selectedIndex].text;
+        document.getElementById('preview-tag').innerText = "#" + tagEl.options[tagEl.selectedIndex].text;
+
+        // Score
+        let score = 30;
+        if (title.length > 10) score += 15;
+        if (title.length > 25) score += 10;
+        if (content.length > 50) score += 15;
+        if (content.length > 150) score += 10;
+        if (content.includes('\`\`\`')) score += 20;
+        if (tag !== 'Discussion') score += 5;
+        if (document.getElementById('has-poll').checked) score += 5;
+        score = Math.min(score, 100);
+
+        document.getElementById('score-display').innerText = `${score}/100`;
+        document.getElementById('score-bar').style.width = `${score}%`;
+
+        // Warnings
+        const warnings = [];
+        if (content.includes('.ToList()') && content.includes('.Where(')) {
+            if (content.indexOf('.ToList()') < content.indexOf('.Where(')) {
+                warnings.push('⚠️ Rủi ro hiệu năng C#/EF Core: Bạn đang gọi .ToList() trước .Where(). Điều này ép tải toàn bộ bảng ghi về RAM rồi mới lọc. Hãy chuyển .Where() lên trước!');
+            }
+        }
+        if (content.includes('class ') && !content.includes('IDisposable') && (content.includes('FileStream') || content.includes('Connection') || content.includes('_stream'))) {
+            warnings.push('💡 Khuyên dùng: Mô phỏng dọn rác bằng IDisposable pattern khép kín cho các Unmanaged resources!');
+        }
+        if (content.length > 10 && !content.includes('\`\`\`')) warnings.push('💡 Định dạng mỹ thuật: Đưa các khối lệnh code vào block ```csharp ... ``` để cộng đồng sinh viên dễ đọc.');
+        if (title.length > 0 && title.length < 10) warnings.push('⚠️ Tiêu đề quá ngắn: Nên nhập tiêu đề trên 10 ký tự chứa ngữ cảnh rõ ràng.');
+
+        const wContainer = document.getElementById('warnings-container');
+        if (warnings.length === 0) {
+            wContainer.innerHTML = `<div class="p-3 bg-emerald-50 text-emerald-800 rounded-xl border border-emerald-100 flex items-start gap-1.5 text-[11px] font-semibold"><i data-lucide="check" class="w-3.5 h-3.5 shrink-0 text-emerald-600 mt-0.5"></i><p>Bài viết đạt điểm học thuật rất tốt!</p></div>`;
+        } else {
+            wContainer.innerHTML = warnings.map(w => `<div class="p-3 bg-white text-slate-700 rounded-xl border border-slate-200 flex items-start gap-1.5 text-[10px] font-medium"><i data-lucide="zap" class="w-3.5 h-3.5 shrink-0 text-amber-500 mt-0.5"></i><p>${w}</p></div>`).join('');
+        }
+        lucide.createIcons();
+
+        // Save Draft
+        localStorage.setItem('smlms_draft_title', title);
+        localStorage.setItem('smlms_draft_content', content);
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const draftEl = document.getElementById('draft-indicator');
+        draftEl.innerText = `Đã lưu nháp ${timeStr}`;
+        draftEl.classList.remove('hidden');
+    }
+
+    function loadDraft() {
+        if (localStorage.getItem('smlms_draft_title')) titleEl.value = localStorage.getItem('smlms_draft_title');
+        if (localStorage.getItem('smlms_draft_content')) contentEl.value = localStorage.getItem('smlms_draft_content');
+    }
+
+    function clearDraft() {
+        localStorage.removeItem('smlms_draft_title');
+        localStorage.removeItem('smlms_draft_content');
+        titleEl.value = '';
+        contentEl.value = '';
+        updatePreviewAndScore();
+        document.getElementById('draft-indicator').classList.add('hidden');
+    }
+
+    function renderPollOptions() {
+        const container = document.getElementById('poll-items');
+        container.innerHTML = pollOptions.map((opt, i) => `
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-black text-pink-600 font-mono w-4 shrink-0">${i+1}.</span>
+                <input type="text" value="${opt}" onchange="updatePoll(${i}, this.value)" class="flex-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-700 outline-none" />
+                ${pollOptions.length > 2 ? `<button type="button" onclick="removePoll(${i})" class="text-slate-400 hover:text-rose-600 p-1 cursor-pointer bg-transparent border-none"><i data-lucide="x" class="w-3 h-3"></i></button>` : ''}
+            </div>
+        `).join('');
+        lucide.createIcons();
+    }
+    window.addPollOption = () => { if (pollOptions.length < 5) { pollOptions.push('Lựa chọn mới'); renderPollOptions(); } }
+    window.removePoll = (i) => { if (pollOptions.length > 2) { pollOptions.splice(i, 1); renderPollOptions(); } }
+    window.updatePoll = (i, val) => { pollOptions[i] = val; }
+
+    window.simulateAttach = (type, name) => {
+        document.getElementById('drop-zone-empty').classList.add('hidden');
+        document.getElementById('drop-zone-filled').classList.remove('hidden');
+        document.getElementById('attached-filename').innerText = name;
+    }
+    window.clearAttachment = () => {
+        document.getElementById('drop-zone-empty').classList.remove('hidden');
+        document.getElementById('drop-zone-filled').classList.add('hidden');
+    }
+
+    window.toggleAiModal = (show) => {
+        const modal = document.getElementById('ai-modal');
+        const content = document.getElementById('ai-modal-content');
+        if (show) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => { content.classList.remove('scale-95', 'opacity-0'); }, 10);
+        } else {
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        }
+    }
+
+    window.triggerAiDraft = (type) => {
+        document.getElementById('ai-options').classList.add('hidden');
+        document.getElementById('ai-loading').classList.remove('hidden');
+        setTimeout(() => {
+            if (type === 'debug') {
+                titleEl.value = "Lỗi văng ngoại lệ NullReferenceException khi dùng ASP.NET Core DI";
+                contentEl.value = "Chào các đồng môn,\\n\\nMình liên tục dính lỗi `NullReferenceException` khi khởi tạo Controller.\\n\\n```csharp\\n// Trong HomeController.cs\\nprivate readonly IEmailService _emailService;\\npublic HomeController() \\n{\\n    // QUÊN: Chưa gán parameter injection vào biến toàn cục của Controller này!\\n}\\n```";
+            } else {
+                titleEl.value = "Kỹ thuật tối ưu hóa bộ nhớ đệm: Hướng dẫn chi tiết sử dụng MemoryStream";
+                contentEl.value = "Thân gửi cả nhà,\\n\\nHôm nay mình chia sẻ tránh rò rỉ RAM OOM bằng RecyclableMemoryStream.\\n\\n```csharp\\nusing var stream = memoryManager.GetStream();\\n```";
+            }
+            updatePreviewAndScore();
+            document.getElementById('ai-options').classList.remove('hidden');
+            document.getElementById('ai-loading').classList.add('hidden');
+            toggleAiModal(false);
+        }, 1200);
+    }
+</script>

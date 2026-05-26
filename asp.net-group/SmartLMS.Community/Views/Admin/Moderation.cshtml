@@ -1,0 +1,111 @@
+@model IEnumerable<SmartLMS.Models.Post>
+@{
+    Layout = "~/Views/Shared/_CommunityLayout.cshtml";
+    ViewData["Title"] = "Trạm kiểm duyệt bài (Moderation Board)";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
+    
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-6 h-6 text-indigo-600"></i>
+                Bảng kiểm duyệt nội dung
+            </h1>
+            <p class="text-xs text-slate-500 font-semibold mt-1">Dành cho Admin và Moderator xét duyệt bài đăng của học viên trước khi hiển thị lên Hub.</p>
+        </div>
+        <div class="bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl flex items-center gap-2">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+            </span>
+            <span class="text-xs font-black text-indigo-800">@ViewBag.PendingCount Bài viết đang chờ</span>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl mb-6 text-sm font-bold flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        @if (Model != null && Model.Any())
+        {
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-[10px] uppercase font-black tracking-wider">
+                        <th class="px-6 py-4">Tác giả</th>
+                        <th class="px-6 py-4">Chủ đề & Tiêu đề</th>
+                        <th class="px-6 py-4">Nội dung tóm lược</th>
+                        <th class="px-6 py-4">Thời gian tạo</th>
+                        <th class="px-6 py-4 text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var post in Model)
+                    {
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(post.Author?.FullName ?? "U")" class="w-8 h-8 rounded-full border border-slate-200" />
+                                    <div>
+                                        <div class="text-xs font-black text-slate-800">@post.Author?.FullName</div>
+                                        <div class="text-[9px] text-slate-400 font-bold uppercase">@post.Author?.Role</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-[9px] bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded font-black uppercase mb-1 inline-block">@post.Category</span>
+                                <div class="text-xs font-bold text-slate-700 leading-snug">@post.Title</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-[10px] font-medium text-slate-500 max-w-xs truncate" title="@post.Content">
+                                    @(post.Content.Length > 80 ? post.Content.Substring(0, 80) + "..." : post.Content)
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-[10px] text-slate-400 font-bold font-mono">
+                                @post.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <!-- Nút Approve -->
+                                    <form asp-controller="Admin" asp-action="ApprovePost" asp-route-id="@post.PostId" method="post">
+                                        <button type="submit" class="p-2 bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-lg transition-colors cursor-pointer" title="Duyệt bài">
+                                            <i data-lucide="check" class="w-4 h-4"></i>
+                                        </button>
+                                    </form>
+
+                                    <!-- Nút Reject -->
+                                    <form asp-controller="Admin" asp-action="RejectPost" asp-route-id="@post.PostId" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn TỪ CHỐI và XÓA bài viết này không?');">
+                                        <button type="submit" class="p-2 bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white rounded-lg transition-colors cursor-pointer" title="Từ chối & Ẩn">
+                                            <i data-lucide="x" class="w-4 h-4"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="py-16 text-center flex flex-col items-center">
+                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="check-circle" class="w-8 h-8 text-slate-300"></i>
+                </div>
+                <h3 class="text-sm font-black text-slate-700">Tuyệt vời! Tất cả đã được duyệt.</h3>
+                <p class="text-xs text-slate-400 font-semibold mt-1">Không còn bài viết nào chờ xử lý (Inbox Zero).</p>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+    });
+</script>

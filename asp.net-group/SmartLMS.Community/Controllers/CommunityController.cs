@@ -47,6 +47,37 @@ public class CommunityController : Controller
         return View(viewModel);
     }
 
+    [HttpGet("post/new")]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost("post/new")]
+    public async Task<IActionResult> SubmitPost([FromForm] string Title, [FromForm] string Content, [FromForm] string Category, [FromForm] string Tags, [FromServices] SmartLMSContext db)
+    {
+        var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(userIdStr, out int userId)) userId = 1; // Fallback for local testing
+
+        var post = new Post
+        {
+            Title = Title,
+            Content = Content,
+            Category = Category,
+            Tags = Tags,
+            AuthorId = userId,
+            CreatedAt = DateTime.UtcNow,
+            IsPublished = false, // Chờ duyệt
+            IsDeleted = false
+        };
+
+        db.Posts.Add(post);
+        await db.SaveChangesAsync();
+
+        TempData["WelcomeMessage"] = "Bài viết của bạn đã được gửi và đang chờ Admin duyệt.";
+        return Redirect("/hub");
+    }
+
     // 2. Resource Sharing
     [HttpGet("resources")]
     [HttpGet("/Community/Resources")]
@@ -135,6 +166,36 @@ public class CommunityController : Controller
         bool success = await _forumService.RewardShareExperienceAsync(userId, request.PostId, request.Format);
         if (success) return Ok(new { success = true, message = "Bạn đã được cộng +15 XP!" });
         return BadRequest(new { success = false, message = "Lỗi xử lý." });
+    [HttpGet("/api/seed-posts")]
+    public async Task<IActionResult> SeedPosts([FromServices] SmartLMSContext db)
+    {
+        var admin = await db.Users.FirstOrDefaultAsync(u => u.Email == "admin" || u.Role == "Admin");
+        int adminId = admin?.UserId ?? 1;
+
+        if (!db.Posts.Any(p => p.Title.Contains("NullReferenceException")))
+        {
+            db.Posts.Add(new Post {
+                Title = "Cách xử lý lỗi NullReferenceException trong Dependency Injection?",
+                Content = "Chào mọi người, mình đang code dự án cuối kỳ nhưng luôn bị văng lỗi NullReferenceException khi gọi `_emailService` trong HomeController.\n\n```csharp\npublic HomeController(IEmailService emailService)\n{\n    // Quên gán biến cục bộ\n}\n```",
+                AuthorId = adminId,
+                Category = "Bug Report",
+                Tags = "C# Advanced",
+                IsPublished = true,
+                CreatedAt = DateTime.UtcNow
+            });
+            db.Posts.Add(new Post {
+                Title = "Chia sẻ mẹo dùng RecyclableMemoryStream để tránh rò rỉ RAM",
+                Content = "Hôm nay mình đọc được bài về cấu hình kịch bản dọn rác (Garbage Collector). Thay vì dùng mảng byte liên tục, các bạn có thể mượn memory manager của pool để giảm tải cho Gen 0.\n\nCode mẫu:\n```csharp\nusing var stream = memoryManager.GetStream();\n```",
+                AuthorId = adminId,
+                Category = "Study Tips",
+                Tags = "C# Advanced",
+                IsPublished = true,
+                CreatedAt = DateTime.UtcNow
+            });
+            await db.SaveChangesAsync();
+            return Ok("Đã Seed 2 bài viết thành công!");
+        }
+        return Ok("Dữ liệu đã tồn tại.");
     }
 }
 
