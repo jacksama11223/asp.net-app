@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
 using SmartLMS.Models;
+using SmartLMS.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Security.Claims;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartLMS.Community.Controllers;
 
@@ -166,6 +168,8 @@ public class CommunityController : Controller
         bool success = await _forumService.RewardShareExperienceAsync(userId, request.PostId, request.Format);
         if (success) return Ok(new { success = true, message = "Bạn đã được cộng +15 XP!" });
         return BadRequest(new { success = false, message = "Lỗi xử lý." });
+    }
+
     [HttpGet("/api/seed-posts")]
     public async Task<IActionResult> SeedPosts([FromServices] SmartLMSContext db)
     {
