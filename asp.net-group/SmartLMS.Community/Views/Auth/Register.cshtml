@@ -1,194 +1,97 @@
+@model SmartLMS.Community.ViewModels.RegisterViewModel
 @{
-    Layout = null;
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Đăng Ký Tài Khoản";
 }
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký thành viên | SmartLMS.AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.8);
-            --text: #f8fafc;
-        }
+<div>
+    <h2 class="text-white font-black text-2xl mb-1">Tạo tài khoản mới 🚀</h2>
+    <p class="text-white/50 text-sm mb-7 font-medium">Tham gia cộng đồng học tập .NET lớn nhất Việt Nam.</p>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            /* Sử dụng ảnh AI làm nền mờ ảo */
-            background-image: url('/images/auth_bg_abstract.png'), radial-gradient(circle at center, #1e1b4b, var(--bg));
-            background-size: cover;
-            background-blend-mode: overlay;
-        }
-
-        .register-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 3rem;
-            border-radius: 32px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @@keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #94a3b8;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .full-width {
-            grid-column: span 2;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.4rem;
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-            background: rgba(15, 23, 42, 0.8);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-        }
-
-        .btn-register {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 14px;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
-        }
-
-        .btn-register:hover {
-            filter: brightness(1.1);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.4);
-        }
-
-        .footer {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #94a3b8;
-        }
-
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-    <div class="register-card">
-        <div class="logo">Gia nhập SmartLMS</div>
-        <p class="subtitle">Bắt đầu hành trình chinh phục tri thức cùng AI</p>
-        
-        <form method="post" action="/Auth/Register">
-            <div class="form-grid">
-                <div class="form-group full-width">
-                    <label>Họ và tên</label>
-                    <input type="text" name="FullName" placeholder="Nguyễn Văn A" required>
-                </div>
-                <div class="form-group">
-                    <label>Tên đăng nhập</label>
-                    <input type="text" name="Username" placeholder="username123" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="Email" placeholder="email@vi-du.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <input type="password" name="Password" placeholder="••••••••" required>
-                </div>
-                <div class="form-group">
-                    <label>Xác nhận mật khẩu</label>
-                    <input type="password" placeholder="••••••••" required>
-                </div>
-                <div class="form-group full-width">
-                    <label>Bạn là ai?</label>
-                    <select name="Role">
-                        <option value="Student">Học viên</option>
-                        <option value="Instructor">Giảng viên</option>
-                        <option value="Enterprise">Doanh nghiệp</option>
-                    </select>
-                </div>
-            </div>
-            
-            <button type="submit" class="btn-register">Tạo tài khoản miễn phí</button>
-        </form>
-
-        <div class="footer">
-            Đã có tài khoản? <a href="/Auth/Login">Đăng nhập</a>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="bg-red-500/15 border border-red-400/30 rounded-xl p-3 mb-5 text-red-300 text-xs font-semibold space-y-1">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>⚠️ @error.ErrorMessage</div>
+            }
         </div>
+    }
+
+    <!form asp-action="Register" asp-controller="Auth" method="post" class="space-y-4">
+        @Html.AntiForgeryToken()
+
+        <div>
+            <label class="text-white/70 text-xs font-bold uppercase tracking-wider block mb-1.5">
+                👤 Họ và Tên
+            </label>
+            <input id="reg-fullname"
+                   asp-for="FullName"
+                   type="text"
+                   class="input-field w-full rounded-xl px-4 py-3 text-sm font-medium"
+                   placeholder="Nguyễn Văn A"
+                   autocomplete="name" />
+            <span asp-validation-for="FullName" class="error-text"></span>
+        </div>
+
+        <div>
+            <label class="text-white/70 text-xs font-bold uppercase tracking-wider block mb-1.5">
+                📧 Địa Chỉ Email
+            </label>
+            <input id="reg-email"
+                   asp-for="Email"
+                   type="email"
+                   class="input-field w-full rounded-xl px-4 py-3 text-sm font-medium"
+                   placeholder="your@email.com"
+                   autocomplete="email" />
+            <span asp-validation-for="Email" class="error-text"></span>
+        </div>
+
+        <div>
+            <label class="text-white/70 text-xs font-bold uppercase tracking-wider block mb-1.5">
+                🔒 Mật Khẩu
+            </label>
+            <input id="reg-password"
+                   asp-for="Password"
+                   type="password"
+                   class="input-field w-full rounded-xl px-4 py-3 text-sm font-medium"
+                   placeholder="Tối thiểu 6 ký tự"
+                   autocomplete="new-password" />
+            <span asp-validation-for="Password" class="error-text"></span>
+        </div>
+
+        <div>
+            <label class="text-white/70 text-xs font-bold uppercase tracking-wider block mb-1.5">
+                🔒 Xác Nhận Mật Khẩu
+            </label>
+            <input id="reg-confirm"
+                   asp-for="ConfirmPassword"
+                   type="password"
+                   class="input-field w-full rounded-xl px-4 py-3 text-sm font-medium"
+                   placeholder="Nhập lại mật khẩu"
+                   autocomplete="new-password" />
+            <span asp-validation-for="ConfirmPassword" class="error-text"></span>
+        </div>
+
+        <p class="text-white/30 text-[10px] leading-relaxed">
+            Bằng cách đăng ký, bạn đồng ý với <a href="#" class="text-cyan-400/70 hover:text-cyan-400">Điều khoản dịch vụ</a> và <a href="#" class="text-cyan-400/70 hover:text-cyan-400">Chính sách bảo mật</a> của SmartLMS.
+        </p>
+
+        <button id="btn-register"
+                type="submit"
+                class="btn-primary w-full py-3.5 rounded-xl text-white font-extrabold text-sm tracking-wide mt-2">
+            Tạo Tài Khoản Ngay 🎉
+        </button>
+    </!form>
+
+    <div class="flex items-center gap-3 my-5">
+        <div class="flex-1 h-px bg-white/10"></div>
+        <span class="text-white/30 text-xs font-bold">HOẶC</span>
+        <div class="flex-1 h-px bg-white/10"></div>
     </div>
-</body>
-</html>
+
+    <a href="/Auth/Login"
+       class="block w-full py-3 rounded-xl border border-white/15 text-center text-white/70 hover:text-white hover:border-white/30 hover:bg-white/5 text-sm font-bold transition-all">
+        Đã có tài khoản? <span class="text-cyan-400">Đăng nhập</span>
+    </a>
+</div>

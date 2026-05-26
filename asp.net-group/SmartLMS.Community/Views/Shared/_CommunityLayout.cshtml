@@ -64,20 +64,33 @@
                 </div>
 
                 <div class="flex items-center gap-2.5">
-                    <button class="flex items-center gap-1.5 border border-cyan-600 text-cyan-600 hover:bg-cyan-50 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm">
-                        <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
-                        <span>Đổi Vai Trò</span>
-                    </button>
-
-                    <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
-                        <div class="w-9 h-9 rounded-xl overflow-hidden bg-slate-100 border-2 border-white shadow shadow-cyan-100 shrink-0">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hoang" alt="Author avatar" />
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        var userName = User.Identity.Name ?? "Thành viên";
+                        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "Student";
+                        <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
+                            <div class="w-9 h-9 rounded-xl overflow-hidden bg-slate-100 border-2 border-white shadow shadow-cyan-100 shrink-0">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@Uri.EscapeDataString(userName)" alt="Avatar" referrerpolicy="no-referrer" />
+                            </div>
+                            <div class="hidden md:block text-left">
+                                <span class="text-xs font-bold text-slate-800 block leading-tight truncate max-w-[100px]">@userName</span>
+                                <span class="text-[9px] bg-cyan-50 border border-cyan-100 text-cyan-700 px-2 py-0.5 rounded-full uppercase tracking-tighter font-black">@userRole</span>
+                            </div>
+                            <a href="/Auth/Logout" class="ml-1 text-[10px] text-slate-400 hover:text-red-500 font-bold transition-colors" title="Đăng xuất">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            </a>
                         </div>
-                        <div class="hidden md:block text-left">
-                            <span class="text-xs font-bold text-slate-800 block leading-tight">Trần Văn Hoàng</span>
-                            <span class="text-[9px] bg-cyan-50 border border-cyan-100 text-cyan-700 px-2 py-0.5 rounded-full uppercase tracking-tighter font-black">Student</span>
-                        </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <a href="/Auth/Login" class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                            <span>Đăng Nhập</span>
+                        </a>
+                        <a href="/Auth/Register" class="flex items-center gap-1.5 border border-cyan-600 text-cyan-600 hover:bg-cyan-50 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm">
+                            <span>Đăng Ký</span>
+                        </a>
+                    }
                 </div>
             </div>
         </div>

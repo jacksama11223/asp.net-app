@@ -1,176 +1,80 @@
+@model SmartLMS.Community.ViewModels.LoginViewModel
 @{
-    Layout = null;
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Đăng Nhập";
 }
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập | SmartLMS.AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
-        }
+<div>
+    <h2 class="text-white font-black text-2xl mb-1">Chào mừng trở lại 👋</h2>
+    <p class="text-white/50 text-sm mb-7 font-medium">Đăng nhập để tiếp tục học cùng cộng đồng.</p>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: radial-gradient(circle at top right, #1e1b4b, var(--bg));
-        }
-
-        .animated-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            filter: blur(80px);
-            opacity: 0.5;
-        }
-
-        .blob {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(var(--primary), var(--secondary));
-            border-radius: 50%;
-            animation: move 20s infinite alternate;
-        }
-
-        @@keyframes move {
-            from { transform: translate(-10%, -10%); }
-            to { transform: translate(20%, 20%); }
-        }
-
-        .login-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 3rem;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @@keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 2rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: #94a3b8;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-top: 1rem;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
-        }
-
-        .footer-links {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.85rem;
-            color: #94a3b8;
-        }
-
-        .footer-links a {
-            color: var(--primary);
-            text-decoration: none;
-            margin-left: 5px;
-        }
-
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="animated-bg">
-        <div class="blob"></div>
-    </div>
-
-    <div class="login-card">
-        <div class="logo">SmartLMS.AI</div>
-        <form method="post" action="/Auth/Login">
-            <div class="form-group">
-                <label for="username">Tên đăng nhập</label>
-                <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập..." required>
-            </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-login">Đăng nhập</button>
-        </form>
-
-        <div class="footer-links">
-            Chưa có tài khoản? <a href="/Auth/Register">Đăng ký ngay</a>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="bg-red-500/15 border border-red-400/30 rounded-xl p-3 mb-5 text-red-300 text-xs font-semibold">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>⚠️ @error.ErrorMessage</div>
+            }
         </div>
+    }
+
+    <!form asp-action="Login" asp-controller="Auth" method="post" class="space-y-4">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+        <div>
+            <label class="text-white/70 text-xs font-bold uppercase tracking-wider block mb-1.5">
+                📧 Địa chỉ Email
+            </label>
+            <input id="login-email"
+                   asp-for="Email"
+                   type="email"
+                   class="input-field w-full rounded-xl px-4 py-3 text-sm font-medium"
+                   placeholder="your@email.com"
+                   autocomplete="email" />
+            <span asp-validation-for="Email" class="error-text"></span>
+        </div>
+
+        <div>
+            <label class="text-white/70 text-xs font-bold uppercase tracking-wider block mb-1.5">
+                🔒 Mật Khẩu
+            </label>
+            <input id="login-password"
+                   asp-for="Password"
+                   type="password"
+                   class="input-field w-full rounded-xl px-4 py-3 text-sm font-medium"
+                   placeholder="••••••••"
+                   autocomplete="current-password" />
+            <span asp-validation-for="Password" class="error-text"></span>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input asp-for="RememberMe" type="checkbox" class="w-3.5 h-3.5 rounded accent-cyan-500" />
+                <span class="text-white/60 text-xs font-semibold">Ghi nhớ đăng nhập</span>
+            </label>
+            <a href="#" class="text-cyan-400 text-xs font-bold hover:text-cyan-300 transition-colors">Quên mật khẩu?</a>
+        </div>
+
+        <button id="btn-login"
+                type="submit"
+                class="btn-primary w-full py-3.5 rounded-xl text-white font-extrabold text-sm tracking-wide mt-2">
+            Đăng Nhập vào Hub →
+        </button>
+    </!form>
+
+    <div class="flex items-center gap-3 my-6">
+        <div class="flex-1 h-px bg-white/10"></div>
+        <span class="text-white/30 text-xs font-bold">HOẶC</span>
+        <div class="flex-1 h-px bg-white/10"></div>
     </div>
-</body>
-</html>
+
+    <a href="/Auth/Register"
+       class="block w-full py-3 rounded-xl border border-white/15 text-center text-white/70 hover:text-white hover:border-white/30 hover:bg-white/5 text-sm font-bold transition-all">
+        Chưa có tài khoản? <span class="text-cyan-400">Đăng ký ngay</span>
+    </a>
+
+    <p class="text-center mt-4 text-white/30 text-xs">
+        Hoặc <a href="http://141.253.114.218" class="text-cyan-400/70 hover:text-cyan-400 transition-colors font-semibold">đăng nhập qua trang chính (Port 80)</a>
+    </p>
+</div>
