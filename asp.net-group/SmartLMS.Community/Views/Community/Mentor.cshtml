@@ -1,0 +1,259 @@
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "AI Study Mentor";
+    
+    // Giả lập thông tin User (Trong thực tế sẽ lấy từ Controller/Identity)
+    var currentUserName = User.Identity?.Name ?? "Học viên";
+    var currentUserRole = "Student";
+    var currentUserPoints = 450;
+}
+
+<!-- Thêm Alpine.js -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col md:flex-row h-[620px]" x-data="mentorState()">
+    <!-- Sub menu controls - Left rail on wide screen, top grid on mobile -->
+    <div class="w-full md:w-60 bg-slate-50 p-5 flex flex-col justify-between border-r border-slate-100 shrink-0">
+        <div class="space-y-4">
+            <div class="flex items-center gap-2 px-2">
+                <div class="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center text-white">
+                    <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-black text-slate-800 leading-none">AI Study Mentor</h2>
+                    <span class="text-[10px] text-cyan-600 font-bold uppercase tracking-wider">Hỗ trợ 24/7 .NET Core</span>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <button @@click="mentorTab = 'chat'" :class="mentorTab === 'chat' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
+                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                    <span>Thảo luận cùng AI</span>
+                </button>
+                <button @@click="mentorTab = 'quiz'" :class="mentorTab === 'quiz' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
+                    <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+                    <span>Đấu trường C# Quiz</span>
+                </button>
+                <button @@click="mentorTab = 'explainer'" :class="mentorTab === 'explainer' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
+                    <i data-lucide="code" class="w-3.5 h-3.5"></i>
+                    <span>Trình giải nghĩa Code</span>
+                </button>
+                <button @@click="mentorTab = 'roadmap'" :class="mentorTab === 'roadmap' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
+                    <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                    <span>Lộ trình .NET Developer</span>
+                </button>
+                <button @@click="mentorTab = 'badges'" :class="mentorTab === 'badges' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
+                    <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <span>Chứng chỉ học thuật</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="hidden md:block bg-cyan-50 border border-cyan-100 rounded-2xl p-3.5">
+            <h4 class="text-[10px] uppercase font-black text-cyan-800 mb-1 flex items-center gap-1">
+                <i data-lucide="lightbulb" class="w-3 h-3"></i> Mẹo tự học
+            </h4>
+            <p class="text-[10px] leading-relaxed text-slate-600 font-medium">
+                Hãy thử dán lỗi StackTrace hoặc Exception của C# vào tab chat để phân tích ngay vấn đề.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main interaction workspace -->
+    <div class="flex-1 flex flex-col h-full bg-white relative overflow-hidden">
+        
+        <!-- INTERACTION ONE: CHATBOT -->
+        <div x-show="mentorTab === 'chat'" class="flex flex-col h-full">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 overflow-hidden flex items-center justify-center font-bold text-indigo-700 text-sm">💬</div>
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-extrabold text-slate-800">Trao đổi bài học với Gemini</h3>
+                        <p class="text-[10px] text-slate-400 font-bold">Role: @currentUserRole &#183; Markdown</p>
+                    </div>
+                </div>
+                <button @@click="resetChat()" class="p-1 px-2.5 text-[10px] font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-150 flex items-center gap-1 transition-all">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i> Làm mới
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-4 max-h-[460px]" id="chatContainer">
+                <template x-for="(msg, index) in messages" :key="index">
+                    <div class="flex items-start gap-3" :class="msg.role === 'user' ? 'justify-end' : 'justify-start'">
+                        <template x-if="msg.role === 'model'">
+                            <div class="w-7 h-7 rounded-lg bg-cyan-100/80 border border-cyan-200 shrink-0 flex items-center justify-center text-xs">🤖</div>
+                        </template>
+                        <div class="max-w-[85%] rounded-2xl p-4 text-xs font-semibold leading-relaxed shadow-sm whitespace-pre-line prose-sm" :class="msg.role === 'user' ? 'bg-cyan-600 text-white rounded-tr-none' : 'bg-slate-50 text-slate-800 border border-slate-100/80 rounded-tl-none'">
+                            <span x-text="msg.text"></span>
+                            <span class="block text-[8px] mt-1.5" :class="msg.role === 'user' ? 'text-cyan-100 text-right' : 'text-slate-400'" x-text="msg.timestamp"></span>
+                        </div>
+                    </div>
+                </template>
+                
+                <div x-show="isChatLoading" style="display:none;" class="flex justify-start items-center gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-cyan-100/80 border border-cyan-200 shrink-0 flex items-center justify-center text-xs animate-spin">🌀</div>
+                    <div class="bg-slate-50 text-slate-400 border border-slate-100 rounded-2xl p-3 text-xs font-semibold flex items-center gap-2">
+                        Mentor đang tư duy câu trả lời...
+                    </div>
+                </div>
+            </div>
+
+            <!form @@submit.prevent="sendChat" class="p-4 border-t border-slate-100 flex items-center gap-2 bg-slate-50/50">
+                <input type="text" placeholder="Ví dụ: Optimize EF Core thế nào?..." x-model="inputText" :disabled="isChatLoading" class="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-medium focus:ring-2 focus:ring-cyan-500 outline-none transition-all disabled:opacity-50" />
+                <button type="submit" :disabled="!inputText.trim() || isChatLoading" class="w-10 h-10 rounded-full bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center transition-colors disabled:opacity-40 shadow shadow-cyan-200">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </!form>
+        </div>
+
+        <!-- INTERACTION TWO: QUIZ -->
+        <div x-show="mentorTab === 'quiz'" style="display:none;" class="p-6 space-y-5 flex-1 overflow-y-auto">
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div class="space-y-1 text-left w-full sm:w-auto">
+                    <label class="text-[10px] text-slate-400 font-bold uppercase block">Chủ đề trắc nghiệm</label>
+                    <select class="px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none font-bold">
+                        <option>.NET Core Web API</option>
+                        <option>Entity Framework Core</option>
+                        <option>Clean Architecture</option>
+                    </select>
+                </div>
+                <button @@click="window.showToast('Đã tạo câu đố mới!')" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-black rounded-xl hover:shadow-lg transition-all shrink-0 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Đổi Bộ Câu Hỏi Mới</span>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-4">
+                    <h4 class="text-xs font-black text-slate-800 leading-relaxed">
+                        Sự khác biệt cốt lõi giữa Transient và Scoped lifetimes trong ASP.NET Core Dependency Injection là gì?
+                    </h4>
+                    <div class="space-y-2">
+                        <button class="w-full p-3 text-left text-xs font-semibold rounded-xl border border-slate-150 hover:bg-slate-50 text-slate-700 transition-all flex items-start gap-2.5 group">
+                            <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-500 group-hover:bg-cyan-100 group-hover:text-cyan-700 text-[10px] flex items-center justify-center shrink-0 uppercase font-black">A</span>
+                            <span class="leading-snug">Transient tạo mới mỗi lần request; Scoped tạo mới 1 lần cho mỗi HTTP request.</span>
+                        </button>
+                        <button class="w-full p-3 text-left text-xs font-semibold rounded-xl border border-slate-150 hover:bg-slate-50 text-slate-700 transition-all flex items-start gap-2.5 group">
+                            <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-500 group-hover:bg-cyan-100 group-hover:text-cyan-700 text-[10px] flex items-center justify-center shrink-0 uppercase font-black">B</span>
+                            <span class="leading-snug">Transient chạy bất đồng bộ; Scoped chạy đồng bộ.</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERACTION THREE: EXPLAINER -->
+        <div x-show="mentorTab === 'explainer'" style="display:none;" class="p-6 space-y-4 flex-1 overflow-y-auto">
+            <div class="space-y-1">
+                <h3 class="text-xs font-extrabold text-slate-800">Giải nghĩa mã nguồn chi tiết</h3>
+                <p class="text-[10px] text-slate-400 font-medium">Bóc tách tư duy thuật toán, cấu trúc lưu trữ và độ phức tạp bộ nhớ RAM/CPU.</p>
+            </div>
+            <div class="space-y-2">
+                <textarea rows="7" placeholder="Dán code C# hoặc SQL vào đây để phân tích..." class="w-full p-4 font-mono text-[11px] bg-slate-900 text-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500 leading-relaxed border border-slate-700">public async Task&lt;UserDto&gt; GetUserAsync(string id) { return await _db.Users.FindAsync(id); }</textarea>
+                <div class="flex justify-end">
+                    <button @@click="window.showToast('AI đang phân tích code...')" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-extrabold transition-all inline-flex items-center gap-2 shadow shadow-cyan-200">
+                        <i data-lucide="code" class="w-3.5 h-3.5"></i> Phân tích mã nguồn
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERACTION FOUR: ROADMAP -->
+        <div x-show="mentorTab === 'roadmap'" style="display:none;" class="p-6 flex-1 overflow-y-auto flex flex-col items-center justify-center text-center">
+            <i data-lucide="map" class="w-16 h-16 text-cyan-200 mb-4"></i>
+            <h3 class="font-bold text-slate-800">Lộ trình học đang cập nhật</h3>
+            <p class="text-xs text-slate-500 mt-2">Tính năng Roadmap sẽ sớm được ra mắt trong bản cập nhật tới!</p>
+        </div>
+
+        <!-- INTERACTION FIVE: BADGES -->
+        <div x-show="mentorTab === 'badges'" style="display:none;" class="p-6 flex-1 overflow-y-auto">
+            <div class="space-y-1 mb-6">
+                <span class="text-[10px] text-cyan-600 font-extrabold uppercase tracking-widest block">Điểm năng lực: @currentUserPoints XP</span>
+                <h3 class="font-extrabold text-slate-800 text-sm">Kho Chứng nhận Học thuật</h3>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/20 to-amber-100/10 border border-amber-200/65 shadow-xs ring-1 ring-amber-100/50 flex items-start gap-4">
+                    <div class="w-12 h-12 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-2xl shadow-xs shrink-0 select-none">🥇</div>
+                    <div class="space-y-1 flex-1 font-sans">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="text-xs font-extrabold text-slate-800 truncate">Kiến trúc sư Clean Architecture</h4>
+                            <span class="text-[9px] font-black text-amber-700 uppercase bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded-md">700 XP</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-semibold line-clamp-2">Tư duy thiết kế độc lập, phân chia tầng dữ liệu linh hoạt.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mentorState() {
+        return {
+            mentorTab: 'chat',
+            inputText: '',
+            isChatLoading: false,
+            messages: [
+                {
+                    role: 'model',
+                    text: 'Xin chào **@currentUserName**! Tôi là **AI Study Mentor** của bạn tại SmartLMS Hub.\n\nTôi chuyên sâu về hệ sinh thái **.NET/C#, SQL Server, Kiến trúc phần mềm**. Bạn có câu hỏi nào hôm nay không?',
+                    timestamp: new Date().toLocaleTimeString('vi', { hour: '2-digit', minute: '2-digit' })
+                }
+            ],
+            resetChat() {
+                this.messages = [{
+                    role: 'model',
+                    text: 'Đã thiết lập lại bối cảnh trò chuyện! Bạn muốn tìm hiểu gì tiếp theo về phân tán .NET?',
+                    timestamp: new Date().toLocaleTimeString('vi', { hour: '2-digit', minute: '2-digit' })
+                }];
+            },
+            sendChat() {
+                if(!this.inputText.trim()) return;
+                
+                this.messages.push({
+                    role: 'user',
+                    text: this.inputText,
+                    timestamp: new Date().toLocaleTimeString('vi', { hour: '2-digit', minute: '2-digit' })
+                });
+                
+                let q = this.inputText;
+                this.inputText = '';
+                this.isChatLoading = true;
+                
+                // Scroll to bottom (wait for Alpine DOM update)
+                setTimeout(() => {
+                    const el = document.getElementById('chatContainer');
+                    if(el) el.scrollTop = el.scrollHeight;
+                }, 100);
+
+                // Giả lập gọi API AI
+                setTimeout(() => {
+                    this.messages.push({
+                        role: 'model',
+                        text: `Đây là phản hồi từ AI System cho câu hỏi: "${q}". Trong thực tế, hệ thống sẽ kết nối qua API của Gemini/OpenAI để trả về kết quả chính xác về C# và .NET.`,
+                        timestamp: new Date().toLocaleTimeString('vi', { hour: '2-digit', minute: '2-digit' })
+                    });
+                    this.isChatLoading = false;
+                    
+                    setTimeout(() => {
+                        const el = document.getElementById('chatContainer');
+                        if(el) el.scrollTop = el.scrollHeight;
+                    }, 100);
+                }, 1500);
+            }
+        }
+    }
+
+    document.addEventListener('alpine:initialized', () => {
+        Alpine.effect(() => {
+            setTimeout(() => {
+                if(window.lucide) {
+                    lucide.createIcons();
+                }
+            }, 50);
+        });
+    });
+</script>

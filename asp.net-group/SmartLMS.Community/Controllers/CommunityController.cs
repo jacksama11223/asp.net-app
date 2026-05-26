@@ -37,7 +37,7 @@ public class CommunityController : Controller
                 Tag = string.IsNullOrEmpty(p.Tags) ? "Th?o Lu?n" : p.Tags,
                 Category = string.IsNullOrEmpty(p.Category) ? "Chung" : p.Category,
                 AuthorName = p.Author?.FullName ?? "?n danh",
-                AuthorRole = "H?c viên",
+                AuthorRole = "H?c viÃªn",
                 AuthorAvatar = "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(p.Author?.FullName ?? "User"),
                 CreatedAt = p.CreatedAt,
                 Likes = p.VoteCount,
@@ -95,6 +95,8 @@ public class CommunityController : Controller
     // 7. Leaderboard
     [HttpGet("leaderboard")]
     [HttpGet("/Community/Leaderboard")]
+    public IActionResult Mentor() { return View(); }
+
     public async Task<IActionResult> Leaderboard()
     {
         var topUsers = await _communityService.GetLeaderboardAsync();
@@ -108,7 +110,7 @@ public class CommunityController : Controller
     {
         if (string.IsNullOrEmpty(request.Prompt)) return BadRequest("Prompt is empty");
         var result = await _forumService.DraftAiResponseAsync(request.Prompt);
-        return Json(new { title = "Phân tích t? Tr? Lý AI", body = result });
+        return Json(new { title = "PhÃ¢n tÃ­ch t? Tr? LÃ½ AI", body = result });
     }
 
     [HttpPost("SimulateCompileSandbox")]
@@ -127,8 +129,8 @@ public class CommunityController : Controller
             userId = 1;
 
         bool success = await _forumService.RewardShareExperienceAsync(userId, request.PostId, request.Format);
-        if (success) return Ok(new { success = true, message = "B?n dã du?c c?ng +15 XP!" });
-        return BadRequest(new { success = false, message = "L?i x? lý." });
+        if (success) return Ok(new { success = true, message = "B?n dÃ£ du?c c?ng +15 XP!" });
+        return BadRequest(new { success = false, message = "L?i x? lÃ½." });
     }
 }
 
