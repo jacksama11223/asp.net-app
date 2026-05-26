@@ -87,6 +87,7 @@ public class CommunityController : Controller
         var post = await db.Posts
             .Include(p => p.Author)
             .Include(p => p.Comments)
+                .ThenInclude(c => c.Author)
             .FirstOrDefaultAsync(p => p.PostId == id);
 
         if (post == null || (!post.IsPublished && !User.IsInRole("Admin") && !User.IsInRole("Moderator") && post.AuthorId.ToString() != User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
@@ -99,6 +100,43 @@ public class CommunityController : Controller
         await db.SaveChangesAsync();
 
         return View(post);
+    }
+
+    [HttpPost("post/{id}/comment")]
+    [Authorize]
+    public async Task<IActionResult> AddComment(int id, [FromForm] string content, [FromServices] SmartLMSContext db)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return BadRequest("Nội dung bình luận không được để trống.");
+        }
+
+        var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(userIdStr, out int userId))
+        {
+            return Unauthorized();
+        }
+
+        var post = await db.Posts.FindAsync(id);
+        if (post == null || (!post.IsPublished && !User.IsInRole("Admin") && !User.IsInRole("Moderator") && post.AuthorId != userId))
+        {
+            return NotFound("Bài viết không tồn tại.");
+        }
+
+        var comment = new Comment
+        {
+            PostId = id,
+            AuthorId = userId,
+            Content = content,
+            CreatedAt = DateTime.UtcNow,
+            IsDeleted = false
+        };
+
+        db.Comments.Add(comment);
+        post.VoteCount++; // Có thể thưởng điểm tương tác cho bài viết
+        await db.SaveChangesAsync();
+
+        return Redirect($"/hub/post/{id}");
     }
 
     // 2. Resource Sharing
