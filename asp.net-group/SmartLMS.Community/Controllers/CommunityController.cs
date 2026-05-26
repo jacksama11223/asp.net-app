@@ -258,7 +258,33 @@ public class CommunityController : Controller
             await db.SaveChangesAsync();
             return Ok("Đã Seed 2 bài viết thành công!");
         }
-        return Ok("Dữ liệu đã tồn tại.");
+        return Ok("Seed thành công 2 bài viết mới.");
+    }
+
+    [HttpGet("/profile/{userId}")]
+    public async Task<IActionResult> Profile(int userId, [FromServices] SmartLMSContext db)
+    {
+        var targetUser = await db.Users.FindAsync(userId);
+        if (targetUser == null) return NotFound("Người dùng không tồn tại.");
+
+        var recentPosts = await db.Posts
+            .Where(p => p.AuthorId == userId && p.IsPublished && !p.IsDeleted)
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(10)
+            .ToListAsync();
+
+        var totalComments = await db.Comments
+            .Where(c => c.AuthorId == userId && !c.IsDeleted)
+            .CountAsync();
+
+        var viewModel = new SmartLMS.Community.ViewModels.ProfileViewModel
+        {
+            User = targetUser,
+            RecentPosts = recentPosts,
+            TotalComments = totalComments
+        };
+
+        return View(viewModel);
     }
 }
 

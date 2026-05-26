@@ -1,0 +1,140 @@
+@model SmartLMS.Community.ViewModels.ProfileViewModel
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = $"Hồ sơ {Model.User.FullName}";
+    var avatarUrl = Model.User.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(Model.User.FullName ?? "User")}&background=random&size=256";
+    var roleLabel = Model.User.Role == "Admin" ? "Quản trị viên" : (Model.User.Role == "Instructor" ? "Giảng viên" : "Học viên");
+}
+
+<div class="max-w-5xl mx-auto pb-10">
+    <!-- Header: Cover & Info -->
+    <div class="relative bg-gray-800/40 border border-white/10 rounded-3xl overflow-hidden mb-8 backdrop-blur-xl">
+        <!-- Cover Photo -->
+        <div class="h-48 bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-700 w-full relative">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-30"></div>
+        </div>
+
+        <div class="px-8 pb-8 pt-0 relative flex flex-col md:flex-row gap-6 items-start md:items-end -mt-16">
+            <!-- Avatar -->
+            <div class="p-2 bg-gray-900 rounded-full shrink-0 shadow-xl z-10">
+                <img src="@avatarUrl" alt="@Model.User.FullName" class="w-32 h-32 rounded-full ring-4 ring-cyan-500/50 object-cover bg-black" />
+            </div>
+
+            <!-- Basic Info -->
+            <div class="flex-1 space-y-1 mb-2 z-10">
+                <h1 class="text-3xl font-black text-white flex items-center gap-2">
+                    @Model.User.FullName
+                    @if (Model.User.Role == "Admin" || Model.User.LecturerStatus == 2)
+                    {
+                        <svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    }
+                </h1>
+                <p class="text-white/60 font-medium text-sm flex items-center gap-3">
+                    <span class="bg-white/10 px-2 py-0.5 rounded-md text-xs font-bold text-cyan-300">@roleLabel</span>
+                    <span><i data-lucide="calendar" class="inline w-3 h-3 mr-1"></i> Tham gia @(Model.User.CreatedDate?.ToString("MM/yyyy") ?? "Gần đây")</span>
+                </p>
+                @if (!string.IsNullOrEmpty(Model.User.Bio))
+                {
+                    <p class="text-white/80 text-sm mt-3 max-w-2xl leading-relaxed">@Model.User.Bio</p>
+                }
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-3 w-full md:w-auto z-10 mb-2">
+                <button class="flex-1 md:flex-none bg-cyan-500 hover:bg-cyan-400 text-black px-6 py-2.5 rounded-xl font-black text-sm transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                    Theo dõi
+                </button>
+                <button class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Sidebar: Stats & Badges -->
+        <div class="space-y-6">
+            <!-- Thống kê (Gamification) -->
+            <div class="bg-gray-800/40 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+                <h3 class="text-white font-black text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Thành tựu học tập
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5 text-center">
+                        <div class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">@(Model.User.TotalXP ?? 0)</div>
+                        <div class="text-[10px] font-bold text-white/50 uppercase mt-1">Tổng XP</div>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5 text-center">
+                        <div class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">@Model.User.CurrentStreak</div>
+                        <div class="text-[10px] font-bold text-white/50 uppercase mt-1">Chuỗi ngày (Streak)</div>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5 text-center">
+                        <div class="text-2xl font-black text-white">@Model.RecentPosts.Count</div>
+                        <div class="text-[10px] font-bold text-white/50 uppercase mt-1">Bài viết</div>
+                    </div>
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/5 text-center">
+                        <div class="text-2xl font-black text-white">@Model.TotalComments</div>
+                        <div class="text-[10px] font-bold text-white/50 uppercase mt-1">Bình luận</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Huy hiệu -->
+            <div class="bg-gray-800/40 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+                <h3 class="text-white font-black text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    Huy hiệu (@Model.Badges.Count)
+                </h3>
+                @if (Model.Badges.Any())
+                {
+                    <div class="flex flex-wrap gap-2">
+                        @foreach (var userBadge in Model.Badges)
+                        {
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20 hover:scale-110 transition-transform cursor-help" title="@userBadge.Badge?.Name">
+                                <img src="@userBadge.Badge?.IconUrl" alt="@userBadge.Badge?.Name" class="w-8 h-8 object-contain" />
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-white/40 text-xs font-semibold text-center italic py-2">Chưa có huy hiệu nào.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Main Content: Posts -->
+        <div class="lg:col-span-2 space-y-6">
+            <h3 class="text-white font-black text-lg mb-4">Bài viết mới nhất</h3>
+            @if (Model.RecentPosts != null && Model.RecentPosts.Any())
+            {
+                <div class="space-y-4">
+                    @foreach (var post in Model.RecentPosts)
+                    {
+                        <div class="bg-gray-800/40 border border-white/10 rounded-2xl p-5 hover:bg-gray-800/60 transition-colors">
+                            <div class="flex justify-between items-start mb-2">
+                                <a href="/hub/post/@post.PostId" class="text-white font-bold text-base hover:text-cyan-400 transition-colors line-clamp-1 block">@post.Title</a>
+                                <span class="text-cyan-400 text-[10px] font-black uppercase bg-cyan-500/10 px-2 py-0.5 rounded shrink-0 ml-2">@post.Category</span>
+                            </div>
+                            <p class="text-white/50 text-xs line-clamp-2 mb-4 leading-relaxed">@post.Summary</p>
+                            <div class="flex items-center gap-4 text-white/40 text-[11px] font-semibold">
+                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg> @post.VoteCount</span>
+                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> @post.ViewCount</span>
+                                <span>•</span>
+                                <span>@post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="bg-gray-800/40 border border-white/10 rounded-2xl p-8 text-center backdrop-blur-xl">
+                    <svg class="w-12 h-12 text-white/20 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    <p class="text-white/50 text-sm font-semibold">Thành viên này chưa có bài viết nào.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
