@@ -1,85 +1,705 @@
-@model IEnumerable<SmartLMS.Models.Post>
+@using System.Collections.Generic
+@model SmartLms.Community.ViewModels.ForumFeedViewModel
+@using System.Text.Encodings.Web
+
+@*
+    =========================================================================
+    🌟 FILE ĐÓNG GÓI DIỄN ĐÀN THẢO LUẬN & HỘP CÔNG CỤ THÔNG MINH (FORUM FEED + WORKSPACE TOOLKIT)
+    =========================================================================
+    - Ngôn ngữ: ASP.NET Core Razor Pages / CSHTML Views (.NET 8+)
+    - Styling: Tailwind CSS (Sử dụng trực tiếp các class CSS tương thích với React)
+    - Thư viện Icons: Lucide Icons CDN (thay thế cho lucide-react)
+    - Interactivity: JavaScript thuần (Vanilla JS) hoặc JQuery để duy trì tối đa tốc độ chuyển đổi.
+    - Cấu trúc: Đóng gói tất cả Logic trạng thái (States) thành các biến JS giúp dán trực tiếp vào Razor MVC
+*@
+
 @{
-    Layout = "_CommunityLayout";
-    ViewData["Title"] = "Forum Feed";
+    ViewData["Title"] = "Diễn Đàn Thảo Luận Kỹ Thuật C# - SmartLMS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="space-y-6">
-    <!-- Create Post Bar -->
-    <div class="glass-card rounded-2xl p-6 shadow-sm">
-        <div class="flex gap-4">
-            <div class="w-12 h-12 rounded-full bg-slate-200 overflow-hidden shrink-0">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Me" alt="My Profile">
-            </div>
-            <div class="flex-1">
-                <textarea placeholder="Share your knowledge or ask for help..." class="w-full bg-slate-50 border-none rounded-2xl p-4 text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-all" rows="2"></textarea>
-                <div class="flex justify-between items-center mt-4">
-                    <div class="flex gap-2">
-                        <button class="p-2 text-slate-500 hover:bg-cyan-50 hover:text-cyan-600 rounded-lg transition-all" title="Add Image">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </button>
-                        <button class="p-2 text-slate-500 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all" title="Add Video">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        </button>
-                        <button class="p-2 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all" title="Attach File">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                        </button>
-                    </div>
-                    <button class="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-2 rounded-xl font-bold shadow-lg transition-all">Post to Hub</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- IMPORT LUCIDE ICONS CDN & TAILWIND CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Feed -->
-    <div class="space-y-6">
-        @foreach (var post in Model)
-        {
-            <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition-all">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@post.AuthorId" alt="Author">
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="font-bold text-slate-800">@(post.Author?.FullName ?? "Unknown")</span>
-                                <span class="bg-slate-100 text-[10px] font-bold text-slate-500 px-2 py-0.5 rounded-full uppercase tracking-tighter">Student</span>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left font-sans text-slate-900 bg-slate-50/50 min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- ==========================================
+             CỘT CHÍNH (LEFT CONTROLS + POSTS LIST)
+             ========================================== -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- ĐẦU TRANG DIỄN ĐÀN -->
+            <div class="bg-white border border-slate-150 rounded-2xl p-6 shadow-xs flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl font-black text-slate-850 tracking-tight">DIỄN ĐÀN HỌC THUẬT C#</h1>
+                    <p class="text-xs text-slate-450 font-semibold mt-1">Nơi trao đổi, gỡ lỗi và tối ưu hóa mã nguồn cùng cộng đồng SmartLMS</p>
+                </div>
+                <button type="button" onclick="toggleCreatePostModal(true)" class="bg-indigo-650 hover:bg-indigo-700 text-white text-xs font-black px-4.5 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer border-none">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    Đăng bài mới
+                </button>
+            </div>
+
+            <!-- DANH SÁCH BÀI ĐĂNG (RAZOR LOOP) -->
+            <div class="space-y-4" id="posts-container">
+                @if (Model.Posts != null && Model.Posts.Any())
+                {
+                    @foreach (var post in Model.Posts)
+                    {
+                        <div class="bg-white border border-slate-150 rounded-2xl p-5 shadow-xs transition-transform hover:translate-y-[-1px] space-y-4" id="post-@post.Id">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="@post.AuthorAvatar" alt="@post.AuthorName" class="w-8 h-8 rounded-full border border-slate-200" />
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-xs font-black text-slate-800">@post.AuthorName</span>
+                                            <span class="text-[9px] bg-slate-100/80 text-slate-450 font-extrabold px-1.5 py-0.5 rounded">@post.AuthorRole</span>
+                                        </div>
+                                        <span class="text-[9.5px] text-slate-400 font-mono">@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-black bg-cyan-100 text-cyan-700 px-2.5 py-0.5 rounded-md uppercase tracking-wide">
+                                    #@post.Tag
+                                </span>
                             </div>
-                            <p class="text-xs text-slate-400">@post.CreatedAt.ToString("MMM dd, yyyy · hh:mm tt")</p>
+
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-black text-slate-850 hover:text-indigo-650 transition-colors cursor-pointer">@post.Title</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">@post.Content</p>
+                            </div>
+
+                            <!-- PHẦN TƯƠNG TÁC: LIKE, COMMENT, CHIA SẺ -->
+                            <div class="flex items-center gap-4 pt-3 border-t border-slate-100">
+                                <button type="button" class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 transition-all bg-transparent border-none cursor-pointer">
+                                    <i data-lucide="heart" class="w-4 h-4"></i>
+                                    <span>@post.Likes</span>
+                                </button>
+                                <button type="button" class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-cyan-600 transition-all bg-transparent border-none cursor-pointer">
+                                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                                    <span>@post.CommentsCount bình luận</span>
+                                </button>
+                                
+                                <!-- NÚT CHIA SẺ LÍ TƯỞNG (Kích hoạt 3-Step Sharing) -->
+                                <button type="button" onclick="openShareModal('@post.Id', '@JavaScriptEncoder.Default.Encode(post.Title)', '@JavaScriptEncoder.Default.Encode(post.Tag)', '@JavaScriptEncoder.Default.Encode(post.Category)')" class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-all bg-transparent border-none cursor-pointer ml-auto">
+                                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                                    <span>Chia sẻ</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <button class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></button>
-                </div>
-
-                <h3 class="text-xl font-bold text-slate-800 mb-3">@post.Title</h3>
-                <p class="text-slate-600 leading-relaxed mb-4">@post.Content</p>
-
-                <!-- Multimedia Placeholder (If any) -->
-                @if(post.PostId % 3 == 0) {
-                    <div class="w-full h-64 bg-slate-100 rounded-2xl mb-4 overflow-hidden border border-slate-200">
-                        <img src="https://source.unsplash.com/random/800x600?technology,coding&sig=@post.PostId" class="w-full h-full object-cover" alt="Post media">
+                    }
+                }
+                else
+                {
+                    <div class="bg-white border border-slate-150 rounded-2xl p-8 text-center text-slate-450 text-xs font-semibold">
+                        Không tìm thấy bài đăng nào phù hợp để thảo luận.
                     </div>
                 }
-
-                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <div class="flex items-center gap-6">
-                        <button class="flex items-center gap-2 text-slate-500 hover:text-cyan-600 font-bold transition-all group">
-                            <div class="p-2 group-hover:bg-cyan-50 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
-                            <span class="text-sm">24</span>
-                        </button>
-                        <button class="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold transition-all group">
-                            <div class="p-2 group-hover:bg-blue-50 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg></div>
-                            <span class="text-sm">@post.Comments.Count</span>
-                        </button>
-                        <button class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-bold transition-all group">
-                            <div class="p-2 group-hover:bg-indigo-50 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg></div>
-                            <span class="text-sm">Repost</span>
-                        </button>
-                    </div>
-                    <button class="p-2 text-slate-400 hover:text-slate-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg></button>
-                </div>
             </div>
-        }
+        </div>
+
+        <!-- =========================================================================
+             CỘT PHẢI: HỘP CÔNG CỤ THẢO LUẬN THÔNG MINH (10 ADVANCED INTEGRATION MODULES)
+             ========================================================================= -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-gradient-to-br from-slate-50 to-cyan-50/25 border border-cyan-150/80 rounded-2xl p-5 shadow-xs space-y-4">
+                
+                <!-- TIÊU ĐỀ HỘP CÔNG CỤ -->
+                <div class="flex items-center justify-between pb-2 border-b border-cyan-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-600 flex items-center justify-center text-white shadow-md shadow-cyan-100/60">
+                            <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wide">Hộp Công Cụ Thảo Luận</h3>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">10 Phân hệ hỗ trợ tối ưu mã nguồn</p>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-back-to-grid" onclick="showToolkitGrid()" class="hidden text-[10px] text-cyan-650 hover:text-cyan-800 font-black flex items-center gap-0.5 cursor-pointer bg-white px-2 py-1 rounded-md border border-slate-150 transition-all shadow-3xs">
+                        ← Trở lại
+                    </button>
+                </div>
+
+                <!-- KHU VỰC CHỌN 10 CÔNG CỤ (GRID SELECTOR) -->
+                <div id="toolkit-grid" class="grid grid-cols-2 gap-2.5">
+                    <!-- Module 1: AI Draft Assistant -->
+                    <button onclick="selectToolkitModule('ai-draft')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-orange-50 text-orange-600 group-hover:bg-orange-100/40 transition-colors">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">1. Trợ lý AI Bút</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Soạn thảo ý kiến</span>
+                    </button>
+
+                    <!-- Module 2: C# Compiler Sandbox -->
+                    <button onclick="selectToolkitModule('cs-sandbox')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-cyan-55 text-cyan-600 group-hover:bg-cyan-100/40 transition-colors">
+                            <i data-lucide="terminal" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">2. Hộp cát C#</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Chấm hiệu suất RAM</span>
+                    </button>
+
+                    <!-- Module 3: Quote & Meme Motivation -->
+                    <button onclick="selectToolkitModule('meme-gen')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-purple-55 text-purple-600 group-hover:bg-purple-100/40 transition-colors">
+                            <i data-lucide="flame" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">3. Động lực & Meme</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Tăng lực đồng nhóm</span>
+                    </button>
+
+                    <!-- Module 4: Active Recall Flashcard -->
+                    <button onclick="selectToolkitModule('flashcard')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-blue-55 text-blue-600 group-hover:bg-blue-100/40 transition-colors">
+                            <i data-lucide="book-open" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">4. Flashcard C#</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Ôn tập gốc rễ</span>
+                    </button>
+
+                    <!-- Module 5: Thread Summarizer -->
+                    <button onclick="selectToolkitModule('summarizer')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-emerald-55 text-emerald-600 group-hover:bg-emerald-100/40 transition-colors">
+                            <i data-lucide="layers" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">5. Tóm tắt Đàm luận</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Nắm cốt thớt rườm</span>
+                    </button>
+
+                    <!-- Module 6: Error Map Level -->
+                    <button onclick="selectToolkitModule('error-map')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-indigo-55 text-indigo-600 group-hover:bg-indigo-100/40 transition-colors">
+                            <i data-lucide="compass" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">6. Bản đồ C# Bug</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Lộ trình dọn rác GC</span>
+                    </button>
+
+                    <!-- Module 7: Reward Bounty (Treo thưởng XP) -->
+                    <button onclick="selectToolkitModule('bounty-maker')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-amber-55 text-amber-600 group-hover:bg-amber-100/40 transition-colors">
+                            <i data-lucide="trophy" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">7. Bài viết Treo XP</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Dành điểm giải mã</span>
+                    </button>
+
+                    <!-- Module 8: Quality Content Checker -->
+                    <button onclick="selectToolkitModule('auditor')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-rose-55 text-rose-600 group-hover:bg-rose-100/40 transition-colors">
+                            <i data-lucide="award" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">8. Kiểm khảo chất</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Check chuẩn bài đăng</span>
+                    </button>
+
+                    <!-- Module 9: Team recruiter -->
+                    <button onclick="selectToolkitModule('recruiter')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-teal-55 text-teal-600 group-hover:bg-teal-100/40 transition-colors">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">9. Tuyển đồng lực</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Rủ tụ tập mổ bug</span>
+                    </button>
+
+                    <!-- Module 10: LMS Interactive Polls -->
+                    <button onclick="selectToolkitModule('poll-maker')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl transition-all hover:scale-[1.01] hover:shadow-2xs cursor-pointer flex flex-col items-center text-center space-y-1.5 group border-none">
+                        <div class="p-2 rounded-lg bg-pink-55 text-pink-600 group-hover:bg-pink-100/40 transition-colors">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-850 leading-tight">10. Trưng trưng cầu</span>
+                        <span class="text-[8px] text-slate-400 leading-none">Biểu quyết ý tập</span>
+                    </button>
+                </div>
+
+                <!-- KHU VỰC CHI TIẾT CHO TỪNG PHÂN HỆ ĐƯỢC CHỌN -->
+                <div id="toolkit-details" class="hidden">
+                    
+                    <!-- MODULE 1: AI DRAFT WORKSPACE -->
+                    <div id="mod-ai-draft" class="hidden space-y-3 text-xs">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-orange-500"></i>
+                            <span class="font-black text-slate-800">Trợ Lý Soạn Thảo AI - Định dạng giáo trình</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 font-semibold">AI định dạng bài đăng chuẩn tắc chỉ bằng một từ khóa.</p>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="ai-draft-prompt" value="hỏi cách dùng IDisposable giải phóng file stream" class="flex-1 bg-white border border-slate-150 px-2.5 py-2 rounded-lg outline-none text-xs font-semibold" />
+                            <button onclick="simulateAiDraft()" id="btn-ai-draft" class="bg-cyan-600 hover:bg-cyan-700 text-white text-[10px] font-black px-3 py-2 rounded-lg cursor-pointer border-none">Gợi ý ⚡</button>
+                        </div>
+                        <div id="ai-draft-res" class="hidden p-3 bg-slate-100 border border-slate-200 rounded-lg space-y-2">
+                            <strong id="ai-draft-title" class="font-black block text-slate-800 text-[10.5px]"></strong>
+                            <p id="ai-draft-body" class="whitespace-pre-wrap text-[10px] bg-white p-2 border border-slate-150 rounded text-slate-600 max-h-36 overflow-y-auto leading-relaxed font-mono"></p>
+                        </div>
+                    </div>
+
+                    <!-- MODULE 2: C# COMPILER SANDBOX -->
+                    <div id="mod-cs-sandbox" class="hidden space-y-3 text-xs">
+                        <div class="flex items-center justify-between">
+                            <span class="font-black text-slate-800">C# Compiler Sandbox - Phân tích GC</span>
+                            <button onclick="loadErrorInSandbox()" class="text-[9px] bg-rose-50 hover:bg-rose-100 border border-rose-150 px-1.5 py-0.5 rounded text-rose-700 cursor-pointer">Nạp code ToList() lỗi</button>
+                        </div>
+                        <textarea id="cs-code-area" class="w-full bg-slate-900 text-cyan-300 font-mono text-[10px] p-2.5 rounded-lg border-none focus:outline-none resize-none" rows="5">using System;
+class Program {
+    static void Main() {
+        int[] num = {1,2,3};
+        Console.WriteLine("GC allocation gen: " + GC.GetGeneration(num));
+    }
+}</textarea>
+                        <button onclick="simulateCompileSandbox()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold py-2 rounded-lg cursor-pointer border-none">Đo hiệu năng ô nhớ ⚡</button>
+                        <div id="cs-compiler-res" class="hidden p-3 bg-slate-950 text-emerald-400 font-mono text-[9px] rounded-lg space-y-2 leading-relaxed whitespace-pre-wrap border border-slate-800"></div>
+                    </div>
+
+                    <!-- MODULE 3: INSPIRED MOTIVATION OR MEME -->
+                    <div id="mod-meme-gen" class="hidden space-y-3 text-xs">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="flame" class="w-4 h-4 text-purple-500"></i>
+                            <span class="font-black text-slate-800">Động lực & Giáo khoa tối ưu C#</span>
+                        </div>
+                        <div class="p-4 bg-orange-50/40 border border-amber-200 rounded-xl space-y-1 text-center font-sans">
+                            <span class="text-[9px] bg-amber-100 text-amber-800 border-none font-black px-1.5 py-0.5 rounded">MEMORY OPTIMIZATION</span>
+                            <p class="font-bold text-slate-700 leading-normal italic text-[11px] pt-1">"Khi dùng Struct thay vì Class cho dữ liệu nhỏ dưới 16 bytes để bảo toàn Generation 0 của Garbage Collector!"</p>
+                        </div>
+                        <button onclick="copyMemeQuote()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-2 rounded-lg cursor-pointer border-none text-[10.5px]">Sao chép danh ngôn học thuật</button>
+                    </div>
+
+                    <!-- MODULE 4: ACTIVE RECALL FLASHCARD -->
+                    <div id="mod-flashcard" class="hidden space-y-3 text-xs">
+                        <span class="font-black text-slate-800 block">Flashcard Ôn tập Chủ động C#</span>
+                        <div onclick="flipFlashcard()" id="flashcard-body" class="h-32 bg-slate-900 text-white border border-slate-800 rounded-xl p-4 flex flex-col justify-between text-center cursor-pointer select-none transition-all">
+                            <span class="text-[8px] text-slate-400 tracking-wider">Hỏi căn bản</span>
+                            <p id="flashcard-text" class="text-[11px] font-black">Memory Struct vs Class hoạt động ra sao?</p>
+                            <span class="text-[9px] text-cyan-400 underline decoration-dashed">Xem câu trả lời →</span>
+                        </div>
+                    </div>
+
+                    <!-- MODULE 5: THREAD REPORT SUMMARIZER -->
+                    <div id="mod-summarizer" class="hidden space-y-3 text-xs">
+                        <span class="font-black text-slate-800 block">Trình tóm tắt đàm thoại diễn đàn</span>
+                        <p class="text-[10px] text-slate-450 leading-relaxed font-semibold">Tóm tắt các chuỗi phản hồi dài dòng thành một cốt lõi giải pháp.</p>
+                        <textarea id="summarizer-input" class="w-full bg-white border border-slate-150 p-2 text-[10.5px] rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 font-semibold" rows="3">A: ToList() sớm mệt RAM quá.&#10;B: Nhớ để .Where() phía trước rồi mới .ToList() ở C# là ổn mà.</textarea>
+                        <button onclick="sumbitThreadSummarize()" id="btn-sum" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2 rounded-lg cursor-pointer border-none">Tóm tắt thần tốc ⚡</button>
+                        <div id="summarizer-res" class="hidden p-3 bg-emerald-50 text-emerald-800 rounded-lg whitespace-pre-wrap font-semibold text-[10.5px] leading-relaxed border border-emerald-100"></div>
+                    </div>
+
+                    <!-- MODULE 6, 7, 8, 9, 10 SIMULATION SKELETONS (Hoạt động linh hoạt giống React) -->
+                    <div id="mod-others" class="hidden space-y-2 text-xs">
+                        <span id="other-mod-title" class="font-black text-slate-800 block">Tính năng đang kích hoạt</span>
+                        <div class="bg-slate-50 border border-slate-150 rounded-lg p-3 space-y-2 font-semibold text-[10.5px] text-slate-600">
+                            <p id="other-mod-desc">Phân hệ đang được khởi chạy hoàn hảo...</p>
+                            <button onclick="handleOtherModSimulate()" class="bg-indigo-600 text-white px-3 py-1.5 rounded-md border-none cursor-pointer">Kiểm nghiệm tác vụ</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
     </div>
 </div>
+
+<!-- =========================================================================
+     🌟 MODAL DIỄN ĐÀN CHIA SẺ 3 BƯỚC TUẦN TỰ (3-STEP ACADEMIC SHARING MANUAL)
+     ========================================================================= -->
+<div id="share-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-3xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[90vh]">
+        
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-cyan-600 to-indigo-600 text-white px-6 py-5 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-2">
+                <div class="p-1.5 bg-white/10 rounded-lg">
+                    <i data-lucide="share-2" class="w-4 h-4 text-white animate-pulse"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Lan Tỏa Tri Thức Đồng Môn</h3>
+                    <p class="text-[10px] text-cyan-100 font-bold uppercase tracking-widest mt-0.5">3 bước tích hợp đóng góp (+15 XP)</p>
+                </div>
+            </div>
+            <button onclick="closeShareModal()" class="text-white/80 hover:text-white bg-white/5 hover:bg-white/15 px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer border-none">Đóng</button>
+        </div>
+
+        <!-- Tiến độ 3 bước trực quan (Step Indicators) -->
+        <div class="bg-slate-50 border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+            <div class="flex-1 flex items-center">
+                <div id="step-1-indicator" class="w-6 h-6 rounded-md bg-cyan-600 text-white flex items-center justify-center text-[10px] font-black">1</div>
+                <span class="text-[9.5px] font-black tracking-wide uppercase text-slate-800 ml-1.5 hidden sm:inline">HT chia sẻ</span>
+                <div id="line-1-2" class="flex-1 h-0.5 mx-3 bg-slate-200"></div>
+            </div>
+            <div class="flex-1 flex items-center">
+                <div id="step-2-indicator" class="w-6 h-6 rounded-md bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-black">2</div>
+                <span class="text-[9.5px] font-black tracking-wide uppercase text-slate-400 ml-1.5 hidden sm:inline">Xem trước</span>
+                <div id="line-2-3" class="flex-1 h-0.5 mx-3 bg-slate-200"></div>
+            </div>
+            <div class="flex-1 flex items-center">
+                <div id="step-3-indicator" class="w-6 h-6 rounded-md bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-black">3</div>
+                <span class="text-[9.5px] font-black tracking-wide uppercase text-slate-400 ml-1.5 hidden sm:inline">Ghi nhận</span>
+            </div>
+        </div>
+
+        <!-- Khối content thay đổi theo từng bước -->
+        <div class="p-6 overflow-y-auto space-y-4 flex-1">
+            
+            <!-- BƯỚC 1: CHỌN HÌNH THỨC TRUYỀN THÔNG (Format Selector) -->
+            <div id="share-view-step1" class="space-y-4 text-left">
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 uppercase tracking-wide">Bước 1: Chọn phương thức chia sẻ</h4>
+                    <p class="text-[11px] text-slate-450 font-semibold">Tối ưu định dạng tài nguyên học tập khi phát hành bên ngoài.</p>
+                </div>
+
+                <div class="space-y-2.5">
+                    <div onclick="selectShareFormat('link')" id="share-opt-link" class="p-3 bg-cyan-50/10 border-2 border-cyan-500 rounded-xl cursor-pointer flex gap-3.5 items-center">
+                        <div class="p-2 bg-cyan-600 text-white rounded-lg"><i data-lucide="link" class="w-4 h-4"></i></div>
+                        <div>
+                            <strong class="text-xs font-black text-slate-850 block">1. Liên kết thông minh (Smart Link Trace)</strong>
+                            <p class="text-[9px] text-slate-400 font-semibold">Gắn mã định danh học viên giúp tính toán điểm chia sẻ tích cực.</p>
+                        </div>
+                    </div>
+
+                    <div onclick="selectShareFormat('markdown')" id="share-opt-markdown" class="p-3 bg-white border border-slate-150 rounded-xl cursor-pointer flex gap-3.5 items-center hover:bg-slate-50">
+                        <div class="p-2 bg-slate-100 text-slate-500 rounded-lg"><i data-lucide="code" class="w-4 h-4"></i></div>
+                        <div>
+                            <strong class="text-xs font-black text-slate-850 block">2. Định dạng mã nguồn Academic Markdown</strong>
+                            <p class="text-[9px] text-slate-400 font-semibold">Xuất file thô kèm code block đẹp mắt cho diễn đàn công cộng.</p>
+                        </div>
+                    </div>
+
+                    <div onclick="selectShareFormat('classroom')" id="share-opt-classroom" class="p-3 bg-white border border-slate-150 rounded-xl cursor-pointer flex gap-3.5 items-center hover:bg-slate-50">
+                        <div class="p-2 bg-slate-100 text-slate-500 rounded-lg"><i data-lucide="users" class="w-4 h-4"></i></div>
+                        <div>
+                            <strong class="text-xs font-black text-slate-850 block">3. Phát tin đẩy SmartLMS Virtual Classroom</strong>
+                            <p class="text-[9px] text-slate-400 font-semibold">Gửi đề đạt đôn đốc trực tiếp lên bảng phân của đồng học trong lớp.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2 border-t border-slate-100">
+                    <button onclick="goToShareStep(2)" class="bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-black px-4 py-2 rounded-lg cursor-pointer border-none">Cấu hình lời dẫn →</button>
+                </div>
+            </div>
+
+            <!-- BƯỚC 2: EDIT LỜI DẪN & XEM TRƯỚC SNIPPET -->
+            <div id="share-view-step2" class="hidden space-y-4 text-left">
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 uppercase tracking-wide">Bước 2: Hiệu chỉnh lời tựa & Xem trước tinh hoa</h4>
+                    <p class="text-[11px] text-slate-450 font-semibold">Lời dặn thấu đáo khơi dậy thảo luận sôi nổi từ đồng môn.</p>
+                </div>
+
+                <div class="space-y-1">
+                    <b class="text-[10px] text-slate-450 font-extrabold block uppercase">Lời giới thiệu của bạn:</b>
+                    <textarea id="share-custom-note" rows="2" class="w-full bg-slate-50 border border-slate-150 rounded-lg p-2.5 text-xs text-slate-700 font-semibold" placeholder="Lời dẫn khuyên dặn..."></textarea>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-50 to-indigo-50/10 border border-indigo-100 p-4 rounded-xl space-y-2">
+                    <span class="text-[9px] text-slate-400 block tracking-widest font-black uppercase">Live Snippet:</span>
+                    <strong id="preview-title" class="text-xs text-slate-800 font-black block">Tiêu đề chia sẻ...</strong>
+                    <div class="p-2.5 bg-white border border-slate-200 rounded text-[10px] text-blue-600 font-mono" id="preview-snippet"></div>
+                </div>
+
+                <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                    <button onclick="goToShareStep(1)" class="text-slate-500 hover:text-slate-800 text-xs font-bold bg-slate-100 border-none px-3.5 py-2 rounded-lg cursor-pointer">Quay lại</button>
+                    <button onclick="goToShareStep(3)" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4.5 py-2 rounded-lg cursor-pointer border-none">Phát hành ngay 🚀</button>
+                </div>
+            </div>
+
+            <!-- BƯỚC 3: SUCCESS KICKER & TÍCH LŨY +15 XP -->
+            <div id="share-view-step3" class="hidden text-center space-y-4 py-3">
+                <div class="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg mx-auto">
+                    <i data-lucide="trophy" class="w-7 h-7"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 uppercase tracking-wide">LƯU TRUYỀN KIẾN THỨC THÀNH CÔNG!</h4>
+                    <p class="text-[11px] text-slate-450 font-semibold">Bạn đã được ghi nhận cộng nóng <strong class="text-emerald-550 underline">+15 XP Academic</strong> vào điểm đóng góp diễn đàn.</p>
+                </div>
+
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-left">
+                    <span class="text-[9px] text-slate-400 block tracking-wider uppercase font-black">Nội dung đã được chuẩn hóa:</span>
+                    <div id="final-share-box">
+                        <textarea id="final-copy-area" readOnly class="w-full bg-slate-900 text-emerald-400 font-mono text-[9px] p-2.5 rounded-lg border-none leading-relaxed resize-none" rows="3"></textarea>
+                        <button onclick="copyFinalShareText()" class="w-full mt-2 py-2 bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-black rounded-lg border-none cursor-pointer">Sao chép tri thức 📋</button>
+                    </div>
+                </div>
+
+                <button onclick="closeShareModal()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-black py-2.5 rounded-xl border-none cursor-pointer">Tuyệt vời! Hoàn tất & Quay lại</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================================
+     ⚙️ SCRIPT ĐIỀU HƯỚNG TRẠNG THÁI TOÀN BỘ CHỨC NĂNG DƯỚI CLIENT
+     ========================================================================= -->
+<script>
+    // 1. Trạng thái chia sẻ 3 bước
+    let selectedSharePostId = '';
+    let selectedShareTitle = '';
+    let selectedShareTag = '';
+    let selectedShareCategory = '';
+    let chosenFormat = 'link'; // 'link' | 'markdown' | 'classroom'
+
+    // Flashcard C# Memory Data
+    const deck = [
+        { front: "Memory Struct vs Class hoạt động ra sao?", back: "Struct (Value type) lưu trực tiếp trên Stack, dọn ngay khi hết scope. Class (Reference type) lưu trên Heap, cần dọn dẹp bởi Garbage Collector." },
+        { front: "Hàm .AsNoTracking() hữu ích thế nào?", back: "Bỏ cơ chế kiểm tra trạng thái Change Tracker của Entity Framework Core đối với truy vấn chỉ đọc, giúp tiết kiệm RAM và xử lý SQL nhanh hơn." },
+        { front: "Captive Dependency là lỗi gì trong DI?", back: "Lỗi phát sinh khi inject một dịch vụ Scoped (vòng đời ngắn hạn mỗi request) vào một dịch vụ Singleton (vòng đời trọn vẹn của ứng dụng)." }
+    ];
+    let curCardIdx = 0;
+    let cardFlipped = false;
+
+    // Khởi chạy Lucide Icons
+    document.addEventListener("DOMContentLoaded", function() {
+        lucide.createIcons();
+    });
+
+    // ==========================================
+    // 🚀 KHU VỰC ĐIỀU CHỈNH 10 BỘ CÔNG CỤ (TOOLKIT)
+    // ==========================================
+    function selectToolkitModule(modName) {
+        document.getElementById("toolkit-grid").classList.add("hidden");
+        document.getElementById("btn-back-to-grid").classList.remove("hidden");
+        document.getElementById("toolkit-details").classList.remove("hidden");
+
+        // Ẩn tất cả phân hệ
+        document.getElementById("mod-ai-draft").classList.add("hidden");
+        document.getElementById("mod-cs-sandbox").classList.add("hidden");
+        document.getElementById("mod-meme-gen").classList.add("hidden");
+        document.getElementById("mod-flashcard").classList.add("hidden");
+        document.getElementById("mod-summarizer").classList.add("hidden");
+        document.getElementById("mod-others").classList.add("hidden");
+
+        if (modName === 'ai-draft') {
+            document.getElementById("mod-ai-draft").classList.remove("hidden");
+        } else if (modName === 'cs-sandbox') {
+            document.getElementById("mod-cs-sandbox").classList.remove("hidden");
+        } else if (modName === 'meme-gen') {
+            document.getElementById("mod-meme-gen").classList.remove("hidden");
+        } else if (modName === 'flashcard') {
+            cardFlipped = false;
+            curCardIdx = 0;
+            updateFlashcardUI();
+            document.getElementById("mod-flashcard").classList.remove("hidden");
+        } else if (modName === 'summarizer') {
+            document.getElementById("mod-summarizer").classList.remove("hidden");
+        } else {
+            // Các module 6, 7, 8, 9, 10
+            document.getElementById("mod-others").classList.remove("hidden");
+            const titleEl = document.getElementById("other-mod-title");
+            const descEl = document.getElementById("other-mod-desc");
+            
+            if (modName === 'error-map') {
+                titleEl.innerText = "6. Bản đồ C# Bug - Khảo sát Lộ trình";
+                descEl.innerText = "Tra soát mã stacktrace lỗi xem thuộc chuyên đề Giáo án nào (.NET Core, Garbage Collector, Memory Allocation).";
+            } else if (modName === 'bounty-maker') {
+                titleEl.innerText = "7. Bài viết Treo thưởng XP";
+                descEl.innerText = "Gia tăng XP cá nhân làm phần quà thưởng nóng cho thành viên tháo gỡ thành công Bug hệ thống.";
+            } else if (modName === 'auditor') {
+                titleEl.innerText = "8. Thẩm định chất lượng mẫu";
+                descEl.innerText = "Kiểm tra ngữ pháp, thụt lề đầu dòng và code block để gia tăng độ tin chọn của chủ đề.";
+            } else if (modName === 'recruiter') {
+                titleEl.innerText = "9. Tuyển đồng đội học thớt";
+                descEl.innerText = "Xây dựng định mẫu chiêu mộ học tập nhóm, thúc đẩy đóng góp bình luận của lớp học.";
+            } else if (modName === 'poll-maker') {
+                titleEl.innerText = "10. Thăm dò ý kiến Trưng cầu";
+                descEl.innerText = "Dựng bảng bình chọn khảo sát xem đâu là thư viện RabbitMQ hay MassTransit được tin dùng nhất.";
+            }
+        }
+        lucide.createIcons();
+    }
+
+    function showToolkitGrid() {
+        document.getElementById("toolkit-grid").classList.remove("hidden");
+        document.getElementById("btn-back-to-grid").classList.add("hidden");
+        document.getElementById("toolkit-details").classList.add("hidden");
+    }
+
+    // Module I: AI Draft Assistant Simulator
+    function simulateAiDraft() {
+        const btn = document.getElementById("btn-ai-draft");
+        const prompt = document.getElementById("ai-draft-prompt").value;
+        const resBox = document.getElementById("ai-draft-res");
+        
+        btn.innerText = "Đang soạn...";
+        setTimeout(() => {
+            btn.innerText = "Gợi ý ⚡";
+            resBox.classList.remove("hidden");
+            document.getElementById("ai-draft-title").innerText = "Cách dọn dẹp Stream hiệu lực bằng IDisposable trong C#";
+            document.getElementById("ai-draft-body").innerText = `/// <summary>
+/// Giải phóng tài nguyên unmanaged an toàn đúng chuẩn .NET 8
+/// </summary>
+public class FileProcessor : IDisposable {
+    private FileStream _fs;
+    public void Dispose() {
+        _fs?.Dispose();
+        GC.SuppressFinalize(this); // Tiết kiệm công việc dọn dẹp cho GC
+    }
+}`;
+        }, 800);
+    }
+
+    // Module II: C# Sandbox Simulation
+    function loadErrorInSandbox() {
+        document.getElementById("cs-code-area").value = `using System;
+using System.Linq;
+class Program {
+    static void Main() {
+        // Lỗi: Gọi .ToList() nạp toàn bộ vào RAM trước khi lọc điều kiện .Where()
+        var list = db.ToList().Where(x => x.Active == true).ToList();
+    }
+}`;
+    }
+
+    function simulateCompileSandbox() {
+        const res = document.getElementById("cs-compiler-res");
+        res.classList.remove("hidden");
+        const code = document.getElementById("cs-code-area").value;
+        
+        if (code.includes("ToList().Where")) {
+            res.innerHTML = "<span class='text-rose-500'>⚠️ CẢNH BÁO PHIÊN BẢN HIỆU NĂNG:</span><br/>Bản code phát sinh lãng phí RAM nghiêm trọng. Gọi .ToList() tải thô toàn bộ bảng rồi mới lọc .Where().<br/>👉 <strong>Khuyên dùng:</strong> Hãy đảo Where() lên trước .ToList()!";
+        } else {
+            res.innerHTML = "<span class='text-emerald-400'>✅ KHẢO SÁT HIỆU NĂNG HOÀN HẢO:</span><br/>Compilation successful.<br/>Heap Allocation occupancy: ~32 bytes (Tối ưu tuyệt vời trên GC Gen 0).";
+        }
+    }
+
+    // Module III: Copy Meme Motivation
+    function copyMemeQuote() {
+        navigator.clipboard.writeText("Mẹo C#: Khi dùng Struct thay vì Class cho dữ liệu nhỏ dưới 16 bytes để bảo toàn Generation 0 của Garbage Collector!");
+        alert("Đã sao chép danh ngôn học thuật!");
+    }
+
+    // Module IV: Active Recall Flashcard Recall
+    function flipFlashcard() {
+        cardFlipped = !cardFlipped;
+        updateFlashcardUI();
+    }
+
+    function updateFlashcardUI() {
+        const body = document.getElementById("flashcard-body");
+        const text = document.getElementById("flashcard-text");
+        
+        if (cardFlipped) {
+            body.classList.remove("bg-slate-900");
+            body.classList.add("bg-emerald-950", "border-emerald-600");
+            text.innerText = deck[curCardIdx].back;
+        } else {
+            body.classList.remove("bg-emerald-950", "border-emerald-600");
+            body.classList.add("bg-slate-900");
+            text.innerText = deck[curCardIdx].front;
+        }
+    }
+
+    // Module V: Summary
+    function sumbitThreadSummarize() {
+        const btn = document.getElementById("btn-sum");
+        btn.innerText = "Đang chạy...";
+        setTimeout(() => {
+            btn.innerText = "Tóm tắt thần tốc ⚡";
+            const box = document.getElementById("summarizer-res");
+            box.classList.remove("hidden");
+            box.innerText = "📌 Tóm tắt hội thảo: Tránh dùng ToList() quá sớm trong truy vấn EF Core để ngăn cản việc kéo quá tải RAM về bộ nhớ đệm client.";
+        }, 600);
+    }
+
+    function handleOtherModSimulate() {
+        alert("Đã khởi động tiến trình giả lập phân hệ học thuật thành công!");
+    }
+
+
+    // ==========================================
+    // 🌟 KHU VỰC THIẾT KẾ CHIA SẺ 3 BƯỚC TUẦN TỰ
+    // ==========================================
+    function openShareModal(postId, title, tag, category) {
+        selectedSharePostId = postId;
+        selectedShareTitle = title;
+        selectedShareTag = tag;
+        selectedShareCategory = category;
+
+        // Reset lời tựa mặc định
+        document.getElementById("share-custom-note").value = `Mình thấy chủ đề "${title}" này vô cùng bổ ích cho các bạn đang tự học .NET, cùng mổ xẻ nhé!`;
+
+        // Bật hiển thị modal
+        document.getElementById("share-modal").classList.remove("hidden");
+        goToShareStep(1);
+    }
+
+    function closeShareModal() {
+        document.getElementById("share-modal").classList.add("hidden");
+    }
+
+    function selectShareFormat(fmt) {
+        chosenFormat = fmt;
+        
+        // Cập nhật giao diện lựa chọn
+        document.getElementById("share-opt-link").className = "p-3 border-2 rounded-xl cursor-pointer flex gap-3.5 items-center " + (fmt === 'link' ? "bg-cyan-50/10 border-cyan-500" : "bg-white border-slate-150");
+        document.getElementById("share-opt-markdown").className = "p-3 border-2 rounded-xl cursor-pointer flex gap-3.5 items-center hover:bg-slate-50 " + (fmt === 'markdown' ? "bg-indigo-50/10 border-indigo-500" : "bg-white border-slate-150");
+        document.getElementById("share-opt-classroom").className = "p-3 border-2 rounded-xl cursor-pointer flex gap-3.5 items-center hover:bg-slate-50 " + (fmt === 'classroom' ? "bg-pink-50/10 border-pink-500" : "bg-white border-slate-150");
+    }
+
+    function goToShareStep(step) {
+        // Ẩn các bước
+        document.getElementById("share-view-step1").classList.add("hidden");
+        document.getElementById("share-view-step2").classList.add("hidden");
+        document.getElementById("share-view-step3").classList.add("hidden");
+
+        // Cập nhật Step Indicators
+        const s1 = document.getElementById("step-1-indicator");
+        const s2 = document.getElementById("step-2-indicator");
+        const s3 = document.getElementById("step-3-indicator");
+        const line12 = document.getElementById("line-1-2");
+        const line23 = document.getElementById("line-2-3");
+
+        s1.className = "w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black " + (step >= 1 ? "bg-cyan-600 text-white" : "bg-slate-200 text-slate-500");
+        s2.className = "w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black " + (step >= 2 ? "bg-cyan-600 text-white" : "bg-slate-200 text-slate-500");
+        s3.className = "w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black " + (step >= 3 ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-500");
+
+        line12.className = "flex-1 h-0.5 mx-3 " + (step >= 2 ? "bg-cyan-600" : "bg-slate-200");
+        line23.className = "flex-1 h-0.5 mx-3 " + (step >= 3 ? "bg-cyan-600" : "bg-slate-200");
+
+        if (step === 1) {
+            document.getElementById("share-view-step1").classList.remove("hidden");
+        } 
+        else if (step === 2) {
+            document.getElementById("share-view-step2").classList.remove("hidden");
+            
+            // Đổ dữ liệu Preview
+            document.getElementById("preview-title").innerText = selectedShareTitle;
+            const previewSnippet = document.getElementById("preview-snippet");
+            const note = document.getElementById("share-custom-note").value;
+
+            if (chosenFormat === 'link') {
+                previewSnippet.innerHTML = `🌐 URL: https://smartlms.edu/forum/posts/${selectedSharePostId}?ref=user`;
+            } else if (chosenFormat === 'markdown') {
+                previewSnippet.innerHTML = `<code>### [C# Thảo Luận] ${selectedShareTitle}<br/>> Lời tựa: ${note}</code>`;
+            } else {
+                previewSnippet.innerHTML = `📢 Tin báo: Đẩy thông điệp lên nhóm lớp tự động...`;
+            }
+        } 
+        else if (step === 3) {
+            document.getElementById("share-view-step3").classList.remove("hidden");
+            
+            // Sinh mã sao chép cuối cùng
+            const finalNote = document.getElementById("share-custom-note").value;
+            const finalArea = document.getElementById("final-copy-area");
+
+            if (chosenFormat === 'link') {
+                finalArea.value = `📍 [HỌC C# NÂNG CAO] Mời đồng học trao đổi: "${selectedShareTitle}"\n👉 Đường link tham gia ngay: https://smartlms.edu/forum/posts/${selectedSharePostId}\n📝 Tin nhắn từ bạn: ${finalNote}`;
+            } else if (chosenFormat === 'markdown') {
+                finalArea.value = `### [Thảo Luận] ${selectedShareTitle}\n\n💬 Lời tựa: *${finalNote}*\n\n[Nhấn để truy cập SmartLMS Hub](https://smartlms.edu/forum/posts/${selectedSharePostId})`;
+            } else {
+                finalArea.value = `📢 [CLASSROOM NOTICE] Bài chia sẻ giáo trình đôn đốc đã đẩy thành công lên nhóm lớp!`;
+            }
+        }
+        lucide.createIcons();
+    }
+
+    function copyFinalShareText() {
+        const copyText = document.getElementById("final-copy-area");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        alert("Đã sao chép tri thức thành công vào bộ nhớ tạm!");
+    }
+</script>
