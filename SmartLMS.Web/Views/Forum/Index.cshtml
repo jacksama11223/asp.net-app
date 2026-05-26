@@ -1,0 +1,277 @@
+@using System.Collections.Generic
+@using System.Text.Encodings.Web
+@model SmartLms.Web.ViewModels.ForumFeedViewModel
+
+@{
+    ViewData["Title"] = "Diễn Đàn Thảo Luận Kỹ Thuật C# - SmartLMS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- IMPORT LUCIDE ICONS CDN & TAILWIND CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- Antiforgery Token for AJAX Posts -->
+@Html.AntiForgeryToken()
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left font-sans text-slate-900 bg-slate-50/50 min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- CỘT CHÍNH -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white border border-slate-150 rounded-2xl p-6 shadow-xs flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl font-black text-slate-850 tracking-tight">DIỄN ĐÀN HỌC THUẬT C#</h1>
+                    <p class="text-xs text-slate-450 font-semibold mt-1">Nơi trao đổi, gỡ lỗi và tối ưu hóa mã nguồn cùng cộng đồng SmartLMS</p>
+                </div>
+                <button type="button" class="bg-indigo-650 hover:bg-indigo-700 text-white text-xs font-black px-4.5 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer border-none">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    Đăng bài mới
+                </button>
+            </div>
+
+            <!-- DANH SÁCH BÀI ĐĂNG -->
+            <div class="space-y-4" id="posts-container">
+                @if (Model.Posts != null && Model.Posts.Any())
+                {
+                    @foreach (var post in Model.Posts)
+                    {
+                        <div class="bg-white border border-slate-150 rounded-2xl p-5 shadow-xs transition-transform hover:translate-y-[-1px] space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="@post.AuthorAvatar" alt="@post.AuthorName" class="w-8 h-8 rounded-full border border-slate-200" />
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-xs font-black text-slate-800">@post.AuthorName</span>
+                                            <span class="text-[9px] bg-slate-100/80 text-slate-450 font-extrabold px-1.5 py-0.5 rounded">@post.AuthorRole</span>
+                                        </div>
+                                        <span class="text-[9.5px] text-slate-400 font-mono">@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-black bg-cyan-100 text-cyan-700 px-2.5 py-0.5 rounded-md uppercase tracking-wide">
+                                    #@post.Tag
+                                </span>
+                            </div>
+
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-black text-slate-850 hover:text-indigo-650 transition-colors cursor-pointer">@post.Title</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">@post.Content</p>
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-3 border-t border-slate-100">
+                                <button type="button" class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 transition-all bg-transparent border-none cursor-pointer">
+                                    <i data-lucide="heart" class="w-4 h-4"></i>
+                                    <span>@post.Likes</span>
+                                </button>
+                                <button type="button" class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-cyan-600 transition-all bg-transparent border-none cursor-pointer">
+                                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                                    <span>@post.CommentsCount bình luận</span>
+                                </button>
+                                
+                                <button type="button" onclick="openShareModal('@post.Id', '@JavaScriptEncoder.Default.Encode(post.Title)', '@JavaScriptEncoder.Default.Encode(post.Tag)', '@JavaScriptEncoder.Default.Encode(post.Category)')" class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-all bg-transparent border-none cursor-pointer ml-auto">
+                                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                                    <span>Chia sẻ</span>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="bg-white border border-slate-150 rounded-2xl p-8 text-center text-slate-450 text-xs font-semibold">
+                        Không tìm thấy bài đăng nào phù hợp để thảo luận.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: HỘP CÔNG CỤ -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-gradient-to-br from-slate-50 to-cyan-50/25 border border-cyan-150/80 rounded-2xl p-5 shadow-xs space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-cyan-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-600 flex items-center justify-center text-white shadow-md shadow-cyan-100/60">
+                            <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wide">Hộp Công Cụ Thảo Luận</h3>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">10 Phân hệ hỗ trợ tối ưu mã nguồn</p>
+                        </div>
+                    </div>
+                    <button id="btn-back-to-grid" onclick="showToolkitGrid()" class="hidden text-[10px] text-cyan-650 hover:text-cyan-800 font-black flex items-center gap-0.5 cursor-pointer bg-white px-2 py-1 rounded-md border border-slate-150 transition-all shadow-3xs">
+                        ← Trở lại
+                    </button>
+                </div>
+
+                <div id="toolkit-grid" class="grid grid-cols-2 gap-2.5">
+                    <button onclick="selectToolkitModule('ai-draft')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl cursor-pointer flex flex-col items-center text-center space-y-1.5 border-none">
+                        <div class="p-2 rounded-lg bg-orange-50 text-orange-600"><i data-lucide="sparkles" class="w-4 h-4"></i></div>
+                        <span class="text-[10px] font-black text-slate-850">1. Trợ lý AI Bút</span>
+                    </button>
+                    <button onclick="selectToolkitModule('cs-sandbox')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl cursor-pointer flex flex-col items-center text-center space-y-1.5 border-none">
+                        <div class="p-2 rounded-lg bg-cyan-50 text-cyan-600"><i data-lucide="terminal" class="w-4 h-4"></i></div>
+                        <span class="text-[10px] font-black text-slate-850">2. Hộp cát C#</span>
+                    </button>
+                    <button onclick="selectToolkitModule('flashcard')" class="p-3 bg-white hover:bg-cyan-50/20 border border-slate-150 rounded-xl cursor-pointer flex flex-col items-center text-center space-y-1.5 border-none">
+                        <div class="p-2 rounded-lg bg-blue-50 text-blue-600"><i data-lucide="book-open" class="w-4 h-4"></i></div>
+                        <span class="text-[10px] font-black text-slate-850">3. Flashcard C#</span>
+                    </button>
+                </div>
+
+                <div id="toolkit-details" class="hidden">
+                    <div id="mod-ai-draft" class="hidden space-y-3 text-xs">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-orange-500"></i>
+                            <span class="font-black text-slate-800">Trợ Lý Soạn Thảo AI - Định dạng giáo trình</span>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="ai-draft-prompt" value="hỏi cách dùng IDisposable giải phóng file stream" class="flex-1 bg-white border border-slate-150 px-2.5 py-2 rounded-lg outline-none text-xs" />
+                            <button onclick="simulateAiDraft()" id="btn-ai-draft" class="bg-cyan-600 hover:bg-cyan-700 text-white text-[10px] font-black px-3 py-2 rounded-lg cursor-pointer border-none">Gợi ý ⚡</button>
+                        </div>
+                        <div id="ai-draft-res" class="hidden p-3 bg-slate-100 border border-slate-200 rounded-lg space-y-2">
+                            <strong id="ai-draft-title" class="font-black block text-slate-800 text-[10.5px]">Kết quả:</strong>
+                            <p id="ai-draft-body" class="whitespace-pre-wrap text-[10px] bg-white p-2 border border-slate-150 rounded text-slate-600 max-h-36 overflow-y-auto font-mono"></p>
+                        </div>
+                    </div>
+
+                    <div id="mod-cs-sandbox" class="hidden space-y-3 text-xs">
+                        <span class="font-black text-slate-800">C# Compiler Sandbox - Phân tích GC</span>
+                        <textarea id="cs-code-area" class="w-full bg-slate-900 text-cyan-300 font-mono text-[10px] p-2.5 rounded-lg border-none" rows="5">var list = db.ToList().Where(x => x.Active == true).ToList();</textarea>
+                        <button onclick="simulateCompileSandbox()" id="btn-cs-sandbox" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold py-2 rounded-lg cursor-pointer border-none">Đo hiệu năng ⚡</button>
+                        <div id="cs-compiler-res" class="hidden p-3 bg-slate-950 text-emerald-400 font-mono text-[9px] rounded-lg space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div id="share-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-3xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-gradient-to-r from-cyan-600 to-indigo-600 text-white px-6 py-5 flex items-center justify-between">
+            <h3 class="font-extrabold text-xs uppercase">Lan Tỏa Tri Thức Đồng Môn</h3>
+            <button onclick="closeShareModal()" class="text-white bg-white/15 px-3 py-1.5 rounded-lg text-xs font-black">Đóng</button>
+        </div>
+        <div class="p-6 overflow-y-auto space-y-4">
+            <div id="share-view-step1">
+                <button onclick="selectShareFormat('link'); goToShareStep(2)" class="p-3 bg-cyan-50 border-2 border-cyan-500 rounded-xl cursor-pointer w-full text-left">
+                    <strong class="text-xs font-black text-slate-850">1. Liên kết thông minh (Smart Link Trace)</strong>
+                </button>
+            </div>
+            <div id="share-view-step2" class="hidden space-y-4">
+                <textarea id="share-custom-note" rows="2" class="w-full bg-slate-50 border border-slate-150 rounded-lg p-2.5 text-xs text-slate-700 font-semibold" placeholder="Lời dẫn..."></textarea>
+                <div class="flex justify-between items-center">
+                    <button onclick="goToShareStep(1)" class="bg-slate-100 text-slate-500 font-bold px-3 py-2 rounded-lg border-none">Quay lại</button>
+                    <button onclick="completeShareReward()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-4 py-2 rounded-lg border-none">Phát hành ngay 🚀</button>
+                </div>
+            </div>
+            <div id="share-view-step3" class="hidden text-center space-y-4">
+                <h4 class="text-xs font-black text-emerald-600 uppercase">THÀNH CÔNG! ĐÃ CỘNG +15 XP!</h4>
+                <textarea id="final-copy-area" readOnly class="w-full bg-slate-900 text-emerald-400 font-mono text-[9px] p-2.5 rounded-lg border-none" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedSharePostId = '';
+    let chosenFormat = 'link';
+
+    document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+
+    function selectToolkitModule(modName) {
+        document.getElementById("toolkit-grid").classList.add("hidden");
+        document.getElementById("btn-back-to-grid").classList.remove("hidden");
+        document.getElementById("toolkit-details").classList.remove("hidden");
+        document.getElementById("mod-ai-draft").classList.add("hidden");
+        document.getElementById("mod-cs-sandbox").classList.add("hidden");
+        
+        if (modName === 'ai-draft') document.getElementById("mod-ai-draft").classList.remove("hidden");
+        if (modName === 'cs-sandbox') document.getElementById("mod-cs-sandbox").classList.remove("hidden");
+    }
+
+    function showToolkitGrid() {
+        document.getElementById("toolkit-grid").classList.remove("hidden");
+        document.getElementById("btn-back-to-grid").classList.add("hidden");
+        document.getElementById("toolkit-details").classList.add("hidden");
+    }
+
+    async function simulateAiDraft() {
+        const btn = document.getElementById("btn-ai-draft");
+        const prompt = document.getElementById("ai-draft-prompt").value;
+        const resBox = document.getElementById("ai-draft-res");
+        
+        btn.innerText = "Đang kết nối API...";
+        try {
+            const res = await fetch('/Forum/SimulateAiDraft', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: prompt })
+            });
+            const data = await res.json();
+            document.getElementById("ai-draft-title").innerText = data.title;
+            document.getElementById("ai-draft-body").innerText = data.body;
+            resBox.classList.remove("hidden");
+        } catch (e) {
+            alert("Lỗi gọi AI API");
+        }
+        btn.innerText = "Gợi ý ⚡";
+    }
+
+    async function simulateCompileSandbox() {
+        const btn = document.getElementById("btn-cs-sandbox");
+        const code = document.getElementById("cs-code-area").value;
+        const resBox = document.getElementById("cs-compiler-res");
+        
+        btn.innerText = "Đang biên dịch...";
+        try {
+            const res = await fetch('/Forum/SimulateCompileSandbox', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code })
+            });
+            const data = await res.json();
+            resBox.innerHTML = data.result.replace(/\n/g, '<br/>');
+            resBox.classList.remove("hidden");
+        } catch (e) {
+            alert("Lỗi C# Sandbox");
+        }
+        btn.innerText = "Đo hiệu năng ⚡";
+    }
+
+    function openShareModal(postId, title, tag, category) {
+        selectedSharePostId = postId;
+        document.getElementById("share-modal").classList.remove("hidden");
+        goToShareStep(1);
+    }
+    function closeShareModal() { document.getElementById("share-modal").classList.add("hidden"); }
+    function selectShareFormat(fmt) { chosenFormat = fmt; }
+    
+    function goToShareStep(step) {
+        document.getElementById("share-view-step1").classList.add("hidden");
+        document.getElementById("share-view-step2").classList.add("hidden");
+        document.getElementById("share-view-step3").classList.add("hidden");
+        if (step === 1) document.getElementById("share-view-step1").classList.remove("hidden");
+        if (step === 2) document.getElementById("share-view-step2").classList.remove("hidden");
+        if (step === 3) document.getElementById("share-view-step3").classList.remove("hidden");
+    }
+
+    async function completeShareReward() {
+        try {
+            const res = await fetch('/Forum/CompleteShareReward', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId: selectedSharePostId, format: chosenFormat })
+            });
+            if (res.ok) {
+                document.getElementById("final-copy-area").value = "Đã cộng +15 XP vào tài khoản. " + document.getElementById("share-custom-note").value;
+                goToShareStep(3);
+            } else {
+                alert("Yêu cầu đăng nhập để nhận XP.");
+            }
+        } catch (e) {
+            alert("Lỗi kết nối.");
+        }
+    }
+</script>

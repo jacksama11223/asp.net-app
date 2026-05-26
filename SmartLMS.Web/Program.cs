@@ -300,6 +300,7 @@ builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS
 
 builder.Services.AddScoped(typeof(SmartLMS.Data.Repositories.IRepository<>), typeof(SmartLMS.Data.Repositories.Repository<>));
 builder.Services.AddScoped<SmartLMS.Business.ICourseService, SmartLMS.Business.CourseService>();
+builder.Services.AddScoped<SmartLMS.Business.IForumService, SmartLMS.Business.ForumService>();
 builder.Services.AddScoped<SmartLMS.Business.ICurriculumService, SmartLMS.Business.CurriculumService>();
 builder.Services.AddScoped<SmartLMS.Business.IPredictionService, SmartLMS.Business.PredictionService>();
 builder.Services.AddScoped<SmartLMS.Business.IReportingService, SmartLMS.Business.ReportingService>();
