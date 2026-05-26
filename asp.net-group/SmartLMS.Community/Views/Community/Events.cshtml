@@ -1,60 +1,134 @@
 @model IEnumerable<SmartLMS.Models.CommunityEvent>
 @{
     Layout = "_CommunityLayout";
-    ViewData["Title"] = "Event Listings";
+    ViewData["Title"] = "Danh sách Sự kiện";
 }
 
-<div class="space-y-6">
-    <div class="flex justify-between items-end">
-        <div>
-            <h2 class="text-3xl font-bold text-slate-800">Community Events</h2>
-            <p class="text-slate-500">Workshops, Coding Sessions, and Webinars.</p>
-        </div>
-        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Propose an Event
+<!-- Thêm Alpine.js cho bộ lọc Category Client-side -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div class="space-y-6" x-data="{ activeCategory: 'all' }">
+    <!-- Category header -->
+    <div class="flex flex-wrap items-center gap-2 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <button @@click="activeCategory = 'all'" :class="activeCategory === 'all' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+            Tất cả sự kiện
+        </button>
+        <button @@click="activeCategory = 'webinar'" :class="activeCategory === 'webinar' ? 'bg-purple-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+            Webinars
+        </button>
+        <button @@click="activeCategory = 'workshop'" :class="activeCategory === 'workshop' ? 'bg-amber-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+            Workshops
+        </button>
+        <button @@click="activeCategory = 'coding_session'" :class="activeCategory === 'coding_session' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+            Học nhóm
         </button>
     </div>
 
-    <!-- Event List -->
-    <div class="space-y-4">
-        @foreach (var ev in Model)
+    <!-- Grid of Events -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @if (Model != null && Model.Any())
         {
-            <div class="glass-card rounded-2xl p-6 flex items-center gap-6 hover:shadow-lg transition-all">
-                <!-- Date Badge -->
-                <div class="w-20 h-20 bg-slate-800 rounded-2xl flex flex-col items-center justify-center text-white shadow-xl">
-                    <span class="text-xs font-bold uppercase opacity-70">@ev.EventDate.ToString("MMM")</span>
-                    <span class="text-3xl font-black">@ev.EventDate.ToString("dd")</span>
-                </div>
+            foreach (var evt in Model)
+            {
+                var categoryKey = evt.EventType?.ToLower().Replace(" ", "_") ?? "other";
+                var categoryColor = categoryKey.Contains("webinar") ? "bg-purple-600" :
+                                    categoryKey.Contains("workshop") ? "bg-amber-600" : "bg-emerald-600";
+                
+                var isRegistered = false; // Fake state for UI
 
-                <!-- Event Details -->
-                <div class="flex-1">
-                    <div class="flex items-center gap-3 mb-1">
-                        <span class="bg-blue-100 text-blue-700 text-[10px] font-black uppercase px-2 py-0.5 rounded">@ev.EventType</span>
-                        <span class="text-slate-400 text-sm flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            @ev.EventDate.ToString("hh:mm tt")
+                <div 
+                    x-show="activeCategory === 'all' || activeCategory === '@categoryKey'"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm flex flex-col justify-between"
+                    x-data="{ registered: @(isRegistered.ToString().ToLower()) }"
+                >
+                    <!-- Event Background & Header -->
+                    <div class="bg-slate-50 p-6 border-b border-slate-100 cursor-pointer hover:bg-slate-100/50 transition-all group">
+                        <span class="text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full text-white @categoryColor">
+                            @(evt.EventType ?? "Event")
                         </span>
+                        
+                        <h3 class="font-bold text-slate-800 text-base mt-3 mb-2 leading-snug group-hover:text-cyan-600 transition-colors flex items-center gap-1">
+                            @evt.Title
+                            <span class="text-[9px] text-cyan-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                (Chi tiết &rarr;)
+                            </span>
+                        </h3>
+                        <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                            @evt.Description
+                        </p>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-800">@ev.Title</h4>
-                    <p class="text-slate-500 text-sm mt-1 flex items-center gap-1">
-                        <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        @ev.Location
-                    </p>
-                </div>
 
-                <!-- Stats & Actions -->
-                <div class="flex items-center gap-8">
-                    <div class="text-center">
-                        <p class="text-2xl font-black text-slate-800">@ev.Participants.Count</p>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">RSVP</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold px-6 py-2 rounded-xl transition-all shadow-md">RSVP</button>
-                        <button class="border border-slate-200 hover:bg-slate-50 font-bold px-4 py-2 rounded-xl transition-all">View Details</button>
+                    <!-- Event Details -->
+                    <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                        <div class="space-y-2.5 text-xs text-slate-600">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <span>Ngày: <strong>@evt.EventDate.ToString("dddd, dd/MM/yyyy")</strong></span>
+                            </div>
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <span>Thời gian: <strong>@evt.EventDate.ToString("HH:mm")</strong></span>
+                            </div>
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <span class="truncate">Nền tảng: <strong class="text-slate-700">@(evt.Location ?? "Online")</strong></span>
+                            </div>
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <span>Số người đã đăng ký: <strong class="text-cyan-600">@(evt.Participants?.Count ?? 0) học viên</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Speaker info + Register CTA -->
+                        <div class="pt-4 border-t border-slate-50 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-200">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=EventHost_@evt.Id" alt="Speaker" />
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Diễn giả / Host</p>
+                                    <p class="text-xs font-bold text-slate-700 truncate">Hệ thống SmartLMS</p>
+                                </div>
+                            </div>
+
+                            <button 
+                                @@click="registered = !registered; window.showToast && window.showToast(registered ? 'Đã đăng ký tham gia sự kiện!' : 'Đã hủy đăng ký sự kiện.')"
+                                :class="registered ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 flex items-center gap-1 border border-emerald-200/50' : 'bg-cyan-600 hover:bg-cyan-700 text-white hover:shadow border border-transparent'"
+                                class="shrink-0 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm"
+                            >
+                                <span x-show="registered" style="display: none;" class="flex items-center gap-1">
+                                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                                    Đã đăng ký
+                                </span>
+                                <span x-show="!registered">Đăng ký tham gia</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-1 md:col-span-2 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-2">
+                <i data-lucide="calendar" class="mx-auto text-slate-300 w-8 h-8"></i>
+                <p class="font-bold">Không tìm thấy sự kiện nào.</p>
+                <p class="text-xs">Vui lòng quay lại sau hoặc chuyển đổi bộ lọc danh mục.</p>
             </div>
         }
     </div>
 </div>
+
+<script>
+    document.addEventListener('alpine:initialized', () => {
+        Alpine.effect(() => {
+            setTimeout(() => {
+                if(window.lucide) {
+                    lucide.createIcons();
+                }
+            }, 50);
+        });
+    });
+</script>
