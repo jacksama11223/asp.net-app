@@ -4,99 +4,276 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SmartLMS Community Hub</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 350: '#94a3b8', 450: '#64748b', 750: '#1e293b' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
-        .tab-active { border-bottom: 4px solid #22d3ee; color: #0891b2; font-weight: 600; }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="text-slate-800">
+<body class="text-slate-800 bg-slate-50 flex flex-col min-h-screen">
+
+    <!-- Toast Alert Notice (Hidden by default) -->
+    <div id="toastAlert" class="fixed top-8 left-1/2 -translate-x-1/2 z-[55] bg-slate-900 text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 border border-slate-750 opacity-0 pointer-events-none transition-all duration-300 translate-y-[-20px]">
+        <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+        <span id="toastMessage">Thông báo</span>
+    </div>
+
     <!-- Header -->
-    <header class="sticky top-0 z-50 w-full bg-white border-b border-slate-200 py-3 shadow-sm">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-200">
-                    <span class="text-white font-bold text-xl">S</span>
+    <header class="sticky top-0 z-50 w-full bg-white border-b border-cyan-100 py-4 shadow-sm select-none">
+        <div class="container mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            
+            <!-- Logo brand -->
+            <a href="/hub" class="flex items-center gap-3 cursor-pointer">
+                <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-200">
+                    <span class="text-white font-extrabold text-xl">S</span>
                 </div>
-                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-600">SmartLMS Community</h1>
-            </div>
-            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-700 tracking-tight leading-tight">
+                        SmartLMS Hub
+                    </h1>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-none">distributed learning hub</p>
+                </div>
+            </a>
+
+            <!-- Search bar & Live accounts actions -->
+            <div class="flex flex-wrap items-center justify-end gap-3.5 w-full sm:w-auto">
                 <div class="relative">
-                    <input type="text" placeholder="Search community..." class="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full w-64 focus:ring-2 focus:ring-cyan-500 transition-all outline-none">
-                    <svg class="w-5 h-5 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Tìm thảo luận, tài liệu, lớp học..." class="pl-10 pr-4 py-2.5 bg-slate-100/80 border-none text-slate-700 placeholder-slate-450 rounded-full w-48 sm:w-64 focus:ring-2 focus:ring-cyan-500 focus:bg-white text-xs transition-all outline-none font-medium" />
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-450"></i>
                 </div>
-                <div class="flex gap-2">
-                    <a href="/Auth/Login" class="border border-cyan-600 text-cyan-600 px-5 py-2 rounded-full font-semibold transition-all hover:bg-cyan-50">Đăng nhập</a>
-                    <a href="/Auth/Register" class="bg-cyan-600 hover:bg-cyan-700 text-white px-5 py-2 rounded-full font-semibold transition-all shadow-md">Đăng ký</a>
+
+                <div class="flex items-center gap-2.5">
+                    <button class="flex items-center gap-1.5 border border-cyan-600 text-cyan-600 hover:bg-cyan-50 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-sm">
+                        <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                        <span>Đổi Vai Trò</span>
+                    </button>
+
+                    <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
+                        <div class="w-9 h-9 rounded-xl overflow-hidden bg-slate-100 border-2 border-white shadow shadow-cyan-100 shrink-0">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hoang" alt="Author avatar" />
+                        </div>
+                        <div class="hidden md:block text-left">
+                            <span class="text-xs font-bold text-slate-800 block leading-tight">Trần Văn Hoàng</span>
+                            <span class="text-[9px] bg-cyan-50 border border-cyan-100 text-cyan-700 px-2 py-0.5 rounded-full uppercase tracking-tighter font-black">Student</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Navigation Tabs -->
-    <nav class="bg-white border-b border-slate-200 sticky top-[65px] z-40">
-        <div class="container mx-auto px-4 flex gap-8">
-            <a asp-action="Index" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "tab-active" : "")">Discussion Forum</a>
-            <a asp-action="Resources" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Resources" ? "tab-active" : "")">Resource Sharing</a>
-            <a asp-action="Events" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Events" ? "tab-active" : "")">Event Listings</a>
-            <a asp-action="Members" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Members" ? "tab-active" : "")">Member Directory</a>
-            <a asp-action="QA" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "QA" ? "tab-active" : "")">Q&A Section</a>
-            <a asp-action="Groups" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Groups" ? "tab-active" : "")">Study Groups</a>
-            <a asp-action="Leaderboard" class="py-4 text-slate-600 hover:text-cyan-600 transition-all @(ViewContext.RouteData.Values["action"]?.ToString() == "Leaderboard" ? "tab-active" : "")">Leaderboard</a>
+    <!-- Navigation menu tab list -->
+    @{
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
+    }
+    <nav class="bg-white border-b border-cyan-100 sticky top-[73px] md:top-[69px] z-40 shadow-sm select-none overflow-x-auto">
+        <div class="container mx-auto px-6 flex gap-6 md:gap-8 whitespace-nowrap min-w-max">
+            
+            <a href="/hub" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Index" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="message-square" class="w-4 h-4"></i> Diễn đàn Thảo luận
+            </a>
+
+            <a href="/hub/resources" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Resources" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="book-open" class="w-4 h-4"></i> Chia sẻ Tài nguyên
+            </a>
+
+            <a href="/hub/events" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Events" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="calendar" class="w-4 h-4"></i> Danh sách Sự kiện
+            </a>
+
+            <a href="/hub/qa" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "QA" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="help-circle" class="w-4 h-4"></i> Chuyên mục Q&A
+            </a>
+
+            <a href="/hub/groups" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Groups" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="graduation-cap" class="w-4 h-4"></i> Nhóm tự học chung
+            </a>
+
+            <a href="/hub/members" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Members" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="users" class="w-4 h-4"></i> Danh mục Thành viên
+            </a>
+
+            <a href="/hub/leaderboard" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Leaderboard" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="trophy" class="w-4 h-4"></i> Bảng vinh danh
+            </a>
+
+            <a href="/hub/mentor" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Mentor" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
+                <i data-lucide="sparkles" class="w-4 h-4 text-pink-500 animate-pulse"></i> Trợ Lý AI Mentor (Hot)
+            </a>
+
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-8 flex gap-8">
-        <!-- Content Area -->
+    <!-- Main Container Workspace layout -->
+    <main class="container mx-auto px-4 py-6 md:py-8 flex flex-col lg:flex-row gap-6 md:gap-8 flex-1">
+        
+        <!-- Left Sidebar: Channels & Tags -->
+        <aside class="w-56 hidden xl:flex flex-col gap-2 shrink-0 select-none">
+            <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Kênh học tập & Thảo luận</div>
+            
+            <a href="/hub" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Index" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
+                <span class="@(currentAction == "Index" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Thảo luận chung
+            </a>
+            
+            <a href="/hub/qa" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "QA" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
+                <span class="@(currentAction == "QA" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Giải đáp thắc mắc (Q&A)
+            </a>
+
+            <a href="/hub/resources" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Resources" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
+                <span class="@(currentAction == "Resources" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Kho tài nguyên
+            </a>
+
+            <a href="/hub/events" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Events" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
+                <span class="@(currentAction == "Events" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Tin tức & Sự kiện
+            </a>
+
+            <a href="/hub/groups" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Groups" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
+                <span class="@(currentAction == "Groups" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Nhóm tự học
+            </a>
+
+            <a href="/hub/mentor" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Mentor" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0"></i>
+                <span class="truncate">Trợ lý AI Mentor (Hot)</span>
+            </a>
+
+            <div class="mt-6 px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Từ khóa tiêu biểu</div>
+            <div class="flex flex-wrap gap-2 px-3">
+                <button class="px-2 py-1 bg-cyan-100 text-cyan-700 text-[10px] font-bold rounded-lg hover:bg-cyan-200 transition-colors cursor-pointer">#dotnet</button>
+                <button class="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-lg hover:bg-blue-200 transition-colors cursor-pointer">#csharp</button>
+                <button class="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-lg hover:bg-purple-200 transition-colors cursor-pointer">#database</button>
+                <button class="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-lg hover:bg-emerald-200 transition-colors cursor-pointer">#algorithms</button>
+                <button class="px-2 py-1 bg-rose-100 text-rose-700 text-[10px] font-bold rounded-lg hover:bg-rose-200 transition-colors cursor-pointer">#ai</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
         <div class="flex-1 min-w-0">
             @RenderBody()
         </div>
 
-        <!-- Sidebar (Widgets) -->
-        <aside class="w-80 hidden lg:block space-y-6">
-            <!-- Announcements Widget -->
-            <div class="glass-card rounded-2xl p-6 shadow-sm">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                    <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
-                    Announcements
+        <!-- Right Sidebar Widgets -->
+        <aside class="w-80 hidden lg:flex flex-col gap-6 shrink-0">
+            <!-- User Stats Widget -->
+            <div class="bg-white rounded-2xl p-5 border border-cyan-100 shadow-sm shadow-cyan-100/50 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-cyan-100 to-blue-50 rounded-bl-full -z-10 opacity-60"></div>
+                
+                <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center justify-between">
+                    <span>Thành tích của bạn</span>
+                    <button class="text-cyan-600 hover:bg-cyan-50 p-1.5 rounded-lg transition-colors"><i data-lucide="bar-chart-2" class="w-4 h-4"></i></button>
                 </h3>
-                <ul class="space-y-4">
-                    <li class="group cursor-pointer">
-                        <p class="text-sm font-semibold group-hover:text-cyan-600 transition-all">New Study Group for Calculus starting next week!</p>
-                        <span class="text-xs text-slate-400">2 hours ago</span>
-                    </li>
-                    <li class="group cursor-pointer">
-                        <p class="text-sm font-semibold group-hover:text-cyan-600 transition-all">Upcoming Webinar on AI Ethics in Education</p>
-                        <span class="text-xs text-slate-400">Yesterday</span>
-                    </li>
-                </ul>
+                
+                <div class="flex items-center gap-4 mb-5">
+                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-200/50">
+                        <i data-lucide="trophy" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-slate-800 tracking-tight flex items-baseline gap-1">
+                            350 <span class="text-xs font-bold text-cyan-600">XP</span>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium">Hạng 15 toàn hệ thống</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-[11px] font-bold mb-1.5">
+                            <span class="text-slate-600">Tiến trình level 5</span>
+                            <span class="text-cyan-600">70%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-1.5 rounded-full w-[70%]"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Active Members Widget -->
-            <div class="glass-card rounded-2xl p-6 shadow-sm">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                    <span class="w-2 h-6 bg-blue-500 rounded-full"></span>
-                    Active Members
+            <!-- Top Contributors -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-150 shadow-sm relative overflow-hidden">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="flame" class="w-4 h-4 text-orange-500"></i>
+                    Thành viên sôi nổi
                 </h3>
-                <div class="grid grid-cols-4 gap-3">
-                    @for(int i=1; i<=8; i++) {
-                        <div class="w-12 h-12 bg-slate-200 rounded-xl overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-all cursor-pointer">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=User@(i)" alt="Member">
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 cursor-pointer group">
+                        <div class="relative">
+                            <div class="w-9 h-9 rounded-xl overflow-hidden bg-slate-100 border-2 border-white shadow-sm">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=DucMinh" alt="User">
+                            </div>
+                            <div class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-yellow-400 border-2 border-white rounded-full flex items-center justify-center text-[8px] font-black text-yellow-900">1</div>
                         </div>
-                    }
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 group-hover:text-cyan-600 transition-colors truncate">Thầy Phạm Đức Minh</h4>
+                            <p class="text-[10px] text-slate-500 truncate">12.5k XP &bull; Instructor</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 cursor-pointer group">
+                        <div class="relative">
+                            <div class="w-9 h-9 rounded-xl overflow-hidden bg-slate-100 border-2 border-white shadow-sm">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hoang" alt="User">
+                            </div>
+                            <div class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-slate-300 border-2 border-white rounded-full flex items-center justify-center text-[8px] font-black text-slate-700">2</div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 group-hover:text-cyan-600 transition-colors truncate">Trần Văn Hoàng</h4>
+                            <p class="text-[10px] text-slate-500 truncate">8.2k XP &bull; Student</p>
+                        </div>
+                    </div>
                 </div>
-                <button class="w-full mt-4 text-sm font-bold text-cyan-600 hover:bg-cyan-50 py-2 rounded-lg transition-all">View All Members</button>
+                
+                <button class="w-full mt-5 py-2 text-[11px] font-bold text-cyan-600 bg-cyan-50 hover:bg-cyan-100 rounded-xl transition-colors">
+                    Xem Bảng Xếp Hạng
+                </button>
             </div>
         </aside>
+
     </main>
 
-    <footer class="bg-white border-t border-slate-200 py-8 mt-12">
-        <div class="container mx-auto px-4 text-center text-slate-400 text-sm">
-            &copy; 2026 SmartLMS.AI Community Hub. Built for Distributed Learning.
+    <!-- Footer information panel -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center select-none mt-auto">
+        <div class="container mx-auto px-4 text-slate-400 text-xs font-semibold uppercase tracking-wider space-y-1">
+            <p>&copy; 2026 SmartLMS.AI Community Hub. Môi trường học tập phân tán cao chu đáo.</p>
+            <p class="text-[9px] font-medium text-slate-350">Hệ thống học tập thông minh & vinh danh học thuật trực quan.</p>
         </div>
     </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+        
+        // Helper function for Toast
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastAlert');
+            const msg = document.getElementById('toastMessage');
+            msg.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 3000);
+        }
+    </script>
     
     @await RenderSectionAsync("Scripts", required: false)
 </body>
