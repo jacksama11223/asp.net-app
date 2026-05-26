@@ -1,0 +1,121 @@
+{
+  "timestamp": "15:17:17 26/5/2026",
+  "target": {
+    "backend": "http://141.253.114.218",
+    "community": "http://141.253.114.218:3080",
+    "react": "http://141.253.114.218"
+  },
+  "summary": {
+    "passed": 33,
+    "failed": 26,
+    "total": 59,
+    "percentage": 56,
+    "status": "🔴 ISSUES"
+  },
+  "failures": [
+    {
+      "label": "GET /UserManagement/GetAuditTrail → 200",
+      "reason": "Status: 302"
+    },
+    {
+      "label": "GET /CodingChallenge/Solve/1 → 200",
+      "reason": "Status: 302"
+    },
+    {
+      "label": "POST /CodingChallenge/Submit → 200",
+      "reason": "Status: 302"
+    },
+    {
+      "label": "GET /Dashboard/GetAnalyticsData → 200",
+      "reason": "Status: 401"
+    },
+    {
+      "label": "GET / (Index Forum) có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/qa có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/groups có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/events có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/resources có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/leaderboard có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/members có SignalR script",
+      "reason": ""
+    },
+    {
+      "label": "GET /hub/mentor → 200/302",
+      "reason": "Status: 404"
+    },
+    {
+      "label": "GET /api/QaApi/questions → 200",
+      "reason": "Status 404 — Container Community chưa deploy (cần: docker compose up -d --build)"
+    },
+    {
+      "label": "GET /api/GroupApi → 200",
+      "reason": "Status 404 — Container Community chưa deploy (cần: docker compose up -d --build)"
+    },
+    {
+      "label": "GET /api/EventApi → 200",
+      "reason": "Status 404 — Container Community chưa deploy (cần: docker compose up -d --build)"
+    },
+    {
+      "label": "GET /api/ResourceApi → 200",
+      "reason": "Status 404 — Container Community chưa deploy (cần: docker compose up -d --build)"
+    },
+    {
+      "label": "GET /api/LeaderboardApi → 200",
+      "reason": "Status 404 — Container Community chưa deploy (cần: docker compose up -d --build)"
+    },
+    {
+      "label": "POST /api/QaApi/questions Guest → 401/302/403",
+      "reason": "Status: 404 (Phải block Guest)"
+    },
+    {
+      "label": "POST /api/GroupApi/join/1 Guest → 401/302/403",
+      "reason": "Status: 404 (Phải block Guest)"
+    },
+    {
+      "label": "POST /api/EventApi/rsvp/1 Guest → 401/302/403",
+      "reason": "Status: 404 (Phải block Guest)"
+    },
+    {
+      "label": "POST /api/ResourceApi Guest → 401/302/403",
+      "reason": "Status: 404 (Phải block Guest)"
+    },
+    {
+      "label": "Leaderboard API → 200",
+      "reason": "Status: 404"
+    },
+    {
+      "label": "Community /hubs/community/negotiate → 200",
+      "reason": "Status: 404"
+    },
+    {
+      "label": "GET Community /api/LeaderboardApi (Widget data) → 200",
+      "reason": "Status: 404"
+    },
+    {
+      "label": "GET Community /api/EventApi (Events Widget) → 200",
+      "reason": "Status: 404"
+    },
+    {
+      "label": "GET Community /api/GroupApi (Groups Widget) → 200",
+      "reason": "Status: 404"
+    }
+  ]
+}
