@@ -46,23 +46,23 @@ try
 {
     var redisForDP = ConnectionMultiplexer.Connect(redisConnStr);
     builder.Services.AddDataProtection()
-        .SetApplicationName("SmartLMS")          // PHẢI khớp với Backend
-        .PersistKeysToStackExchangeRedis(redisForDP, "DataProtection-Keys");
+        .SetApplicationName("SmartLMS-AI")          // PHẢI khớp hoàn toàn với Backend
+        .PersistKeysToStackExchangeRedis(redisForDP, "SmartLMS-DataProtection-Keys");
 }
 catch
 {
     // Fallback: nếu Redis chưa sẵn sàng (môi trường dev local)
     builder.Services.AddDataProtection()
-        .SetApplicationName("SmartLMS");
+        .SetApplicationName("SmartLMS-AI");
 }
 
 // ════════════════════════════════════════════════════════════════
 // 5. AUTHENTICATION - Cookie dùng chung với Backend
 // ════════════════════════════════════════════════════════════════
-builder.Services.AddAuthentication("Identity.Application")
-    .AddCookie("Identity.Application", options =>
+builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
-        options.Cookie.Name     = ".SmartLMS.Auth";
+        options.Cookie.Name     = "SmartLMS_Auth"; // Phải khớp với Backend
         // Dùng chung domain để share session giữa Port 80 & 3080
         // Trong môi trường dev: để trống. Production: ".yourdomain.com"
         options.Cookie.Domain   = builder.Configuration["Auth__CookieDomain"] ?? "";

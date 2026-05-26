@@ -80,10 +80,10 @@ public class AuthController : Controller
             new Claim(ClaimTypes.Role,           user.Role ?? "Student"),
         };
 
-        var identity  = new ClaimsIdentity(claims, "Identity.Application");
+        var identity  = new ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
 
-        await HttpContext.SignInAsync("Identity.Application", principal, new AuthenticationProperties
+        await HttpContext.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
         {
             IsPersistent     = model.RememberMe,
             ExpiresUtc       = model.RememberMe
@@ -146,10 +146,10 @@ public class AuthController : Controller
             new Claim(ClaimTypes.Role,           "Student"),
         };
 
-        var identity  = new ClaimsIdentity(claims, "Identity.Application");
+        var identity  = new ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
 
-        await HttpContext.SignInAsync("Identity.Application", principal);
+        await HttpContext.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
         TempData["WelcomeMessage"] = $"Chào mừng {user.FullName} đến với SmartLMS Community Hub!";
         return Redirect("/hub");
@@ -161,7 +161,7 @@ public class AuthController : Controller
     [Authorize]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync("Identity.Application");
+        await HttpContext.SignOutAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
         return Redirect("/Auth/Login");
     }
 }
