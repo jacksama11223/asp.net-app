@@ -80,6 +80,27 @@ public class CommunityController : Controller
         return Redirect("/hub");
     }
 
+    // Post Details (Phase 1)
+    [HttpGet("post/{id}")]
+    public async Task<IActionResult> Details(int id, [FromServices] SmartLMSContext db)
+    {
+        var post = await db.Posts
+            .Include(p => p.Author)
+            .Include(p => p.Comments)
+            .FirstOrDefaultAsync(p => p.PostId == id);
+
+        if (post == null || (!post.IsPublished && !User.IsInRole("Admin") && !User.IsInRole("Moderator") && post.AuthorId.ToString() != User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
+        {
+            return NotFound("Bài viết không tồn tại hoặc chưa được duyệt.");
+        }
+
+        // Tăng view count
+        post.ViewCount++;
+        await db.SaveChangesAsync();
+
+        return View(post);
+    }
+
     // 2. Resource Sharing
     [HttpGet("resources")]
     [HttpGet("/Community/Resources")]
