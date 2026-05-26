@@ -95,7 +95,7 @@
                             </div>
 
                             <button 
-                                @@click="registered = !registered; window.showToast && window.showToast(registered ? 'Đã đăng ký tham gia sự kiện!' : 'Đã hủy đăng ký sự kiện.')"
+                                @@click="rsvpEvent(@evt.Id, $data)"
                                 :class="registered ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 flex items-center gap-1 border border-emerald-200/50' : 'bg-cyan-600 hover:bg-cyan-700 text-white hover:shadow border border-transparent'"
                                 class="shrink-0 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm"
                             >
@@ -125,10 +125,32 @@
     document.addEventListener('alpine:initialized', () => {
         Alpine.effect(() => {
             setTimeout(() => {
-                if(window.lucide) {
-                    lucide.createIcons();
-                }
+                if(window.lucide) { lucide.createIcons(); }
             }, 50);
         });
     });
+
+    async function rsvpEvent(eventId, componentData) {
+        if (componentData.registered) return; // Đã đăng ký rồi
+
+        try {
+            const res = await fetch(`/api/EventApi/rsvp/${eventId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                window.showToast && window.showToast('✅ ' + data.message);
+                componentData.registered = true;
+            } else if (res.status === 401) {
+                window.location.href = '/Auth/Login?returnUrl=/hub/events';
+            } else {
+                const err = await res.json();
+                window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi đăng ký sự kiện.'));
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
 </script>

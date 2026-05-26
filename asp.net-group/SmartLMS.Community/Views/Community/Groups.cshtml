@@ -15,13 +15,24 @@
             <span>Danh sách phòng tự học và nhóm học</span>
         </div>
 
-        <button 
-            @@click="isCreatingGroup = !isCreatingGroup"
-            class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-md active:scale-95"
-        >
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            Tạo nhóm học mới
-        </button>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <button 
+                @@click="isCreatingGroup = !isCreatingGroup"
+                class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-md active:scale-95"
+            >
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Tạo nhóm học mới
+            </button>
+        }
+        else
+        {
+            <a href="/Auth/Login?returnUrl=/hub/groups"
+               class="flex items-center gap-1.5 bg-slate-100 hover:bg-cyan-50 text-slate-600 hover:text-cyan-700 text-sm font-bold px-4 py-2 rounded-xl transition-all border border-slate-200">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+                Đăng nhập để tạo nhóm
+            </a>
+        }
     </div>
 
     <!-- Creation form slide -->
@@ -133,7 +144,7 @@
                         </span>
 
                         <button 
-                            @@click="joined = !joined"
+                            @@click="joinGroup(@grp.Id, $data)"
                             :class="joined ? 'bg-cyan-50 text-cyan-600 border border-cyan-100 hover:bg-cyan-100 flex items-center gap-1' : 'bg-cyan-600 hover:bg-cyan-700 text-white hover:shadow border border-transparent'"
                             class="text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm"
                         >
@@ -162,10 +173,32 @@
     document.addEventListener('alpine:initialized', () => {
         Alpine.effect(() => {
             setTimeout(() => {
-                if(window.lucide) {
-                    lucide.createIcons();
-                }
+                if(window.lucide) { lucide.createIcons(); }
             }, 50);
         });
     });
+
+    async function joinGroup(groupId, componentData) {
+        if (componentData.joined) return; // Đã join rồi
+
+        try {
+            const res = await fetch(`/api/GroupApi/join/${groupId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                window.showToast && window.showToast('✅ ' + data.message);
+                componentData.joined = true;
+            } else if (res.status === 401) {
+                window.location.href = '/Auth/Login?returnUrl=/hub/groups';
+            } else {
+                const err = await res.json();
+                window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi tham gia nhóm.'));
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
 </script>

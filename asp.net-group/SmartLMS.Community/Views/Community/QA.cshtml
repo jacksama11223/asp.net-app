@@ -54,7 +54,9 @@
             </div>
 
             <div class="flex justify-end pt-1">
-                <button type="button" @@click="isAsking = false; window.showToast && window.showToast('Đã ghi nhận câu hỏi, chờ admin phê duyệt!')" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95">
+                <button type="button" id="btn-submit-qa"
+                    @@click="submitQuestion()"
+                    class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95">
                     Đăng câu hỏi
                 </button>
             </div>
@@ -215,10 +217,75 @@
     document.addEventListener('alpine:initialized', () => {
         Alpine.effect(() => {
             setTimeout(() => {
-                if(window.lucide) {
-                    lucide.createIcons();
-                }
+                if(window.lucide) { lucide.createIcons(); }
             }, 50);
         });
     });
+
+    // Lấy AntiForgery token từ cookie (cho POST requests)
+    function getToken() {
+        return document.querySelector('[name="__RequestVerificationToken"]')?.value || '';
+    }
+
+    // Gửi câu hỏi mới lên API
+    async function submitQuestion() {
+        const title   = document.getElementById('qa-title')?.value?.trim();
+        const content = document.getElementById('qa-content')?.value?.trim();
+        const tags    = document.getElementById('qa-tags')?.value?.trim();
+
+        if (!title || !content) {
+            window.showToast && window.showToast('⚠️ Vui lòng nhập tiêu đề và nội dung!');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/QaApi/questions', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ title, content, tags }),
+            });
+
+            if (res.ok) {
+                window.showToast && window.showToast('✅ Câu hỏi đã được gửi! Trang sẽ tải lại...');
+                setTimeout(() => location.reload(), 1500);
+            } else if (res.status === 401) {
+                window.location.href = '/Auth/Login?returnUrl=/hub/qa';
+            } else {
+                const err = await res.json();
+                window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi gửi câu hỏi'));
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
+
+    // Gửi câu trả lời
+    async function submitAnswer(questionId) {
+        const textarea = document.querySelector(`[data-qid="${questionId}"] textarea`);
+        const content  = textarea?.value?.trim();
+
+        if (!content) {
+            window.showToast && window.showToast('⚠️ Vui lòng nhập nội dung câu trả lời!');
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/QaApi/questions/${questionId}/answers`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ content }),
+            });
+
+            if (res.ok) {
+                window.showToast && window.showToast('✅ Câu trả lời đã được gửi!');
+                textarea.value = '';
+            } else if (res.status === 401) {
+                window.location.href = '/Auth/Login?returnUrl=/hub/qa';
+            } else {
+                window.showToast && window.showToast('❌ Lỗi gửi câu trả lời.');
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
 </script>

@@ -1,0 +1,6 @@
+{
+  "name": "SmartLMS Community Hub",
+  "description": "An interactive, fully featured community platform for distributed learning, with discussions, resource sharing, event listings, member directory, Q&A, study groups, and a leaderboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -25,13 +25,24 @@
             </button>
         </div>
 
-        <button 
-            @@click="isUploading = !isUploading"
-            class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-md active:scale-95"
-        >
-            <i data-lucide="upload" class="w-4 h-4"></i>
-            Đăng tài liệu mới
-        </button>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <button 
+                @@click="isUploading = !isUploading"
+                class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-md active:scale-95"
+            >
+                <i data-lucide="upload" class="w-4 h-4"></i>
+                Đăng tài liệu mới
+            </button>
+        }
+        else
+        {
+            <a href="/Auth/Login?returnUrl=/hub/resources"
+               class="flex items-center gap-1.5 bg-slate-100 hover:bg-cyan-50 text-slate-600 hover:text-cyan-700 text-sm font-bold px-4 py-2 rounded-xl transition-all border border-slate-200">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+                Đăng nhập để đăng tài liệu
+            </a>
+        }
     </div>
 
     <!-- Upload Slide Panel -->
@@ -85,7 +96,7 @@
             </div>
 
             <div class="flex justify-end pt-2">
-                <button type="button" @@click="isUploading = false; window.showToast && window.showToast('Đã tải lên tài liệu thành công!')" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95">
+                <button type="button" @@click="uploadResource()" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95">
                     Xác nhận tải lên
                 </button>
             </div>
@@ -180,10 +191,40 @@
     document.addEventListener('alpine:initialized', () => {
         Alpine.effect(() => {
             setTimeout(() => {
-                if(window.lucide) {
-                    lucide.createIcons();
-                }
+                if(window.lucide) { lucide.createIcons(); }
             }, 50);
         });
     });
+
+    async function uploadResource() {
+        // Collect form data
+        const title = document.querySelector('input[placeholder*="Tiêu đề"]')?.value?.trim();
+        const desc  = document.querySelector('textarea')?.value?.trim();
+        
+        if (!title) {
+            window.showToast && window.showToast('⚠️ Vui lòng nhập tiêu đề tài liệu!');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/ResourceApi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: title, description: desc, fileType: "PDF", subject: ".NET Development" })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                window.showToast && window.showToast('✅ ' + data.message);
+                setTimeout(() => location.reload(), 1500);
+            } else if (res.status === 401) {
+                window.location.href = '/Auth/Login?returnUrl=/hub/resources';
+            } else {
+                const err = await res.json();
+                window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi tải lên tài liệu.'));
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
 </script>
