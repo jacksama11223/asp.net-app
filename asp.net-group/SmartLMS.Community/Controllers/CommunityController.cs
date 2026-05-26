@@ -1,10 +1,11 @@
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartLMS.Business;
+using SmartLMS.Models;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Security.Claims;
+using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SmartLMS.Community.Controllers;
 
@@ -21,6 +22,7 @@ public class CommunityController : Controller
         _forumService = forumService;
     }
 
+    // 1. Discussion Forum (Default) - NOW USING FORUM SERVICE FOR THE NEW UI
     [HttpGet("")]
     public async Task<IActionResult> Index(int page = 1)
     {
@@ -36,7 +38,7 @@ public class CommunityController : Controller
                 Category = string.IsNullOrEmpty(p.Category) ? "Chung" : p.Category,
                 AuthorName = p.Author?.FullName ?? "?n danh",
                 AuthorRole = "H?c viên",
-                AuthorAvatar = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(p.Author?.FullName ?? "User")}",
+                AuthorAvatar = "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(p.Author?.FullName ?? "User")",
                 CreatedAt = p.CreatedAt,
                 Likes = p.VoteCount,
                 CommentsCount = p.Comments?.Count ?? 0
@@ -44,6 +46,62 @@ public class CommunityController : Controller
         };
         return View(viewModel);
     }
+
+    // 2. Resource Sharing
+    [HttpGet("resources")]
+    [HttpGet("/Community/Resources")]
+    public async Task<IActionResult> Resources(string? fileType, string? subject)
+    {
+        var resources = await _communityService.GetResourcesAsync(fileType, subject);
+        return View(resources);
+    }
+
+    // 3. Event Listings
+    [HttpGet("events")]
+    [HttpGet("/Community/Events")]
+    public async Task<IActionResult> Events()
+    {
+        var events = await _communityService.GetEventsAsync();
+        return View(events);
+    }
+
+    // 4. Member Directory
+    [HttpGet("members")]
+    [HttpGet("/Community/Members")]
+    public async Task<IActionResult> Members(string? role, string? skill)
+    {
+        var members = await _communityService.GetMembersAsync(role, skill);
+        return View(members);
+    }
+
+    // 5. Q&A Section
+    [HttpGet("qa")]
+    [HttpGet("/Community/QA")]
+    public async Task<IActionResult> QA(string status = "All")
+    {
+        var questions = await _communityService.GetQuestionsAsync(status);
+        return View(questions);
+    }
+
+    // 6. Study Groups
+    [HttpGet("groups")]
+    [HttpGet("/Community/Groups")]
+    public async Task<IActionResult> Groups()
+    {
+        var groups = await _communityService.GetStudyGroupsAsync();
+        return View(groups);
+    }
+
+    // 7. Leaderboard
+    [HttpGet("leaderboard")]
+    [HttpGet("/Community/Leaderboard")]
+    public async Task<IActionResult> Leaderboard()
+    {
+        var topUsers = await _communityService.GetLeaderboardAsync();
+        return View(topUsers);
+    }
+
+    // --- NEW API ENDPOINTS FOR FORUM FEED ---
 
     [HttpPost("SimulateAiDraft")]
     public async Task<IActionResult> SimulateAiDraft([FromBody] AiDraftRequest request)
@@ -62,12 +120,11 @@ public class CommunityController : Controller
     }
 
     [HttpPost("CompleteShareReward")]
-    // [Authorize]
     public async Task<IActionResult> CompleteShareReward([FromBody] ShareRewardRequest request)
     {
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-            userId = 1; // Fallback for testing without Auth
+            userId = 1;
 
         bool success = await _forumService.RewardShareExperienceAsync(userId, request.PostId, request.Format);
         if (success) return Ok(new { success = true, message = "B?n dã du?c c?ng +15 XP!" });
