@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SmartLMS.Business;
 using SmartLMS.Models;
+using SmartLMS.Community.Hubs;
 using System.Security.Claims;
 
 namespace SmartLMS.Community.Controllers;
@@ -11,7 +13,12 @@ namespace SmartLMS.Community.Controllers;
 public class ResourceApiController : ControllerBase
 {
     private readonly ICommunityService _service;
-    public ResourceApiController(ICommunityService service) => _service = service;
+    private readonly IHubContext<CommunityHub> _hubContext;
+    public ResourceApiController(ICommunityService service, IHubContext<CommunityHub> hubContext) 
+    { 
+        _service = service; 
+        _hubContext = hubContext; 
+    }
 
     // GET /api/ResourceApi?fileType=pdf&subject=csharp
     [HttpGet]
@@ -44,6 +51,9 @@ public class ResourceApiController : ControllerBase
         };
 
         var result = await _service.UploadResourceAsync(resource);
+
+        await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"Tài liệu mới vừa được đăng: '{req.Title}'");
+
         return Ok(new { success = true, resourceId = result.Id, message = "Tài liệu đã được tải lên thành công! +20 XP 📚" });
     }
 }

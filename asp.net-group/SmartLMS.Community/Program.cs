@@ -5,6 +5,7 @@ using SmartLMS.Models.Security;
 using SmartLMS.Business.Security;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
+using SmartLMS.Community.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -104,5 +106,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllers();
+app.MapHub<CommunityHub>("/hubs/community");
 
 app.Run();

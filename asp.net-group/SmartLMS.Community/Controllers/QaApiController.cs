@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SmartLMS.Business;
 using SmartLMS.Models;
+using SmartLMS.Community.Hubs;
 using System.Security.Claims;
 
 namespace SmartLMS.Community.Controllers;
@@ -11,7 +13,13 @@ namespace SmartLMS.Community.Controllers;
 public class QaApiController : ControllerBase
 {
     private readonly ICommunityService _service;
-    public QaApiController(ICommunityService service) => _service = service;
+    private readonly IHubContext<CommunityHub> _hubContext;
+
+    public QaApiController(ICommunityService service, IHubContext<CommunityHub> hubContext)
+    {
+        _service = service;
+        _hubContext = hubContext;
+    }
 
     // GET /api/QaApi/questions?status=All
     [HttpGet("questions")]
@@ -42,7 +50,11 @@ public class QaApiController : ControllerBase
         };
 
         var result = await _service.AskQuestionAsync(question);
-        return Ok(new { success = true, questionId = result.Id, message = "Câu hỏi đã được gửi!" });
+
+        // Notify via SignalR
+        await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"Có câu hỏi mới: '{req.Title}'");
+
+        return Ok(new { success = true, questionId = result.Id, message = "Câu hỏi đã được gửi thành công!" });
     }
 
     // POST /api/QaApi/questions/{id}/answers  [Authorize]
@@ -67,9 +79,14 @@ public class QaApiController : ControllerBase
         };
 
         var result = await _service.AddAnswerAsync(answer);
-        return Ok(new { success = true, answerId = result.Id, message = "Câu trả lời đã được gửi!" });
+
+        // Notify via SignalR
+        await _hubContext.Clients.All.SendAsync("ReceiveNotification", "Có người vừa thảo luận về một câu hỏi!");
+
+        return Ok(new { success = true, answerId = result.Id, message = "Câu trả lời đã được thêm!" });
     }
 }
 
 public record AskQuestionRequest(string Title, string Content);
 public record AddAnswerRequest(string Content);
+

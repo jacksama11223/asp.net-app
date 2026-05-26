@@ -262,7 +262,26 @@
             }, 3000);
         }
     </script>
+    </script>
     
+    <!-- SignalR for Real-time Notifications -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
+    <script>
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/hubs/community")
+            .withAutomaticReconnect()
+            .build();
+
+        hubConnection.on("ReceiveNotification", function (message) {
+            if(window.showToast) window.showToast("🔔 " + message);
+        });
+
+        hubConnection.start().catch(function (err) {
+            console.error("SignalR Error:", err.toString());
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
