@@ -355,9 +355,8 @@
 
         // Form Submit
         document.getElementById('post-form').addEventListener('submit', (e) => {
-            // Let the form submit natively via POST to /hub/post/new
-            // Just clear draft before it redirects
-            clearDraft();
+            // DO NOT clear draft here because it will empty the input values before they are sent to the server!
+            // The localStorage draft will just be overwritten next time anyway.
         });
     });
 
