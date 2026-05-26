@@ -28,6 +28,7 @@ public class CommunityEvent
     public string EventType { get; set; } = string.Empty; // Webinar, Workshop, Coding Session
     public int MaxParticipants { get; set; }
     public string Status { get; set; } = "Upcoming";
+    public bool IsApproved { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
     public ICollection<EventParticipant> Participants { get; set; } = new List<EventParticipant>();

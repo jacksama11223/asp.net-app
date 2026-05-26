@@ -14,6 +14,7 @@ public class StudyGroup
     public int ProgressPercentage { get; set; }
     public int EXP { get; set; }
     public bool IsPrivate { get; set; }
+    public bool IsApproved { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<StudyGroupMember> Members { get; set; } = new List<StudyGroupMember>();
@@ -38,6 +39,7 @@ public class CommunityQuestion
     public User? Author { get; set; }
     public string Status { get; set; } = "Unsolved"; // Solved, Unsolved
     public int? BestAnswerId { get; set; }
+    public bool IsApproved { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<CommunityAnswer> Answers { get; set; } = new List<CommunityAnswer>();
 }
