@@ -136,7 +136,37 @@ public class CommunityController : Controller
         post.VoteCount++; // Có thể thưởng điểm tương tác cho bài viết
         await db.SaveChangesAsync();
 
-        return Redirect($"/hub/post/{id}");
+        var authorName = User.Identity?.Name ?? $"User {userId}";
+        var avatarUrl = User.FindFirst("AvatarUrl")?.Value ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(authorName)}&background=random";
+
+        return Json(new {
+            success = true,
+            comment = new {
+                id = comment.CommentId,
+                content = comment.Content,
+                authorId = comment.AuthorId,
+                authorName = authorName,
+                authorAvatar = avatarUrl,
+                createdAt = comment.CreatedAt.ToString("dd/MM HH:mm")
+            }
+        });
+    }
+
+    [HttpPost("post/{id}/upvote")]
+    [Authorize]
+    public async Task<IActionResult> Upvote(int id, [FromServices] SmartLMSContext db)
+    {
+        var post = await db.Posts.FindAsync(id);
+        if (post == null || (!post.IsPublished && !User.IsInRole("Admin") && !User.IsInRole("Moderator")))
+        {
+            return NotFound(new { success = false, message = "Bài viết không tồn tại." });
+        }
+
+        // Logic thực tế có thể cần bảng UserUpvotes để tránh spam, nhưng ở đây tạm tăng số đếm
+        post.VoteCount++;
+        await db.SaveChangesAsync();
+
+        return Json(new { success = true, newVoteCount = post.VoteCount });
     }
 
     // 2. Resource Sharing

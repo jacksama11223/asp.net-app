@@ -37,9 +37,9 @@
 
         <div class="flex items-center justify-between pt-6 border-t border-white/10">
             <div class="flex items-center gap-4">
-                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-colors text-sm font-bold">
+                <button onclick="upvotePost(@Model.PostId, this)" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-colors text-sm font-bold cursor-pointer">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
-                    @Model.VoteCount
+                    <span id="voteCount_@Model.PostId">@Model.VoteCount</span>
                 </button>
                 <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-colors text-sm font-bold">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
@@ -63,21 +63,22 @@
     <div class="bg-gray-800/40 border border-white/10 rounded-2xl p-6 lg:p-8 backdrop-blur-xl">
         <h3 class="text-lg font-black text-white mb-6">Bình luận (@(Model.Comments?.Count ?? 0))</h3>
         
-        <!-- Form nhập bình luận (Đã kết nối Backend) -->
-        <form action="/hub/post/@Model.PostId/comment" method="POST" class="flex gap-4 mb-8">
+        <!-- Form nhập bình luận (AJAX) -->
+        <form id="commentForm" onsubmit="submitComment(event, @Model.PostId)" class="flex gap-4 mb-8">
             <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(User.Identity?.Name ?? "U")&background=random" class="w-10 h-10 rounded-full ring-2 ring-white/10" />
             <div class="flex-1">
-                <textarea name="content" required rows="3" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm text-white placeholder-white/30 focus:ring-2 focus:ring-cyan-500/50 outline-none resize-none transition-all" placeholder="Viết bình luận của bạn... (Hỗ trợ Markdown)"></textarea>
-                <div class="flex justify-end mt-2">
-                    <button type="submit" class="bg-cyan-500 hover:bg-cyan-400 text-black px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] cursor-pointer border-none">
-                        Gửi bình luận
+                <textarea id="commentContent" name="content" required rows="3" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-white/30 focus:bg-white/10 focus:border-cyan-500/50 outline-none resize-none transition-all shadow-inner" placeholder="Viết bình luận của bạn... (Hỗ trợ Markdown)"></textarea>
+                <div class="flex justify-end mt-3">
+                    <button type="submit" id="btnSubmitComment" class="bg-cyan-500 hover:bg-cyan-400 text-black px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] cursor-pointer border-none flex items-center gap-2">
+                        <span>Gửi bình luận</span>
+                        <svg class="w-4 h-4 hidden" id="commentSpinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     </button>
                 </div>
             </div>
         </form>
 
         <!-- Danh sách bình luận -->
-        <div class="space-y-6">
+        <div id="commentsList" class="space-y-6">
             @if (Model.Comments != null && Model.Comments.Any())
             {
                 foreach (var c in Model.Comments.Where(x => !x.IsDeleted).OrderBy(x => x.CreatedAt))
@@ -113,3 +114,82 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        async function upvotePost(postId, btn) {
+            const res = await fetch(`/hub/post/${postId}/upvote`, { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById(`voteCount_${postId}`).innerText = data.newVoteCount;
+                btn.classList.add('bg-cyan-500/30', 'text-cyan-300');
+                btn.classList.remove('bg-cyan-500/10', 'text-cyan-400');
+            } else {
+                alert(data.message || 'Lỗi khi upvote.');
+            }
+        }
+
+        async function submitComment(e, postId) {
+            e.preventDefault();
+            const content = document.getElementById('commentContent').value;
+            if (!content.trim()) return;
+
+            const btn = document.getElementById('btnSubmitComment');
+            const spinner = document.getElementById('commentSpinner');
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('content', content);
+
+            try {
+                const res = await fetch(`/hub/post/${postId}/comment`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success) {
+                        const noComment = document.getElementById('noCommentMsg');
+                        if (noComment) noComment.remove();
+
+                        const c = data.comment;
+                        const formattedContent = c.content.replace(/\n/g, '<br/>');
+                        const html = `
+                            <div class="flex gap-4 animate-fade-in">
+                                <a href="/profile/${c.authorId}" title="Xem hồ sơ">
+                                    <img src="${c.authorAvatar}" alt="${c.authorName}" class="w-10 h-10 rounded-full ring-1 ring-white/20 hover:ring-cyan-500 transition-all cursor-pointer" />
+                                </a>
+                                <div class="flex-1">
+                                    <div class="bg-black/30 rounded-2xl rounded-tl-none p-4 border border-white/5">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <a href="/profile/${c.authorId}" class="text-white font-bold text-sm hover:text-cyan-400 transition-colors">${c.authorName}</a>
+                                            <span class="text-white/30 text-[10px]">${c.createdAt}</span>
+                                        </div>
+                                        <div class="text-white/70 text-sm">${formattedContent}</div>
+                                    </div>
+                                    <div class="flex items-center gap-4 mt-2 px-2">
+                                        <button class="text-white/40 hover:text-cyan-400 text-xs font-bold transition-colors">Thích</button>
+                                        <button class="text-white/40 hover:text-cyan-400 text-xs font-bold transition-colors">Phản hồi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        const list = document.getElementById('commentsList');
+                        list.insertAdjacentHTML('beforeend', html);
+                        document.getElementById('commentForm').reset();
+                    }
+                } else {
+                    alert('Lỗi gửi bình luận (Hãy đăng nhập).');
+                }
+            } catch (err) {
+                alert('Lỗi kết nối.');
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }
+        }
+    </script>
+}
