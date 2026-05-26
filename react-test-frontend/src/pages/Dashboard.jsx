@@ -11,6 +11,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL, getDashboardStats, getEngagementChart } from '../api';
+import { CommunitySidebarWidget } from '../components/CommunityWidget';
 import { COURSE_TRENDS, AI_RISK_DATA } from '../utils/mockData';
 import { toast } from 'sonner';
 
@@ -371,6 +372,9 @@ const StudentDashboard = ({ user, stats, chartData, myAnalytics, navigate }) => 
                 )}
               </Stack>
             </CardWrapper>
+
+            {/* Community Hub Widgets */}
+            <CommunitySidebarWidget />
           </Stack>
         </Grid.Col>
       </Grid>

@@ -100,3 +100,44 @@ export const getStudentBookings = async (apiClient) => {
   const response = await apiClient.get('/api/booking/student');
   return response.data;
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Community Hub APIs (Port 3080 via Nginx proxy /community-api)
+// ─────────────────────────────────────────────────────────────────────────────
+const COMMUNITY_BASE = (() => {
+  if (typeof window === 'undefined') return 'http://localhost:3080';
+  const h = window.location.hostname;
+  // Production: Nginx forward /community-api/ → 3080
+  return h === 'localhost' || h === '127.0.0.1'
+    ? `http://${h}:3080`
+    : `${window.location.protocol}//${h}`; // handled by nginx /community-api
+})();
+
+const communityFetch = async (path) => {
+  const res = await fetch(`${COMMUNITY_BASE}${path}`, {
+    credentials: 'include', // gửi cookie SSO
+  });
+  if (!res.ok) throw new Error(`Community API error: ${res.status}`);
+  return res.json();
+};
+
+export const getCommunityLeaderboard = () =>
+  communityFetch('/api/LeaderboardApi');
+
+export const getCommunityEvents = () =>
+  communityFetch('/api/EventApi');
+
+export const getCommunityGroups = () =>
+  communityFetch('/api/GroupApi');
+
+export const getCommunityStats = async () => {
+  // Aggregate stats: events + groups count
+  const [events, groups] = await Promise.all([
+    communityFetch('/api/EventApi'),
+    communityFetch('/api/GroupApi'),
+  ]);
+  return {
+    totalEvents: Array.isArray(events) ? events.length : 0,
+    totalGroups: Array.isArray(groups) ? groups.length : 0,
+  };
+};
