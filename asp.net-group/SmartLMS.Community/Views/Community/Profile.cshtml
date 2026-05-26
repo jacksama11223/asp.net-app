@@ -91,8 +91,8 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach (var userBadge in Model.Badges)
                         {
-                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20 hover:scale-110 transition-transform cursor-help" title="@userBadge.Badge?.Name">
-                                <img src="@userBadge.Badge?.IconUrl" alt="@userBadge.Badge?.Name" class="w-8 h-8 object-contain" />
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20 hover:scale-110 transition-transform cursor-help" title="@userBadge.BadgeName">
+                                <img src="@userBadge.BadgeIcon" alt="@userBadge.BadgeName" class="w-8 h-8 object-contain" />
                             </div>
                         }
                     </div>

@@ -3,7 +3,7 @@
     Layout = "_CommunityLayout";
     ViewData["Title"] = Model.Title;
     var authorName = Model.Author?.FullName ?? "Ẩn danh";
-    var avatarUrl = Model.Author?.AvatarUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(authorName)}&background=random";
+    var avatarUrl = Model.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(authorName)}&background=random";
 }
 
 <div class="max-w-4xl mx-auto pb-10">
@@ -83,7 +83,7 @@
                 foreach (var c in Model.Comments.Where(x => !x.IsDeleted).OrderBy(x => x.CreatedAt))
                 {
                     var cAuthor = c.Author?.FullName ?? $"User {c.AuthorId}";
-                    var cAvatar = c.Author?.AvatarUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cAuthor)}&background=random";
+                    var cAvatar = c.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cAuthor)}&background=random";
                     <div class="flex gap-4">
                         <a href="/profile/@c.AuthorId" title="Xem hồ sơ"><img src="@cAvatar" alt="@cAuthor" class="w-10 h-10 rounded-full ring-1 ring-white/20 hover:ring-cyan-500 transition-all cursor-pointer" /></a>
                         <div class="flex-1">
