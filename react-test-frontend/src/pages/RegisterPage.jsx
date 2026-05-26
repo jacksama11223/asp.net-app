@@ -159,7 +159,7 @@ export const RegisterPage = () => {
 
               <Box mt="sm" className="flex justify-center">
                 <ReCAPTCHA
-                  sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || "YOUR_RECAPTCHA_SITE_KEY_HERE"}
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
                   onChange={handleCaptchaChange}
                 />
               </Box>
