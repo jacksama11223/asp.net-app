@@ -128,47 +128,22 @@
     <!-- Main Container Workspace layout -->
     <main class="container mx-auto px-4 py-6 md:py-8 flex flex-col lg:flex-row gap-6 md:gap-8 flex-1">
         
-        <!-- Left Sidebar: Channels & Tags -->
-        <aside class="w-56 hidden xl:flex flex-col gap-2 shrink-0 select-none">
-            <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Kênh học tập & Thảo luận</div>
-            
-            <a href="/hub" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Index" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
-                <span class="@(currentAction == "Index" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Thảo luận chung
-            </a>
-            
-            <a href="/hub/qa" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "QA" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
-                <span class="@(currentAction == "QA" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Giải đáp thắc mắc (Q&A)
-            </a>
-
-            <a href="/hub/resources" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Resources" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
-                <span class="@(currentAction == "Resources" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Kho tài nguyên
-            </a>
-
-            <a href="/hub/events" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Events" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
-                <span class="@(currentAction == "Events" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Tin tức & Sự kiện
-            </a>
-
-            <a href="/hub/groups" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Groups" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
-                <span class="@(currentAction == "Groups" ? "text-cyan-500 font-black text-sm" : "text-slate-400 text-sm")">#</span> Nhóm tự học
-            </a>
-
-            <a href="/hub/mentor" class="flex items-center gap-3 px-3.5 py-2.5 text-left text-xs font-bold rounded-xl transition-all @(currentAction == "Mentor" ? "bg-white shadow-sm text-cyan-600 font-extrabold border border-cyan-100/55" : "text-slate-600 hover:bg-white hover:shadow-sm")">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0"></i>
-                <span class="truncate">Trợ lý AI Mentor (Hot)</span>
-            </a>
-
-            <div class="mt-6 px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Từ khóa tiêu biểu</div>
-            <div class="flex flex-wrap gap-2 px-3">
-                <button class="px-2 py-1 bg-cyan-100 text-cyan-700 text-[10px] font-bold rounded-lg hover:bg-cyan-200 transition-colors cursor-pointer">#dotnet</button>
-                <button class="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-lg hover:bg-blue-200 transition-colors cursor-pointer">#csharp</button>
-                <button class="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-lg hover:bg-purple-200 transition-colors cursor-pointer">#database</button>
-                <button class="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-lg hover:bg-emerald-200 transition-colors cursor-pointer">#algorithms</button>
-                <button class="px-2 py-1 bg-rose-100 text-rose-700 text-[10px] font-bold rounded-lg hover:bg-rose-200 transition-colors cursor-pointer">#ai</button>
+        <!-- Horizontal Toolbox & Tags -->
+        <div class="flex-1 min-w-0 flex flex-col gap-6">
+            <div class="bg-white px-4 py-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 select-none">
+                <div class="flex items-center gap-2">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Từ khóa tiêu biểu:</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-2 py-1 bg-cyan-100 text-cyan-700 text-[10px] font-bold rounded-lg hover:bg-cyan-200 transition-colors cursor-pointer">#dotnet</button>
+                        <button class="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-lg hover:bg-blue-200 transition-colors cursor-pointer">#csharp</button>
+                        <button class="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-lg hover:bg-purple-200 transition-colors cursor-pointer">#database</button>
+                        <button class="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-lg hover:bg-emerald-200 transition-colors cursor-pointer">#algorithms</button>
+                        <button class="px-2 py-1 bg-rose-100 text-rose-700 text-[10px] font-bold rounded-lg hover:bg-rose-200 transition-colors cursor-pointer">#ai</button>
+                    </div>
+                </div>
             </div>
-        </aside>
 
-        <!-- Main Content Panel -->
-        <div class="flex-1 min-w-0">
+            <!-- Main Content -->
             @RenderBody()
         </div>
 
