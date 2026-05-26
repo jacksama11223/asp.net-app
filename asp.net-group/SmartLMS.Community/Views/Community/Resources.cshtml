@@ -1,78 +1,189 @@
 @model IEnumerable<SmartLMS.Models.CommunityResource>
 @{
     Layout = "_CommunityLayout";
-    ViewData["Title"] = "Resource Sharing";
+    ViewData["Title"] = "Kho tài nguyên & Đề thi";
 }
 
-<div class="space-y-6">
-    <div class="flex justify-between items-end">
-        <div>
-            <h2 class="text-3xl font-bold text-slate-800">Resource Library</h2>
-            <p class="text-slate-500">Discover and share study materials with the community.</p>
+<!-- Thêm Alpine.js cho bộ lọc và modal -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div class="space-y-6" x-data="{ isUploading: false, activeSubject: 'All' }">
+    <!-- Search and filter header -->
+    <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-2 flex items-center gap-1">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 text-slate-400"></i> Môn học:
+            </span>
+            <button @@click="activeSubject = 'All'" :class="activeSubject === 'All' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Tất cả tài liệu
+            </button>
+            <button @@click="activeSubject = '.NET Development'" :class="activeSubject === '.NET Development' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                .NET Development
+            </button>
+            <button @@click="activeSubject = 'Database Systems'" :class="activeSubject === 'Database Systems' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Database Systems
+            </button>
         </div>
-        <button class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
-            Upload New Resource
+
+        <button 
+            @@click="isUploading = !isUploading"
+            class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-md active:scale-95"
+        >
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            Đăng tài liệu mới
         </button>
     </div>
 
-    <!-- Filters -->
-    <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
-        <span class="text-sm font-bold text-slate-400 uppercase tracking-wider">Filter by:</span>
-        <select class="bg-white border border-slate-200 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-cyan-500">
-            <option>All File Types</option>
-            <option>PDF</option>
-            <option>Video</option>
-            <option>Code</option>
-        </select>
-        <select class="bg-white border border-slate-200 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-cyan-500">
-            <option>All Subjects</option>
-            <option>Calculus</option>
-            <option>Python</option>
-            <option>Machine Learning</option>
-        </select>
+    <!-- Upload Slide Panel -->
+    <div 
+        x-show="isUploading"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        class="overflow-hidden" style="display: none;"
+    >
+        <form class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                    <i data-lucide="upload" class="w-4 h-4 text-cyan-500"></i>
+                    Chia sẻ tài liệu & Đề thi thử
+                </h3>
+                <button type="button" @@click="isUploading = false" class="text-xs text-slate-400 hover:text-slate-600 font-bold">
+                    Hủy bỏ
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <input type="text" required placeholder="Tiêu đề tài liệu (ví dụ: Tổng hợp đề thi thử DSA kỳ 1 năm 2025)" class="w-full bg-slate-50 border-none rounded-xl px-4 py-3 text-slate-800 font-medium placeholder-slate-400 outline-none focus:ring-2 focus:ring-cyan-500 transition-all text-sm" />
+
+                <textarea required placeholder="Mô tả nội dung tài liệu, cách tải hoặc tóm tắt các điểm quan trọng..." rows="3" class="w-full bg-slate-50 border-none rounded-xl p-4 text-slate-800 placeholder-slate-400 outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-all text-sm"></textarea>
+
+                <div class="grid grid-cols-4 gap-3">
+                    <div class="col-span-2 space-y-1">
+                        <label class="text-xs font-semibold text-slate-400">Môn học / Lĩnh vực</label>
+                        <select class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500">
+                            <option value=".NET Development">.NET Development</option>
+                            <option value="Database Systems">Database Systems</option>
+                            <option value="General Info">General Info</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-400">Định dạng</label>
+                        <select class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500">
+                            <option value="PDF">PDF</option>
+                            <option value="DOCX">DOCX</option>
+                            <option value="ZIP">ZIP</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-400">Dung lượng</label>
+                        <input type="text" value="2.4 MB" class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button type="button" @@click="isUploading = false; window.showToast && window.showToast('Đã tải lên tài liệu thành công!')" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95">
+                    Xác nhận tải lên
+                </button>
+            </div>
+        </form>
     </div>
 
-    <!-- Resource List -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        @foreach (var res in Model)
+    <!-- Grid of Resources -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @if (Model != null && Model.Any())
         {
-            <div class="glass-card rounded-2xl p-6 hover:shadow-xl hover:scale-[1.01] transition-all group">
-                <div class="flex gap-4">
-                    <div class="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center text-cyan-600">
-                        @if(res.FileType == "PDF") {
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        } else if(res.FileType == "Video") {
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        } else {
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                        }
+            foreach (var res in Model)
+            {
+                var isLiked = false; // Fake state
+                
+                <div 
+                    x-show="activeSubject === 'All' || activeSubject === '@res.Subject'"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    class="bg-white rounded-2xl p-5 border border-slate-100 flex gap-4 hover:shadow-md transition-all group cursor-pointer"
+                    x-data="{ liked: @(isLiked.ToString().ToLower()), likesCount: @res.VoteCount, downloads: @(new Random().Next(10, 500)) }"
+                >
+                    <!-- Left File Type Graphic Icon -->
+                    <div class="w-12 h-14 bg-cyan-50 group-hover:bg-cyan-100/80 rounded-xl flex flex-col items-center justify-center border border-cyan-100/50 shrink-0 text-cyan-600 font-bold transition-all">
+                        <i data-lucide="file-text" class="w-5 h-5 mb-0.5"></i>
+                        <span class="text-[9px] uppercase tracking-wider">@(res.FileType ?? "PDF")</span>
                     </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-bold text-lg group-hover:text-cyan-600 transition-all">@res.Title</h4>
-                            <div class="flex items-center gap-1 text-orange-400 font-bold">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                @res.Rating.ToString("F1")
+
+                    <!-- Right Details -->
+                    <div class="flex-1 min-w-0 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start gap-2">
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-md">
+                                    @res.Subject
+                                </span>
+                                <span class="text-[10px] text-slate-400 font-medium">
+                                    3.5 MB
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mt-1 mb-1 leading-snug group-hover:text-cyan-600 transition-all truncate">
+                                @res.Title
+                            </h4>
+                            <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                                @res.Description
+                            </p>
+                        </div>
+
+                        <!-- Footer of resource -->
+                        <div class="pt-3 mt-3 border-t border-slate-50 flex items-center justify-between text-xs text-slate-400">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-5 h-5 rounded-full overflow-hidden bg-slate-200">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@res.UploaderId" alt="Author" />
+                                </div>
+                                <span class="font-medium truncate max-w-[100px] text-slate-500">@(res.Uploader?.FullName ?? "Member")</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button 
+                                    @@click.stop="liked = !liked; likesCount = liked ? likesCount + 1 : likesCount - 1"
+                                    :class="liked ? 'text-rose-500 font-bold' : ''"
+                                    class="flex items-center gap-1 p-1 hover:text-rose-600 transition-all"
+                                >
+                                    <i data-lucide="thumbs-up" class="w-3.5 h-3.5" :class="liked ? 'fill-rose-500 text-rose-500' : ''"></i>
+                                    <span x-text="likesCount"></span>
+                                </button>
+
+                                <button 
+                                    @@click.stop="downloads++; window.showToast && window.showToast('Bắt đầu tải file tài liệu học tập của SmartLMS thành công!')"
+                                    class="flex items-center gap-1 bg-slate-100 hover:bg-cyan-600 hover:text-white text-slate-600 px-2.5 py-1 rounded-lg font-bold transition-all"
+                                >
+                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    <span x-text="downloads"></span>
+                                </button>
                             </div>
                         </div>
-                        <p class="text-sm text-slate-500 mt-1">Uploaded by @(res.Uploader?.FullName ?? "Unknown")</p>
-                        <div class="flex gap-2 mt-4">
-                            <span class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full">@res.Subject</span>
-                            <span class="bg-cyan-50 text-cyan-600 text-xs font-bold px-3 py-1 rounded-full">@res.FileType</span>
-                        </div>
                     </div>
                 </div>
-                <div class="mt-6 flex gap-3">
-                    <button class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 rounded-xl transition-all flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Download
-                    </button>
-                    <button class="px-4 border border-slate-200 hover:bg-slate-50 rounded-xl transition-all">
-                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    </button>
-                </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-1 md:col-span-2 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-2">
+                <i data-lucide="file" class="mx-auto text-slate-300 w-8 h-8"></i>
+                <p class="font-bold">Không tìm thấy tài liệu phù hợp.</p>
+                <p class="text-xs">Hãy sửa đổi nội dung tìm kiếm hoặc chuyển sang bộ lọc khác.</p>
             </div>
         }
     </div>
 </div>
+
+<script>
+    document.addEventListener('alpine:initialized', () => {
+        Alpine.effect(() => {
+            setTimeout(() => {
+                if(window.lucide) {
+                    lucide.createIcons();
+                }
+            }, 50);
+        });
+    });
+</script>

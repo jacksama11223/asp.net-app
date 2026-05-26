@@ -1,71 +1,207 @@
 @model IEnumerable<SmartLMS.Models.User>
 @{
     Layout = "_CommunityLayout";
-    ViewData["Title"] = "Member Directory";
+    ViewData["Title"] = "Danh mục Thành viên";
 }
 
-<div class="space-y-6">
-    <div class="flex justify-between items-end">
-        <div>
-            <h2 class="text-3xl font-bold text-slate-800">Member Directory</h2>
-            <p class="text-slate-500">Connect with mentors, leaders, and fellow students.</p>
+<!-- Thêm Alpine.js cho bộ lọc và Modal Nhắn tin -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div class="space-y-6" x-data="{ 
+    activeRole: 'all',
+    messagingMember: null,
+    messageText: '',
+    messagesLog: []
+}">
+    <!-- Role select list -->
+    <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-2">Lọc theo vai trò:</span>
+            <button @@click="activeRole = 'all'" :class="activeRole === 'all' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Tất cả thành viên
+            </button>
+            <button @@click="activeRole = 'Student'" :class="activeRole === 'Student' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Học viên (Students)
+            </button>
+            <button @@click="activeRole = 'Instructor'" :class="activeRole === 'Instructor' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Giảng viên (Instructors)
+            </button>
+            <button @@click="activeRole = 'Mentor'" :class="activeRole === 'Mentor' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Cố vấn học tập (Mentors)
+            </button>
+            <button @@click="activeRole = 'Admin'" :class="activeRole === 'Admin' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
+                Quản trị viên (Admin)
+            </button>
         </div>
     </div>
 
-    <!-- Member Search & Filters -->
-    <div class="glass-card rounded-2xl p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="relative">
-            <input type="text" placeholder="Search by name or skill..." class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-cyan-500">
-            <svg class="w-5 h-5 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-        <select class="bg-white border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-cyan-500">
-            <option>All Roles</option>
-            <option>Mentor</option>
-            <option>Student</option>
-            <option>Study Leader</option>
-        </select>
-        <select class="bg-white border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-cyan-500">
-            <option>All Skills</option>
-            <option>Python</option>
-            <option>ASP.NET Core</option>
-            <option>UI/UX Design</option>
-        </select>
-    </div>
-
-    <!-- Member Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach (var member in Model)
+    <!-- Grid of Members -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @if (Model != null && Model.Any())
         {
-            <div class="glass-card rounded-3xl p-6 text-center hover:shadow-xl transition-all group">
-                <div class="relative inline-block mb-4">
-                    <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden mx-auto bg-slate-100">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@member.UserId" alt="@member.FullName">
+            foreach (var member in Model)
+            {
+                var roleClass = member.Role == "Instructor" ? "bg-rose-50 text-rose-700 border-rose-100" :
+                                member.Role == "Mentor" ? "bg-amber-50 text-amber-700 border-amber-100" :
+                                member.Role == "Admin" ? "bg-purple-50 text-purple-700 border-purple-100" :
+                                "bg-cyan-50 text-cyan-700 border-cyan-100";
+
+                var rnd = new Random();
+                var points = rnd.Next(100, 5000);
+                var weeklyGain = rnd.Next(10, 500);
+
+                <div 
+                    x-show="activeRole === 'all' || activeRole === '@member.Role'"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col justify-between hover:shadow-md transition-all text-center relative overflow-hidden"
+                    x-data="{ following: false }"
+                >
+                    <!-- Decorative top strip -->
+                    <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500"></div>
+
+                    <div class="space-y-3 pt-2 cursor-pointer group">
+                        <!-- Profile Pic -->
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 border border-slate-100 mx-auto group-hover:ring-2 group-hover:ring-cyan-400 transition-all">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@member.UserId" alt="@member.FullName" />
+                        </div>
+
+                        <!-- Name & Role -->
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm leading-tight group-hover:text-cyan-600 transition-colors">
+                                @member.FullName
+                            </h4>
+                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border mt-1.5 uppercase tracking-wider @roleClass">
+                                @(member.Role ?? "Student")
+                            </span>
+                        </div>
+
+                        <!-- Badges (Mocked) -->
+                        <div class="flex flex-wrap gap-1 justify-center max-h-12 overflow-y-hidden py-1">
+                            <span class="bg-slate-50 text-slate-500 text-[9px] font-bold px-1.5 py-0.5 rounded border border-slate-100 flex items-center gap-0.5">
+                                <i data-lucide="award" class="w-2.5 h-2.5 text-cyan-500"></i> Top Learner
+                            </span>
+                            @if(rnd.Next(0, 2) == 1) {
+                                <span class="bg-slate-50 text-slate-500 text-[9px] font-bold px-1.5 py-0.5 rounded border border-slate-100 flex items-center gap-0.5">
+                                    <i data-lucide="award" class="w-2.5 h-2.5 text-orange-500"></i> Code Reviewer
+                                </span>
+                            }
+                        </div>
+
+                        <!-- Quick Academic stats -->
+                        <div class="grid grid-cols-2 gap-2 text-[11px] py-2.5 border-y border-slate-50 text-slate-500">
+                            <div class="text-left pl-3">
+                                <span class="block text-[10px] text-slate-400 font-medium">LMS Tích lũy</span>
+                                <strong class="text-slate-700">@points Điểm</strong>
+                            </div>
+                            <div class="text-right pr-3 border-l border-slate-50">
+                                <span class="block text-[10px] text-slate-400 font-medium">Hoạt động tuần</span>
+                                <strong class="text-emerald-600">+@weeklyGain</strong>
+                            </div>
+                        </div>
                     </div>
-                    <div class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-white rounded-full" title="Online"></div>
-                </div>
 
-                <h4 class="text-xl font-bold text-slate-800">@member.FullName</h4>
-                <p class="text-xs font-bold text-cyan-600 uppercase tracking-widest mb-4">@member.Role</p>
+                    <!-- Action columns -->
+                    <div class="grid grid-cols-2 gap-2 mt-4 pt-1">
+                        <button 
+                            @@click="following = !following; window.showToast && window.showToast(following ? 'Đã theo dõi @member.FullName!' : 'Bỏ theo dõi thành công.')"
+                            :class="following ? 'bg-cyan-50 text-cyan-600 hover:bg-cyan-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                            class="flex items-center justify-center gap-1.5 text-xs font-bold py-2 rounded-xl transition-all"
+                        >
+                            <span x-show="following" style="display: none;" class="flex items-center gap-1.5">
+                                <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Đã theo dõi
+                            </span>
+                            <span x-show="!following" class="flex items-center gap-1.5">
+                                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Theo dõi
+                            </span>
+                        </button>
 
-                <!-- Skills -->
-                <div class="flex flex-wrap justify-center gap-2 mb-6">
-                    <span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full">Python</span>
-                    <span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full">ML</span>
-                    <span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full">Docker</span>
+                        <button 
+                            @@click="messagingMember = { name: '@member.FullName', role: '@member.Role', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=@member.UserId' }; messagesLog = []"
+                            class="flex items-center justify-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold py-2 rounded-xl transition-all shadow-sm active:scale-95"
+                        >
+                            <i data-lucide="mail" class="w-3.5 h-3.5"></i> Nhắn tin
+                        </button>
+                    </div>
                 </div>
-
-                <!-- Badges -->
-                <div class="flex justify-center gap-3 mb-6">
-                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-blue-500 border border-blue-100" title="Top Mentor">🏆</div>
-                    <div class="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center text-orange-500 border border-orange-100" title="Fast Learner">⚡</div>
-                    <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center text-purple-500 border border-purple-100" title="Code Reviewer">🔍</div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 rounded-xl text-sm transition-all shadow-md">View Profile</button>
-                    <button class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold py-2 rounded-xl text-sm transition-all">Message</button>
-                </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-2">
+                <i data-lucide="users" class="mx-auto text-slate-300 w-8 h-8"></i>
+                <p class="font-bold">Không tìm thấy học viên nào.</p>
+                <p class="text-xs">Hãy sửa đổi bộ lọc tìm kiếm.</p>
             </div>
         }
     </div>
+
+    <!-- Direct Messaging Dialog Portal (AlpineJS) -->
+    <div 
+        x-show="messagingMember !== null"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        style="display: none;"
+    >
+        <div @@click.away="messagingMember = null" class="bg-white rounded-3xl overflow-hidden w-full max-w-md shadow-xl border border-slate-100 flex flex-col">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 p-5 text-white flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl overflow-hidden bg-white/10 border border-white/20">
+                        <img :src="messagingMember?.avatar" alt="Avatar" />
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm leading-tight" x-text="messagingMember?.name"></h4>
+                        <span class="text-[10px] bg-white/20 text-white font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider" x-text="messagingMember?.role">
+                        </span>
+                    </div>
+                </div>
+                <button @@click="messagingMember = null" class="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Messages Feed body -->
+            <div class="p-5 h-64 overflow-y-auto bg-slate-50 space-y-3 flex flex-col justify-end">
+                <div class="text-center text-[10px] text-slate-400 py-1 bg-white rounded-xl border border-slate-100">
+                    Phòng hội thoại riêng tư bảo mật của SmartLMS. Hoạt động của bạn tuân thủ nội quy Hub.
+                </div>
+
+                <div class="space-y-2 max-h-52 overflow-y-auto">
+                    <!-- Default welcome answer -->
+                    <div class="text-xs bg-white rounded-2xl p-3 border border-slate-100 max-w-[85%] self-start text-slate-600">
+                        Chào bạn! Mình có thể giúp gì cho bạn trong việc học tập khóa học SmartLMS không?
+                    </div>
+
+                    <!-- User messages log -->
+                    <template x-for="logMsg in messagesLog" :key="logMsg">
+                        <div class="text-xs bg-cyan-600 text-white rounded-2xl p-3 max-w-[85%] ml-auto text-left" x-text="logMsg"></div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Send Form -->
+            <!form @@submit.prevent="if(messageText.trim()) { messagesLog.push(messageText); messageText = ''; }" class="p-4 border-t border-slate-100 flex gap-2 bg-white">
+                <input type="text" required placeholder="Gửi tin nhắn riêng tới thành viên..." x-model="messageText" class="flex-1 bg-slate-50 text-xs px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 placeholder-slate-400" />
+                <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white p-2.5 rounded-xl transition-all shadow active:scale-95 shrink-0">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </!form>
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('alpine:initialized', () => {
+        Alpine.effect(() => {
+            setTimeout(() => {
+                if(window.lucide) {
+                    lucide.createIcons();
+                }
+            }, 50);
+        });
+    });
+</script>
