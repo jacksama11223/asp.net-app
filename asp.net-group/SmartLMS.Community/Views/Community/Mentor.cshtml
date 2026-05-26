@@ -229,20 +229,36 @@
                     if(el) el.scrollTop = el.scrollHeight;
                 }, 100);
 
-                // Giả lập gọi API AI
-                setTimeout(() => {
+                // Gọi API thực tế
+                fetch('/api/MentorApi/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: q, userId: '1' })
+                })
+                .then(response => response.json())
+                .then(data => {
                     this.messages.push({
                         role: 'model',
-                        text: `Đây là phản hồi từ AI System cho câu hỏi: "${q}". Trong thực tế, hệ thống sẽ kết nối qua API của Gemini/OpenAI để trả về kết quả chính xác về C# và .NET.`,
+                        text: data.responseMessage || 'Lỗi: Không nhận được phản hồi từ AI.',
                         timestamp: new Date().toLocaleTimeString('vi', { hour: '2-digit', minute: '2-digit' })
                     });
+                })
+                .catch(err => {
+                    this.messages.push({
+                        role: 'model',
+                        text: 'Lỗi hệ thống: Không thể kết nối đến Backend AI API (Port 5181).',
+                        timestamp: new Date().toLocaleTimeString('vi', { hour: '2-digit', minute: '2-digit' })
+                    });
+                })
+                .finally(() => {
                     this.isChatLoading = false;
-                    
                     setTimeout(() => {
                         const el = document.getElementById('chatContainer');
                         if(el) el.scrollTop = el.scrollHeight;
                     }, 100);
-                }, 1500);
+                });
             }
         }
     }
