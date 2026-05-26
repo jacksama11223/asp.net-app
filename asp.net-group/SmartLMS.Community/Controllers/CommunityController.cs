@@ -38,7 +38,7 @@ public class CommunityController : Controller
                 Category = string.IsNullOrEmpty(p.Category) ? "Chung" : p.Category,
                 AuthorName = p.Author?.FullName ?? "?n danh",
                 AuthorRole = "H?c viên",
-                AuthorAvatar = "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(p.Author?.FullName ?? "User")",
+                AuthorAvatar = "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(p.Author?.FullName ?? "User"),
                 CreatedAt = p.CreatedAt,
                 Likes = p.VoteCount,
                 CommentsCount = p.Comments?.Count ?? 0
