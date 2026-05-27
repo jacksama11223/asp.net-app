@@ -5,7 +5,7 @@
 # ============================================================
 
 DB_CONTAINER="smartlms-db-prod"
-DB_PASS="YourStrongPassword123!"
+DB_PASS="YOUR_DB_PASSWORD"
 DB_NAME="SmartLMS"
 DB_USER="root"
 
@@ -206,4 +206,6 @@ echo "| Student    | nguyen.linh      | Student@123      |"
 echo "| Student    | vo.huong         | Student@123      |"
 echo "| Student    | ly.bach          | Student@123      |"
 echo "================================"
-echo "🌐 URL: http://141.253.114.218"
+echo "🌐 URL: http://YOUR_VPS_IP"
+
+

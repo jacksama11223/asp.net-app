@@ -10,5 +10,7 @@ services:
       - "5182:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=141.253.114.218;Database=SmartLMS;User=root;Password=YourStrongPassword123!;
+      - ConnectionStrings__DefaultConnection=Server=YOUR_VPS_IP;Database=SmartLMS;User=root;Password=YOUR_DB_PASSWORD;
     restart: always
+
+

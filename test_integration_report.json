@@ -1,9 +1,9 @@
 {
   "timestamp": "15:17:17 26/5/2026",
   "target": {
-    "backend": "http://141.253.114.218",
-    "community": "http://141.253.114.218:3080",
-    "react": "http://141.253.114.218"
+    "backend": "http://YOUR_VPS_IP",
+    "community": "http://YOUR_VPS_IP:3080",
+    "react": "http://YOUR_VPS_IP"
   },
   "summary": {
     "passed": 33,

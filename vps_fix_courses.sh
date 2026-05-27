@@ -19,7 +19,7 @@ git pull origin main
 # ─── BƯỚC 2: Fix InstructorId trong DB ───────────
 echo ""
 echo "🗄️ Bước 2: Fix dữ liệu InstructorId trong MariaDB..."
-sudo docker exec -i smartlms-db-prod mariadb -uroot -pYourStrongPassword123! SmartLMS -e "
+sudo docker exec -i smartlms-db-prod mariadb -uroot -pYOUR_DB_PASSWORD SmartLMS -e "
 UPDATE Courses 
 SET InstructorId = (
     SELECT UserId FROM Users 
@@ -37,7 +37,7 @@ echo "  ✅ Đã cập nhật InstructorId và Status cho tất cả Courses."
 # Kiểm tra kết quả
 echo ""
 echo "📊 Kết quả sau fix:"
-sudo docker exec -i smartlms-db-prod mariadb -uroot -pYourStrongPassword123! SmartLMS -e "
+sudo docker exec -i smartlms-db-prod mariadb -uroot -pYOUR_DB_PASSWORD SmartLMS -e "
 SELECT c.CourseId, c.Title, c.Status, c.IsDeleted, c.InstructorId, u.FullName as InstructorName
 FROM Courses c
 LEFT JOIN Users u ON c.InstructorId = u.UserId;
@@ -82,5 +82,7 @@ for c in data:
 echo ""
 echo "=================================================="
 echo " ✅ FIX HOÀN TẤT! Truy cập:"
-echo "    http://141.253.114.218/courses"
+echo "    http://YOUR_VPS_IP/courses"
 echo "=================================================="
+
+

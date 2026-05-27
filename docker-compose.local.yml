@@ -3,7 +3,7 @@ services:
     image: mariadb:latest
     container_name: smartlms-db-local
     environment:
-      - MYSQL_ROOT_PASSWORD=AnhLongPro123!
+      - MYSQL_ROOT_PASSWORD=YOUR_DB_PASSWORD
       - MYSQL_DATABASE=SmartLMS
     ports:
       - "3306:3306"
@@ -23,8 +23,8 @@ services:
       - "5181:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=AnhLongPro123!;
-      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=AnhLongPro123!;
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YOUR_DB_PASSWORD;
+      - ConnectionStrings__ReadOnlyConnection=Server=db;Port=3306;Database=SmartLMS;User=root;Password=YOUR_DB_PASSWORD;
     depends_on:
       - db
     networks:
@@ -33,3 +33,4 @@ services:
 networks:
   lms-local:
     driver: bridge
+
