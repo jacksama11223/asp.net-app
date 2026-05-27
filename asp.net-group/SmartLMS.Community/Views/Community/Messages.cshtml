@@ -6,10 +6,10 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 
-<div class="max-w-6xl mx-auto h-[80vh] flex gap-6 font-sans" x-data="chatModule()">
+<div class="w-full max-w-6xl mx-auto h-[80vh] flex flex-col md:flex-row gap-6 font-sans" x-data="chatModule()">
     
     <!-- Left Sidebar: Chat List -->
-    <div class="w-80 bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden shrink-0">
+    <div class="w-full md:w-80 h-[30vh] md:h-full bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden shrink-0">
         <div class="p-6 border-b border-slate-100">
             <h2 class="text-xl font-black text-slate-800 flex items-center gap-2">
                 <i data-lucide="message-circle" class="w-6 h-6 text-cyan-600"></i> Tin nhắn
@@ -60,9 +60,8 @@
         <!-- Ánh sáng nền -->
         <div class="absolute inset-0 bg-slate-50/50 pointer-events-none"></div>
 
-        <!-- Chat Header -->
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-sm relative z-10">
-            <div class="flex items-center gap-4">
+        <div class="p-4 md:p-6 border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-sm relative z-10">
+            <div class="flex items-center gap-2 md:gap-4">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md">
                     <i data-lucide="globe" class="w-5 h-5"></i>
                 </div>
@@ -88,7 +87,7 @@
         </div>
 
         <!-- Messages Area -->
-        <div id="messages-container" class="flex-1 p-6 overflow-y-auto space-y-6 relative z-10 flex flex-col">
+        <div id="messages-container" class="flex-1 p-4 md:p-6 overflow-y-auto space-y-6 relative z-10 flex flex-col">
             
             <!-- Default Welcome Message -->
             <div class="flex justify-center mb-8">
@@ -101,7 +100,7 @@
             <template x-for="(msg, index) in messages" :key="index">
                 <div class="flex w-full" :class="msg.isMine ? 'justify-end' : 'justify-start'">
                     
-                    <div class="flex gap-3 max-w-[70%]" :class="msg.isMine ? 'flex-row-reverse' : 'flex-row'">
+                    <div class="flex gap-2 md:gap-3 max-w-[85%] md:max-w-[70%]" :class="msg.isMine ? 'flex-row-reverse' : 'flex-row'">
                         
                         <img x-show="!msg.isMine" :src="msg.avatarUrl" class="w-8 h-8 rounded-full shadow-sm shrink-0" />
                         

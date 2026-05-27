@@ -31,7 +31,7 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="text-slate-800 bg-slate-50 flex flex-col min-h-screen">
+<body class="text-slate-800 bg-slate-50 flex flex-col min-h-screen overflow-x-hidden">
 
     <!-- Toast Alert Notice (Hidden by default) -->
     <div id="toastAlert" class="fixed top-8 left-1/2 -translate-x-1/2 z-[55] bg-slate-900 text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 border border-slate-750 opacity-0 pointer-events-none transition-all duration-300 translate-y-[-20px]">
@@ -101,7 +101,7 @@
         var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
     }
     <nav class="bg-white border-b border-cyan-100 sticky top-[73px] md:top-[69px] z-40 shadow-sm select-none overflow-x-auto">
-        <div class="container mx-auto px-6 flex gap-6 md:gap-8 whitespace-nowrap min-w-max">
+        <div class="container mx-auto px-6 flex gap-6 md:gap-8 whitespace-nowrap overflow-x-auto pb-1 min-w-0" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
             
             <a href="/hub" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Index" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
                 <i data-lucide="message-square" class="w-4 h-4"></i> Diễn đàn Thảo luận
