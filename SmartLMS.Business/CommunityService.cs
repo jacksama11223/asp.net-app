@@ -96,7 +96,7 @@ public class CommunityService : ICommunityService
     {
         return await _context.CommunityEvents
             .Include(e => e.Participants)
-            // .Where(e => e.IsApproved) // TODO: Mở lại sau khi chạy script thêm cột vào CSDL
+            .Where(e => e.IsApproved)
             .OrderBy(e => e.EventDate)
             .ToListAsync();
     }
@@ -116,7 +116,7 @@ public class CommunityService : ICommunityService
     // === 4. Q&A SECTION ===
     public async Task<IEnumerable<CommunityQuestion>> GetQuestionsAsync(string status = "All")
     {
-        var query = _context.CommunityQuestions.Include(q => q.Author).Include(q => q.Answers).AsQueryable(); // TODO: Thêm lại .Where(q => q.IsApproved) sau khi update DB
+        var query = _context.CommunityQuestions.Include(q => q.Author).Include(q => q.Answers).Where(q => q.IsApproved).AsQueryable();
         
         if (status != "All")
             query = query.Where(q => q.Status == status);
@@ -144,7 +144,7 @@ public class CommunityService : ICommunityService
         return await _context.StudyGroups
             .Include(g => g.Leader)
             .Include(g => g.Members)
-            // .Where(g => g.IsApproved) // TODO: Mở lại sau khi chạy script thêm cột vào CSDL
+            .Where(g => g.IsApproved)
             .OrderByDescending(g => g.EXP)
             .ToListAsync();
     }
