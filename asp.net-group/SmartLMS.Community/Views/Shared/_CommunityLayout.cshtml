@@ -274,31 +274,26 @@
     <!-- TÍCH HỢP MESSENGER CHAT (PHASE 4) -->
     <!-- Alpine.js (Nếu chưa có) -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <div id="messengerChatApp" x-data="{
-            chatOpen: false, 
-            fullScreen: false, 
-            msgText: '', 
-            messages: []
-         }"
+    <div id="messengerChatApp" x-data
          class="fixed z-[99] flex flex-col font-sans transition-all duration-300"
-         :class="fullScreen ? 'inset-0 bg-white' : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100%-2rem)] sm:w-80 h-[500px] max-h-[80vh] shadow-2xl rounded-2xl bg-white border border-slate-200'"
-         x-show="chatOpen"
+         :class="$store.chat.fullScreen ? 'inset-0 bg-white' : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100%-2rem)] sm:w-80 h-[500px] max-h-[80vh] shadow-2xl rounded-2xl bg-white border border-slate-200'"
+         x-show="$store.chat.chatOpen"
          style="display: none;"
     >
         <!-- Chat Header -->
-        <div class="flex items-center justify-between p-3 border-b border-slate-100 bg-gradient-to-r from-cyan-600 to-indigo-600 text-white rounded-t-2xl" :class="fullScreen ? 'rounded-none' : ''">
+        <div class="flex items-center justify-between p-3 border-b border-slate-100 bg-gradient-to-r from-cyan-600 to-indigo-600 text-white rounded-t-2xl" :class="$store.chat.fullScreen ? 'rounded-none' : ''">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
                 <h3 class="font-bold text-sm tracking-wide">Community Chat</h3>
             </div>
             <div class="flex items-center gap-2 text-white/80">
                 <!-- Nút Phóng To / Thu Nhỏ -->
-                <button @@click="fullScreen = !fullScreen" class="hover:text-white transition-colors" title="Phóng to toàn trang">
-                    <i data-lucide="maximize" class="w-4 h-4" x-show="!fullScreen"></i>
-                    <i data-lucide="minimize" class="w-4 h-4" x-show="fullScreen"></i>
+                <button @@click="$store.chat.fullScreen = !$store.chat.fullScreen" class="hover:text-white transition-colors" title="Phóng to toàn trang">
+                    <i data-lucide="maximize" class="w-4 h-4" x-show="!$store.chat.fullScreen"></i>
+                    <i data-lucide="minimize" class="w-4 h-4" x-show="$store.chat.fullScreen"></i>
                 </button>
                 <!-- Nút Đóng -->
-                <button @@click="chatOpen = false; fullScreen = false" class="hover:text-white transition-colors">
+                <button @@click="$store.chat.chatOpen = false; $store.chat.fullScreen = false" class="hover:text-white transition-colors">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -307,7 +302,7 @@
         <!-- Chat Body -->
         <div id="chatMessagesContainer" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
             <!-- Messages will be injected here via Alpine loop -->
-            <template x-for="(msg, index) in messages" :key="index">
+            <template x-for="(msg, index) in $store.chat.messages" :key="index">
                 <div class="flex gap-2" :class="msg.isMine ? 'justify-end' : 'justify-start'">
                     
                     <!-- Avatar người khác -->
@@ -345,10 +340,10 @@
         </div>
 
         <!-- Chat Input Area -->
-        <div class="p-3 border-t border-slate-100 bg-white" :class="fullScreen ? 'rounded-none' : 'rounded-b-2xl'">
-            <form x-on:submit.prevent="sendMessageChat()" class="flex items-end gap-2 relative">
-                <textarea x-model="msgText" rows="1" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500/50 resize-none max-h-24 min-h-[44px]" x-on:keydown.enter.prevent="if(!$event.shiftKey) sendMessageChat()"></textarea>
-                <button type="submit" class="p-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl transition-transform active:scale-90 shadow-md flex items-center justify-center shrink-0 h-[44px] w-[44px]" :disabled="!msgText.trim()">
+        <div class="p-3 border-t border-slate-100 bg-white" :class="$store.chat.fullScreen ? 'rounded-none' : 'rounded-b-2xl'">
+            <form x-on:submit.prevent="$store.chat.sendMessage()" class="flex items-end gap-2 relative">
+                <textarea x-model="$store.chat.msgText" rows="1" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500/50 resize-none max-h-24 min-h-[44px]" x-on:keydown.enter.prevent="if(!$event.shiftKey) $store.chat.sendMessage()"></textarea>
+                <button type="submit" class="p-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl transition-transform active:scale-90 shadow-md flex items-center justify-center shrink-0 h-[44px] w-[44px]" :disabled="!$store.chat.msgText.trim()">
                     <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
                 </button>
             </form>
@@ -356,15 +351,77 @@
     </div>
 
     <!-- FAB (Nút Mở Chat) -->
-    <button id="fabChatBtn" onclick="document.getElementById('messengerChatApp').__x.$data.chatOpen = true; setTimeout(()=>lucide.createIcons(), 50)" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(8,145,178,0.4)] hover:scale-110 hover:shadow-[0_15px_35px_rgba(8,145,178,0.5)] transition-all z-[98]">
-        <i data-lucide="message-circle" class="w-6 h-6"></i>
-        <!-- Ping Badge -->
-        <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-rose-500 border-2 border-white rounded-full"></span>
-    </button>
+    <div x-data>
+        <button id="fabChatBtn" @@click="$store.chat.chatOpen = true; setTimeout(()=>lucide.createIcons(), 50)" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(8,145,178,0.4)] hover:scale-110 hover:shadow-[0_15px_35px_rgba(8,145,178,0.5)] transition-all z-[98]">
+            <i data-lucide="message-circle" class="w-6 h-6"></i>
+            <!-- Ping Badge -->
+            <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-rose-500 border-2 border-white rounded-full"></span>
+        </button>
+    </div>
 
     <!-- SignalR for Real-time Notifications -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
     <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('chat', {
+                chatOpen: false,
+                fullScreen: false,
+                msgText: '',
+                messages: [],
+                sendMessage() {
+                    if(!this.msgText.trim()) return;
+
+                    let name = '@(User.Identity?.Name)';
+                    
+                    // Xử lý khách lạ (Guest)
+                    if (!name) {
+                        let guestName = localStorage.getItem('guestChatName');
+                        if (!guestName) {
+                            guestName = prompt("Chào bạn! Vui lòng nhập tên của bạn để tham gia nhóm Chat:");
+                            if (guestName && guestName.trim()) {
+                                localStorage.setItem('guestChatName', guestName.trim());
+                            } else {
+                                return; // Hủy gửi nếu không nhập tên
+                            }
+                        }
+                        name = guestName + " (Khách)";
+                    }
+
+                    const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
+                    
+                    // Gửi qua SignalR
+                    hubConnection.invoke("SendMessageToAll", name, avatar, this.msgText, "", "", "")
+                        .catch(err => console.error(err.toString()));
+                        
+                    this.msgText = '';
+                },
+                receiveMessage(senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
+                    const localName = localStorage.getItem('guestChatName') ? (localStorage.getItem('guestChatName') + " (Khách)") : "Thành viên";
+                    const isMine = senderName === '@(User.Identity?.Name)' || senderName === localName;
+                    
+                    this.messages.push({
+                        name: senderName,
+                        avatar: senderAvatar || 'https://ui-avatars.com/api/?name=U',
+                        text: message,
+                        isMine: isMine,
+                        postUrl: postUrl,
+                        previewTitle: previewTitle,
+                        previewDesc: previewDesc
+                    });
+                    
+                    if(!this.chatOpen && !isMine) {
+                        if(window.showToast) window.showToast("💬 Tin nhắn mới từ " + senderName);
+                    }
+                    
+                    // Auto scroll to bottom
+                    setTimeout(() => {
+                        const container = document.getElementById('chatMessagesContainer');
+                        if(container) container.scrollTop = container.scrollHeight;
+                    }, 100);
+                }
+            });
+        });
+
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/hubs/community")
             .withAutomaticReconnect()
@@ -375,67 +432,14 @@
         });
 
         hubConnection.on("ReceiveMessage", function (senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
-            const chatComponent = document.getElementById('messengerChatApp');
-            if (chatComponent) {
-                const data = chatComponent.__x.$data;
-                const localName = localStorage.getItem('guestChatName') ? (localStorage.getItem('guestChatName') + " (Khách)") : "Thành viên";
-                const isMine = senderName === '@(User.Identity?.Name)' || senderName === localName;
-                data.messages.push({
-                    name: senderName,
-                    avatar: senderAvatar || 'https://ui-avatars.com/api/?name=U',
-                    text: message,
-                    isMine: isMine,
-                    postUrl: postUrl,
-                    previewTitle: previewTitle,
-                    previewDesc: previewDesc
-                });
-                
-                if(!data.chatOpen && !isMine) {
-                    if(window.showToast) window.showToast("💬 Tin nhắn mới từ " + senderName);
-                }
-                
-                // Auto scroll to bottom
-                setTimeout(() => {
-                    const container = document.getElementById('chatMessagesContainer');
-                    if(container) container.scrollTop = container.scrollHeight;
-                }, 100);
+            if (Alpine && Alpine.store('chat')) {
+                Alpine.store('chat').receiveMessage(senderName, senderAvatar, message, postUrl, previewTitle, previewDesc);
             }
         });
 
         hubConnection.start().catch(function (err) {
             console.error("SignalR Error:", err.toString());
         });
-
-        // Hàm Alpine gửi tin nhắn
-        function sendMessageChat() {
-            const chatComponent = document.getElementById('messengerChatApp');
-            const data = chatComponent.__x.$data;
-            if(!data.msgText.trim()) return;
-
-            let name = '@(User.Identity?.Name)';
-            
-            // Xử lý khách lạ (Guest)
-            if (!name) {
-                let guestName = localStorage.getItem('guestChatName');
-                if (!guestName) {
-                    guestName = prompt("Chào bạn! Vui lòng nhập tên của bạn để tham gia nhóm Chat:");
-                    if (guestName && guestName.trim()) {
-                        localStorage.setItem('guestChatName', guestName.trim());
-                    } else {
-                        return; // Hủy gửi nếu không nhập tên
-                    }
-                }
-                name = guestName + " (Khách)";
-            }
-
-            const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
-            
-            // Gửi qua SignalR
-            hubConnection.invoke("SendMessageToAll", name, avatar, data.msgText, "", "", "")
-                .catch(err => console.error(err.toString()));
-                
-            data.msgText = '';
-        }
 
         // Tích hợp Share Modal vào Chat
         window.sendPostToChat = function(postId, title, category) {
@@ -463,7 +467,9 @@
             if(window.showToast) window.showToast("✅ Đã gửi bài viết vào khung chat nhóm!");
             
             // Tự động mở chat
-            document.getElementById('messengerChatApp').__x.$data.chatOpen = true;
+            if (Alpine && Alpine.store('chat')) {
+                Alpine.store('chat').chatOpen = true;
+            }
         }
     </script>
 
