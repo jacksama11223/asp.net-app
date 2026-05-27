@@ -315,7 +315,11 @@
                             <span x-show="!msg.isMine" class="text-[10px] text-slate-400 mx-1 font-semibold" x-text="msg.name"></span>
                             
                             <!-- Khung chữ và Reactions wrapper -->
-                            <div class="relative group" style="width: max-content; max-width: 100%;" x-data="{ showEmoji: false }">
+                            <div class="relative" style="width: max-content; max-width: 100%;" 
+                                 x-data="{ showEmojiMenu: false, showButton: false, hideTimeout: null }"
+                                 @@mouseenter="showButton = true; clearTimeout(hideTimeout);"
+                                 @@mouseleave="if(!showEmojiMenu) { hideTimeout = setTimeout(() => showButton = false, 4000); }">
+                                 
                                 <!-- Bubble -->
                                 <div class="px-3 py-2 text-sm shadow-sm rounded-2xl break-words relative"
                                      style="word-break: break-word;"
@@ -339,20 +343,24 @@
                                 </div>
                                 
                                 <!-- Nút thả tim (Hiện cạnh bubble) -->
-                                <div class="absolute top-1/2 -translate-y-1/2 hidden group-hover:flex items-center justify-center z-20"
+                                <div class="absolute top-1/2 -translate-y-1/2 items-center justify-center z-20 flex"
+                                     x-show="showButton || showEmojiMenu"
+                                     x-transition.opacity.duration.300ms
+                                     style="display: none;"
                                      :class="msg.isMine ? '-left-8' : '-right-8'">
-                                    <button @@click="showEmoji = !showEmoji" @@click.outside="showEmoji = false" class="w-6 h-6 bg-white border border-slate-200 rounded-full shadow-sm text-slate-500 hover:text-cyan-600 hover:bg-slate-50 flex items-center justify-center transition-colors">
+                                     
+                                    <button @@click="showEmojiMenu = !showEmojiMenu" @@click.outside="showEmojiMenu = false; if(!showButton) showButton = false;" class="w-6 h-6 bg-white border border-slate-200 rounded-full shadow-sm text-slate-500 hover:text-cyan-600 hover:bg-slate-50 flex items-center justify-center transition-colors">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11v1a10 10 0 1 1-9-10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/><path d="M16 5h6"/><path d="M19 2v6"/></svg>
                                     </button>
                                     
                                     <!-- Emoji Menu -->
-                                    <div x-show="showEmoji" style="display: none;"
+                                    <div x-show="showEmojiMenu" style="display: none;"
                                          x-transition.opacity.duration.200ms
                                          class="absolute top-8 bg-white border border-slate-200 rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.1)] p-2 flex gap-2 z-30 min-w-max"
                                          :class="msg.isMine ? 'right-0' : 'left-0'">
                                          <template x-for="emoji in ['❤️', '👍', '😂', '😮', '😢', '🔥', '🚀', '💯']">
                                              <button class="hover:scale-125 transition-transform text-lg cursor-pointer" 
-                                                     @@click="$store.chat.reactToMessage(msg.id, emoji); showEmoji = false"
+                                                     @@click="$store.chat.reactToMessage(msg.id, emoji); showEmojiMenu = false; showButton = false;"
                                                      x-text="emoji"></button>
                                          </template>
                                     </div>
@@ -496,14 +504,30 @@
                 },
                 reactToMessage(messageId, emoji) {
                     if (!messageId) return;
+                    
+                    // Optimistic UI Update: Hiển thị emoji ngay lập tức cho chính mình
+                    const index = this.messages.findIndex(m => m.id === messageId);
+                    if (index !== -1) {
+                        const msg = { ...this.messages[index] };
+                        if (!msg.reactions) msg.reactions = {};
+                        if (!msg.reactions[emoji]) msg.reactions[emoji] = 0;
+                        msg.reactions[emoji]++;
+                        
+                        // Thay thế toàn bộ object trong mảng để ép Alpine re-render ngay
+                        this.messages[index] = msg;
+                    }
+                    
+                    // Gửi lên server
                     hubConnection.invoke("ReactToMessage", messageId, emoji)
                         .catch(err => console.error(err.toString()));
                 },
                 updateReaction(messageId, reactionsJson) {
-                    const msg = this.messages.find(m => m.id === messageId);
-                    if (msg) {
+                    const index = this.messages.findIndex(m => m.id === messageId);
+                    if (index !== -1) {
                         try {
-                            msg.reactions = JSON.parse(reactionsJson);
+                            const parsed = JSON.parse(reactionsJson);
+                            // Ghi đè lại object để ép Alpine re-render
+                            this.messages[index] = { ...this.messages[index], reactions: parsed };
                         } catch(e){}
                     }
                 }
