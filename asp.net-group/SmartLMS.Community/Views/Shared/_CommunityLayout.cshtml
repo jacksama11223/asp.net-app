@@ -274,7 +274,7 @@
     <!-- TÍCH HỢP MESSENGER CHAT (PHASE 4) -->
     <!-- Alpine.js (Nếu chưa có) -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <div x-data="{
+    <div id="messengerChatApp" x-data="{
             chatOpen: false, 
             fullScreen: false, 
             msgText: '', 
@@ -356,7 +356,7 @@
     </div>
 
     <!-- FAB (Nút Mở Chat) -->
-    <button id="fabChatBtn" onclick="document.querySelector('[x-data]').__x.$data.chatOpen = true; setTimeout(()=>lucide.createIcons(), 50)" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(8,145,178,0.4)] hover:scale-110 hover:shadow-[0_15px_35px_rgba(8,145,178,0.5)] transition-all z-[98]">
+    <button id="fabChatBtn" onclick="document.getElementById('messengerChatApp').__x.$data.chatOpen = true; setTimeout(()=>lucide.createIcons(), 50)" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(8,145,178,0.4)] hover:scale-110 hover:shadow-[0_15px_35px_rgba(8,145,178,0.5)] transition-all z-[98]">
         <i data-lucide="message-circle" class="w-6 h-6"></i>
         <!-- Ping Badge -->
         <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-rose-500 border-2 border-white rounded-full"></span>
@@ -375,10 +375,11 @@
         });
 
         hubConnection.on("ReceiveMessage", function (senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
-            const chatComponent = document.querySelector('[x-data]');
+            const chatComponent = document.getElementById('messengerChatApp');
             if (chatComponent) {
                 const data = chatComponent.__x.$data;
-                const isMine = senderName === '@(User.Identity?.Name ?? "Thành viên")';
+                const localName = localStorage.getItem('guestChatName') ? (localStorage.getItem('guestChatName') + " (Khách)") : "Thành viên";
+                const isMine = senderName === '@(User.Identity?.Name)' || senderName === localName;
                 data.messages.push({
                     name: senderName,
                     avatar: senderAvatar || 'https://ui-avatars.com/api/?name=U',
@@ -407,11 +408,26 @@
 
         // Hàm Alpine gửi tin nhắn
         function sendMessageChat() {
-            const chatComponent = document.querySelector('[x-data]');
+            const chatComponent = document.getElementById('messengerChatApp');
             const data = chatComponent.__x.$data;
             if(!data.msgText.trim()) return;
 
-            const name = '@(User.Identity?.Name ?? "Thành viên")';
+            let name = '@(User.Identity?.Name)';
+            
+            // Xử lý khách lạ (Guest)
+            if (!name) {
+                let guestName = localStorage.getItem('guestChatName');
+                if (!guestName) {
+                    guestName = prompt("Chào bạn! Vui lòng nhập tên của bạn để tham gia nhóm Chat:");
+                    if (guestName && guestName.trim()) {
+                        localStorage.setItem('guestChatName', guestName.trim());
+                    } else {
+                        return; // Hủy gửi nếu không nhập tên
+                    }
+                }
+                name = guestName + " (Khách)";
+            }
+
             const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
             
             // Gửi qua SignalR
@@ -423,7 +439,20 @@
 
         // Tích hợp Share Modal vào Chat
         window.sendPostToChat = function(postId, title, category) {
-            const name = '@(User.Identity?.Name ?? "Thành viên")';
+            let name = '@(User.Identity?.Name)';
+            if (!name) {
+                let guestName = localStorage.getItem('guestChatName');
+                if (!guestName) {
+                    guestName = prompt("Vui lòng nhập tên của bạn trước khi chia sẻ bài viết:");
+                    if (guestName && guestName.trim()) {
+                        localStorage.setItem('guestChatName', guestName.trim());
+                    } else {
+                        return;
+                    }
+                }
+                name = guestName + " (Khách)";
+            }
+
             const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
             const postUrl = `/hub/post/${postId}`;
             
@@ -434,7 +463,7 @@
             if(window.showToast) window.showToast("✅ Đã gửi bài viết vào khung chat nhóm!");
             
             // Tự động mở chat
-            document.querySelector('[x-data]').__x.$data.chatOpen = true;
+            document.getElementById('messengerChatApp').__x.$data.chatOpen = true;
         }
     </script>
 
