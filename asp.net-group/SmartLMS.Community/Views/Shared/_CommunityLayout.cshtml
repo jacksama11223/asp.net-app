@@ -346,8 +346,8 @@
 
         <!-- Chat Input Area -->
         <div class="p-3 border-t border-slate-100 bg-white" :class="fullScreen ? 'rounded-none' : 'rounded-b-2xl'">
-            <form @@submit.prevent="sendMessageChat()" class="flex items-end gap-2 relative">
-                <textarea x-model="msgText" rows="1" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500/50 resize-none max-h-24 min-h-[44px]" @@keydown.enter.prevent="if(!$event.shiftKey) sendMessageChat()"></textarea>
+            <form x-on:submit.prevent="sendMessageChat()" class="flex items-end gap-2 relative">
+                <textarea x-model="msgText" rows="1" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500/50 resize-none max-h-24 min-h-[44px]" x-on:keydown.enter.prevent="if(!$event.shiftKey) sendMessageChat()"></textarea>
                 <button type="submit" class="p-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl transition-transform active:scale-90 shadow-md flex items-center justify-center shrink-0 h-[44px] w-[44px]" :disabled="!msgText.trim()">
                     <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
                 </button>
