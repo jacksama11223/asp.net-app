@@ -110,7 +110,26 @@
                                         </div>
                                     </div>
                                 </form>
-                                <div id="inlineCommentsList_@post.Id" class="space-y-3 mt-4"></div>
+                                <div id="inlineCommentsList_@post.Id" class="space-y-3 mt-4">
+                                    @if (post.Comments != null && post.Comments.Any())
+                                    {
+                                        foreach (var c in post.Comments)
+                                        {
+                                            <div class="flex gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                                <a href="/profile/@c.AuthorId">
+                                                    <img src="@c.AuthorAvatar" class="w-6 h-6 rounded-full border border-slate-200" alt="@c.AuthorName" />
+                                                </a>
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="text-xs font-black text-slate-800">@c.AuthorName</span>
+                                                        <span class="text-[9px] text-slate-400">@c.CreatedAt</span>
+                                                    </div>
+                                                    <div class="text-[11px] text-slate-600 whitespace-pre-wrap">@c.Content</div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
                             </div>
                         </div>
                     }

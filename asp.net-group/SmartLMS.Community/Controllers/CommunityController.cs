@@ -43,7 +43,16 @@ public class CommunityController : Controller
                 AuthorAvatar = "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(p.Author?.FullName ?? "User"),
                 CreatedAt = p.CreatedAt,
                 Likes = p.VoteCount,
-                CommentsCount = p.Comments?.Count ?? 0
+                CommentsCount = p.Comments?.Count ?? 0,
+                Comments = p.Comments?.OrderBy(c => c.CreatedAt).Select(c => new SmartLms.Community.ViewModels.ForumCommentViewModel
+                {
+                    Id = c.CommentId.ToString(),
+                    Content = c.Content,
+                    AuthorId = c.AuthorId.ToString(),
+                    AuthorName = c.Author?.FullName ?? "Ẩn danh",
+                    AuthorAvatar = "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(c.Author?.FullName ?? "User"),
+                    CreatedAt = c.CreatedAt.ToString("dd/MM HH:mm")
+                }).ToList() ?? new System.Collections.Generic.List<SmartLms.Community.ViewModels.ForumCommentViewModel>()
             }).ToList()
         };
         return View(viewModel);
@@ -156,17 +165,32 @@ public class CommunityController : Controller
     [Authorize]
     public async Task<IActionResult> Upvote(int id, [FromServices] SmartLMSContext db)
     {
+        var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
         var post = await db.Posts.FindAsync(id);
         if (post == null || (!post.IsPublished && !User.IsInRole("Admin") && !User.IsInRole("Moderator")))
         {
             return NotFound(new { success = false, message = "Bài viết không tồn tại." });
         }
 
-        // Logic thực tế có thể cần bảng UserUpvotes để tránh spam, nhưng ở đây tạm tăng số đếm
-        post.VoteCount++;
+        var existingVote = await db.Set<PostVote>().FirstOrDefaultAsync(v => v.PostId == id && v.UserId == userId);
+        if (existingVote != null)
+        {
+            // Toggle bỏ vote
+            db.Set<PostVote>().Remove(existingVote);
+            post.VoteCount--;
+        }
+        else
+        {
+            // Thêm vote mới
+            db.Set<PostVote>().Add(new PostVote { PostId = id, UserId = userId });
+            post.VoteCount++;
+        }
+        
         await db.SaveChangesAsync();
 
-        return Json(new { success = true, newVoteCount = post.VoteCount });
+        return Json(new { success = true, newVoteCount = post.VoteCount, upvoted = existingVote == null });
     }
 
     // 2. Resource Sharing

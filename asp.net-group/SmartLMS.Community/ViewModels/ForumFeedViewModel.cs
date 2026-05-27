@@ -24,5 +24,17 @@ namespace SmartLms.Community.ViewModels
         public DateTime CreatedAt { get; set; }
         public int Likes { get; set; }
         public int CommentsCount { get; set; }
+        
+        public List<ForumCommentViewModel> Comments { get; set; } = new List<ForumCommentViewModel>();
+    }
+
+    public class ForumCommentViewModel
+    {
+        public string Id { get; set; } = null!;
+        public string Content { get; set; } = null!;
+        public string AuthorId { get; set; } = null!;
+        public string AuthorName { get; set; } = null!;
+        public string AuthorAvatar { get; set; } = null!;
+        public string CreatedAt { get; set; } = null!;
     }
 }

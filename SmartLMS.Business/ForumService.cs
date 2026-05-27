@@ -21,9 +21,10 @@ namespace SmartLMS.Business
         {
             return await _context.Posts
                 .Include(p => p.Author)
-                .Include(p => p.Comments)
+                .Include(p => p.Comments).ThenInclude(c => c.Author)
                 .Where(p => p.IsPublished && !p.IsDeleted)
-                .OrderByDescending(p => p.CreatedAt)
+                .OrderByDescending(p => (p.VoteCount * 2) + (p.Comments.Count * 1) - (EF.Functions.DateDiffDay(p.CreatedAt, DateTime.UtcNow) * 5))
+                .ThenByDescending(p => p.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
