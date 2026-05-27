@@ -9,7 +9,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
       # ✅ Kết nối về VPS-A (Thay IP_VPS_A bằng YOUR_VPS_IP)
-      - ConnectionStrings__DefaultConnection=Server=YOUR_VPS_IP;Port=3306;Database=SmartLMS;User=root;Password=${DB_PASSWORD};SslMode=None;Maximum Pool Size=100;Connection Timeout=300;Command Timeout=300;
+      - ConnectionStrings__DefaultConnection=Server=YOUR_VPS_IP;Port=3306;Database=SmartLMS;User=root;Password=${DB_PASSWORD};SslMode=None;Maximum Pool Size=30;Connection Timeout=300;Command Timeout=300;
       - Redis__ConnectionString=YOUR_VPS_IP:6379,password=YOUR_REDIS_PASSWORD_HERE
       - COMPlus_gcServer=0
       - DOTNET_GCConserveMemory=9
