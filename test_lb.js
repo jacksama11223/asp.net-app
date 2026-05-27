@@ -2,7 +2,7 @@ const http = require('http');
 
 // Bắn vào Endpoint API để Nginx chia tải cho các node backend
 const URL = 'http://141.253.114.218/Account/Login'; 
-const TOTAL_REQUESTS = 500; // Tổng số đạn
+const TOTAL_REQUESTS = 5000; // Tổng số đạn
 const CONCURRENT = 100; // Số súng bắn cùng lúc
 
 let completed = 0;
@@ -29,7 +29,7 @@ async function makeRequest() {
             resolve();
         });
         
-        req.setTimeout(2000, () => {
+        req.setTimeout(10000, () => {
             req.destroy();
             stats['Timeout'] = (stats['Timeout'] || 0) + 1;
         });
