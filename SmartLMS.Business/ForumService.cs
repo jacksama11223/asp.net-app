@@ -23,7 +23,7 @@ namespace SmartLMS.Business
                 .Include(p => p.Author)
                 .Include(p => p.Comments).ThenInclude(c => c.Author)
                 .Where(p => p.IsPublished && !p.IsDeleted)
-                .OrderByDescending(p => (p.VoteCount * 2) + (p.Comments.Count * 1) - (EF.Functions.DateDiffDay(p.CreatedAt, DateTime.UtcNow) * 5))
+                .OrderByDescending(p => (p.VoteCount * 2) + (p.Comments.Count * 1) - ((DateTime.UtcNow.Date - p.CreatedAt.Date).Days * 5))
                 .ThenByDescending(p => p.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
