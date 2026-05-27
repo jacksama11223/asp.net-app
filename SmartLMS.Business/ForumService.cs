@@ -19,14 +19,20 @@ namespace SmartLMS.Business
 
         public async Task<List<Post>> GetForumFeedAsync(int page = 1, int pageSize = 10)
         {
-            return await _context.Posts
+            int offset = (page - 1) * pageSize;
+            var sql = $@"
+                SELECT p.* 
+                FROM Posts p
+                WHERE p.IsPublished = 1 AND p.IsDeleted = 0
+                ORDER BY (p.VoteCount * 2) + 
+                         (SELECT COUNT(*) FROM Comments c WHERE c.PostId = p.PostId AND c.IsDeleted = 0) - 
+                         (DATEDIFF(UTC_TIMESTAMP(), p.CreatedAt) * 5) DESC,
+                         p.CreatedAt DESC
+                LIMIT {pageSize} OFFSET {offset}";
+
+            return await _context.Posts.FromSqlRaw(sql)
                 .Include(p => p.Author)
                 .Include(p => p.Comments).ThenInclude(c => c.Author)
-                .Where(p => p.IsPublished && !p.IsDeleted)
-                .OrderByDescending(p => (p.VoteCount * 2) + (p.Comments.Count * 1) - ((DateTime.UtcNow.Date - p.CreatedAt.Date).Days * 5))
-                .ThenByDescending(p => p.CreatedAt)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
         }
 
