@@ -1,0 +1,236 @@
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Tin nhắn trực tuyến (Real-time Chat)";
+}
+
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+<div class="max-w-6xl mx-auto h-[80vh] flex gap-6 font-sans" x-data="chatModule()">
+    
+    <!-- Left Sidebar: Chat List -->
+    <div class="w-80 bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden shrink-0">
+        <div class="p-6 border-b border-slate-100">
+            <h2 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                <i data-lucide="message-circle" class="w-6 h-6 text-cyan-600"></i> Tin nhắn
+            </h2>
+            <div class="mt-4 relative">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input type="text" placeholder="Tìm kiếm bạn bè..." class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border-none rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all" />
+            </div>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-3 space-y-1">
+            <!-- Global Chat Room -->
+            <button x-on:click="activeChat = 'global'; unreadGlobal = 0;" 
+                    :class="activeChat === 'global' ? 'bg-cyan-50 border-cyan-200' : 'hover:bg-slate-50 border-transparent'"
+                    class="w-full flex items-center gap-3 p-3 rounded-2xl border transition-all cursor-pointer text-left">
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
+                        <i data-lucide="globe" class="w-5 h-5"></i>
+                    </div>
+                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-black text-slate-800 truncate">Sảnh chính (Global)</h4>
+                    <p class="text-[11px] text-slate-500 truncate mt-0.5" x-text="lastGlobalMessage || 'Chào mừng đến với SmartLMS Chat!'"></p>
+                </div>
+                <div x-show="unreadGlobal > 0" class="w-5 h-5 bg-rose-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold" x-text="unreadGlobal"></div>
+            </button>
+
+            <hr class="border-slate-100 my-2" />
+            <div class="px-3 py-1 text-[10px] font-black text-slate-400 uppercase tracking-widest">Bạn bè & Nhóm</div>
+
+            <!-- Demo Friend 1 -->
+            <button class="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 border border-transparent transition-all cursor-pointer text-left opacity-60">
+                <div class="relative">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="w-12 h-12 rounded-full border border-slate-200" />
+                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-slate-300 border-2 border-white rounded-full"></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-bold text-slate-800 truncate">Hệ thống</h4>
+                    <p class="text-[11px] text-slate-500 truncate mt-0.5">Tính năng 1:1 đang phát triển</p>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Side: Chat Window -->
+    <div class="flex-1 bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden relative">
+        <!-- Ánh sáng nền -->
+        <div class="absolute inset-0 bg-slate-50/50 pointer-events-none"></div>
+
+        <!-- Chat Header -->
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-sm relative z-10">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md">
+                    <i data-lucide="globe" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-slate-800">Sảnh chính (Global)</h3>
+                    <p class="text-[11px] text-emerald-500 font-bold flex items-center gap-1.5 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Trực tuyến realtime bằng SignalR
+                    </p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button class="p-2.5 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-xl transition-all">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                </button>
+                <button class="p-2.5 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-xl transition-all">
+                    <i data-lucide="video" class="w-4 h-4"></i>
+                </button>
+                <button class="p-2.5 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-xl transition-all">
+                    <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="messages-container" class="flex-1 p-6 overflow-y-auto space-y-6 relative z-10 flex flex-col">
+            
+            <!-- Default Welcome Message -->
+            <div class="flex justify-center mb-8">
+                <div class="bg-indigo-50 border border-indigo-100 text-indigo-800 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                    Bắt đầu phiên mã hóa End-to-End
+                </div>
+            </div>
+
+            <!-- Loop qua danh sách tin nhắn -->
+            <template x-for="(msg, index) in messages" :key="index">
+                <div class="flex w-full" :class="msg.isMine ? 'justify-end' : 'justify-start'">
+                    
+                    <div class="flex gap-3 max-w-[70%]" :class="msg.isMine ? 'flex-row-reverse' : 'flex-row'">
+                        
+                        <img x-show="!msg.isMine" :src="msg.avatarUrl" class="w-8 h-8 rounded-full shadow-sm shrink-0" />
+                        
+                        <div class="space-y-1" :class="msg.isMine ? 'items-end' : 'items-start'">
+                            <div x-show="!msg.isMine" class="text-[10px] font-bold text-slate-400 ml-1" x-text="msg.senderName"></div>
+                            
+                            <div class="px-5 py-3 rounded-2xl text-sm font-medium leading-relaxed relative group"
+                                 :class="msg.isMine 
+                                    ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-tr-sm shadow-md shadow-cyan-500/20' 
+                                    : 'bg-white border border-slate-100 text-slate-700 rounded-tl-sm shadow-sm'">
+                                
+                                <!-- Text Message -->
+                                <span x-text="msg.text"></span>
+                                
+                                <!-- Shared Post Embed -->
+                                <template x-if="msg.postUrl">
+                                    <div class="mt-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20" :class="!msg.isMine ? 'bg-slate-50 border-slate-200' : ''">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <i data-lucide="link" class="w-3.5 h-3.5" :class="msg.isMine ? 'text-white' : 'text-cyan-600'"></i>
+                                            <span class="text-[10px] font-black uppercase tracking-wider" :class="msg.isMine ? 'text-cyan-100' : 'text-cyan-700'">Bài viết được chia sẻ</span>
+                                        </div>
+                                        <a :href="msg.postUrl" class="text-xs font-bold hover:underline line-clamp-2" :class="msg.isMine ? 'text-white' : 'text-slate-800'">
+                                            Xem chi tiết bài viết này trên diễn đàn
+                                        </a>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </template>
+        </div>
+
+        <!-- Chat Input Form -->
+        <div class="p-5 border-t border-slate-100 bg-white relative z-10">
+            <form x-on:submit.prevent="sendMessage" class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-2 focus-within:ring-2 focus-within:ring-cyan-500 focus-within:border-transparent transition-all shadow-sm">
+                
+                <button type="button" class="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-xl transition-all">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                </button>
+                <button type="button" class="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-xl transition-all">
+                    <i data-lucide="image" class="w-5 h-5"></i>
+                </button>
+
+                <input type="text" x-model="inputText" placeholder="Nhắn tin với Sảnh chính..." class="flex-1 bg-transparent border-none focus:outline-none text-sm font-medium text-slate-700 px-2" />
+                
+                <button type="submit" :disabled="!inputText.trim()" 
+                        :class="inputText.trim() ? 'bg-cyan-600 hover:bg-cyan-700 text-white shadow-md active:scale-95' : 'bg-slate-200 text-slate-400'"
+                        class="p-2.5 rounded-xl transition-all flex items-center justify-center">
+                    <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+    });
+
+    function chatModule() {
+        return {
+            activeChat: 'global',
+            unreadGlobal: 0,
+            lastGlobalMessage: '',
+            inputText: '',
+            messages: [],
+            hubConnection: null,
+            currentUser: '@(User.Identity?.Name ?? "Anonymous")',
+            currentUserAvatar: 'https://ui-avatars.com/api/?name=@Uri.EscapeDataString(User.Identity?.Name ?? "U")&background=random',
+
+            async init() {
+                // Initialize SignalR
+                this.hubConnection = new signalR.HubConnectionBuilder()
+                    .withUrl("/hubs/community")
+                    .withAutomaticReconnect()
+                    .build();
+
+                // On receive message
+                this.hubConnection.on("ReceiveMessage", (senderName, senderAvatar, message, postUrl) => {
+                    const isMine = senderName === this.currentUser;
+                    
+                    this.messages.push({
+                        senderName,
+                        avatarUrl: senderAvatar,
+                        text: message,
+                        postUrl: postUrl,
+                        isMine: isMine
+                    });
+
+                    if (!isMine && this.activeChat !== 'global') {
+                        this.unreadGlobal++;
+                    }
+                    this.lastGlobalMessage = (isMine ? "Bạn: " : senderName + ": ") + message;
+
+                    // Scroll to bottom
+                    setTimeout(() => {
+                        const container = document.getElementById('messages-container');
+                        container.scrollTop = container.scrollHeight;
+                        if(window.lucide) { lucide.createIcons(); }
+                    }, 50);
+                });
+
+                try {
+                    await this.hubConnection.start();
+                    console.log("Connected to CommunityHub");
+                    // Join global group
+                    await this.hubConnection.invoke("JoinGroup", "GlobalChat");
+                } catch (err) {
+                    console.error("SignalR Connection Error: ", err);
+                }
+            },
+
+            async sendMessage() {
+                if (!this.inputText.trim()) return;
+
+                const msg = this.inputText.trim();
+                this.inputText = ''; // clear input
+
+                try {
+                    await this.hubConnection.invoke("SendMessageToGroup", "GlobalChat", this.currentUser, this.currentUserAvatar, msg, "");
+                } catch (err) {
+                    console.error("Lỗi gửi tin nhắn: ", err);
+                    window.showToast && window.showToast('❌ Không thể gửi tin nhắn.');
+                }
+            }
+        }
+    }
+</script>

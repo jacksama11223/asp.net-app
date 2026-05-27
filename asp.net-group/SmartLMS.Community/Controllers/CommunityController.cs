@@ -229,6 +229,40 @@ public class CommunityController : Controller
     public IActionResult Mentor() { return View(); }
 
 
+    // 9. Profile Page
+    [HttpGet("profile/{id}")]
+    [HttpGet("/Community/Profile/{id}")]
+    public async Task<IActionResult> Profile(int id, [FromServices] SmartLMSContext db)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u => u.UserId == id);
+        if (user == null) return NotFound();
+
+        ViewBag.RecentPosts = await db.Posts
+            .Where(p => p.AuthorId == id && p.IsPublished && !p.IsDeleted)
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(5)
+            .ToListAsync();
+            
+        ViewBag.Badges = await db.UserBadges
+            .Where(b => b.UserId == id)
+            .ToListAsync();
+            
+        // Calculate total EXP
+        var points = await db.UserActivityPoints.Where(p => p.UserId == id).SumAsync(p => p.Points);
+        ViewBag.TotalEXP = points;
+
+        return View(user);
+    }
+
+    // 10. Real-time Messaging
+    [HttpGet("messages")]
+    [HttpGet("/Community/Messages")]
+    [Authorize]
+    public IActionResult Messages()
+    {
+        return View();
+    }
+
     // --- NEW API ENDPOINTS FOR FORUM FEED ---
 
     [HttpPost("SimulateAiDraft")]
@@ -291,31 +325,6 @@ public class CommunityController : Controller
         return Ok("Seed thành công 2 bài viết mới.");
     }
 
-    [HttpGet("/profile/{userId}")]
-    public async Task<IActionResult> Profile(int userId, [FromServices] SmartLMSContext db)
-    {
-        var targetUser = await db.Users.FindAsync(userId);
-        if (targetUser == null) return NotFound("Người dùng không tồn tại.");
-
-        var recentPosts = await db.Posts
-            .Where(p => p.AuthorId == userId && p.IsPublished && !p.IsDeleted)
-            .OrderByDescending(p => p.CreatedAt)
-            .Take(10)
-            .ToListAsync();
-
-        var totalComments = await db.Comments
-            .Where(c => c.AuthorId == userId && !c.IsDeleted)
-            .CountAsync();
-
-        var viewModel = new SmartLMS.Community.ViewModels.ProfileViewModel
-        {
-            User = targetUser,
-            RecentPosts = recentPosts,
-            TotalComments = totalComments
-        };
-
-        return View(viewModel);
-    }
 }
 
 public class AiDraftRequest { public string Prompt { get; set; } = string.Empty; }
