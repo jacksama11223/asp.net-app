@@ -13,7 +13,6 @@ services:
       --server-id=2
       --log-bin=mysql-bin
       --binlog-format=ROW
-      --read-only=1
       --innodb-buffer-pool-size=64M
       --innodb-log-file-size=128M
       --max-connections=5000
