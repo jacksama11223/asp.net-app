@@ -315,8 +315,8 @@
                         <!-- Tên người gửi -->
                         <span x-show="!msg.isMine" class="text-[10px] text-slate-400 ml-1 font-semibold" x-text="msg.name"></span>
                         
-                        <div class="px-3 py-2 text-sm shadow-sm whitespace-pre-wrap"
-                             :class="msg.isMine ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-sm'">
+                        <div class="px-3 py-2 text-sm shadow-sm whitespace-pre-wrap w-fit"
+                             :class="msg.isMine ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm self-end' : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-sm self-start'">
                             <span x-text="msg.text"></span>
                             
                             <!-- LINK PREVIEW (RICH EMBED CARD) -->
@@ -368,6 +368,30 @@
                 fullScreen: false,
                 msgText: '',
                 messages: [],
+                init() {
+                    // Fetch chat history from DB
+                    fetch('/api/chat/history')
+                        .then(res => res.json())
+                        .then(data => {
+                            const localName = localStorage.getItem('guestChatName') ? (localStorage.getItem('guestChatName') + " (Khách)") : "Thành viên";
+                            this.messages = data.map(msg => ({
+                                name: msg.name,
+                                avatar: msg.avatar,
+                                text: msg.text,
+                                postUrl: msg.postUrl,
+                                previewTitle: msg.previewTitle,
+                                previewDesc: msg.previewDesc,
+                                isMine: msg.name === '@(User.Identity?.Name)' || msg.name === localName
+                            }));
+                            
+                            // Tự cuộn xuống dưới cùng khi load xong
+                            setTimeout(() => {
+                                const container = document.getElementById('chatMessagesContainer');
+                                if(container) container.scrollTop = container.scrollHeight;
+                            }, 300);
+                        })
+                        .catch(err => console.error("Failed to load chat history:", err));
+                },
                 sendMessage() {
                     if(!this.msgText.trim()) return;
 

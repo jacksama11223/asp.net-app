@@ -349,6 +349,29 @@ public class CommunityController : Controller
         return Ok("Seed thành công 2 bài viết mới.");
     }
 
+    [HttpGet("/api/chat/history")]
+    public async Task<IActionResult> GetChatHistory([FromServices] SmartLMSContext db)
+    {
+        var messages = await db.CommunityChatMessages
+            .OrderByDescending(m => m.Timestamp)
+            .Take(50)
+            .ToListAsync();
+            
+        // Đảo ngược lại để hiện tin cũ trước, tin mới sau
+        messages.Reverse();
+
+        return Json(messages.Select(m => new
+        {
+            name = m.SenderName,
+            avatar = string.IsNullOrEmpty(m.SenderAvatar) ? "https://ui-avatars.com/api/?name=U" : m.SenderAvatar,
+            text = m.MessageText,
+            postUrl = m.PostUrl,
+            previewTitle = m.PreviewTitle,
+            previewDesc = m.PreviewDesc,
+            timestamp = m.Timestamp.ToString("o")
+        }));
+    }
+
 }
 
 public class AiDraftRequest { public string Prompt { get; set; } = string.Empty; }

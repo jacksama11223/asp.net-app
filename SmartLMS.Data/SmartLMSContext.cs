@@ -160,6 +160,7 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<DocumentPage> DocumentPages { get; set; }
     public virtual DbSet<DirectMessage> DirectMessages { get; set; }
+    public virtual DbSet<CommunityChatMessage> CommunityChatMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -458,6 +459,12 @@ public partial class SmartLMSContext : DbContext
             entity.HasOne(d => d.Sender).WithMany().HasForeignKey(d => d.SenderId).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(d => d.Receiver).WithMany().HasForeignKey(d => d.ReceiverId).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(d => d.Course).WithMany().HasForeignKey(d => d.CourseId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<CommunityChatMessage>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("CommunityChatMessages");
+            entity.Property(e => e.Timestamp).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         modelBuilder.Entity<UserLesson>(entity =>
