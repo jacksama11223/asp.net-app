@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 
-const TARGET_URL = 'http://141.253.114.218/'; 
+const TARGET_URL = 'http://141.253.114.218/Account/Login'; 
 // Đổi thành /Account/Login nếu muốn test sức chịu đựng của Backend/Database
 // Để nguyên '/' nếu muốn test sức chịu đựng của Frontend + Nginx
 
