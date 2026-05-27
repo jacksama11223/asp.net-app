@@ -1,4 +1,25 @@
 services:
+  # ✅ Database Bản Sao (Read Replica)
+  db_slave:
+    image: mariadb:latest
+    container_name: smartlms-db-slave
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    mem_limit: 300m
+    command: >
+      --server-id=2
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --read-only=1
+      --innodb-buffer-pool-size=64M
+      --innodb-log-file-size=128M
+      --max-connections=5000
+    networks:
+      - smartlms-worker-net
+
   backend:
     image: ghcr.io/jacksama11223/asp.net-app/smartlms-backend:latest
     restart: always
@@ -8,8 +29,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
-      # ✅ Kết nối về VPS-A (Thay IP_VPS_A bằng YOUR_VPS_IP)
+      # ✅ Ghi dữ liệu: Kết nối về VPS-A (Master) qua mạng Internet
       - ConnectionStrings__DefaultConnection=Server=YOUR_VPS_IP;Port=3306;Database=SmartLMS;User=root;Password=${DB_PASSWORD};SslMode=None;Maximum Pool Size=30;Connection Timeout=300;Command Timeout=300;
+      # ✅ Đọc dữ liệu: Kết nối về VPS-B (Slave) qua Localhost siêu tốc
+      - ConnectionStrings__ReadOnlyConnection=Server=db_slave;Port=3306;Database=SmartLMS;User=root;Password=${DB_PASSWORD};SslMode=None;Maximum Pool Size=100;Connection Timeout=300;Command Timeout=300;
       - Redis__ConnectionString=YOUR_VPS_IP:6379,password=YOUR_REDIS_PASSWORD_HERE
       - COMPlus_gcServer=0
       - DOTNET_GCConserveMemory=9
