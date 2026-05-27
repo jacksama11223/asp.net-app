@@ -12,17 +12,17 @@
     <!-- Header Card -->
     <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 relative">
         <div class="h-32 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
-        <div class="px-8 pb-8 relative">
+        <div class="px-4 sm:px-8 pb-8 relative flex flex-col sm:block items-center">
             <!-- Avatar -->
-            <div class="absolute -top-12 border-4 border-white rounded-full bg-white shadow-md">
+            <div class="absolute -top-12 sm:left-8 border-4 border-white rounded-full bg-white shadow-md">
                 <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(Model.FullName ?? "U")&size=96&background=random" class="w-24 h-24 rounded-full object-cover" alt="Avatar" />
             </div>
             
-            <div class="mt-14 flex justify-between items-start">
-                <div>
+            <div class="mt-14 w-full flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4">
+                <div class="text-center sm:text-left">
                     <h1 class="text-2xl font-black text-slate-800">@Model.FullName</h1>
                     <p class="text-sm text-cyan-600 font-bold uppercase tracking-wider mt-1">@Model.Role</p>
-                    <div class="flex items-center gap-4 mt-3 text-sm text-slate-500 font-semibold">
+                    <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mt-3 text-xs sm:text-sm text-slate-500 font-semibold">
                         <span class="flex items-center gap-1.5"><i data-lucide="mail" class="w-4 h-4"></i> @Model.Email</span>
                         <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-4 h-4"></i> Tham gia: @(Model.CreatedDate?.ToString("MM/yyyy") ?? "N/A")</span>
                     </div>
