@@ -311,12 +311,12 @@
                     </template>
                     
                     <!-- Khung tin nhắn -->
-                    <div class="max-w-[75%] flex flex-col gap-1">
+                    <div class="max-w-[75%] flex flex-col gap-1" :class="msg.isMine ? 'items-end' : 'items-start'">
                         <!-- Tên người gửi -->
                         <span x-show="!msg.isMine" class="text-[10px] text-slate-400 ml-1 font-semibold" x-text="msg.name"></span>
                         
-                        <div class="px-3 py-2 text-sm shadow-sm whitespace-pre-wrap w-fit"
-                             :class="msg.isMine ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm self-end' : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-sm self-start'">
+                        <div class="px-3 py-2 text-sm shadow-sm whitespace-pre-wrap w-fit break-words text-left"
+                             :class="msg.isMine ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-sm'">
                             <span x-text="msg.text"></span>
                             
                             <!-- LINK PREVIEW (RICH EMBED CARD) -->
@@ -373,7 +373,10 @@
                     fetch('/api/chat/history')
                         .then(res => res.json())
                         .then(data => {
-                            const localName = localStorage.getItem('guestChatName') ? (localStorage.getItem('guestChatName') + " (Khách)") : "Thành viên";
+                            const myName = '@(User.Identity?.Name)';
+                            const localGuestName = localStorage.getItem('guestChatName');
+                            const myLocalName = localGuestName ? (localGuestName + " (Khách)") : null;
+                            
                             this.messages = data.map(msg => ({
                                 name: msg.name,
                                 avatar: msg.avatar,
@@ -381,7 +384,7 @@
                                 postUrl: msg.postUrl,
                                 previewTitle: msg.previewTitle,
                                 previewDesc: msg.previewDesc,
-                                isMine: msg.name === '@(User.Identity?.Name)' || msg.name === localName
+                                isMine: (myName && msg.name === myName) || (!myName && myLocalName && msg.name === myLocalName)
                             }));
                             
                             // Tự cuộn xuống dưới cùng khi load xong
@@ -420,8 +423,10 @@
                     this.msgText = '';
                 },
                 receiveMessage(senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
-                    const localName = localStorage.getItem('guestChatName') ? (localStorage.getItem('guestChatName') + " (Khách)") : "Thành viên";
-                    const isMine = senderName === '@(User.Identity?.Name)' || senderName === localName;
+                    const myName = '@(User.Identity?.Name)';
+                    const localGuestName = localStorage.getItem('guestChatName');
+                    const myLocalName = localGuestName ? (localGuestName + " (Khách)") : null;
+                    const isMine = (myName && senderName === myName) || (!myName && myLocalName && senderName === myLocalName);
                     
                     this.messages.push({
                         name: senderName,
