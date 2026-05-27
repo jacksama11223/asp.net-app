@@ -4,6 +4,8 @@ using SmartLMS.Data;
 using SmartLMS.Models;
 using System;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Collections.Generic;
 
 namespace SmartLMS.Community.Hubs;
 
@@ -53,6 +55,26 @@ public class CommunityHub : Hub
         _context.CommunityChatMessages.Add(chatMsg);
         await _context.SaveChangesAsync();
 
-        await Clients.All.SendAsync("ReceiveMessage", senderName, senderAvatar, message, postUrl, previewTitle, previewDesc);
+        await Clients.All.SendAsync("ReceiveMessage", chatMsg.Id, senderName, senderAvatar, message, postUrl, previewTitle, previewDesc);
+    }
+
+    public async Task ReactToMessage(int messageId, string emoji)
+    {
+        var msg = await _context.CommunityChatMessages.FindAsync(messageId);
+        if (msg != null)
+        {
+            var reactions = new Dictionary<string, int>();
+            if (!string.IsNullOrEmpty(msg.ReactionsJson))
+            {
+                try { reactions = JsonSerializer.Deserialize<Dictionary<string, int>>(msg.ReactionsJson); } catch { }
+            }
+            if (reactions.ContainsKey(emoji)) reactions[emoji]++;
+            else reactions[emoji] = 1;
+            
+            msg.ReactionsJson = JsonSerializer.Serialize(reactions);
+            await _context.SaveChangesAsync();
+
+            await Clients.All.SendAsync("MessageReacted", messageId, msg.ReactionsJson);
+        }
     }
 }

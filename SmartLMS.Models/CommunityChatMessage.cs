@@ -31,5 +31,7 @@ namespace SmartLMS.Models
         public string PreviewDesc { get; set; } = string.Empty;
 
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        
+        public string ReactionsJson { get; set; } = "{}";
     }
 }

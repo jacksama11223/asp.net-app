@@ -301,38 +301,64 @@
 
         <!-- Chat Body -->
         <div id="chatMessagesContainer" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
-            <!-- Messages will be injected here via Alpine loop -->
             <template x-for="(msg, index) in $store.chat.messages" :key="index">
-                <div class="flex gap-2" :class="msg.isMine ? 'justify-end' : 'justify-start'">
-                    
-                    <!-- Avatar người khác -->
-                    <template x-if="!msg.isMine">
-                        <img :src="msg.avatar" class="w-8 h-8 rounded-full border border-slate-200 shrink-0 self-end mb-1" />
-                    </template>
-                    
-                    <!-- Khung tin nhắn -->
-                    <div class="max-w-[75%] flex flex-col gap-1" :class="msg.isMine ? 'items-end' : 'items-start'">
-                        <!-- Tên người gửi -->
-                        <span x-show="!msg.isMine" class="text-[10px] text-slate-400 ml-1 font-semibold" x-text="msg.name"></span>
+                <div class="flex w-full" :class="msg.isMine ? 'justify-end' : 'justify-start'">
+                    <div class="flex items-end max-w-[85%] gap-2" :class="msg.isMine ? 'flex-row-reverse' : 'flex-row'">
                         
-                        <div class="px-3 py-2 text-sm shadow-sm whitespace-pre-wrap w-fit break-words text-left"
-                             :class="msg.isMine ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-sm'">
-                            <span x-text="msg.text"></span>
+                        <!-- Avatar -->
+                        <template x-if="!msg.isMine">
+                            <img :src="msg.avatar" class="w-8 h-8 rounded-full border border-slate-200 shrink-0" />
+                        </template>
+                        
+                        <div class="flex flex-col gap-1 w-full" :class="msg.isMine ? 'items-end' : 'items-start'">
+                            <!-- Tên người gửi -->
+                            <span x-show="!msg.isMine" class="text-[10px] text-slate-400 mx-1 font-semibold" x-text="msg.name"></span>
                             
-                            <!-- LINK PREVIEW (RICH EMBED CARD) -->
-                            <template x-if="msg.previewTitle">
-                                <a :href="msg.postUrl" target="_blank" class="block mt-2 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:border-cyan-400 transition-colors cursor-pointer no-underline group block text-left">
-                                    <div class="h-24 bg-gradient-to-br from-slate-200 to-slate-100 relative">
-                                        <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <i data-lucide="link" class="w-8 h-8 text-slate-400"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-3">
-                                        <h4 class="text-xs font-bold text-slate-800 line-clamp-1 group-hover:text-cyan-700" x-text="msg.previewTitle"></h4>
-                                        <p class="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-tight" x-text="msg.previewDesc"></p>
-                                    </div>
-                                </a>
+                            <!-- Khung chữ và Reactions wrapper -->
+                            <div class="relative group" style="width: max-content; max-width: 100%;">
+                                <!-- Bubble -->
+                                <div class="px-3 py-2 text-sm shadow-sm rounded-2xl break-words"
+                                     style="word-break: break-word;"
+                                     :class="msg.isMine ? 'bg-cyan-600 text-white rounded-br-sm text-left' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm text-left'">
+                                    <span x-text="msg.text" class="whitespace-pre-wrap"></span>
+                                    
+                                    <!-- LINK PREVIEW (RICH EMBED CARD) -->
+                                    <template x-if="msg.previewTitle">
+                                        <a :href="msg.postUrl" target="_blank" class="block mt-2 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:border-cyan-400 transition-colors cursor-pointer no-underline group block text-left">
+                                            <div class="h-24 bg-gradient-to-br from-slate-200 to-slate-100 relative">
+                                                <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                    <i data-lucide="link" class="w-8 h-8 text-slate-400"></i>
+                                                </div>
+                                            </div>
+                                            <div class="p-3">
+                                                <h4 class="text-xs font-bold text-slate-800 line-clamp-1 group-hover:text-cyan-700" x-text="msg.previewTitle"></h4>
+                                                <p class="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-tight" x-text="msg.previewDesc"></p>
+                                            </div>
+                                        </a>
+                                    </template>
+                                </div>
+                                
+                                <!-- Nút thả tim (Hiện khi hover) -->
+                                <div class="absolute -bottom-3 hidden group-hover:flex items-center justify-center gap-1 bg-white border border-slate-200 rounded-full shadow-sm px-1.5 py-0.5 text-xs z-10"
+                                     :class="msg.isMine ? '-left-8' : '-right-8'">
+                                    <button class="hover:scale-125 transition-transform" @@click="$store.chat.reactToMessage(msg.id, '❤️')">❤️</button>
+                                    <button class="hover:scale-125 transition-transform" @@click="$store.chat.reactToMessage(msg.id, '👍')">👍</button>
+                                    <button class="hover:scale-125 transition-transform" @@click="$store.chat.reactToMessage(msg.id, '😂')">😂</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Hiển thị Reactions đã thả -->
+                            <template x-if="msg.reactions && Object.keys(msg.reactions).length > 0">
+                                <div class="flex flex-wrap gap-1 mt-0.5" :class="msg.isMine ? 'justify-end' : 'justify-start'">
+                                    <template x-for="(count, emoji) in msg.reactions" :key="emoji">
+                                        <button class="text-[10px] bg-white px-1.5 py-0.5 rounded-full border border-slate-200 text-slate-600 shadow-sm hover:bg-slate-50 transition-colors"
+                                                @@click="$store.chat.reactToMessage(msg.id, emoji)">
+                                            <span x-text="emoji"></span> <span x-text="count" class="font-bold"></span>
+                                        </button>
+                                    </template>
+                                </div>
                             </template>
+                            
                         </div>
                     </div>
                 </div>
@@ -377,15 +403,21 @@
                             const localGuestName = localStorage.getItem('guestChatName');
                             const myLocalName = localGuestName ? (localGuestName + " (Khách)") : null;
                             
-                            this.messages = data.map(msg => ({
-                                name: msg.name,
-                                avatar: msg.avatar,
-                                text: msg.text,
-                                postUrl: msg.postUrl,
-                                previewTitle: msg.previewTitle,
-                                previewDesc: msg.previewDesc,
-                                isMine: (myName && msg.name === myName) || (!myName && myLocalName && msg.name === myLocalName)
-                            }));
+                            this.messages = data.map(msg => {
+                                let parsedReactions = {};
+                                try { if(msg.reactionsJson) parsedReactions = JSON.parse(msg.reactionsJson); } catch(e){}
+                                return {
+                                    id: msg.id,
+                                    name: msg.name,
+                                    avatar: msg.avatar,
+                                    text: msg.text,
+                                    postUrl: msg.postUrl,
+                                    previewTitle: msg.previewTitle,
+                                    previewDesc: msg.previewDesc,
+                                    reactions: parsedReactions,
+                                    isMine: (myName && msg.name === myName) || (!myName && myLocalName && msg.name === myLocalName)
+                                };
+                            });
                             
                             // Tự cuộn xuống dưới cùng khi load xong
                             setTimeout(() => {
@@ -422,20 +454,22 @@
                         
                     this.msgText = '';
                 },
-                receiveMessage(senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
+                receiveMessage(messageId, senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
                     const myName = '@(User.Identity?.Name)';
                     const localGuestName = localStorage.getItem('guestChatName');
                     const myLocalName = localGuestName ? (localGuestName + " (Khách)") : null;
                     const isMine = (myName && senderName === myName) || (!myName && myLocalName && senderName === myLocalName);
                     
                     this.messages.push({
+                        id: messageId,
                         name: senderName,
                         avatar: senderAvatar || 'https://ui-avatars.com/api/?name=U',
                         text: message,
                         isMine: isMine,
                         postUrl: postUrl,
                         previewTitle: previewTitle,
-                        previewDesc: previewDesc
+                        previewDesc: previewDesc,
+                        reactions: {}
                     });
                     
                     if(!this.chatOpen && !isMine) {
@@ -447,6 +481,19 @@
                         const container = document.getElementById('chatMessagesContainer');
                         if(container) container.scrollTop = container.scrollHeight;
                     }, 100);
+                },
+                reactToMessage(messageId, emoji) {
+                    if (!messageId) return;
+                    hubConnection.invoke("ReactToMessage", messageId, emoji)
+                        .catch(err => console.error(err.toString()));
+                },
+                updateReaction(messageId, reactionsJson) {
+                    const msg = this.messages.find(m => m.id === messageId);
+                    if (msg) {
+                        try {
+                            msg.reactions = JSON.parse(reactionsJson);
+                        } catch(e){}
+                    }
                 }
             });
         });
@@ -460,9 +507,15 @@
             if(window.showToast) window.showToast("🔔 " + message);
         });
 
-        hubConnection.on("ReceiveMessage", function (senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
+        hubConnection.on("ReceiveMessage", function (messageId, senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
             if (Alpine && Alpine.store('chat')) {
-                Alpine.store('chat').receiveMessage(senderName, senderAvatar, message, postUrl, previewTitle, previewDesc);
+                Alpine.store('chat').receiveMessage(messageId, senderName, senderAvatar, message, postUrl, previewTitle, previewDesc);
+            }
+        });
+        
+        hubConnection.on("MessageReacted", function (messageId, reactionsJson) {
+            if (Alpine && Alpine.store('chat')) {
+                Alpine.store('chat').updateReaction(messageId, reactionsJson);
             }
         });
 

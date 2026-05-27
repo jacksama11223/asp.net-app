@@ -362,12 +362,14 @@ public class CommunityController : Controller
 
         return Json(messages.Select(m => new
         {
+            id = m.Id,
             name = m.SenderName,
             avatar = string.IsNullOrEmpty(m.SenderAvatar) ? "https://ui-avatars.com/api/?name=U" : m.SenderAvatar,
             text = m.MessageText,
             postUrl = m.PostUrl,
             previewTitle = m.PreviewTitle,
             previewDesc = m.PreviewDesc,
+            reactionsJson = m.ReactionsJson,
             timestamp = m.Timestamp.ToString("o")
         }));
     }
