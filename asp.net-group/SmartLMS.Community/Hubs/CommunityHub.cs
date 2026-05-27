@@ -23,8 +23,8 @@ public class CommunityHub : Hub
     }
 
     // Send a message to the general global chat
-    public async Task SendMessageToAll(string senderName, string senderAvatar, string message, string postUrl)
+    public async Task SendMessageToAll(string senderName, string senderAvatar, string message, string postUrl, string previewTitle = "", string previewDesc = "")
     {
-        await Clients.All.SendAsync("ReceiveMessage", senderName, senderAvatar, message, postUrl);
+        await Clients.All.SendAsync("ReceiveMessage", senderName, senderAvatar, message, postUrl, previewTitle, previewDesc);
     }
 }

@@ -668,36 +668,12 @@ class Program {
     // CHIA SẺ QUA REAL-TIME CHAT (PHASE 7)
     // ==========================================
     function shareViaMessage() {
-        // We know the current post ID because it was passed to openShareModal(id, title)
-        const postUrl = `${window.location.origin}/Community/Post/${selectedSharePostId}`;
-        const message = `Mọi người xem bài viết này nhé: "${document.getElementById('preview-title').innerText}"`;
-        
-        // Gọi SignalR Hub trực tiếp từ hàm này để gửi tin nhắn
-        const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/hubs/community")
-            .build();
-
-        hubConnection.start().then(function () {
-            const currentUser = '@(User.Identity?.Name ?? "Anonymous")';
-            const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser)}&background=random`;
-            
-            hubConnection.invoke("SendMessageToGroup", "GlobalChat", currentUser, avatar, message, postUrl)
-                .then(() => {
-                    window.showToast && window.showToast('✅ Đã gửi bài viết vào Nhóm chat chung thành công!');
-                    closeShareModal();
-                    // Chuyển hướng người dùng sang trang chat
-                    setTimeout(() => {
-                        window.location.href = '/Community/Messages';
-                    }, 1000);
-                })
-                .catch(err => {
-                    console.error("Lỗi chia sẻ chat: ", err);
-                    window.showToast && window.showToast('❌ Gửi tin nhắn thất bại.');
-                });
-        }).catch(function (err) {
-            console.error("SignalR Connection Error: ", err);
-            window.showToast && window.showToast('❌ Không thể kết nối tới server Chat.');
-        });
+        closeShareModal();
+        if(window.sendPostToChat) {
+            window.sendPostToChat(selectedSharePostId, selectedShareTitle, selectedShareCategory || 'Thảo Luận');
+        } else {
+            window.showToast && window.showToast('❌ Tính năng Chat đang tải, vui lòng thử lại sau.');
+        }
     }
 
     // ==========================================

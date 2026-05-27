@@ -31,20 +31,37 @@ public class ResourceApiController : ControllerBase
     // POST /api/ResourceApi  [Authorize] - Upload tài liệu mới (metadata, file upload riêng)
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> UploadResource([FromBody] UploadResourceRequest req)
+    public async Task<IActionResult> UploadResource([FromForm] UploadResourceRequest req)
     {
         if (string.IsNullOrWhiteSpace(req.Title))
             return BadRequest(new { message = "Tiêu đề tài liệu không được để trống." });
 
+        if (req.File == null || req.File.Length == 0)
+            return BadRequest(new { message = "Vui lòng đính kèm một file tài liệu." });
+
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!int.TryParse(userIdClaim, out int userId)) return Unauthorized();
+
+        // Ensure directory exists
+        var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "resources");
+        if (!Directory.Exists(uploadDir)) Directory.CreateDirectory(uploadDir);
+
+        // Generate safe file name
+        var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(req.File.FileName)}";
+        var filePath = Path.Combine(uploadDir, fileName);
+
+        // Save file
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await req.File.CopyToAsync(stream);
+        }
 
         var resource = new CommunityResource
         {
             Title       = req.Title,
             Description = req.Description ?? "",
-            FileType    = req.FileType ?? "other",
-            FileUrl     = req.FileUrl ?? "",
+            FileType    = req.FileType ?? "PDF",
+            FileUrl     = $"/uploads/resources/{fileName}",
             Subject     = req.Subject ?? "",
             UploaderId  = userId,
             CreatedAt   = DateTime.UtcNow,
@@ -58,4 +75,11 @@ public class ResourceApiController : ControllerBase
     }
 }
 
-public record UploadResourceRequest(string Title, string? Description, string? FileType, string? FileUrl, string? Subject);
+public class UploadResourceRequest
+{
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    public string? FileType { get; set; }
+    public string? Subject { get; set; }
+    public IFormFile? File { get; set; }
+}

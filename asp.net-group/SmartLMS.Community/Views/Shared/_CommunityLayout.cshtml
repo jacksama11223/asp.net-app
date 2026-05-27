@@ -271,6 +271,97 @@
     </script>
     </script>
     
+    <!-- TÍCH HỢP MESSENGER CHAT (PHASE 4) -->
+    <!-- Alpine.js (Nếu chưa có) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <div x-data="{
+            chatOpen: false, 
+            fullScreen: false, 
+            msgText: '', 
+            messages: []
+         }"
+         class="fixed z-[99] flex flex-col font-sans transition-all duration-300"
+         :class="fullScreen ? 'inset-0 bg-white' : 'bottom-6 right-6 w-80 h-[500px] max-h-[80vh] shadow-2xl rounded-2xl bg-white border border-slate-200'"
+         x-show="chatOpen"
+         style="display: none;"
+    >
+        <!-- Chat Header -->
+        <div class="flex items-center justify-between p-3 border-b border-slate-100 bg-gradient-to-r from-cyan-600 to-indigo-600 text-white rounded-t-2xl" :class="fullScreen ? 'rounded-none' : ''">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <h3 class="font-bold text-sm tracking-wide">Community Chat</h3>
+            </div>
+            <div class="flex items-center gap-2 text-white/80">
+                <!-- Nút Phóng To / Thu Nhỏ -->
+                <button @@click="fullScreen = !fullScreen" class="hover:text-white transition-colors" title="Phóng to toàn trang">
+                    <i data-lucide="maximize" class="w-4 h-4" x-show="!fullScreen"></i>
+                    <i data-lucide="minimize" class="w-4 h-4" x-show="fullScreen"></i>
+                </button>
+                <!-- Nút Đóng -->
+                <button @@click="chatOpen = false; fullScreen = false" class="hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Body -->
+        <div id="chatMessagesContainer" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+            <!-- Messages will be injected here via Alpine loop -->
+            <template x-for="(msg, index) in messages" :key="index">
+                <div class="flex gap-2" :class="msg.isMine ? 'justify-end' : 'justify-start'">
+                    
+                    <!-- Avatar người khác -->
+                    <template x-if="!msg.isMine">
+                        <img :src="msg.avatar" class="w-8 h-8 rounded-full border border-slate-200 shrink-0 self-end mb-1" />
+                    </template>
+                    
+                    <!-- Khung tin nhắn -->
+                    <div class="max-w-[75%] flex flex-col gap-1">
+                        <!-- Tên người gửi -->
+                        <span x-show="!msg.isMine" class="text-[10px] text-slate-400 ml-1 font-semibold" x-text="msg.name"></span>
+                        
+                        <div class="px-3 py-2 text-sm shadow-sm whitespace-pre-wrap"
+                             :class="msg.isMine ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-sm'">
+                            <span x-text="msg.text"></span>
+                            
+                            <!-- LINK PREVIEW (RICH EMBED CARD) -->
+                            <template x-if="msg.previewTitle">
+                                <a :href="msg.postUrl" target="_blank" class="block mt-2 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:border-cyan-400 transition-colors cursor-pointer no-underline group block text-left">
+                                    <div class="h-24 bg-gradient-to-br from-slate-200 to-slate-100 relative">
+                                        <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <i data-lucide="link" class="w-8 h-8 text-slate-400"></i>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                        <h4 class="text-xs font-bold text-slate-800 line-clamp-1 group-hover:text-cyan-700" x-text="msg.previewTitle"></h4>
+                                        <p class="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-tight" x-text="msg.previewDesc"></p>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="p-3 border-t border-slate-100 bg-white" :class="fullScreen ? 'rounded-none' : 'rounded-b-2xl'">
+            <form @@submit.prevent="sendMessageChat()" class="flex items-end gap-2 relative">
+                <textarea x-model="msgText" rows="1" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500/50 resize-none max-h-24 min-h-[44px]" @@keydown.enter.prevent="if(!$event.shiftKey) sendMessageChat()"></textarea>
+                <button type="submit" class="p-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl transition-transform active:scale-90 shadow-md flex items-center justify-center shrink-0 h-[44px] w-[44px]" :disabled="!msgText.trim()">
+                    <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FAB (Nút Mở Chat) -->
+    <button id="fabChatBtn" onclick="document.querySelector('[x-data]').__x.$data.chatOpen = true; setTimeout(()=>lucide.createIcons(), 50)" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(8,145,178,0.4)] hover:scale-110 hover:shadow-[0_15px_35px_rgba(8,145,178,0.5)] transition-all z-[98]">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+        <!-- Ping Badge -->
+        <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-rose-500 border-2 border-white rounded-full"></span>
+    </button>
+
     <!-- SignalR for Real-time Notifications -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
     <script>
@@ -283,9 +374,68 @@
             if(window.showToast) window.showToast("🔔 " + message);
         });
 
+        hubConnection.on("ReceiveMessage", function (senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
+            const chatComponent = document.querySelector('[x-data]');
+            if (chatComponent) {
+                const data = chatComponent.__x.$data;
+                const isMine = senderName === '@(User.Identity?.Name ?? "Thành viên")';
+                data.messages.push({
+                    name: senderName,
+                    avatar: senderAvatar || 'https://ui-avatars.com/api/?name=U',
+                    text: message,
+                    isMine: isMine,
+                    postUrl: postUrl,
+                    previewTitle: previewTitle,
+                    previewDesc: previewDesc
+                });
+                
+                if(!data.chatOpen && !isMine) {
+                    if(window.showToast) window.showToast("💬 Tin nhắn mới từ " + senderName);
+                }
+                
+                // Auto scroll to bottom
+                setTimeout(() => {
+                    const container = document.getElementById('chatMessagesContainer');
+                    if(container) container.scrollTop = container.scrollHeight;
+                }, 100);
+            }
+        });
+
         hubConnection.start().catch(function (err) {
             console.error("SignalR Error:", err.toString());
         });
+
+        // Hàm Alpine gửi tin nhắn
+        function sendMessageChat() {
+            const chatComponent = document.querySelector('[x-data]');
+            const data = chatComponent.__x.$data;
+            if(!data.msgText.trim()) return;
+
+            const name = '@(User.Identity?.Name ?? "Thành viên")';
+            const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
+            
+            // Gửi qua SignalR
+            hubConnection.invoke("SendMessageToAll", name, avatar, data.msgText, "", "", "")
+                .catch(err => console.error(err.toString()));
+                
+            data.msgText = '';
+        }
+
+        // Tích hợp Share Modal vào Chat
+        window.sendPostToChat = function(postId, title, category) {
+            const name = '@(User.Identity?.Name ?? "Thành viên")';
+            const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
+            const postUrl = `/hub/post/${postId}`;
+            
+            // Gửi tin nhắn kèm thẻ Preview
+            hubConnection.invoke("SendMessageToAll", name, avatar, "Hãy xem bài thảo luận này nhé!", postUrl, title, category)
+                .catch(err => console.error(err.toString()));
+                
+            if(window.showToast) window.showToast("✅ Đã gửi bài viết vào khung chat nhóm!");
+            
+            // Tự động mở chat
+            document.querySelector('[x-data]').__x.$data.chatOpen = true;
+        }
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
