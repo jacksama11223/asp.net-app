@@ -14,11 +14,13 @@ public class QaApiController : ControllerBase
 {
     private readonly ICommunityService _service;
     private readonly IHubContext<CommunityHub> _hubContext;
+    private readonly IBacklinkService _backlinkService;
 
-    public QaApiController(ICommunityService service, IHubContext<CommunityHub> hubContext)
+    public QaApiController(ICommunityService service, IHubContext<CommunityHub> hubContext, IBacklinkService backlinkService)
     {
         _service = service;
         _hubContext = hubContext;
+        _backlinkService = backlinkService;
     }
 
     // GET /api/QaApi/questions?status=All
@@ -47,9 +49,13 @@ public class QaApiController : ControllerBase
             AuthorId  = userId,
             CreatedAt = DateTime.UtcNow,
             Status    = "Unsolved",
+            AttachmentIds = req.AttachmentIds // Thêm AttachmentIds
         };
 
         var result = await _service.AskQuestionAsync(question);
+
+        // Trích xuất Backlink từ nội dung câu hỏi
+        await _backlinkService.ExtractAndSaveBacklinksAsync(req.Content, "QA", result.Id);
 
         // Notify via SignalR
         await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"Có câu hỏi mới: '{req.Title}'");
@@ -76,9 +82,13 @@ public class QaApiController : ControllerBase
             CreatedAt  = DateTime.UtcNow,
             Votes      = 0,
             IsVerified = false,
+            AttachmentIds = req.AttachmentIds // Thêm AttachmentIds
         };
 
         var result = await _service.AddAnswerAsync(answer);
+
+        // Trích xuất Backlink từ nội dung câu trả lời
+        await _backlinkService.ExtractAndSaveBacklinksAsync(req.Content, "QA_Answer", result.Id);
 
         // Notify via SignalR
         await _hubContext.Clients.All.SendAsync("ReceiveNotification", "Có người vừa thảo luận về một câu hỏi!");
@@ -87,6 +97,6 @@ public class QaApiController : ControllerBase
     }
 }
 
-public record AskQuestionRequest(string Title, string Content);
-public record AddAnswerRequest(string Content);
+public record AskQuestionRequest(string Title, string Content, string AttachmentIds = null);
+public record AddAnswerRequest(string Content, string AttachmentIds = null);
 

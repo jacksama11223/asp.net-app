@@ -68,6 +68,46 @@
                     {
                         var userName = User.Identity.Name ?? "Thành viên";
                         var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "Student";
+                        
+                        <!-- Notification Bell -->
+                        <div class="relative" x-data="notificationApp()">
+                            <button @@click="toggleNotifications()" @@click.outside="open = false" class="relative p-2 text-slate-400 hover:text-cyan-600 transition-colors">
+                                <i data-lucide="bell" class="w-5 h-5"></i>
+                                <span x-show="unreadCount > 0" x-text="unreadCount" class="absolute top-1 right-1 flex items-center justify-center w-3.5 h-3.5 bg-rose-500 text-white text-[9px] font-bold rounded-full border border-white"></span>
+                            </button>
+                            
+                            <!-- Notification Dropdown -->
+                            <div x-show="open" style="display: none;"
+                                 x-transition.opacity.duration.200ms
+                                 class="absolute right-0 mt-2 w-80 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+                                <div class="px-4 py-3 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                                    <h3 class="font-bold text-sm text-slate-800">Thông báo</h3>
+                                    <button @@click="markAllAsRead()" class="text-[10px] text-cyan-600 font-bold hover:underline">Đánh dấu đã đọc tất cả</button>
+                                </div>
+                                <div class="max-h-96 overflow-y-auto p-2">
+                                    <template x-if="notifications.length === 0">
+                                        <div class="p-4 text-center text-xs text-slate-400">Không có thông báo nào.</div>
+                                    </template>
+                                    <template x-for="notif in notifications" :key="notif.id">
+                                        <div @@click="readNotification(notif)" 
+                                             class="p-3 mb-1 rounded-xl cursor-pointer transition-colors border border-transparent"
+                                             :class="notif.isRead ? 'hover:bg-slate-50' : 'bg-cyan-50 border-cyan-100'">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-8 h-8 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center shrink-0">
+                                                    <i data-lucide="bell" class="w-4 h-4"></i>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <h4 class="text-xs font-bold text-slate-800" x-text="notif.title"></h4>
+                                                    <p class="text-[11px] text-slate-500 mt-0.5 line-clamp-2" x-text="notif.message"></p>
+                                                    <span class="text-[9px] font-medium text-slate-400 mt-1 block" x-text="new Date(notif.createdAt).toLocaleString('vi-VN')"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
                             <div class="w-9 h-9 rounded-xl overflow-hidden bg-slate-100 border-2 border-white shadow shadow-cyan-100 shrink-0">
                                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@Uri.EscapeDataString(userName)" alt="Avatar" referrerpolicy="no-referrer" />
@@ -535,12 +575,27 @@
         });
 
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/hubs/community")
+            .withUrl("/hubs/dashboard") // Using DashboardHub
             .withAutomaticReconnect()
             .build();
 
-        hubConnection.on("ReceiveNotification", function (message) {
-            if(window.showToast) window.showToast("🔔 " + message);
+        hubConnection.on("ReceiveNotification", function (data) {
+            // SignalR giờ trả về object (id, title, message, link, type, createdAt) hoặc trả về string nếu là system
+            let title, message;
+            if (typeof data === "string") {
+                title = "Thông báo hệ thống";
+                message = data;
+            } else if (arguments.length > 1) {
+                // Compatible with old NotifyUserAsync(title, message, type)
+                title = arguments[0];
+                message = arguments[1];
+            } else {
+                title = data.title;
+                message = data.message;
+                // Nếu đang đăng nhập, báo AlpineJS cập nhật thông báo
+                document.dispatchEvent(new CustomEvent('new-notification', { detail: data }));
+            }
+            if(window.showToast) window.showToast("🔔 " + title + ": " + message);
         });
 
         hubConnection.on("ReceiveMessage", function (messageId, senderName, senderAvatar, message, postUrl, previewTitle, previewDesc) {
@@ -579,19 +634,91 @@
             const postUrl = `/hub/post/${postId}`;
             
             // Gửi tin nhắn kèm thẻ Preview
-            hubConnection.invoke("SendMessageToAll", name, avatar, "Hãy xem bài thảo luận này nhé!", postUrl, title, category)
-                .catch(err => console.error(err.toString()));
-                
-            if(window.showToast) window.showToast("✅ Đã gửi bài viết vào khung chat nhóm!");
+            const commHub = new signalR.HubConnectionBuilder().withUrl("/hubs/community").build();
+            commHub.start().then(() => {
+                commHub.invoke("SendMessageToAll", name, avatar, "Hãy xem bài thảo luận này nhé!", postUrl, title, category)
+                    .catch(err => console.error(err.toString()));
+                if(window.showToast) window.showToast("✅ Đã gửi bài viết vào khung chat nhóm!");
+            });
             
             // Tự động mở chat
             if (Alpine && Alpine.store('chat')) {
                 Alpine.store('chat').chatOpen = true;
             }
         }
+
+        // Alpine component for Notifications
+        function notificationApp() {
+            return {
+                open: false,
+                unreadCount: 0,
+                notifications: [],
+                init() {
+                    this.fetchUnreadCount();
+                    
+                    document.addEventListener('new-notification', (e) => {
+                        const notif = e.detail;
+                        this.notifications.unshift(notif);
+                        this.unreadCount++;
+                    });
+                },
+                toggleNotifications() {
+                    this.open = !this.open;
+                    if (this.open && this.notifications.length === 0) {
+                        this.fetchNotifications();
+                    }
+                },
+                async fetchUnreadCount() {
+                    try {
+                        const res = await fetch('/api/NotificationApi/unread-count');
+                        const data = await res.json();
+                        if (data.success) {
+                            this.unreadCount = data.count;
+                        }
+                    } catch(e) {}
+                },
+                async fetchNotifications() {
+                    try {
+                        const res = await fetch('/api/NotificationApi');
+                        const data = await res.json();
+                        if (data.success) {
+                            this.notifications = data.notifications;
+                        }
+                    } catch(e) {}
+                },
+                async readNotification(notif) {
+                    if (!notif.isRead) {
+                        try {
+                            const res = await fetch(`/api/NotificationApi/${notif.id}/read`, { method: 'POST' });
+                            const data = await res.json();
+                            if (data.success) {
+                                notif.isRead = true;
+                                if (this.unreadCount > 0) this.unreadCount--;
+                            }
+                        } catch(e) {}
+                    }
+                    if (notif.link) {
+                        window.location.href = notif.link;
+                    }
+                },
+                async markAllAsRead() {
+                    try {
+                        const res = await fetch(`/api/NotificationApi/read-all`, { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                            this.notifications.forEach(n => n.isRead = true);
+                            this.unreadCount = 0;
+                        }
+                    } catch(e) {}
+                }
+            }
+        }
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/textarea-hints.js"></script>
+    <script src="~/js/attachment-uploader.js"></script>
+    <script src="~/js/document-viewer.js"></script>
 </body>
 </html>
 

@@ -12,6 +12,7 @@
 ## 🛡️ Core Models (Entities)
 - `AchievementHubViewModel`
 - `ActivityLog`
+- `AiMentor`
 - `ApiKey`
 - `AuditLog`
 - `Badge`
@@ -21,9 +22,11 @@
 - `Cohort`
 - `Comment`
 - `CommissionRate`
+- `CommunityChatMessage`
 - `CommunityGamification`
 - `CommunityInteraction`
 - `CommunityModules`
+- `CommunityProfile`
 - `Coupon`
 - `Course`
 - `CourseModule`
@@ -49,6 +52,7 @@
 - `SmtpSettings`
 - `User`
 - `UserCohort`
+- `UserLesson`
 - `Webhook`
 - `ZoomConfig`
 
@@ -64,6 +68,8 @@
 - `AffiliateService`
 - `ApiKeyService`
 - `AssessmentService`
+- `AutoCensorService`
+- `BacklinkService`
 - `BookingService`
 - `CertificateService`
 - `CohortService`
@@ -72,13 +78,16 @@
 - `CourseService`
 - `CurriculumService`
 - `EmailService`
+- `ForumService`
 - `IApiKeyService`
 - `IAssessmentService`
+- `IBacklinkService`
 - `IBookingService`
 - `ICohortService`
 - `ICommunityService`
 - `ICompilerService`
 - `ICurriculumService`
+- `IForumService`
 - `INotificationService`
 - `IOrderService`
 - `ISearchEngineService`
@@ -139,6 +148,7 @@
 - [UI/API] `CourseManagement`
 - [UI/API] `Curriculum`
 - [UI/API] `Dashboard`
+- [UI/API] `Forum`
 - [UI/API] `Helpdesk`
 - [UI/API] `Home`
 - [UI/API] `IAM`
@@ -151,30 +161,50 @@
 - [UI/API] `UserManagement`
 
 ## 👥 Community Hub (Port 3080)
+- [UI/API] `Admin`
+- [UI/API] `AttachmentApi`
 - [UI/API] `Auth`
 - [UI/API] `Community`
+- [UI/API] `EventApi`
+- [UI/API] `GroupApi`
 - [UI/API] `Home`
+- [UI/API] `LeaderboardApi`
+- [UI/API] `QaApi`
+- [UI/API] `RatingApi`
+- [UI/API] `ResourceApi`
+- [UI/API] `ShareApi`
 - [UI/API] `WeatherForecast`
 
 ## ⚡ Event Handlers & Workers
 
 ## 📜 Database Scripts & SQL
+- `add_forum_seed_data.sql`
+- `add_user_lessons_table.sql`
+- `alter_table.sql`
 - `create_messages_table.sql`
+- `create_table.sql`
+- `db_dump.sql`
+- `deploy_vps.sql`
 - `enterprise_patch.sql`
+- `fix_community_db.sql`
 - `fix_ef_mapping.sql`
+- `fix_instructor_courses.sql`
 - `hotfix_db_domain.sql`
 - `mariadb_fixes.sql`
 - `optimization_audit.sql`
 - `optimize_db.sql`
 - `performance_tuning.sql`
+- `phase3_only.sql`
 - `procedures.sql`
 - `repair_data.sql`
 - `seed.sql`
 - `setup_database.sql`
+- `smartlms_seed_data.sql`
 - `sync_db_full_v4.sql`
 - `sync_db_schema.sql`
 - `sync_db_v5_final_fix.sql`
 - `update_course_management.sql`
+- `update_phase3.sql`
 - `update_sprint2_schema.sql`
 - `update_tech_debt.sql`
 - `user_management_upgrade.sql`

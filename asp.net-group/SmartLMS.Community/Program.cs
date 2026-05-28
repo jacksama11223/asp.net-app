@@ -26,6 +26,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<SmartLMS.Models.Security.IEncryptionService, SmartLMS.Business.Security.AesEncryptionService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
 builder.Services.AddScoped<IForumService, ForumService>();
+builder.Services.AddScoped<IBacklinkService, BacklinkService>();
 
 // 3. Redis Cache
 var redisConnStr = builder.Configuration["Redis__ConnectionString"]

@@ -17,11 +17,13 @@ public class CommunityController : Controller
 {
     private readonly ICommunityService _communityService;
     private readonly IForumService _forumService;
+    private readonly IBacklinkService _backlinkService;
 
-    public CommunityController(ICommunityService communityService, IForumService forumService)
+    public CommunityController(ICommunityService communityService, IForumService forumService, IBacklinkService backlinkService)
     {
         _communityService = communityService;
         _forumService = forumService;
+        _backlinkService = backlinkService;
     }
 
     // 1. Discussion Forum (Default) - NOW USING FORUM SERVICE FOR THE NEW UI
@@ -85,6 +87,9 @@ public class CommunityController : Controller
         db.Posts.Add(post);
         await db.SaveChangesAsync();
 
+        // Trích xuất Backlink từ nội dung bài viết
+        await _backlinkService.ExtractAndSaveBacklinksAsync(Content, "Post", post.PostId);
+
         TempData["WelcomeMessage"] = "Bài viết của bạn đã được gửi và đang chờ Admin duyệt.";
         return Redirect("/hub");
     }
@@ -144,6 +149,9 @@ public class CommunityController : Controller
         db.Comments.Add(comment);
         post.VoteCount++; // Có thể thưởng điểm tương tác cho bài viết
         await db.SaveChangesAsync();
+
+        // Trích xuất Backlink từ nội dung bình luận bài viết
+        await _backlinkService.ExtractAndSaveBacklinksAsync(content, "PostComment", comment.CommentId);
 
         var authorName = User.Identity?.Name ?? $"User {userId}";
         var avatarUrl = User.FindFirst("AvatarUrl")?.Value ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(authorName)}&background=random";
@@ -292,6 +300,16 @@ public class CommunityController : Controller
 
 
     // 9. Profile Page
+    [HttpGet("profile/me")]
+    [HttpGet("/Community/Profile/Me")]
+    [Authorize]
+    public async Task<IActionResult> MyProfile([FromServices] SmartLMSContext db)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+        return await Profile(userId, db);
+    }
+
     [HttpGet("profile/{id}")]
     [HttpGet("/Community/Profile/{id}")]
     public async Task<IActionResult> Profile(int id, [FromServices] SmartLMSContext db)

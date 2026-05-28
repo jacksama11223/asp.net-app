@@ -36,6 +36,7 @@ public partial class User
     public string? Hometown { get; set; }
 
     public int? TotalXP { get; set; } = 0;
+    public int? AcademicXP { get; set; } = 0; // Điểm uy tín học thuật
     public int CurrentStreak { get; set; } = 0;
     public DateTime? LastActivityDate { get; set; }
     public int? HierarchyLevel { get; set; } = 3; // 1: SuperAdmin, 2: DeptAdmin, 3: Staff/Student

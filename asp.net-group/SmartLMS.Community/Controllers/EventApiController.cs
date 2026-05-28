@@ -15,12 +15,14 @@ public class EventApiController : ControllerBase
     private readonly ICommunityService _service;
     private readonly IHubContext<CommunityHub> _hubContext;
     private readonly SmartLMS.Data.SmartLMSContext _context;
+    private readonly IBacklinkService _backlinkService;
 
-    public EventApiController(ICommunityService service, IHubContext<CommunityHub> hubContext, SmartLMS.Data.SmartLMSContext context) 
+    public EventApiController(ICommunityService service, IHubContext<CommunityHub> hubContext, SmartLMS.Data.SmartLMSContext context, IBacklinkService backlinkService) 
     { 
         _service = service; 
         _hubContext = hubContext; 
         _context = context;
+        _backlinkService = backlinkService;
     }
 
     // GET /api/EventApi
@@ -77,6 +79,9 @@ public class EventApiController : ControllerBase
 
         await _service.CreateEventAsync(ev);
 
+        // Trích xuất Backlink từ nội dung mô tả sự kiện
+        await _backlinkService.ExtractAndSaveBacklinksAsync(req.Description, "Event", ev.Id);
+
         return Ok(new { success = true, message = "Yêu cầu tạo sự kiện đã được gửi tới Admin!" });
     }
 
@@ -123,6 +128,9 @@ public class EventApiController : ControllerBase
 
         _context.EventDiscussions.Add(discussion);
         await _context.SaveChangesAsync();
+
+        // Trích xuất Backlink từ nội dung bình luận
+        await _backlinkService.ExtractAndSaveBacklinksAsync(req.Content, "EventDiscussion", discussion.Id);
 
         return Ok(new { success = true, message = "Bình luận đã được đăng!" });
     }

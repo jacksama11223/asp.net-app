@@ -168,6 +168,10 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<GroupPostComment> GroupPostComments { get; set; }
     public virtual DbSet<EventDiscussion> EventDiscussions { get; set; }
     public virtual DbSet<SharedContent> SharedContents { get; set; }
+    
+    // Community Profile & Gamification (Phase 4 & 5)
+    public virtual DbSet<EntityBacklink> EntityBacklinks { get; set; }
+    public virtual DbSet<UserRating> UserRatings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

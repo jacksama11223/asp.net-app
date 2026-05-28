@@ -80,6 +80,25 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Rating System -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <i data-lucide="star" class="w-4 h-4 text-yellow-500"></i> Đánh giá thành viên
+                </h3>
+                <div id="rating-form" class="space-y-3">
+                    <div class="flex items-center gap-2 justify-center" id="star-container">
+                        <button type="button" class="star-btn text-slate-300 hover:text-yellow-400" data-value="1"><i data-lucide="star" class="w-6 h-6"></i></button>
+                        <button type="button" class="star-btn text-slate-300 hover:text-yellow-400" data-value="2"><i data-lucide="star" class="w-6 h-6"></i></button>
+                        <button type="button" class="star-btn text-slate-300 hover:text-yellow-400" data-value="3"><i data-lucide="star" class="w-6 h-6"></i></button>
+                        <button type="button" class="star-btn text-slate-300 hover:text-yellow-400" data-value="4"><i data-lucide="star" class="w-6 h-6"></i></button>
+                        <button type="button" class="star-btn text-slate-300 hover:text-yellow-400" data-value="5"><i data-lucide="star" class="w-6 h-6"></i></button>
+                    </div>
+                    <input type="hidden" id="selected-score" value="0" />
+                    <textarea id="rating-comment" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Viết nhận xét (không bắt buộc)..."></textarea>
+                    <button type="button" onclick="submitRating()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2 rounded-xl text-sm shadow-md transition-all">Gửi Đánh Giá</button>
+                </div>
+            </div>
         </div>
 
         <!-- Main Content: Recent Posts -->
@@ -125,5 +144,57 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         lucide.createIcons();
+
+        // Xử lý logic chọn sao
+        const stars = document.querySelectorAll(".star-btn");
+        const scoreInput = document.getElementById("selected-score");
+
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                const value = parseInt(star.getAttribute("data-value"));
+                scoreInput.value = value;
+                
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute("data-value")) <= value) {
+                        s.classList.remove("text-slate-300");
+                        s.classList.add("text-yellow-400");
+                        s.querySelector('svg').classList.add("fill-yellow-400");
+                    } else {
+                        s.classList.add("text-slate-300");
+                        s.classList.remove("text-yellow-400");
+                        s.querySelector('svg').classList.remove("fill-yellow-400");
+                    }
+                });
+            });
+        });
     });
+
+    async function submitRating() {
+        const score = document.getElementById("selected-score").value;
+        const comment = document.getElementById("rating-comment").value;
+        const targetUserId = @Model.UserId;
+
+        if (score == 0) {
+            alert("Vui lòng chọn số sao để đánh giá.");
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/RatingApi", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ targetUserId: targetUserId, score: parseInt(score), comment: comment })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(data.message);
+                document.getElementById("rating-comment").value = "";
+            } else {
+                alert(data.message || "Đã xảy ra lỗi.");
+            }
+        } catch (error) {
+            console.error("Lỗi:", error);
+            alert("Lỗi kết nối.");
+        }
+    }
 </script>

@@ -1,58 +1,104 @@
 const http = require('http');
 
-// Bắn vào Endpoint API để Nginx chia tải cho các node backend
-const URL = 'http://141.253.114.218/Account/Login'; 
-const TOTAL_REQUESTS = 5000; // Tổng số đạn
-const CONCURRENT = 100; // Số súng bắn cùng lúc
+const TARGET_HOST = '141.253.114.218';
+const TARGET_PORT = 80;
+
+// Đổi path ở đây để test endpoint khác nhau
+const TARGET_PATH = '/api/public/courses'; // Endpoint công khai → test Nginx Caching
+
+const TOTAL_REQUESTS = 15000; // Tăng lượng đạn để kéo dài thời gian test
+const CONCURRENT = 500; // Nã 500 viên đạn CÙNG 1 GIÂY để đè bẹp CPU VPS-A
 
 let completed = 0;
-const stats = {};
+let totalSuccess = 0;
+let totalFail = 0;
 
-async function makeRequest() {
+// Thống kê theo Node (IP:PORT của backend)
+const nodeStats = {};    // { ip: count }
+const nodeTimings = {};  // { ip: [ms, ms, ...] }
+
+function recordNode(node, ms) {
+    nodeStats[node] = (nodeStats[node] || 0) + 1;
+    if (!nodeTimings[node]) nodeTimings[node] = [];
+    nodeTimings[node].push(ms);
+}
+
+function makeRequest() {
     return new Promise((resolve) => {
-        const req = http.get(URL, (res) => {
-            // Lấy IP của VPS/Container vừa xử lý request từ Header của Nginx
-            const node = res.headers['x-server-node'] || 'Failed/Timeout';
-            
-            // Nếu có nhiều IP do retry, chỉ lấy IP cuối cùng
-            const finalNode = node.split(', ').pop();
-            stats[finalNode] = (stats[finalNode] || 0) + 1;
-            
-            completed++;
-            res.on('data', () => {});
-            res.on('end', resolve);
-        });
+        const startMs = Date.now();
         
-        req.on('error', (err) => {
-            stats['Error/Dropped'] = (stats['Error/Dropped'] || 0) + 1;
+        // Thêm tham số random để PHÁ VỠ NGINX CACHE
+        // Bắt buộc Backend phải dùng CPU để xử lý thay vì lấy từ RAM Nginx
+        const randomQuery = `?nocache=${Math.random()}`;
+        
+        const req = http.request({
+            host: TARGET_HOST,
+            port: TARGET_PORT,
+            path: TARGET_PATH + randomQuery,
+            method: 'GET',
+        }, (res) => {
+            const ms = Date.now() - startMs;
+            const node = res.headers['x-server-node'];
+            const status = res.status || res.statusCode;
+
+            res.on('data', () => {});
+            res.on('end', () => {
+                completed++;
+                if (status >= 200 && status < 500) {
+                    totalSuccess++;
+                    // Nếu có header thì ghi theo node, không thì ghi "No-Header"
+                    recordNode(node ? node.split(', ').pop() : `HTTP-${status}`, ms);
+                } else {
+                    totalFail++;
+                    recordNode(`Error-${status}`, ms);
+                }
+                resolve();
+            });
+        });
+
+        req.setTimeout(8000, () => {
+            req.destroy();
             completed++;
+            totalFail++;
+            recordNode('Timeout', 8000);
             resolve();
         });
-        
-        req.setTimeout(10000, () => {
-            req.destroy();
-            stats['Timeout'] = (stats['Timeout'] || 0) + 1;
+
+        req.on('error', () => {
+            completed++;
+            totalFail++;
+            recordNode('ConnError', Date.now() - startMs);
+            resolve();
         });
+
+        req.end();
     });
 }
 
 async function runTest() {
-    console.log(`🚀 Đang khởi động dàn phóng...`);
-    console.log(`Mục tiêu: ${URL}`);
-    console.log(`Số lượng: ${TOTAL_REQUESTS} requests | Đồng thời: ${CONCURRENT}\n`);
-    
+    console.log(`🚀 SmartLMS Load Balancing Test`);
+    console.log(`🎯 Target: http://${TARGET_HOST}${TARGET_PATH}`);
+    console.log(`📦 ${TOTAL_REQUESTS} requests | ${CONCURRENT} concurrent\n`);
+
     const startTime = Date.now();
-    
-    // Cập nhật bảng realtime mỗi 500ms
+
     const interval = setInterval(() => {
         console.clear();
         console.log(`📊 REALTIME LOAD BALANCING (Nginx)`);
         console.log(`-----------------------------------`);
-        console.table(stats);
-        console.log(`\n⏳ Đã xử lý: ${completed} / ${TOTAL_REQUESTS} requests`);
+
+        // Bảng kết quả kèm avg response time
+        const rows = {};
+        for (const [node, count] of Object.entries(nodeStats)) {
+            const timings = nodeTimings[node] || [];
+            const avg = timings.length ? Math.round(timings.reduce((a,b)=>a+b,0)/timings.length) : 0;
+            rows[node] = { requests: count, avg_ms: `${avg}ms` };
+        }
+        console.table(rows);
+        console.log(`\n✅ Success: ${totalSuccess} | ❌ Fail/Timeout: ${totalFail}`);
+        console.log(`⏳ Đã xử lý: ${completed} / ${TOTAL_REQUESTS} requests`);
     }, 500);
 
-    // Chạy song song
     for (let i = 0; i < TOTAL_REQUESTS; i += CONCURRENT) {
         const batch = [];
         for (let j = 0; j < CONCURRENT && i + j < TOTAL_REQUESTS; j++) {
@@ -62,15 +108,22 @@ async function runTest() {
     }
 
     clearInterval(interval);
-    
-    // Kết quả cuối cùng
+
     const timeTaken = (Date.now() - startTime) / 1000;
     console.clear();
-    console.log(`✅ TEST HOÀN TẤT`);
+    console.log(`✅ TEST HOÀN TẤT — ${timeTaken.toFixed(2)}s | ${Math.round(TOTAL_REQUESTS / timeTaken)} req/sec`);
     console.log(`-----------------------------------`);
-    console.table(stats);
-    console.log(`\n⏱ Tổng thời gian: ${timeTaken.toFixed(2)} giây`);
-    console.log(`🔥 Tốc độ trung bình: ${(TOTAL_REQUESTS / timeTaken).toFixed(0)} requests/sec`);
+
+    const rows = {};
+    for (const [node, count] of Object.entries(nodeStats)) {
+        const timings = nodeTimings[node] || [];
+        const avg = timings.length ? Math.round(timings.reduce((a,b)=>a+b,0)/timings.length) : 0;
+        const pct = ((count / TOTAL_REQUESTS) * 100).toFixed(1);
+        rows[node] = { requests: count, pct: `${pct}%`, avg_ms: `${avg}ms` };
+    }
+    console.table(rows);
+    console.log(`\n✅ Success: ${totalSuccess} | ❌ Fail/Timeout: ${totalFail}`);
 }
 
 runTest();
+

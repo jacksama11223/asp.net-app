@@ -15,12 +15,14 @@ public class GroupApiController : ControllerBase
     private readonly ICommunityService _service;
     private readonly IHubContext<CommunityHub> _hubContext;
     private readonly SmartLMS.Data.SmartLMSContext _context;
+    private readonly IBacklinkService _backlinkService;
 
-    public GroupApiController(ICommunityService service, IHubContext<CommunityHub> hubContext, SmartLMS.Data.SmartLMSContext context) 
+    public GroupApiController(ICommunityService service, IHubContext<CommunityHub> hubContext, SmartLMS.Data.SmartLMSContext context, IBacklinkService backlinkService) 
     { 
         _service = service; 
         _hubContext = hubContext; 
         _context = context;
+        _backlinkService = backlinkService;
     }
 
     // GET /api/GroupApi
@@ -74,6 +76,9 @@ public class GroupApiController : ControllerBase
 
         await _service.CreateGroupAsync(group);
 
+        // Trích xuất Backlink từ nội dung mô tả nhóm
+        await _backlinkService.ExtractAndSaveBacklinksAsync(req.Description, "Group", group.Id);
+
         return Ok(new { success = true, message = "Yêu cầu tạo nhóm đã được gửi tới Admin!" });
     }
 
@@ -121,6 +126,9 @@ public class GroupApiController : ControllerBase
 
         _context.GroupPosts.Add(groupPost);
         await _context.SaveChangesAsync();
+
+        // Trích xuất Backlink từ nội dung bài đăng nhóm
+        await _backlinkService.ExtractAndSaveBacklinksAsync(req.Content, "GroupPost", groupPost.Id);
 
         return Ok(new { success = true, message = "Bài viết đã được đăng!" });
     }

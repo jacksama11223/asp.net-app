@@ -6,43 +6,49 @@
     var avatarUrl = Model.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(authorName)}&background=random";
 }
 
-<div class="max-w-4xl mx-auto pb-10">
-    <a href="/hub" class="inline-flex items-center gap-2 text-white/50 hover:text-white mb-6 text-sm font-semibold transition-colors">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Quay lại Bảng tin
-    </a>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+<div class="space-y-6" x-data="shareManager()">
     <!-- Bài viết chính -->
-    <article class="bg-gray-800/40 border border-white/10 rounded-2xl p-6 lg:p-8 backdrop-blur-xl mb-6">
-        <div class="flex items-center gap-4 mb-6">
+    <article class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 space-y-6">
+        <div class="flex justify-between items-center">
+            <a href="/hub" class="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-cyan-600 transition-colors">
+                &larr; Trở về Bảng tin
+            </a>
+            
+            <button @@click="openShare('POST', @Model.PostId)" class="inline-flex items-center gap-2 text-sm font-bold text-cyan-600 hover:text-cyan-700 transition-colors bg-cyan-50 px-3 py-1.5 rounded-lg shadow-sm active:scale-95">
+                <i data-lucide="share-2" class="w-4 h-4"></i> Chia sẻ
+            </button>
+        </div>
+
+        <div class="flex items-center gap-4 mb-2">
             <a href="/profile/@Model.AuthorId" title="Xem hồ sơ">
-                <img src="@avatarUrl" alt="@authorName" class="w-12 h-12 rounded-full ring-2 ring-cyan-500/30 object-cover cursor-pointer hover:ring-cyan-400 transition-all" />
+                <img src="@avatarUrl" alt="@authorName" class="w-12 h-12 rounded-full ring-2 ring-slate-100 object-cover cursor-pointer hover:ring-cyan-400 transition-all shadow-sm" />
             </a>
             <div>
-                <a href="/profile/@Model.AuthorId" class="text-white font-bold text-base hover:text-cyan-400 transition-colors">@authorName</a>
-                <div class="text-white/40 text-xs mt-0.5 flex items-center gap-2">
+                <a href="/profile/@Model.AuthorId" class="text-slate-800 font-black text-base hover:text-cyan-600 transition-colors">@authorName</a>
+                <div class="text-slate-400 text-xs mt-0.5 flex items-center gap-2 font-semibold">
                     <span>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
                     <span>•</span>
-                    <span class="bg-white/10 px-2 py-0.5 rounded-md text-[10px] text-cyan-300 font-bold uppercase tracking-wider">@Model.Category</span>
+                    <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border border-slate-200">@Model.Category</span>
                 </div>
             </div>
         </div>
 
-        <h1 class="text-2xl lg:text-3xl font-black text-white mb-6 leading-tight">@Model.Title</h1>
+        <h1 class="text-2xl lg:text-3xl font-black text-slate-800 leading-tight">@Model.Title</h1>
 
-        <div class="prose prose-invert max-w-none mb-8 text-white/80 leading-relaxed prose-pre:bg-black/50 prose-pre:border prose-pre:border-white/10 prose-pre:rounded-xl">
-            <!-- Chuyển Markdown sang HTML cơ bản. Cần Markdig nếu muốn parse markdown xịn -->
+        <div class="prose max-w-none text-slate-700 leading-relaxed prose-pre:bg-slate-50 prose-pre:border prose-pre:border-slate-200 prose-pre:rounded-xl prose-code:text-cyan-700">
             @Html.Raw(Model.Content.Replace("\n", "<br/>"))
         </div>
 
-        <div class="flex items-center justify-between pt-6 border-t border-white/10">
+        <div class="flex items-center justify-between pt-6 border-t border-slate-100">
             <div class="flex items-center gap-4">
-                <button onclick="upvotePost(@Model.PostId, this)" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-colors text-sm font-bold cursor-pointer">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                <button onclick="upvotePost(@Model.PostId, this)" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-500 hover:bg-rose-50 hover:text-rose-600 transition-colors text-sm font-bold cursor-pointer border border-slate-100">
+                    <i data-lucide="heart" class="w-4 h-4"></i>
                     <span id="voteCount_@Model.PostId">@Model.VoteCount</span>
                 </button>
-                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-colors text-sm font-bold">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 hover:text-cyan-600 hover:bg-cyan-50 transition-colors text-sm font-bold border border-transparent">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
                     @(Model.Comments?.Count ?? 0)
                 </button>
             </div>
@@ -52,7 +58,7 @@
                 {
                     foreach (var tag in Model.Tags.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        <span class="px-2.5 py-1 rounded-lg bg-white/5 text-white/60 text-xs font-semibold">#@tag.Trim()</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-100 text-slate-500 text-xs font-bold shadow-sm">#@tag.Trim()</span>
                     }
                 }
             </div>
@@ -60,25 +66,29 @@
     </article>
 
     <!-- Khu vực Bình luận -->
-    <div class="bg-gray-800/40 border border-white/10 rounded-2xl p-6 lg:p-8 backdrop-blur-xl">
-        <h3 class="text-lg font-black text-white mb-6">Bình luận (@(Model.Comments?.Count ?? 0))</h3>
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 space-y-6">
+        <h3 class="text-lg font-black text-slate-800 border-b border-slate-100 pb-4">Bình luận (@(Model.Comments?.Count ?? 0))</h3>
         
         <!-- Form nhập bình luận (AJAX) -->
-        <form id="commentForm" onsubmit="submitComment(event, @Model.PostId)" class="flex gap-4 mb-8">
-            <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(User.Identity?.Name ?? "U")&background=random" class="w-10 h-10 rounded-full ring-2 ring-white/10" />
-            <div class="flex-1">
-                <textarea id="commentContent" name="content" required rows="3" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-white/30 focus:bg-white/10 focus:border-cyan-500/50 outline-none resize-none transition-all shadow-inner" placeholder="Viết bình luận của bạn... (Hỗ trợ Markdown)"></textarea>
-                <div class="flex justify-end mt-3">
-                    <button type="submit" id="btnSubmitComment" class="bg-cyan-500 hover:bg-cyan-400 text-black px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] cursor-pointer border-none flex items-center gap-2">
-                        <span>Gửi bình luận</span>
-                        <svg class="w-4 h-4 hidden" id="commentSpinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
+        <form id="commentForm" onsubmit="submitComment(event, @Model.PostId)" class="space-y-3 pt-2">
+            <label class="text-sm font-bold text-slate-800">Viết bình luận của bạn</label>
+            <div class="flex gap-4 items-start">
+                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(User.Identity?.Name ?? "U")&background=random" class="w-10 h-10 rounded-full ring-2 ring-slate-100 mt-1 shadow-sm" />
+                <div class="flex-1 space-y-3">
+                    <textarea id="commentContent" name="content" required rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none resize-none transition-all" placeholder="Nhập nội dung thảo luận... (Bấm [[ để trích dẫn Bài viết/QA, @ cho Sự kiện, # cho Nhóm)"></textarea>
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" id="btnSubmitComment" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md active:scale-95 flex items-center gap-2 cursor-pointer border-none">
+                            <span>Gửi bình luận</span>
+                            <svg class="w-4 h-4 hidden animate-spin" id="commentSpinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
 
         <!-- Danh sách bình luận -->
-        <div id="commentsList" class="space-y-6">
+        <div id="commentsList" class="space-y-6 pt-6 border-t border-slate-100">
             @if (Model.Comments != null && Model.Comments.Any())
             {
                 foreach (var c in Model.Comments.Where(x => !x.IsDeleted).OrderBy(x => x.CreatedAt))
@@ -86,20 +96,28 @@
                     var cAuthor = c.Author?.FullName ?? $"User {c.AuthorId}";
                     var cAvatar = c.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cAuthor)}&background=random";
                     <div class="flex gap-4">
-                        <a href="/profile/@c.AuthorId" title="Xem hồ sơ"><img src="@cAvatar" alt="@cAuthor" class="w-10 h-10 rounded-full ring-1 ring-white/20 hover:ring-cyan-500 transition-all cursor-pointer" /></a>
+                        <a href="/profile/@c.AuthorId" title="Xem hồ sơ" class="shrink-0">
+                            <img src="@cAvatar" alt="@cAuthor" class="w-10 h-10 rounded-full border border-slate-200 hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer" />
+                        </a>
                         <div class="flex-1">
-                            <div class="bg-black/30 rounded-2xl rounded-tl-none p-4 border border-white/5">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <a href="/profile/@c.AuthorId" class="text-white font-bold text-sm hover:text-cyan-400 transition-colors">@cAuthor</a>
-                                    <span class="text-white/30 text-[10px]">@c.CreatedAt.ToString("dd/MM HH:mm")</span>
+                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-sm relative">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <a href="/profile/@c.AuthorId" class="text-slate-800 font-black text-sm hover:text-cyan-600 transition-colors">@cAuthor</a>
+                                        <span class="text-slate-400 text-[10px] font-bold">@c.CreatedAt.ToString("dd/MM HH:mm")</span>
+                                    </div>
                                 </div>
-                                <div class="text-white/70 text-sm">
-                                    @Html.Raw(c.Content.Replace("\n", "<br/>"))
+                                <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
+                                    @Html.Raw(c.Content)
                                 </div>
                             </div>
                             <div class="flex items-center gap-4 mt-2 px-2">
-                                <button class="text-white/40 hover:text-cyan-400 text-xs font-bold transition-colors">Thích</button>
-                                <button class="text-white/40 hover:text-cyan-400 text-xs font-bold transition-colors">Phản hồi</button>
+                                <button class="text-slate-400 hover:text-rose-500 text-xs font-bold transition-colors flex items-center gap-1">
+                                    <i data-lucide="heart" class="w-3.5 h-3.5"></i> Thích
+                                </button>
+                                <button class="text-slate-400 hover:text-cyan-600 text-xs font-bold transition-colors flex items-center gap-1">
+                                    <i data-lucide="reply" class="w-3.5 h-3.5"></i> Phản hồi
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -107,31 +125,78 @@
             }
             else
             {
-                <div class="text-center py-8">
-                    <p class="text-white/40 text-sm font-medium">Chưa có bình luận nào. Hãy là người đầu tiên bóc tem!</p>
+                <div id="noCommentMsg" class="text-center py-10 bg-slate-50 rounded-2xl border border-slate-100">
+                    <i data-lucide="message-square-dashed" class="w-10 h-10 mx-auto text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 text-sm font-semibold">Chưa có bình luận nào. Hãy là người đầu tiên bóc tem!</p>
                 </div>
             }
+        </div>
+    </div>
+    
+    <!-- Share Modal (Alpine JS) -->
+    <div x-show="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm" style="display: none;" x-transition>
+        <div @@click.away="isOpen = false" class="bg-white rounded-3xl w-full max-w-md p-8 space-y-5 shadow-2xl">
+            <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                <i data-lucide="share-2" class="w-5 h-5 text-cyan-600"></i> Chia sẻ nội dung
+            </h3>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Gửi đến</label>
+                <select x-model="targetType" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm font-bold text-slate-700">
+                    <option value="Chat">Nhóm Chat Tổng (General Chat)</option>
+                    <option value="Group">Một nhóm học (Group)</option>
+                    <option value="User">Tin nhắn cá nhân (User)</option>
+                </select>
+            </div>
+            
+            <div class="space-y-3" x-show="targetType !== 'Chat'">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">ID Người nhận / Nhóm</label>
+                <input type="number" x-model="targetId" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm font-bold text-slate-700" placeholder="Nhập ID...">
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Lời nhắn (Tùy chọn)</label>
+                <textarea x-model="message" rows="2" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm placeholder-slate-400 resize-none font-semibold text-slate-700" placeholder="Này, xem cái này đi..."></textarea>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button @@click="isOpen = false" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
+                <button @@click="submitShare" :disabled="isSharing" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 disabled:bg-slate-400 transition-colors font-black shadow-md flex items-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> <span x-text="isSharing ? 'Đang gửi...' : 'Gửi đi'"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(window.lucide) { lucide.createIcons(); }
+        });
+
+        // Upvote Logic
         async function upvotePost(postId, btn) {
-            const res = await fetch(`/hub/post/${postId}/upvote`, { method: 'POST' });
-            const data = await res.json();
-            if (data.success) {
-                document.getElementById(`voteCount_${postId}`).innerText = data.newVoteCount;
-                btn.classList.add('bg-cyan-500/30', 'text-cyan-300');
-                btn.classList.remove('bg-cyan-500/10', 'text-cyan-400');
-            } else {
-                alert(data.message || 'Lỗi khi upvote.');
+            try {
+                const res = await fetch(`/hub/post/${postId}/upvote`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById(`voteCount_${postId}`).innerText = data.newVoteCount;
+                    btn.classList.add('bg-rose-50', 'text-rose-600', 'border-rose-100');
+                    btn.classList.remove('bg-slate-50', 'text-slate-500', 'border-slate-100');
+                } else {
+                    window.showToast && window.showToast('⚠️ ' + (data.message || 'Lỗi khi upvote.'));
+                }
+            } catch(e) {
+                console.error(e);
             }
         }
 
+        // Comment Submit Logic
         async function submitComment(e, postId) {
             e.preventDefault();
-            const content = document.getElementById('commentContent').value;
+            const contentInput = document.getElementById('commentContent');
+            const content = contentInput.value;
             if (!content.trim()) return;
 
             const btn = document.getElementById('btnSubmitComment');
@@ -155,23 +220,26 @@
                         if (noComment) noComment.remove();
 
                         const c = data.comment;
-                        const formattedContent = c.content.replace(/\n/g, '<br/>');
+                        const formattedContent = c.content;
+                        
                         const html = `
                             <div class="flex gap-4 animate-fade-in">
-                                <a href="/profile/${c.authorId}" title="Xem hồ sơ">
-                                    <img src="${c.authorAvatar}" alt="${c.authorName}" class="w-10 h-10 rounded-full ring-1 ring-white/20 hover:ring-cyan-500 transition-all cursor-pointer" />
+                                <a href="/profile/${c.authorId}" title="Xem hồ sơ" class="shrink-0">
+                                    <img src="${c.authorAvatar}" alt="${c.authorName}" class="w-10 h-10 rounded-full border border-slate-200 hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer" />
                                 </a>
                                 <div class="flex-1">
-                                    <div class="bg-black/30 rounded-2xl rounded-tl-none p-4 border border-white/5">
-                                        <div class="flex items-center gap-2 mb-2">
-                                            <a href="/profile/${c.authorId}" class="text-white font-bold text-sm hover:text-cyan-400 transition-colors">${c.authorName}</a>
-                                            <span class="text-white/30 text-[10px]">${c.createdAt}</span>
+                                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-sm relative">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <a href="/profile/${c.authorId}" class="text-slate-800 font-black text-sm hover:text-cyan-600 transition-colors">${c.authorName}</a>
+                                                <span class="text-slate-400 text-[10px] font-bold">${c.createdAt}</span>
+                                            </div>
                                         </div>
-                                        <div class="text-white/70 text-sm">${formattedContent}</div>
+                                        <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">${formattedContent}</div>
                                     </div>
                                     <div class="flex items-center gap-4 mt-2 px-2">
-                                        <button class="text-white/40 hover:text-cyan-400 text-xs font-bold transition-colors">Thích</button>
-                                        <button class="text-white/40 hover:text-cyan-400 text-xs font-bold transition-colors">Phản hồi</button>
+                                        <button class="text-slate-400 hover:text-rose-500 text-xs font-bold transition-colors flex items-center gap-1"><i data-lucide="heart" class="w-3.5 h-3.5"></i> Thích</button>
+                                        <button class="text-slate-400 hover:text-cyan-600 text-xs font-bold transition-colors flex items-center gap-1"><i data-lucide="reply" class="w-3.5 h-3.5"></i> Phản hồi</button>
                                     </div>
                                 </div>
                             </div>
@@ -180,16 +248,92 @@
                         const list = document.getElementById('commentsList');
                         list.insertAdjacentHTML('beforeend', html);
                         document.getElementById('commentForm').reset();
+                        if(window.lucide) { lucide.createIcons(); }
+                        window.showToast && window.showToast('✅ Bình luận đã được gửi!');
                     }
+                } else if (res.status === 401) {
+                    window.location.href = `/Auth/Login?returnUrl=/hub/post/${postId}`;
                 } else {
-                    alert('Lỗi gửi bình luận (Hãy đăng nhập).');
+                    window.showToast && window.showToast('❌ Lỗi gửi bình luận.');
                 }
             } catch (err) {
-                alert('Lỗi kết nối.');
+                window.showToast && window.showToast('❌ Lỗi kết nối.');
             } finally {
                 btn.disabled = false;
                 spinner.classList.add('hidden');
             }
+        }
+
+        // Share Manager Logic (Alpine)
+        function shareManager() {
+            return {
+                isOpen: false,
+                isSharing: false,
+                contentType: '',
+                contentId: 0,
+                targetType: 'Chat', // Default to General Chat
+                targetId: '',
+                message: '',
+
+                openShare(type, id) {
+                    this.contentType = type;
+                    this.contentId = id;
+                    this.isOpen = true;
+                    this.targetId = '';
+                    this.message = '';
+                    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 50);
+                },
+
+                async submitShare() {
+                    // Xử lý gửi Chat Tổng
+                    if (this.targetType === 'Chat') {
+                        if(window.sendPostToChat) {
+                            window.sendPostToChat(this.contentId, '@JavaScriptEncoder.Default.Encode(Model.Title)', '@JavaScriptEncoder.Default.Encode(Model.Category)');
+                            this.isOpen = false;
+                            window.showToast && window.showToast('✅ Đã đẩy lên Chat Tổng!');
+                            return;
+                        } else {
+                            window.showToast && window.showToast('❌ Chat đang tải hoặc không khả dụng.');
+                            return;
+                        }
+                    }
+
+                    // Gửi qua API Share cho Group/User
+                    if (!this.targetId) {
+                        window.showToast && window.showToast('⚠️ Vui lòng nhập ID người nhận hoặc nhóm!');
+                        return;
+                    }
+
+                    this.isSharing = true;
+                    try {
+                        const res = await fetch('/api/ShareApi/share', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                targetType: this.targetType,
+                                targetId: parseInt(this.targetId),
+                                contentType: this.contentType,
+                                contentId: this.contentId,
+                                message: this.message
+                            })
+                        });
+
+                        if (res.ok) {
+                            this.isOpen = false;
+                            window.showToast && window.showToast('✅ Đã chia sẻ thành công!');
+                        } else if (res.status === 401) {
+                            window.location.href = '/Auth/Login';
+                        } else {
+                            const err = await res.json();
+                            window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi khi chia sẻ.'));
+                        }
+                    } catch (e) {
+                        window.showToast && window.showToast('❌ Lỗi kết nối đến máy chủ.');
+                    } finally {
+                        this.isSharing = false;
+                    }
+                }
+            };
         }
     </script>
 }

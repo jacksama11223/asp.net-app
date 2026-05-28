@@ -83,5 +83,43 @@ namespace SmartLMS.Community.Controllers
                 message = "Tải lên thành công"
             });
         }
+
+        [HttpGet("view/{id}")]
+        [AllowAnonymous] // Hoặc giữ Authorize nếu muốn bảo mật
+        public async Task<IActionResult> ViewAttachment(int id)
+        {
+            var attachment = await _context.Attachments.FindAsync(id);
+            if (attachment == null) return NotFound();
+
+            var filePath = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), attachment.FileUrl.TrimStart('/'));
+            if (!System.IO.File.Exists(filePath)) return NotFound();
+
+            var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out string contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            // Mở dưới dạng inline để xem trên trình duyệt
+            Response.Headers.Add("Content-Disposition", $"inline; filename=\"{attachment.FileName}\"");
+            return PhysicalFile(filePath, contentType);
+        }
+
+        [HttpGet("metadata/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetMetadata(int id)
+        {
+            var attachment = await _context.Attachments.FindAsync(id);
+            if (attachment == null) return NotFound();
+
+            return Ok(new
+            {
+                id = attachment.Id,
+                fileName = attachment.FileName,
+                fileType = attachment.FileType,
+                fileSize = attachment.FileSize,
+                uploadedAt = attachment.UploadedAt
+            });
+        }
     }
 }

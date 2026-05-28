@@ -107,14 +107,18 @@
 
                             <div class="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap" x-html="formatMentions(disc.content)"></div>
 
-                            <!-- Attachment -->
-                            <div x-show="disc.attachmentIds" class="bg-slate-50 border border-slate-100 rounded-xl p-3 flex items-center gap-3 mt-3 group/file cursor-pointer hover:bg-purple-50 hover:border-purple-100 transition-colors">
-                                <div class="bg-blue-100 text-blue-600 p-2 rounded-lg">
-                                    <i data-lucide="folder-archive" class="w-5 h-5"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-bold text-slate-700 truncate group-hover/file:text-purple-700">Tài liệu đính kèm</p>
-                                </div>
+                            <!-- Attachments -->
+                            <div x-show="disc.attachmentIds" class="flex flex-wrap gap-2 mt-3">
+                                <template x-for="aid in (disc.attachmentIds || '').split(',').filter(x => x)" :key="aid">
+                                    <div @@click.prevent="window.documentViewer.open(aid)" class="attachment-viewer-btn cursor-pointer bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex items-center gap-3 hover:bg-purple-50 hover:border-purple-200 transition-colors group/file max-w-xs shadow-sm">
+                                        <div class="bg-purple-100 text-purple-600 p-1.5 rounded-lg group-hover/file:bg-purple-600 group-hover/file:text-white transition-colors">
+                                            <i data-lucide="paperclip" class="w-4 h-4"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs font-bold text-slate-700 truncate group-hover/file:text-purple-700">File đính kèm</p>
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
 
                             <!-- Actions -->
