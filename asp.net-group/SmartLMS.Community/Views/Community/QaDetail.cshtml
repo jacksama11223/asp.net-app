@@ -1,0 +1,223 @@
+@model SmartLMS.Models.CommunityQuestion
+@using System.Text.RegularExpressions
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Chi tiết câu hỏi: " + Model.Title;
+}
+
+@functions {
+    public string FormatMentions(string content)
+    {
+        if (string.IsNullOrEmpty(content)) return "";
+        var encoded = System.Net.WebUtility.HtmlEncode(content);
+        encoded = Regex.Replace(encoded, @"@(\d+)", "<a href=\"/hub/events/$1\" class=\"text-cyan-600 font-bold hover:underline\">@SựKiện-$1</a>");
+        encoded = Regex.Replace(encoded, @"#(\d+)", "<a href=\"/hub/groups/$1\" class=\"text-purple-600 font-bold hover:underline\">#Nhóm-$1</a>");
+        // For shared cards (optional visualization)
+        encoded = Regex.Replace(encoded, @"\[SHARED_QA:(\d+)\]", "<div class=\"p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold\"><i data-lucide=\"help-circle\" class=\"w-4 h-4 inline\"></i> <a href=\"/hub/qa/$1\" class=\"text-indigo-600\">Đính kèm Câu hỏi QA-$1</a></div>");
+        encoded = Regex.Replace(encoded, @"\[SHARED_EVENT:(\d+)\]", "<div class=\"p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold\"><i data-lucide=\"calendar\" class=\"w-4 h-4 inline\"></i> <a href=\"/hub/events/$1\" class=\"text-indigo-600\">Đính kèm Sự kiện Event-$1</a></div>");
+        encoded = Regex.Replace(encoded, @"\[SHARED_RESOURCE:(\d+)\]", "<div class=\"p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold\"><i data-lucide=\"file\" class=\"w-4 h-4 inline\"></i> <a href=\"/hub/resources\" class=\"text-indigo-600\">Đính kèm Tài nguyên Res-$1</a></div>");
+        return encoded;
+    }
+}
+
+
+<div class="space-y-6" x-data="shareManager()">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 space-y-6">
+        <div class="flex justify-between items-center">
+            <a href="/hub/qa" class="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-cyan-600 transition-colors">
+                &larr; Trở về danh sách Hỏi Đáp
+            </a>
+            <button @@click="openShare('QA', @Model.Id)" class="inline-flex items-center gap-2 text-sm font-bold text-cyan-600 hover:text-cyan-700 transition-colors bg-cyan-50 px-3 py-1.5 rounded-lg">
+                <i data-lucide="share-2" class="w-4 h-4"></i> Chia sẻ
+            </button>
+        </div>
+        <h1 class="text-2xl font-black text-slate-800">@Model.Title</h1>
+        <div class="text-sm text-slate-500 whitespace-pre-wrap font-mono bg-slate-50 p-4 rounded-xl border border-slate-100">
+            @Model.Content
+        </div>
+        <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
+            <span>Người hỏi: @(Model.Author?.FullName ?? "User")</span>
+            <span>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+        </div>
+    </div>
+
+    <!-- Answers Section -->
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 space-y-6">
+        <h3 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-4">
+            Các câu trả lời (@(Model.Answers?.Count ?? 0))
+        </h3>
+
+        @if (Model.Answers != null && Model.Answers.Any())
+        {
+            <div class="space-y-4">
+                @foreach(var ans in Model.Answers.OrderByDescending(a => a.Votes))
+                {
+                    <div class="bg-slate-50 rounded-xl p-4 space-y-2 relative">
+                        @if(ans.IsVerified)
+                        {
+                            <span class="absolute top-4 right-4 bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md">
+                                Đã xác nhận
+                            </span>
+                        }
+                        <p class="text-sm text-slate-700">@Html.Raw(FormatMentions(ans.Content))</p>
+                        <div class="flex justify-between items-center text-xs text-slate-500">
+                            <span>@(ans.AuthorId)</span>
+                            <span>@ans.CreatedAt.ToString("dd/MM HH:mm") • @ans.Votes Votes</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-sm text-slate-500 italic">Chưa có câu trả lời nào. Hãy là người đầu tiên giúp đỡ!</p>
+        }
+        <!-- Form gửi câu trả lời -->
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <div class="mt-8 space-y-3 pt-6 border-t border-slate-100">
+                <label class="text-sm font-bold text-slate-800">Viết câu trả lời của bạn</label>
+                <div class="flex gap-3 items-end">
+                    <textarea id="answer-content" placeholder="Nhập câu trả lời kỹ thuật chi tiết tại đây (hỗ trợ code)..." rows="3" class="flex-1 bg-slate-50 border border-slate-200 p-4 rounded-xl text-sm outline-none focus:ring-2 focus:ring-cyan-500 placeholder-slate-400 font-mono resize-none"></textarea>
+                    <button type="button" @@click="submitAnswer(@Model.Id)" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-4 rounded-xl transition-all shadow font-bold active:scale-95 shrink-0 flex items-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i> Gửi
+                    </button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mt-8 p-4 bg-slate-50 rounded-xl text-center text-sm text-slate-500 border border-slate-100">
+                Vui lòng <a href="/Auth/Login?returnUrl=/hub/qa/@Model.Id" class="text-cyan-600 font-bold hover:underline">đăng nhập</a> để tham gia trả lời câu hỏi.
+            </div>
+        }
+    </div>
+
+    <!-- Share Modal -->
+    <div x-show="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-transition>
+        <div @@click.away="isOpen = false" class="bg-white rounded-3xl w-full max-w-md p-8 space-y-5 shadow-2xl">
+            <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                <i data-lucide="share-2" class="w-5 h-5 text-cyan-600"></i> Chia sẻ nội dung
+            </h3>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Gửi đến</label>
+                <select x-model="targetType" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm font-bold text-slate-700">
+                    <option value="Group">Một nhóm học (Group)</option>
+                    <option value="User">Tin nhắn cá nhân (User)</option>
+                </select>
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">ID Người nhận / Nhóm</label>
+                <input type="number" x-model="targetId" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm font-bold text-slate-700" placeholder="Nhập ID...">
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Lời nhắn (Tùy chọn)</label>
+                <textarea x-model="message" rows="2" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm placeholder-slate-400 resize-none" placeholder="Này, xem cái này đi..."></textarea>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button @@click="isOpen = false" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
+                <button @@click="submitShare" :disabled="isSharing" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 disabled:bg-slate-400 transition-colors font-bold shadow-md flex items-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> <span x-text="isSharing ? 'Đang gửi...' : 'Gửi đi'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AlpineJS & Script -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if(window.lucide) { lucide.createIcons(); }
+    });
+
+    async function submitAnswer(questionId) {
+        const content = document.getElementById('answer-content')?.value?.trim();
+
+        if (!content) {
+            window.showToast && window.showToast('⚠️ Vui lòng nhập nội dung câu trả lời!');
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/QaApi/questions/${questionId}/answers`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ content }),
+            });
+
+            if (res.ok) {
+                window.showToast && window.showToast('✅ Câu trả lời đã được gửi!');
+                setTimeout(() => location.reload(), 1000);
+            } else if (res.status === 401) {
+                window.location.href = `/Auth/Login?returnUrl=/hub/qa/${questionId}`;
+            } else {
+                window.showToast && window.showToast('❌ Lỗi gửi câu trả lời.');
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
+
+    function shareManager() {
+        return {
+            isOpen: false,
+            isSharing: false,
+            contentType: '',
+            contentId: 0,
+            targetType: 'Group',
+            targetId: '',
+            message: '',
+
+            openShare(type, id) {
+                this.contentType = type;
+                this.contentId = id;
+                this.isOpen = true;
+                this.targetId = '';
+                this.message = '';
+                // Ensure icons load in modal
+                setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 50);
+            },
+
+            async submitShare() {
+                if (!this.targetId) {
+                    window.showToast && window.showToast('⚠️ Vui lòng nhập ID người nhận hoặc nhóm!');
+                    return;
+                }
+
+                this.isSharing = true;
+                try {
+                    const res = await fetch('/api/ShareApi/share', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            targetType: this.targetType,
+                            targetId: parseInt(this.targetId),
+                            contentType: this.contentType,
+                            contentId: this.contentId,
+                            message: this.message
+                        })
+                    });
+
+                    if (res.ok) {
+                        this.isOpen = false;
+                        window.showToast && window.showToast('✅ Đã chia sẻ thành công!');
+                    } else if (res.status === 401) {
+                        window.location.href = '/Auth/Login';
+                    } else {
+                        const err = await res.json();
+                        window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi khi chia sẻ.'));
+                    }
+                } catch (e) {
+                    window.showToast && window.showToast('❌ Lỗi kết nối đến máy chủ.');
+                } finally {
+                    this.isSharing = false;
+                }
+            }
+        };
+    }
+</script>

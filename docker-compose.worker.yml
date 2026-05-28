@@ -25,7 +25,7 @@ services:
     restart: always
     mem_limit: 250m
     deploy:
-      replicas: 3
+      replicas: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080

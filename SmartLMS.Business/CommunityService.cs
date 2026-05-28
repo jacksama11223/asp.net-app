@@ -101,6 +101,13 @@ public class CommunityService : ICommunityService
             .ToListAsync();
     }
 
+    public async Task<CommunityEvent> CreateEventAsync(CommunityEvent ev)
+    {
+        _context.CommunityEvents.Add(ev);
+        await _context.SaveChangesAsync();
+        return ev;
+    }
+
     public async Task<bool> RSVPToEventAsync(int eventId, int userId)
     {
         var alreadyRegistered = await _context.EventParticipants
@@ -147,6 +154,13 @@ public class CommunityService : ICommunityService
             .Where(g => g.IsApproved)
             .OrderByDescending(g => g.EXP)
             .ToListAsync();
+    }
+
+    public async Task<StudyGroup> CreateGroupAsync(StudyGroup group)
+    {
+        _context.StudyGroups.Add(group);
+        await _context.SaveChangesAsync();
+        return group;
     }
 
     public async Task<bool> JoinGroupAsync(int groupId, int userId)

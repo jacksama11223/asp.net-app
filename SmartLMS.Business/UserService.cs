@@ -123,4 +123,10 @@ public class UserService : IUserService
                           .Take(100) // Giới hạn 100 bản ghi gần nhất để tối ưu hiệu năng
                           .ToListAsync();
     }
+
+    public async Task LogAuditAsync(AuditLog log)
+    {
+        _context.AuditLogs.Add(log);
+        await _context.SaveChangesAsync();
+    }
 }

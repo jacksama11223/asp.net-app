@@ -1,5 +1,13 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-28] - Phase 3: Hyper-Connectivity & Cross-Module Sharing
+- **Added:** Nâng cấp cấu trúc `SharedContents` để hỗ trợ chia sẻ đa luồng (Tài nguyên, Sự kiện, Bài viết) qua tin nhắn cá nhân (`TargetUserId`) và Nhóm học tập.
+- **Added:** Bổ sung các bảng mở rộng tính năng tương tác sâu: `Attachments`, `EventDiscussions`, `GroupPosts`, `GroupPostComments`.
+- **Added:** Tích hợp bộ API định tuyến trung tâm `ShareApiController` giúp điều phối logic chia sẻ nội dung toàn hệ thống.
+- **Added:** Cấu hình tự động nhận diện từ khóa trích dẫn (`@SựKiện`, `#Nhóm`, `[SHARED_TYPE:ID]`) tại các View Razor để tạo liên kết tương tác.
+- **Added:** Triển khai kịch bản kiểm thử API tích hợp `test_community_hub.cjs` bảo chứng chất lượng kết nối Database (MariaDB).
+- **Improved:** Triển khai schema thủ công qua `docker exec mariadb` bảo mật trên VPS Master, bỏ qua nhu cầu public port 3306.
+
 ### [2026-05-26] - Admin Moderation UI & Community Seed API
 - **Added:** Endpoint API `/api/seed-posts` trong `CommunityController` để tự động giả lập (seed) dữ liệu bài viết chuẩn Markdown vào cơ sở dữ liệu MariaDB mà không cần thông qua script NodeJS bên ngoài.
 - **Added:** Giao diện Trạm kiểm duyệt (`Admin/Moderation.cshtml`) với thiết kế hiện đại, giúp Admin và Moderator quản lý danh sách bài viết chờ duyệt (`IsPublished = false`).

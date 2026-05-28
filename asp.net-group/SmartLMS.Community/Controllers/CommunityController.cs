@@ -211,6 +211,18 @@ public class CommunityController : Controller
         return View(events);
     }
 
+    [HttpGet("events/{id}")]
+    [HttpGet("/Community/Events/{id}")]
+    public async Task<IActionResult> EventDetail(int id, [FromServices] SmartLMSContext db)
+    {
+        var ev = await db.CommunityEvents
+            .Include(e => e.Participants)
+            .FirstOrDefaultAsync(e => e.Id == id);
+            
+        if (ev == null) return NotFound("Sự kiện không tồn tại hoặc chưa được duyệt.");
+        return View(ev);
+    }
+
     // 4. Member Directory
     [HttpGet("members")]
     [HttpGet("/Community/Members")]
@@ -229,6 +241,19 @@ public class CommunityController : Controller
         return View(questions);
     }
 
+    [HttpGet("qa/{id}")]
+    [HttpGet("/Community/QA/{id}")]
+    public async Task<IActionResult> QaDetail(int id, [FromServices] SmartLMSContext db)
+    {
+        var question = await db.CommunityQuestions
+            .Include(q => q.Author)
+            .Include(q => q.Answers)
+            .FirstOrDefaultAsync(q => q.Id == id);
+            
+        if (question == null) return NotFound("Câu hỏi không tồn tại.");
+        return View(question);
+    }
+
     // 6. Study Groups
     [HttpGet("groups")]
     [HttpGet("/Community/Groups")]
@@ -236,6 +261,19 @@ public class CommunityController : Controller
     {
         var groups = await _communityService.GetStudyGroupsAsync();
         return View(groups);
+    }
+
+    [HttpGet("groups/{id}")]
+    [HttpGet("/Community/Groups/{id}")]
+    public async Task<IActionResult> GroupDetail(int id, [FromServices] SmartLMSContext db)
+    {
+        var group = await db.StudyGroups
+            .Include(g => g.Leader)
+            .Include(g => g.Members)
+            .FirstOrDefaultAsync(g => g.Id == id);
+            
+        if (group == null) return NotFound("Nhóm học tập không tồn tại.");
+        return View(group);
     }
 
     // 7. Leaderboard

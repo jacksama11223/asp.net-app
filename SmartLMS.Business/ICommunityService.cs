@@ -19,6 +19,7 @@ public interface ICommunityService
     
     // === 3. EVENT LISTINGS ===
     Task<IEnumerable<CommunityEvent>> GetEventsAsync();
+    Task<CommunityEvent> CreateEventAsync(CommunityEvent ev);
     Task<bool> RSVPToEventAsync(int eventId, int userId);
     
     // === 4. Q&A SECTION ===
@@ -28,6 +29,7 @@ public interface ICommunityService
     
     // === 5. STUDY GROUPS ===
     Task<IEnumerable<StudyGroup>> GetStudyGroupsAsync();
+    Task<StudyGroup> CreateGroupAsync(StudyGroup group);
     Task<bool> JoinGroupAsync(int groupId, int userId);
     
     // === 6. MEMBER DIRECTORY & GAMIFICATION ===

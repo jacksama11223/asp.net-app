@@ -7,21 +7,68 @@
 <!-- Thêm Alpine.js cho bộ lọc Category Client-side -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<div class="space-y-6" x-data="{ activeCategory: 'all' }">
-    <!-- Category header -->
-    <div class="flex flex-wrap items-center gap-2 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-        <button @@click="activeCategory = 'all'" :class="activeCategory === 'all' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
-            Tất cả sự kiện
+<div class="space-y-6" x-data="{ activeCategory: 'all', isCreatingEvent: false }">
+    <!-- Category header & Create Button -->
+    <div class="flex flex-wrap items-center justify-between gap-2 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex flex-wrap items-center gap-2">
+            <button @@click="activeCategory = 'all'" :class="activeCategory === 'all' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                Tất cả sự kiện
+            </button>
+            <button @@click="activeCategory = 'webinar'" :class="activeCategory === 'webinar' ? 'bg-purple-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                Webinars
+            </button>
+            <button @@click="activeCategory = 'workshop'" :class="activeCategory === 'workshop' ? 'bg-amber-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                Workshops
+            </button>
+            <button @@click="activeCategory = 'coding_session'" :class="activeCategory === 'coding_session' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                Học nhóm
+            </button>
+        </div>
+        <button @@click="isCreatingEvent = !isCreatingEvent" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Đề xuất Tổ chức
         </button>
-        <button @@click="activeCategory = 'webinar'" :class="activeCategory === 'webinar' ? 'bg-purple-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
-            Webinars
-        </button>
-        <button @@click="activeCategory = 'workshop'" :class="activeCategory === 'workshop' ? 'bg-amber-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
-            Workshops
-        </button>
-        <button @@click="activeCategory = 'coding_session'" :class="activeCategory === 'coding_session' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
-            Học nhóm
-        </button>
+    </div>
+
+    <!-- Form Tạo Sự Kiện (Collapsible) -->
+    <div x-show="isCreatingEvent" style="display: none;" x-collapse class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-4 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-cyan-500"></div>
+        <h3 class="text-base font-bold text-slate-800">Đăng ký Tổ chức Sự kiện mới</h3>
+        <p class="text-xs text-slate-500 mb-4">Yêu cầu của bạn sẽ được gửi tới Ban quản trị để phê duyệt, hỗ trợ thiết kế Banner và lên lịch truyền thông.</p>
+        
+        <div class="space-y-4">
+            <input type="text" id="event-title" required placeholder="Tên sự kiện (VD: Masterclass ASP.NET Core & Docker)..." class="w-full bg-slate-50 border-none rounded-xl px-4 py-3 text-slate-800 font-medium placeholder-slate-400 outline-none focus:ring-2 focus:ring-cyan-500 transition-all text-sm" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400">Ngày giờ tổ chức</label>
+                    <input type="datetime-local" id="event-date" required class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400">Hình thức / Nền tảng</label>
+                    <input type="text" id="event-location" required placeholder="Zoom, Google Meet, Phòng 101..." class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400">Loại sự kiện</label>
+                    <select id="event-type" class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500">
+                        <option value="Webinar">Webinar (Hội thảo trực tuyến)</option>
+                        <option value="Workshop">Workshop (Thực hành chuyên sâu)</option>
+                        <option value="Coding Session">Coding Session (Code chung)</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400">Số lượng người tham dự tối đa</label>
+                    <input type="number" id="event-maxparticipants" required value="100" min="5" max="1000" class="w-full bg-slate-50 border-none text-sm px-4 py-2.5 rounded-xl text-slate-700 outline-none focus:ring-2 focus:ring-cyan-500" />
+                </div>
+            </div>
+
+            <textarea id="event-description" required placeholder="Nội dung chính, diễn giả tham gia, lợi ích cho người tham dự..." rows="4" class="w-full bg-slate-50 border-none rounded-xl p-4 text-slate-800 placeholder-slate-400 outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-all text-sm"></textarea>
+        </div>
+
+        <div class="flex justify-end pt-2">
+            <button type="button" @@click="submitEventRequest($data)" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2">
+                <i data-lucide="send" class="w-4 h-4"></i> Gửi Yêu Cầu Tổ Chức
+            </button>
+        </div>
     </div>
 
     <!-- Grid of Events -->
@@ -50,12 +97,12 @@
                             @(evt.EventType ?? "Event")
                         </span>
                         
-                        <h3 class="font-bold text-slate-800 text-base mt-3 mb-2 leading-snug group-hover:text-cyan-600 transition-colors flex items-center gap-1">
+                        <a href="/hub/events/@evt.Id" class="font-bold text-slate-800 text-base mt-3 mb-2 leading-snug group-hover:text-cyan-600 transition-colors flex items-center gap-1 w-max">
                             @evt.Title
-                            <span class="text-[9px] text-cyan-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="text-[9px] text-cyan-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                 (Chi tiết &rarr;)
                             </span>
-                        </h3>
+                        </a>
                         <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">
                             @evt.Description
                         </p>
@@ -148,6 +195,47 @@
             } else {
                 const err = await res.json();
                 window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi đăng ký sự kiện.'));
+            }
+        } catch {
+            window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+        }
+    }
+
+    async function submitEventRequest(componentData) {
+        const title           = document.getElementById('event-title')?.value?.trim();
+        const dateStr         = document.getElementById('event-date')?.value;
+        const location        = document.getElementById('event-location')?.value?.trim();
+        const eventType       = document.getElementById('event-type')?.value?.trim();
+        const maxParticipants = parseInt(document.getElementById('event-maxparticipants')?.value) || 100;
+        const description     = document.getElementById('event-description')?.value?.trim();
+
+        if (!title || !dateStr || !location || !description) {
+            window.showToast && window.showToast('⚠️ Vui lòng điền đầy đủ thông tin bắt buộc!');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/EventApi/create', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ 
+                    title, 
+                    eventDate: new Date(dateStr).toISOString(), 
+                    location, 
+                    eventType, 
+                    maxParticipants, 
+                    description 
+                }),
+            });
+
+            if (res.ok) {
+                window.showToast && window.showToast('✅ Yêu cầu tổ chức sự kiện đã được gửi tới Admin!');
+                componentData.isCreatingEvent = false;
+            } else if (res.status === 401) {
+                window.location.href = '/Auth/Login?returnUrl=/hub/events';
+            } else {
+                const err = await res.json();
+                window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi tạo sự kiện'));
             }
         } catch {
             window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');

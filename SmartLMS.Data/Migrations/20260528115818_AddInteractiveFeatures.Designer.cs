@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartLMS.Data;
 
@@ -11,9 +12,11 @@ using SmartLMS.Data;
 namespace SmartLMS.Data.Migrations
 {
     [DbContext(typeof(SmartLMSContext))]
-    partial class SmartLMSContextModelSnapshot : ModelSnapshot
+    [Migration("20260528115818_AddInteractiveFeatures")]
+    partial class AddInteractiveFeatures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1667,9 +1670,6 @@ namespace SmartLMS.Data.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int?>("TargetGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TargetUserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

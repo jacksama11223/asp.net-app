@@ -8,6 +8,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <div class="space-y-6" x-data="{ 
+    ...shareManager(),
     isUploading: false, 
     activeSubject: 'All', 
     viewingPdf: false, 
@@ -180,6 +181,13 @@
                                     <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                     <span x-text="downloads"></span>
                                 </button>
+                                
+                                <button 
+                                    @@click.stop="openShare('RESOURCE', @res.Id)"
+                                    class="flex items-center gap-1 bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-600 px-2.5 py-1 rounded-lg font-bold transition-all"
+                                >
+                                    <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -285,6 +293,40 @@
             </div>
         </div>
     </template>
+
+    <!-- Share Modal -->
+    <div x-show="isOpen" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-transition>
+        <div @@click.away="isOpen = false" class="bg-white rounded-3xl w-full max-w-md p-8 space-y-5 shadow-2xl">
+            <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                <i data-lucide="share-2" class="w-5 h-5 text-indigo-600"></i> Chuyển tiếp tài liệu
+            </h3>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Gửi đến</label>
+                <select x-model="targetType" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-bold text-slate-700">
+                    <option value="Group">Một nhóm học (Group)</option>
+                    <option value="User">Tin nhắn cá nhân (User)</option>
+                </select>
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">ID Người nhận / Nhóm</label>
+                <input type="number" x-model="targetId" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-bold text-slate-700" placeholder="Nhập ID...">
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Lời nhắn (Tùy chọn)</label>
+                <textarea x-model="message" rows="2" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm placeholder-slate-400 resize-none" placeholder="Hãy xem tài liệu này..."></textarea>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button @@click="isOpen = false" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
+                <button @@click="submitShare" :disabled="isSharing" class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:bg-slate-400 transition-colors font-bold shadow-md flex items-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> <span x-text="isSharing ? 'Đang gửi...' : 'Gửi đi'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -346,5 +388,62 @@
         } catch {
             window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
         }
+    }
+
+    function shareManager() {
+        return {
+            isOpen: false,
+            isSharing: false,
+            contentType: '',
+            contentId: 0,
+            targetType: 'Group',
+            targetId: '',
+            message: '',
+
+            openShare(type, id) {
+                this.contentType = type;
+                this.contentId = id;
+                this.isOpen = true;
+                this.targetId = '';
+                this.message = '';
+                setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 50);
+            },
+
+            async submitShare() {
+                if (!this.targetId) {
+                    window.showToast && window.showToast('⚠️ Vui lòng nhập ID người nhận hoặc nhóm!');
+                    return;
+                }
+
+                this.isSharing = true;
+                try {
+                    const res = await fetch('/api/ShareApi/share', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            targetType: this.targetType,
+                            targetId: parseInt(this.targetId),
+                            contentType: this.contentType,
+                            contentId: this.contentId,
+                            message: this.message
+                        })
+                    });
+
+                    if (res.ok) {
+                        this.isOpen = false;
+                        window.showToast && window.showToast('✅ Đã chia sẻ thành công!');
+                    } else if (res.status === 401) {
+                        window.location.href = '/Auth/Login';
+                    } else {
+                        const err = await res.json();
+                        window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi khi chia sẻ.'));
+                    }
+                } catch (e) {
+                    window.showToast && window.showToast('❌ Lỗi kết nối đến máy chủ.');
+                } finally {
+                    this.isSharing = false;
+                }
+            }
+        };
     }
 </script>

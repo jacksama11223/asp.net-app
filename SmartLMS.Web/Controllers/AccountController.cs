@@ -49,6 +49,18 @@ public class AccountController : Controller
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
+            // 🚀 BẮN VÀ QUÊN (FIRE-AND-FORGET) QUA HANGFIRE
+            // Bất kỳ VPS nào (đặc biệt là Worker) nhận job này sẽ tự ghi vào DB ngầm,
+            // người dùng không phải chờ đợi Network I/O nữa!
+            Hangfire.BackgroundJob.Enqueue<IUserService>(s => s.LogAuditAsync(new AuditLog 
+            { 
+                UserId = user.UserId, 
+                ActionType = "LOGIN", 
+                ActionName = "User logged in",
+                ControllerName = "AccountController",
+                Timestamp = System.DateTime.Now 
+            }));
+
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 return Redirect(returnUrl);

@@ -1,0 +1,363 @@
+@model SmartLMS.Models.CommunityEvent
+@{
+    Layout = "_CommunityLayout";
+    ViewData["Title"] = "Chi tiết sự kiện: " + Model.Title;
+}
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div class="space-y-6">
+    <!-- Event Banner -->
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl p-8 lg:p-12 text-white shadow-md relative overflow-hidden flex flex-col justify-end min-h-[300px]">
+        <a href="/hub/events" class="absolute top-8 left-8 z-10 inline-flex items-center gap-2 text-xs font-bold text-white/70 hover:text-white transition-colors">
+            &larr; Tất cả Sự kiện
+        </a>
+        <div class="absolute top-8 right-8 z-10">
+            <button @@click="openShare('EVENT', @Model.Id)" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-colors px-4 py-2 rounded-xl shadow-sm">
+                <i data-lucide="share-2" class="w-4 h-4"></i> Chia sẻ
+            </button>
+        </div>
+        <div class="relative z-10 space-y-4">
+            <span class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest backdrop-blur-sm">@Model.EventType</span>
+            <h1 class="text-3xl lg:text-5xl font-black max-w-4xl leading-tight">@Model.Title</h1>
+        </div>
+        <!-- Decorative bg -->
+        <i data-lucide="calendar-days" class="absolute -right-12 -bottom-12 w-96 h-96 text-white/10 rotate-12"></i>
+    </div>
+
+    <!-- Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" x-data="eventPage(@Model.Id)">
+        <!-- Main Info -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 space-y-6">
+                <h3 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-4">Thông tin Sự kiện</h3>
+                <p class="text-slate-600 leading-relaxed whitespace-pre-wrap">@Model.Description</p>
+                
+                <!-- Event Metadata -->
+                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                    <div class="bg-slate-50 p-4 rounded-xl flex items-start gap-3">
+                        <i data-lucide="calendar" class="w-5 h-5 text-purple-600 mt-0.5"></i>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Thời gian</p>
+                            <p class="text-sm font-bold text-slate-700">@Model.EventDate.ToString("dd/MM/yyyy HH:mm")</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl flex items-start gap-3">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-indigo-600 mt-0.5"></i>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Địa điểm / Nền tảng</p>
+                            <p class="text-sm font-bold text-slate-700">@(Model.Location ?? "Online")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discussion / Comments -->
+            <div class="space-y-4">
+                <!-- Form Đặt câu hỏi / Bình luận -->
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 bg-slate-200 rounded-full overflow-hidden">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=@(User.Identity?.Name ?? "U")" alt="You" />
+                        </div>
+                        <span class="text-sm font-bold text-slate-700">Thảo luận & Hỏi đáp sự kiện</span>
+                    </div>
+                    
+                    <textarea x-model="newDiscussionContent" placeholder="Bạn có câu hỏi gì cho diễn giả? Hoặc chia sẻ tài liệu liên quan..." rows="3" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-xl text-sm outline-none focus:ring-2 focus:ring-purple-500 placeholder-slate-400 resize-none transition-all"></textarea>
+                    
+                    <!-- Hiển thị file đính kèm -->
+                    <div x-show="attachments.length > 0" class="flex flex-wrap gap-2 mt-2" style="display: none;">
+                        <template x-for="(file, index) in attachments" :key="index">
+                            <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600">
+                                <i data-lucide="paperclip" class="w-3 h-3 text-purple-600"></i>
+                                <span x-text="file.fileName"></span>
+                                <button type="button" @@click="attachments.splice(index, 1)" class="text-rose-500 hover:text-rose-700 ml-1">&times;</button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-50">
+                        <div class="flex gap-2 relative">
+                            <!-- Nút Đính kèm tài liệu -->
+                            <input type="file" id="fileUpload" class="hidden" @@change="uploadFile($event)" style="display: none;">
+                            <button @@click="document.getElementById('fileUpload').click()" class="text-xs font-bold text-slate-500 hover:text-purple-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-purple-50 transition-colors">
+                                <i data-lucide="paperclip" class="w-4 h-4"></i> Đính kèm
+                            </button>
+                        </div>
+                        <button @@click="submitDiscussion()" :disabled="isSubmitting" class="bg-purple-600 hover:bg-purple-700 disabled:bg-slate-400 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i> <span x-text="isSubmitting ? 'Đang gửi...' : 'Gửi câu hỏi'"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Danh sách Bài thảo luận -->
+                <div class="space-y-4">
+                    <template x-for="disc in discussions" :key="disc.id">
+                        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <img :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${disc.authorId}`" class="w-10 h-10 rounded-full border border-slate-200 bg-slate-100" />
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800">
+                                            <span x-text="disc.authorName"></span>
+                                        </p>
+                                        <p class="text-[10px] text-slate-400 font-bold" x-text="new Date(disc.createdAt).toLocaleString()"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap" x-html="formatMentions(disc.content)"></div>
+
+                            <!-- Attachment -->
+                            <div x-show="disc.attachmentIds" class="bg-slate-50 border border-slate-100 rounded-xl p-3 flex items-center gap-3 mt-3 group/file cursor-pointer hover:bg-purple-50 hover:border-purple-100 transition-colors">
+                                <div class="bg-blue-100 text-blue-600 p-2 rounded-lg">
+                                    <i data-lucide="folder-archive" class="w-5 h-5"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-bold text-slate-700 truncate group-hover/file:text-purple-700">Tài liệu đính kèm</p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center gap-6 pt-4 border-t border-slate-50 text-xs font-bold text-slate-500">
+                                <button class="flex items-center gap-1.5 hover:text-rose-500 transition-colors"><i data-lucide="heart" class="w-4 h-4"></i> <span x-text="disc.likesCount"></span></button>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <div x-show="discussions.length === 0" class="text-center py-10 text-slate-400 text-sm font-medium">
+                        <i data-lucide="message-square" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+                        Chưa có câu hỏi hay thảo luận nào cho sự kiện này.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar (Action & Attendees) -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest text-center">Tình trạng vé</h3>
+                <div class="text-center">
+                    <span class="text-4xl font-black text-slate-800">@(Model.Participants?.Count ?? 0)</span>
+                    <span class="text-sm font-bold text-slate-400">/ @Model.MaxParticipants</span>
+                </div>
+                <!-- Vạch progress -->
+                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-500 to-indigo-500 h-2.5 rounded-full" style="width: @(Model.MaxParticipants > 0 ? ((Model.Participants?.Count ?? 0) * 100 / Model.MaxParticipants) : 0)%"></div>
+                </div>
+                
+                <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 flex justify-center items-center gap-2">
+                    <i data-lucide="ticket" class="w-4 h-4"></i> Đăng ký ngay
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest mb-4">Khách mời dự kiến</h3>
+                <div class="flex -space-x-3 overflow-hidden p-2">
+                    @for(int i=0; i<Math.Min(10, Model.Participants?.Count ?? 5); i++)
+                    {
+                        <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=P_@i" alt="User"/>
+                    }
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-white bg-slate-100 text-xs font-bold text-slate-500">
+                        +
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div x-show="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-transition>
+        <div @@click.away="isOpen = false" class="bg-white rounded-3xl w-full max-w-md p-8 space-y-5 shadow-2xl">
+            <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                <i data-lucide="share-2" class="w-5 h-5 text-indigo-600"></i> Chia sẻ sự kiện này
+            </h3>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Gửi đến</label>
+                <select x-model="targetType" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-bold text-slate-700">
+                    <option value="Group">Một nhóm học (Group)</option>
+                    <option value="User">Tin nhắn cá nhân (User)</option>
+                </select>
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">ID Người nhận / Nhóm</label>
+                <input type="number" x-model="targetId" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-bold text-slate-700" placeholder="Nhập ID...">
+            </div>
+            
+            <div class="space-y-3">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Lời nhắn (Tùy chọn)</label>
+                <textarea x-model="message" rows="2" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm placeholder-slate-400 resize-none" placeholder="Này, xem sự kiện này đi..."></textarea>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button @@click="isOpen = false" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
+                <button @@click="submitShare" :disabled="isSharing" class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:bg-slate-400 transition-colors font-bold shadow-md flex items-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> <span x-text="isSharing ? 'Đang gửi...' : 'Gửi đi'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('alpine:initialized', () => {
+        Alpine.effect(() => {
+            setTimeout(() => {
+                if(window.lucide) { lucide.createIcons(); }
+            }, 50);
+        });
+    });
+
+    function eventPage(eventId) {
+        return {
+            // Discussions state
+            discussions: [],
+            newDiscussionContent: '',
+            attachments: [],
+            isSubmitting: false,
+            
+            // Share state
+            isOpen: false,
+            isSharing: false,
+            contentType: '',
+            contentId: 0,
+            targetType: 'Group',
+            targetId: '',
+            message: '',
+
+            formatMentions(content) {
+                if (!content) return '';
+                let html = content.replace(/</g, '&lt;').replace(/>/g, '&gt;'); // Basic XSS protection
+                html = html.replace(/@(\d+)/g, '<a href="/hub/events/$1" class="text-indigo-600 font-bold hover:underline">@SựKiện-$1</a>');
+                html = html.replace(/#(\d+)/g, '<a href="/hub/groups/$1" class="text-purple-600 font-bold hover:underline">#Nhóm-$1</a>');
+                html = html.replace(/\[SHARED_QA:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><i data-lucide="help-circle" class="w-4 h-4 inline"></i> <a href="/hub/qa/$1" class="text-indigo-600">Đính kèm Câu hỏi QA-$1</a></div>');
+                html = html.replace(/\[SHARED_EVENT:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><i data-lucide="calendar" class="w-4 h-4 inline"></i> <a href="/hub/events/$1" class="text-indigo-600">Đính kèm Sự kiện Event-$1</a></div>');
+                html = html.replace(/\[SHARED_RESOURCE:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><i data-lucide="file" class="w-4 h-4 inline"></i> <a href="/hub/resources" class="text-indigo-600">Đính kèm Tài nguyên Res-$1</a></div>');
+                return html;
+            },
+
+            async init() {
+                await this.fetchDiscussions();
+            },
+
+            async fetchDiscussions() {
+                try {
+                    const res = await fetch(`/api/EventApi/${eventId}/discussions`);
+                    if (res.ok) {
+                        this.discussions = await res.json();
+                    }
+                } catch (e) {
+                    console.error("Lỗi tải bình luận", e);
+                }
+            },
+
+            async uploadFile(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append("file", file);
+
+                try {
+                    window.showToast && window.showToast('ℹ️ Đang tải lên file...');
+                    const res = await fetch('/api/AttachmentApi/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        this.attachments.push(data);
+                        window.showToast && window.showToast('✅ Đã đính kèm file!');
+                    } else {
+                        const err = await res.json();
+                        window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi tải lên.'));
+                    }
+                } catch (e) {
+                    window.showToast && window.showToast('❌ Lỗi kết nối máy chủ.');
+                }
+            },
+
+            async submitDiscussion() {
+                if (!this.newDiscussionContent.trim()) {
+                    window.showToast && window.showToast('⚠️ Vui lòng nhập nội dung!');
+                    return;
+                }
+
+                this.isSubmitting = true;
+                const attachmentIds = this.attachments.map(a => a.id).join(',');
+
+                try {
+                    const res = await fetch(`/api/EventApi/${eventId}/discussions`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: this.newDiscussionContent, attachmentIds })
+                    });
+
+                    if (res.ok) {
+                        this.newDiscussionContent = '';
+                        this.attachments = [];
+                        window.showToast && window.showToast('✅ Bình luận đã được gửi!');
+                        await this.fetchDiscussions();
+                    } else if (res.status === 401) {
+                        window.location.href = '/Auth/Login';
+                    } else {
+                        const err = await res.json();
+                        window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi gửi bình luận.'));
+                    }
+                } catch (e) {
+                    window.showToast && window.showToast('❌ Lỗi kết nối.');
+                } finally {
+                    this.isSubmitting = false;
+                }
+            },
+            
+            // Share logic
+            openShare(type, id) {
+                this.contentType = type;
+                this.contentId = id;
+                this.isOpen = true;
+                this.targetId = '';
+                this.message = '';
+                setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 50);
+            },
+
+            async submitShare() {
+                if (!this.targetId) {
+                    window.showToast && window.showToast('⚠️ Vui lòng nhập ID người nhận hoặc nhóm!');
+                    return;
+                }
+
+                this.isSharing = true;
+                try {
+                    const res = await fetch('/api/ShareApi/share', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            targetType: this.targetType,
+                            targetId: parseInt(this.targetId),
+                            contentType: this.contentType,
+                            contentId: this.contentId,
+                            message: this.message
+                        })
+                    });
+
+                    if (res.ok) {
+                        this.isOpen = false;
+                        window.showToast && window.showToast('✅ Đã chia sẻ thành công!');
+                    } else if (res.status === 401) {
+                        window.location.href = '/Auth/Login';
+                    } else {
+                        const err = await res.json();
+                        window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi khi chia sẻ.'));
+                    }
+                } catch (e) {
+                    window.showToast && window.showToast('❌ Lỗi kết nối đến máy chủ.');
+                } finally {
+                    this.isSharing = false;
+                }
+            }
+        };
+    }
+</script>

@@ -40,26 +40,28 @@ public class PredictionService : IPredictionService
 {
     private readonly SmartLMS.Data.SmartLMSContext _context;
     private readonly MLContext _mlContext;
+    private readonly Microsoft.Extensions.Caching.Distributed.IDistributedCache _cache;
     private static ITransformer? _model;
     private static object _lock = new object();
     private static PredictionEngine<StudentDropoutData, DropoutPrediction>? _predictionEngine;
 
-    public PredictionService(SmartLMS.Data.SmartLMSContext context)
+    public PredictionService(SmartLMS.Data.SmartLMSContext context, Microsoft.Extensions.Caching.Distributed.IDistributedCache cache)
     {
         _context = context;
+        _cache = cache;
         _mlContext = new MLContext(seed: 0);
     }
 
     public async Task TrainModelAsync()
     {
         // Tải dữ liệu thực tế từ Database
-        var data = _context.Enrollments
+        var data = await _context.Enrollments
             .Select(e => new StudentDropoutData 
             { 
                 Progress = (float)(e.Progress ?? 0), 
                 AvgScore = (float)(e.AvgScore ?? 0), 
                 IsDropout = e.IsDropout ?? false 
-            }).ToList();
+            }).ToListAsync();
 
         if (!data.Any()) return;
 
@@ -70,23 +72,38 @@ public class PredictionService : IPredictionService
 
         var builtModel = pipeline.Fit(dataView);
         
+        // 🚀 CÔNG NGHỆ LÕI: Worker Train xong, lưu ngay vào Redis để 3 con VPS khác dùng chung!
+        using var stream = new System.IO.MemoryStream();
+        _mlContext.Model.Save(builtModel, dataView.Schema, stream);
+        await _cache.SetAsync("ai_dropout_model", stream.ToArray(), new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7)
+        });
         
         lock (_lock)
         {
             _model = builtModel;
             _predictionEngine = _mlContext.Model.CreatePredictionEngine<StudentDropoutData, DropoutPrediction>(_model);
         }
-        
-        await Task.CompletedTask;
     }
 
-    private void TrainModelIfNone()
+    private async Task EnsureModelLoadedAsync()
     {
-        lock (_lock)
+        if (_model != null) return;
+
+        // 💡 Prod Node hoặc Worker khác sẽ tải Model từ RAM của Redis về, không cần Train lại!
+        var modelBytes = await _cache.GetAsync("ai_dropout_model");
+        if (modelBytes != null && modelBytes.Length > 0)
         {
-            if (_model != null) return;
+            using var stream = new System.IO.MemoryStream(modelBytes);
+            lock (_lock)
+            {
+                _model = _mlContext.Model.Load(stream, out var schema);
+                _predictionEngine = _mlContext.Model.CreatePredictionEngine<StudentDropoutData, DropoutPrediction>(_model);
+            }
+            return;
         }
-        TrainModelAsync().GetAwaiter().GetResult();
+
+        await TrainModelAsync();
     }
 
     public async Task<DropoutPrediction> PredictDropoutAsync(int userId, int courseId)
@@ -96,7 +113,7 @@ public class PredictionService : IPredictionService
 
     public async Task<DropoutPrediction> PredictDropoutAsync(int userId, int courseId, bool includeXai)
     {
-        TrainModelIfNone();
+        await EnsureModelLoadedAsync();
 
         // Lấy dữ liệu thực tế của sinh viên từ Database
         var enrollment = await _context.Enrollments.FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);

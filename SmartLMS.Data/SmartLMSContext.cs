@@ -162,6 +162,13 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<DirectMessage> DirectMessages { get; set; }
     public virtual DbSet<CommunityChatMessage> CommunityChatMessages { get; set; }
 
+    // Interactive Features (Phase 2)
+    public virtual DbSet<Attachment> Attachments { get; set; }
+    public virtual DbSet<GroupPost> GroupPosts { get; set; }
+    public virtual DbSet<GroupPostComment> GroupPostComments { get; set; }
+    public virtual DbSet<EventDiscussion> EventDiscussions { get; set; }
+    public virtual DbSet<SharedContent> SharedContents { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -430,6 +437,31 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<StudyGroup>(entity => {
             entity.HasKey(e => e.Id);
             entity.ToTable("StudyGroups");
+        });
+
+        // Interactive Features Mapping
+        modelBuilder.Entity<Attachment>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Uploader).WithMany().HasForeignKey(e => e.UploaderId).OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<GroupPost>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Group).WithMany().HasForeignKey(e => e.GroupId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Author).WithMany().HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<GroupPostComment>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Post).WithMany(p => p.Comments).HasForeignKey(e => e.GroupPostId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Author).WithMany().HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<EventDiscussion>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Event).WithMany().HasForeignKey(e => e.EventId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Author).WithMany().HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<SharedContent>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Sender).WithMany().HasForeignKey(e => e.SenderId).OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Post>(entity => {
