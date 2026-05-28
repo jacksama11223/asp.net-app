@@ -35,6 +35,7 @@ public class CommunityQuestion
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
+    public string AttachmentIds { get; set; } = string.Empty;
     public int AuthorId { get; set; }
     public User? Author { get; set; }
     public string Status { get; set; } = "Unsolved"; // Solved, Unsolved
@@ -50,6 +51,7 @@ public class CommunityAnswer
     public int QuestionId { get; set; }
     public CommunityQuestion? Question { get; set; }
     public string Content { get; set; } = string.Empty;
+    public string AttachmentIds { get; set; } = string.Empty;
     public int AuthorId { get; set; }
     public User? Author { get; set; }
     public bool IsVerified { get; set; } // Expert verified
