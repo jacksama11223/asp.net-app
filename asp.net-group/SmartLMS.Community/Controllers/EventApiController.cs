@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SmartLMS.Business;
 using SmartLMS.Community.Hubs;
+using SmartLMS.Models;
 using System.Security.Claims;
 
 namespace SmartLMS.Community.Controllers;

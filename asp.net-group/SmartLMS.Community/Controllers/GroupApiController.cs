@@ -67,7 +67,6 @@ public class GroupApiController : ControllerBase
             Name = req.Name,
             Subject = req.Subject,
             Description = req.Description,
-            MaxMembers = req.MaxMembers > 0 ? req.MaxMembers : 50,
             LeaderId = userId,
             CreatedAt = DateTime.UtcNow,
             IsApproved = false // Chờ Admin duyệt
