@@ -48,16 +48,16 @@ export const Sidebar = ({ collapsed, onToggle, closeMobile }) => {
         <Group justify={collapsed ? "center" : "space-between"} mb="xl" className="transition-all duration-300">
           {!collapsed && (
             <Group gap="sm">
-              <ThemeIcon size="xl" radius="md" variant="gradient" gradient={{ from: 'brand', to: 'indigo' }}>
-                <LuZap size={24} />
-              </ThemeIcon>
-              <Text size="xl" fw={900} tracking="tighter" className="text-slate-900">SmartLMS</Text>
+              <Box w={32} h={32}>
+                <img src="/images/brand/logo.svg" alt="Trăm Tiếng" className="w-full h-full object-contain" />
+              </Box>
+              <Text size="xl" fw={900} tracking="tighter" className="text-slate-900 bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-green-700">Trăm Tiếng</Text>
             </Group>
           )}
           {collapsed && (
-            <ThemeIcon size="xl" radius="md" variant="gradient" gradient={{ from: 'brand', to: 'indigo' }} onClick={onToggle} className="cursor-pointer">
-              <LuZap size={24} />
-            </ThemeIcon>
+            <Box w={32} h={32} onClick={onToggle} className="cursor-pointer">
+              <img src="/images/brand/logo.svg" alt="Trăm Tiếng" className="w-full h-full object-contain" />
+            </Box>
           )}
           
           <ActionIcon variant="subtle" color="gray" onClick={onToggle} title="Toggle Sidebar">

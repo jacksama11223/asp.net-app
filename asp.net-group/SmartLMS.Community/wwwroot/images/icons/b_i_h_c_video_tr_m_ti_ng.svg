@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#adc6ff",
+                    "on-primary-container": "#004b1e",
+                    "tertiary-fixed-dim": "#ffb4a9",
+                    "surface-container-highest": "#dce5d9",
+                    "primary": "#006e2f",
+                    "tertiary-container": "#ff8b7c",
+                    "primary-container": "#22c55e",
+                    "inverse-on-surface": "#ebf3e7",
+                    "background": "#f3fcef",
+                    "on-primary-fixed": "#002109",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#76231b",
+                    "on-surface": "#161d16",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#edf6ea",
+                    "outline-variant": "#bccbb9",
+                    "surface-variant": "#dce5d9",
+                    "surface": "#f3fcef",
+                    "surface-dim": "#d4ddd0",
+                    "primary-fixed": "#6bff8f",
+                    "on-primary-fixed-variant": "#005321",
+                    "inverse-primary": "#4ae176",
+                    "inverse-surface": "#2a322a",
+                    "surface-bright": "#f3fcef",
+                    "on-tertiary-fixed-variant": "#7f2a21",
+                    "on-surface-variant": "#3d4a3d",
+                    "surface-container-high": "#e2ebde",
+                    "secondary-container": "#2170e4",
+                    "tertiary": "#9e4036",
+                    "on-secondary-fixed-variant": "#004395",
+                    "tertiary-fixed": "#ffdad5",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-background": "#161d16",
+                    "primary-fixed-dim": "#4ae176",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#006e2f",
+                    "on-secondary-container": "#fefcff",
+                    "surface-container": "#e8f0e4",
+                    "on-tertiary-fixed": "#410001",
+                    "on-secondary-fixed": "#001a42",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#0058be",
+                    "outline": "#6d7b6c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "gutter": "20px",
+                    "sm": "16px",
+                    "base": "4px",
+                    "xs": "8px",
+                    "margin-mobile": "16px",
+                    "xl": "64px",
+                    "lg": "40px",
+                    "margin-desktop": "auto"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .video-gradient {
+            background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant/10 fixed full-width top-0 z-50 flex justify-between items-center px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByoelitWoMlr7VpeVn8d1Kg72ta2Jn2tERKGIn6o7QtycL8WjjemhHPR1CY7X3wg4bftJtj-fqQ7eJdHUeb5FGsnk0TPy32hqofxojaSeFC0etK0GvSlhVY10YFnxTXmnsGgemmKFsWKB9NH27ZL79NpwGO0XrAKTjwcuzr6DBqkSzcNuhEwjDN4dKT06JDxD5cA5bdUJwW7mj956CsZm5PosF3ixeJxhpnttVuhQCU08lWE_4vUIidteC69Vk3hfeQGVOCkiIcAFM"/>
+</div>
+<h1 class="text-headline-md-mobile font-headline-md text-primary dark:text-primary-fixed">Trăm Tiếng</h1>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-variant transition-transform duration-150 active:scale-95 text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined">local_fire_department</span>
+</button>
+</header>
+<!-- Content Canvas -->
+<main class="pt-16 max-w-screen-md mx-auto">
+<!-- Video Section -->
+<section class="relative aspect-video w-full overflow-hidden bg-black group">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="A cinematic wide-shot of a modern language classroom with bright natural lighting streaming through floor-to-ceiling windows. The scene is clean and minimalist, featuring a teacher illustrating vocabulary on a sleek digital whiteboard. The color palette is dominated by airy whites, emerald greens, and soft earthy browns, creating a focused and inspiring educational atmosphere in a modern corporate style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDZ65H525YSW-ltxt60d85UwlBO67RKWMWDPwjQR8gapM8aEmZO_LHTi4P62asziLQsxC60OFSvd-CvUMgk-G-pe1iKRgIHTW8Fv5OQYhuSMZZHX4xWcF9hGYePU50n9LM_VOPuQZ-OaIAdnX0LU7SPBHKqsJzbsl76DiAe9qDUTEYb1BeJciHxkSu9uPsjVlPcohCmu3PkSMoVzFHs-_rwAUqkT2aymeFJbHLWym3EP1b2qWmm-Tm0FcOyBRv1kr9eUwRy31mcdTBw')"></div>
+<div class="absolute inset-0 video-gradient flex items-center justify-center">
+<button class="w-20 h-20 bg-primary-container/90 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-90">
+<img alt="Play" class="w-10 h-10 ml-1" src="https://lh3.googleusercontent.com/aida/ADBb0ujnymGlH50XAkP-uJJoEoxMoWrhp1OEs-2kG3vwfpf5qTaMO40PPYGw3xO3A4W4O9m3s4k9uUqUlMPUr3hM4vlOqN3T1cOJLIErIFt9TXIDx4mkxbV5ecY7FWN8kfZrWC7SZAR_Pe3vs8Ei_IybiW-UFFovfm3D9NBAsLfhJlJ7-oWyjmn_EplKe-lhZfwTamOTZ7hwPPxqc7C1i1I5N9C91gvxGUV2t6PgskPq78KPp40a2G810V1jztzZ"/>
+</button>
+</div>
+<!-- Video Progress Mini -->
+<div class="absolute bottom-0 left-0 right-0 h-1.5 bg-white/20">
+<div class="h-full bg-primary-container w-1/3 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></div>
+</div>
+</section>
+<!-- Lesson Header & Progress -->
+<section class="px-margin-mobile py-sm bg-surface-container-lowest">
+<div class="flex justify-between items-start mb-base">
+<div>
+<span class="text-label-sm font-label-sm text-secondary bg-secondary-fixed/30 px-xs py-0.5 rounded-full mb-xs inline-block">Tiếng Anh Giao Tiếp</span>
+<h2 class="text-headline-md font-headline-md text-on-surface">Bài 1: Giao tiếp Cơ bản</h2>
+</div>
+<button class="p-xs hover:bg-surface-container rounded-lg transition-all active:scale-90">
+<img alt="Bookmark" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida/ADBb0uhrIB5qBRjDPELOn6Lo52LN2uxmhq_5P7LzfL8nAQs-cRmAJBepGeQH3xqNIZzfRm9cULNApVD_OnO_7OxEsy_rmk1Ug2dXvRq9n6VLdVLm5xTsXumKp3DGBMo-U_wswuYSvSvRmhJQq02WPDCdk-u2BIH_mNgdZa0s7Q0d2mheFIS-EU45YRimBu3_3u24hyKJqGv_bEhgkdGIwJwBF8YZhPvQuDQKooE6ZP6WWVxIM7muSMz08ogQIR_P"/>
+</button>
+</div>
+<!-- Detailed Progress Bar -->
+<div class="mt-sm">
+<div class="flex justify-between items-center mb-xs">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Tiến độ bài học</span>
+<span class="text-label-sm font-label-sm text-primary font-bold">35%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[35%] rounded-full shadow-sm"></div>
+</div>
+</div>
+</section>
+<!-- Lesson Materials - Asymmetric / Bento Style -->
+<section class="px-margin-mobile py-lg">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-md uppercase tracking-wider">Tài liệu học tập</h3>
+<div class="grid grid-cols-2 gap-sm">
+<!-- PDF Material -->
+<div class="col-span-2 p-sm bg-surface-container-low border border-outline-variant/10 rounded-xl flex items-center gap-sm hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-sm group-hover:rotate-3 transition-transform">
+<span class="material-symbols-outlined text-tertiary">description</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Giáo trình bài 1.pdf</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">2.4 MB • PDF Document</p>
+</div>
+<span class="material-symbols-outlined text-outline">download</span>
+</div>
+<!-- Vocabulary Chip Grid -->
+<div class="col-span-1 p-sm bg-primary-container/10 border border-primary/10 rounded-xl flex flex-col justify-between aspect-square hover:shadow-md transition-shadow cursor-pointer">
+<div class="flex justify-between">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">translate</span>
+<span class="material-symbols-outlined text-primary-container">arrow_outward</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-primary-container">Flashcards</p>
+<p class="text-label-sm font-label-sm text-primary">15 từ mới</p>
+</div>
+</div>
+<!-- Audio Material -->
+<div class="col-span-1 p-sm bg-secondary-container/10 border border-secondary/10 rounded-xl flex flex-col justify-between aspect-square hover:shadow-md transition-shadow cursor-pointer">
+<div class="flex justify-between">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">headphones</span>
+<span class="material-symbols-outlined text-secondary-container">arrow_outward</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-secondary-fixed-variant">Luyện nghe</p>
+<p class="text-label-sm font-label-sm text-secondary">05:20 phút</p>
+</div>
+</div>
+<!-- Quiz Card -->
+<div class="col-span-2 p-md bg-surface-container-highest border border-outline-variant/20 rounded-xl flex justify-between items-center hover:bg-surface-variant transition-colors cursor-pointer">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-tertiary-container rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Kiểm tra kiến thức</p>
+<p class="text-label-sm font-label-sm text-on-tertiary-container">Vượt qua để mở khóa Bài 2</p>
+</div>
+</div>
+<button class="bg-primary text-white font-label-md text-label-md px-md py-xs rounded-full border-b-2 border-on-primary-fixed-variant active:translate-y-0.5 active:border-b-0 transition-all">Bắt đầu</button>
+</div>
+</div>
+</section>
+<!-- Community Section Preview -->
+<section class="px-margin-mobile pb-xl">
+<div class="flex justify-between items-center mb-md">
+<h3 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Thảo luận (24)</h3>
+<span class="text-primary text-label-sm font-bold flex items-center gap-base cursor-pointer">Xem tất cả <span class="material-symbols-outlined text-[16px]">chevron_right</span></span>
+</div>
+<div class="space-y-sm">
+<div class="flex gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-dim overflow-hidden flex-shrink-0">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiQhzcHtGZnGylKcFjV2jtQ_Q4AP3UkD6tqadI7TqWFm5I15_81k8NqxzG4QoshiPKWvLFE_yhTKRd_wIeJTXbFqd0CqNxue2BRkUzhXlLuvJS2B_xsqpW4sq6Eux8DBefoWLmwGDL9BY9Tk7ViNbt2SA0v9OWumWa3O3o2cKYHPLtqLY88hkLNztfRD4QpSh-fZFUCGiECCcVSltoELsFioiswd9AmBN9D9CmZN1Chbg8bGZHTY9PWxbWXLuD7pUwSAiPPyXMUyhk"/>
+</div>
+<div class="bg-white p-sm rounded-xl border border-outline-variant/10 flex-1 relative shadow-sm">
+<!-- Speech bubble tail effect -->
+<div class="absolute -left-1 top-3 w-2 h-2 bg-white border-l border-b border-outline-variant/10 rotate-45"></div>
+<p class="text-label-sm font-bold text-on-surface mb-1">Mai Anh</p>
+<p class="text-body-md text-on-surface-variant leading-tight">Cách phát âm từ "Schedule" trong video có vẻ hơi khác, có phải giọng Anh-Anh không ạ?</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center bg-surface dark:bg-surface-dim pb-4 pt-2 border-t border-outline-variant/10 z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-xl px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-label-sm text-label-sm mt-1">Courses</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm mt-1">Community</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for the bookmark button
+        const bookmarkBtn = document.querySelector('img[src*="IMAGE_54"]').parentElement;
+        let bookmarked = false;
+        bookmarkBtn.addEventListener('click', () => {
+            bookmarked = !bookmarked;
+            bookmarkBtn.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                bookmarkBtn.style.transform = 'scale(1)';
+                bookmarkBtn.style.filter = bookmarked ? 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.4))' : 'none';
+            }, 150);
+        });
+
+        // Simulating video interaction
+        const playBtn = document.querySelector('button img[src*="IMAGE_17"]').parentElement;
+        playBtn.addEventListener('click', () => {
+            playBtn.classList.add('opacity-0');
+            setTimeout(() => {
+                playBtn.style.display = 'none';
+            }, 300);
+        });
+    </script>
+</body></html>
