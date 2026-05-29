@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .code-editor {
+            font-family: 'JetBrains Mono', monospace;
+            background-image: radial-gradient(#bccbb9 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+        }
+        .pressed-effect:active {
+            transform: translateY(2px);
+            box-shadow: none !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-container": "#004b1e",
+                        "tertiary-fixed-dim": "#ffb4a9",
+                        "surface-container-highest": "#dce5d9",
+                        "primary": "#006e2f",
+                        "tertiary-container": "#ff8b7c",
+                        "primary-container": "#22c55e",
+                        "inverse-on-surface": "#ebf3e7",
+                        "background": "#f3fcef",
+                        "on-primary-fixed": "#002109",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#76231b",
+                        "on-surface": "#161d16",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#edf6ea",
+                        "outline-variant": "#bccbb9",
+                        "surface-variant": "#dce5d9",
+                        "surface": "#f3fcef",
+                        "surface-dim": "#d4ddd0",
+                        "primary-fixed": "#6bff8f",
+                        "on-primary-fixed-variant": "#005321",
+                        "inverse-primary": "#4ae176",
+                        "inverse-surface": "#2a322a",
+                        "surface-bright": "#f3fcef",
+                        "on-tertiary-fixed-variant": "#7f2a21",
+                        "on-surface-variant": "#3d4a3d",
+                        "surface-container-high": "#e2ebde",
+                        "secondary-container": "#2170e4",
+                        "tertiary": "#9e4036",
+                        "on-secondary-fixed-variant": "#004395",
+                        "tertiary-fixed": "#ffdad5",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-background": "#161d16",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#006e2f",
+                        "on-secondary-container": "#fefcff",
+                        "surface-container": "#e8f0e4",
+                        "on-tertiary-fixed": "#410001",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#0058be",
+                        "outline": "#6d7b6c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "gutter": "20px",
+                        "sm": "16px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "margin-mobile": "16px",
+                        "xl": "64px",
+                        "lg": "40px",
+                        "margin-desktop": "auto"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile h-16 w-full docked full-width top-0 bg-surface border-b border-outline-variant/10 z-50 sticky">
+<div class="flex items-center gap-xs">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline/10">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<span class="text-headline-md-mobile font-headline-md text-primary">Trăm Tiếng</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined text-primary">local_fire_department</span>
+</button>
+</header>
+<main class="flex-grow p-margin-mobile pb-32 max-w-md mx-auto w-full">
+<!-- Task Instructions -->
+<section class="mb-lg">
+<div class="flex items-center justify-between mb-xs">
+<span class="font-label-md text-label-md bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full">Challenge #42</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 15 mins
+                </span>
+</div>
+<h1 class="font-headline-md text-headline-md-mobile text-on-surface mb-2">Mảng Động Cơ Bản</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">
+                Hãy viết một hàm <code class="bg-surface-container px-1 rounded">countVowels(str)</code> để đếm số lượng nguyên âm trong một chuỗi tiếng Việt.
+            </p>
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 mb-4">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="font-label-md text-label-md">Gợi ý:</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant leading-relaxed">
+                    Sử dụng vòng lặp <code class="text-secondary">for...of</code> và phương thức <code class="text-secondary">includes()</code> để kiểm tra từng ký tự.
+                </p>
+</div>
+</section>
+<!-- Code Editor Area -->
+<section class="mb-lg relative">
+<div class="flex items-center justify-between bg-surface-variant rounded-t-xl px-4 py-2 border-b border-outline-variant/10">
+<div class="flex gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">javascript</span>
+</div>
+<div class="code-editor min-h-[240px] bg-on-surface text-surface p-4 rounded-b-xl border border-outline-variant/20 shadow-lg relative overflow-hidden">
+<pre class="text-sm leading-6"><code><span class="text-secondary-fixed-dim">function</span> <span class="text-primary-fixed">countVowels</span>(str) {
+  <span class="text-tertiary-container">// Viết mã của bạn tại đây</span>
+  <span class="text-secondary-fixed-dim">let</span> count = <span class="text-orange-400">0</span>;
+  <span class="text-secondary-fixed-dim">const</span> vowels = <span class="text-primary-fixed-dim">"aeiou"</span>;
+  
+  <span class="text-cursor border-r-2 border-white animate-pulse"> </span>
+}</code></pre>
+</div>
+<!-- Contextual Floating Action Button -->
+<button class="absolute -bottom-6 right-4 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-lg flex items-center justify-center pressed-effect z-10" onclick="runCode()">
+<img alt="Run compiler" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida/ADBb0ui2UfS8oQhM-sJfuqhzs1P1oz3Foy8h2DA12YGnvPqa8EpT6CE5HwuW7YD2V8YPSGZmCB7e1-vBeNuxyj3S9cOzezStbNtbRw7C5lJncsudV4_LdTtg3y2TyDQtQienkKxyZUBZ6-v1b1PJmG6R32XPBwdcNsnKfkG9VQQXvjurOIb5CubGLdFKI0d5uM1RueLZWfoWLiseXBM1tMND1zigzmj6EOTaaAvyGXN3n7gKvtaTGDF60pRwBZh3"/>
+</button>
+</section>
+<!-- Result Area (Hidden by default) -->
+<section class="hidden animate-in fade-in slide-in-from-bottom-4 duration-300" id="result-area">
+<div class="bg-surface-container rounded-xl p-6 border-2 border-transparent transition-all" id="result-card">
+<div class="flex items-start gap-4">
+<img alt="Result" class="w-12 h-12 shrink-0" id="result-icon" src=""/>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface" id="result-title"></h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1" id="result-msg"></p>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 font-label-md text-label-md py-3 px-4 rounded-xl border-2 border-secondary text-secondary hover:bg-secondary-container/5 pressed-effect" id="retry-btn" onclick="hideResult()">
+                        Thử lại
+                    </button>
+<button class="flex-1 font-label-md text-label-md py-3 px-4 rounded-xl bg-primary text-on-primary border-b-4 border-on-primary-fixed-variant pressed-effect" id="next-btn">
+                        Tiếp theo
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center bg-surface pb-4 pt-2 border-t border-outline-variant/10 z-40">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-label-sm text-label-sm">Courses</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm">Community</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        function runCode() {
+            const resultArea = document.getElementById('result-area');
+            const resultCard = document.getElementById('result-card');
+            const resultIcon = document.getElementById('result-icon');
+            const resultTitle = document.getElementById('result-title');
+            const resultMsg = document.getElementById('result-msg');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Simulate random outcome
+            const isSuccess = Math.random() > 0.4;
+            
+            resultArea.classList.remove('hidden');
+            
+            if (isSuccess) {
+                resultCard.className = "bg-surface-container rounded-xl p-6 border-2 border-primary-container transition-all";
+                resultIcon.src = "https://lh3.googleusercontent.com/aida/ADBb0ujeVAqBbSd3diS720e944UnAwigrjL4WGUDmvbzxJZRjTe7m5FrVazNHHYNuZvGhE46zQpKbyVQ5IzckOd7_kOQvq1AA5OKCi5RuV-iU_MPTobCS_7U2m79sjVy1bb4rUJ-S5EBtE0yVpB55ioTl_ITKNEXidLFofwGT1eRZceGPARD-5uHvgtpkbRsSgQMOVV4kZ6uizlNjgxPrUl69EtJ2LlgLwUu3PieaZpCSfzzGHe0Z_OdXROFhRLm";
+                resultTitle.innerText = "Tuyệt vời!";
+                resultMsg.innerText = "Tất cả các trường hợp kiểm thử (test cases) đều đã vượt qua thành công.";
+                nextBtn.classList.remove('hidden');
+            } else {
+                resultCard.className = "bg-surface-container rounded-xl p-6 border-2 border-error/30 transition-all";
+                resultIcon.src = "https://lh3.googleusercontent.com/aida/ADBb0ujIDI3MDegsMqgaxhy6tMnz56YBi2afJnLjxeDR34XOoz6IOTs0qCdl8fMNojtPdauzF9S7Oj-2l-ciBS8_t17FaSdZ9BpdiOAop_QfDwECtVO-QVOMjHICeERZpI0mL8DikQrNYjnMqIET7xufLE72b48UePZUffWx7PBSiVcLXgGjZdQed6666M9ys51Nan615zi6QjJ0JrJIXC2nsmOq8gKgQgMQrj8MY_6Al6ZJKwMnkWeZK4Sj3Zhb";
+                resultTitle.innerText = "Opps! Lỗi rồi";
+                resultMsg.innerText = "Hàm của bạn trả về 'undefined' cho đầu vào 'Hello'. Hãy kiểm tra lại logic.";
+                nextBtn.classList.add('hidden');
+            }
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function hideResult() {
+            document.getElementById('result-area').classList.add('hidden');
+        }
+    </script>
+</body></html>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +65,8 @@ public class CommunityApiController : ControllerBase
             .Include(p => p.Author)
             .Include(p => p.Comments.Where(c => !c.IsDeleted))
                 .ThenInclude(c => c.Author)
+            .Include(p => p.Comments.Where(c => !c.IsDeleted))
+                .ThenInclude(c => c.CommentVotes)
             .FirstOrDefaultAsync(p => p.PostId == id && !p.IsDeleted);
 
         if (post == null) return NotFound();
@@ -73,7 +75,39 @@ public class CommunityApiController : ControllerBase
         post.ViewCount++;
         await _context.SaveChangesAsync();
 
-        return Ok(post);
+        // Build threaded comments tree
+        var allComments = post.Comments.Select(c => new
+        {
+            c.CommentId,
+            c.Content,
+            c.CreatedAt,
+            c.ParentId,
+            c.IsPinned,
+            c.IsEdited,
+            c.AttachmentIds,
+            Upvotes = c.CommentVotes?.Count(v => v.VoteValue == 1) ?? 0,
+            Downvotes = c.CommentVotes?.Count(v => v.VoteValue == -1) ?? 0,
+            Author = new { c.Author.FullName, c.Author.UserId }
+        }).ToList();
+
+        var rootComments = allComments.Where(c => c.ParentId == null).Select(c => new
+        {
+            Comment = c,
+            Replies = allComments.Where(r => r.ParentId == c.CommentId).ToList()
+        }).OrderByDescending(c => c.Comment.IsPinned).ThenBy(c => c.Comment.CreatedAt).ToList();
+
+        return Ok(new
+        {
+            post.PostId,
+            post.Title,
+            post.Content,
+            post.CreatedAt,
+            post.ViewCount,
+            post.VoteCount,
+            post.VerifiedCommentId,
+            Author = new { post.Author.FullName, post.Author.UserId },
+            ThreadedComments = rootComments
+        });
     }
 
     [HttpPost("posts")]
@@ -117,15 +151,81 @@ public class CommunityApiController : ControllerBase
         var post = await _context.Posts.FindAsync(postId);
         if (post == null) return NotFound("Post not found");
 
-        // Chá»‰ tÃ¡c giáº£ hoáº·c Admin má»›i Ä‘Æ°á»£c verify
+        // Chỉ tác giả hoặc Admin mới được verify
         if (post.AuthorId != userId && !User.IsInRole("Admin")) 
-            return Forbid("Chá»‰ tÃ¡c giáº£ má»›i Ä‘Æ°á»£c xÃ¡c nháº­n cÃ¢u tráº£ lá»i.");
+            return Forbid("Chỉ tác giả mới được xác nhận câu trả lời.");
 
         post.VerifiedCommentId = commentId;
         await _context.SaveChangesAsync();
 
         return Ok(new { success = true });
     }
+
+    [HttpPut("comments/{id}")]
+    public async Task<IActionResult> EditComment(int id, [FromBody] Comment updateModel)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+        var comment = await _context.Comments.FindAsync(id);
+        if (comment == null || comment.IsDeleted) return NotFound();
+
+        if (comment.AuthorId != userId && !User.IsInRole("Admin")) return Forbid();
+
+        // Lưu lịch sử
+        _context.CommentEditHistories.Add(new CommentEditHistory
+        {
+            CommentId = comment.CommentId,
+            OldContent = comment.Content,
+            EditedAt = DateTime.Now
+        });
+
+        comment.Content = updateModel.Content;
+        comment.IsEdited = true;
+        await _context.SaveChangesAsync();
+
+        return Ok(comment);
+    }
+
+    [HttpDelete("comments/{id}")]
+    public async Task<IActionResult> DeleteComment(int id)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+        var comment = await _context.Comments.FindAsync(id);
+        if (comment == null || comment.IsDeleted) return NotFound();
+
+        if (comment.AuthorId != userId && !User.IsInRole("Admin")) return Forbid();
+
+        comment.IsDeleted = true; // Soft delete
+        await _context.SaveChangesAsync();
+
+        return Ok(new { success = true });
+    }
+
+    [HttpPost("posts/{id}/react")]
+    public async Task<IActionResult> ReactToPost(int id, [FromQuery] string type)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+        var existing = await _context.UserReactions.FirstOrDefaultAsync(r => r.EntityId == id && r.EntityType == "Post" && r.UserId == userId);
+        
+        if (existing != null)
+        {
+            if (existing.ReactionType == type) {
+                _context.UserReactions.Remove(existing); // Unlike
+            } else {
+                existing.ReactionType = type; // Change reaction
+            }
+        }
+        else
+        {
+            _context.UserReactions.Add(new UserReaction { UserId = userId, EntityId = id, EntityType = "Post", ReactionType = type });
+        }
+        
+        await _context.SaveChangesAsync();
+        return Ok(new { success = true });
+    }
 }
-
-

@@ -13,6 +13,7 @@ import { CourseDetails } from './pages/CourseDetails';
 import { MyLearning } from './pages/MyLearning';
 import { StudyWorkspace } from './pages/StudyWorkspace';
 import { Community } from './pages/Community';
+import { CommunityPostDetail } from './pages/CommunityPostDetail';
 import { CommunityNewPost } from './pages/CommunityNewPost';
 import { CommunityFriends } from './pages/CommunityFriends';
 import { CommunityQuizBuilder } from './pages/CommunityQuizBuilder';
@@ -60,6 +61,7 @@ function App() {
           <Route path="/course/:id" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
           <Route path="/my-learning" element={<ProtectedRoute><MyLearning /></ProtectedRoute>} />
           <Route path="/community" element={<ProtectedRoute><ForumHome /></ProtectedRoute>} />
+          <Route path="/community/:id" element={<ProtectedRoute><CommunityPostDetail /></ProtectedRoute>} />
           <Route path="/community/post/new" element={<ProtectedRoute><CommunityNewPost /></ProtectedRoute>} />
           <Route path="/community/friends" element={<ProtectedRoute><CommunityFriends /></ProtectedRoute>} />
           <Route path="/community/quiz-builder" element={<ProtectedRoute><CommunityQuizBuilder /></ProtectedRoute>} />

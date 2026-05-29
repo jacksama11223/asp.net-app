@@ -16,4 +16,11 @@ public class Comment
     
     public int? ParentId { get; set; } // Hỗ trợ reply (bình luận phân cấp)
     public bool IsDeleted { get; set; } = false;
+    
+    // Community Advanced Features
+    public string? AttachmentIds { get; set; } // Chuỗi JSON chứa mảng file ID
+    public bool IsPinned { get; set; } = false; // Ghim bình luận lên đầu
+    public bool IsEdited { get; set; } = false; // Đã từng chỉnh sửa chưa
+
+    public virtual ICollection<CommentVote> CommentVotes { get; set; } = new List<CommentVote>();
 }

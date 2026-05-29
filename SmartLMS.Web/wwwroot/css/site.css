@@ -1,13 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
 
 :root {
-    --bg-color: #0f172a;
-    --accent-color: #38bdf8;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --text-primary: #f8fafc;
-    --text-muted: #94a3b8;
-    --gradient-primary: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    --bg-color: #F8FAFC; /* Light mode default for learning platform */
+    --accent-color: #22C55E;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --text-primary: #1E293B;
+    --text-muted: #64748B;
+    --gradient-primary: linear-gradient(135deg, #22C55E 0%, #3B82F6 100%);
+    
+    /* Trăm Tiếng Brand Colors */
+    --brand-primary: #0A2E36;
+    --brand-green: #22C55E;
+    --brand-blue: #3B82F6;
+    --brand-red: #EF4444;
+    --brand-amber: #F59E0B;
 }
 
 body {
@@ -108,4 +115,64 @@ main {
 
 .animate-fade {
     animation: fadeIn 0.8s ease forwards;
+}
+
+/* Community Advanced UI CSS */
+.mention-tag {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--brand-blue);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mention-tag:hover {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+
+.comment-thread-line {
+    border-left: 2px solid var(--glass-border);
+    margin-left: 18px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.reaction-popup {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(20px) scale(0.8);
+    opacity: 0;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: white;
+    border-radius: 20px;
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.reaction-trigger {
+    position: relative;
+    display: inline-block;
+}
+
+.reaction-trigger:hover .reaction-popup {
+    transform: translateY(-5px) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.reaction-popup img {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.reaction-popup img:hover {
+    transform: scale(1.2);
 }

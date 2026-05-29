@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trăm Tiếng - Quiz Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#adc6ff",
+                    "on-primary-container": "#004b1e",
+                    "tertiary-fixed-dim": "#ffb4a9",
+                    "surface-container-highest": "#dce5d9",
+                    "primary": "#006e2f",
+                    "tertiary-container": "#ff8b7c",
+                    "primary-container": "#22c55e",
+                    "inverse-on-surface": "#ebf3e7",
+                    "background": "#f3fcef",
+                    "on-primary-fixed": "#002109",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#76231b",
+                    "on-surface": "#161d16",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#edf6ea",
+                    "outline-variant": "#bccbb9",
+                    "surface-variant": "#dce5d9",
+                    "surface": "#f3fcef",
+                    "surface-dim": "#d4ddd0",
+                    "primary-fixed": "#6bff8f",
+                    "on-primary-fixed-variant": "#005321",
+                    "inverse-primary": "#4ae176",
+                    "inverse-surface": "#2a322a",
+                    "surface-bright": "#f3fcef",
+                    "on-tertiary-fixed-variant": "#7f2a21",
+                    "on-surface-variant": "#3d4a3d",
+                    "surface-container-high": "#e2ebde",
+                    "secondary-container": "#2170e4",
+                    "tertiary": "#9e4036",
+                    "on-secondary-fixed-variant": "#004395",
+                    "tertiary-fixed": "#ffdad5",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-background": "#161d16",
+                    "primary-fixed-dim": "#4ae176",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#006e2f",
+                    "on-secondary-container": "#fefcff",
+                    "surface-container": "#e8f0e4",
+                    "on-tertiary-fixed": "#410001",
+                    "on-secondary-fixed": "#001a42",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#0058be",
+                    "outline": "#6d7b6c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "gutter": "20px",
+                    "sm": "16px",
+                    "base": "4px",
+                    "xs": "8px",
+                    "margin-mobile": "16px",
+                    "xl": "64px",
+                    "lg": "40px",
+                    "margin-desktop": "auto"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .option-selected {
+            border-color: #006e2f !important;
+            background-color: #f3fcef !important;
+        }
+        .active-interaction {
+            transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .active-interaction:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 z-50 flex justify-between items-center px-margin-mobile h-16 w-full bg-surface dark:bg-surface-dim border-b border-outline-variant/10 flat no shadows">
+<div class="flex items-center gap-sm active-interaction">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+</div>
+<span class="text-headline-md-mobile font-headline-md text-primary dark:text-primary-fixed">Trăm Tiếng</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="flex items-center bg-surface-container-high px-3 py-1 rounded-full gap-xs">
+<span class="material-symbols-outlined text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-md text-label-md text-on-surface">12</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col pt-4 pb-32 px-margin-mobile max-w-lg mx-auto w-full">
+<!-- Progress Bar -->
+<div class="mb-lg">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Câu 4 trên 10</span>
+<div class="flex items-center gap-1 text-tertiary">
+<img alt="Countdown Timer Icon" class="w-5 h-5 object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uhf5N5B8bh3KAj4A28uyXmwvF-4nyEYhz8r12emOm7xia8mPTELRZMM-u6bBEZosHHN0GceAGt4cJX99M589o1ldZ7wlteTCbdOMJmIX2zs75m-iyhBfiUlhO-CCbuLDNIPyIM4ZUEI4NJqBeh8pHATuHCRIJj8bL0v6by-RqfRb_BjOU155EEQE_HNoeEweCl8a_DrNkYNHHcplmDIQ2LpreZab_MamgBMAAIAycclUvC4xMybaNUaRQBN"/>
+<span class="font-label-md text-label-md font-bold" id="timer">00:45</span>
+</div>
+</div>
+<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[40%] rounded-full transition-all duration-700 ease-out"></div>
+</div>
+</div>
+<!-- Question Section -->
+<div class="bg-surface-container-lowest border border-outline-variant/15 p-md rounded-xl mb-lg relative">
+<!-- Speech Bubble Leaf Decorative Element -->
+<div class="absolute -top-3 -right-3 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="energy_savings_leaf">energy_savings_leaf</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-sm">Chọn nghĩa đúng của cụm từ sau:</h2>
+<div class="bg-surface p-md rounded-lg border-l-4 border-primary shadow-sm mb-base">
+<p class="font-body-lg text-body-lg text-on-surface italic">"Học đi đôi với hành"</p>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md">Gợi ý: Thành ngữ này nhấn mạnh việc ứng dụng kiến thức.</p>
+</div>
+<!-- Options Container -->
+<div class="space-y-sm" id="options-group">
+<!-- Option 1 -->
+<label class="flex items-center p-md bg-surface-container-lowest border border-outline-variant/20 rounded-xl cursor-pointer hover:bg-surface-container transition-colors group active-interaction">
+<input class="hidden peer" name="quiz-option" type="radio" value="1"/>
+<div class="w-6 h-6 mr-sm flex-shrink-0 relative">
+<img alt="Unchecked Option" class="absolute inset-0 w-full h-full peer-checked:opacity-0 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0ugvmK9mnuB5K3bu1y9fDoer6k4RLcJhEcKNzRtdN7otZ-NGKsBPS--ZLkSKV1-KCUcB-5bW86kLK6nVt2XRJp9uDqgAts5E5YbHbT_P58KPL0xaWjxWCabJkMILZHU2JQg2qM5M403i33LEXtze-lMgSRk4zKOjTLTfaRZyE5ZorcZgivD0dczmSADvESt4atgo3F6yWO6aw91WQl6cN8g3CXDN4TpnlFcdDUlH0SqlE4sDak7AjifJFkc"/>
+<img alt="Checked Option" class="absolute inset-0 w-full h-full opacity-0 peer-checked:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0uhArxC6-mUAH0QR21jIoQbp1fqP_RL1T2tYhxsH4kQAlSRD5eIu8rBFsDrltaE-ZrkhJSuywfhVzq0YNAMPx0mDYVopGDPJXRMmtQf0dz2ATQ-RfJH2saedfBWdDcJ6efTx1bkIzERBShGf6-wBakbwT9xYyNXo6JBvdnGQZgTK2R7o-cvYGBeRluYN2YeD57ts6LXuZkQM1FLltRUFHbh6fZIo5RH8YnBnPkVK76IaXFF0d-jeN0AfilVo"/>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Học tập và vui chơi đồng thời.</span>
+</label>
+<!-- Option 2 -->
+<label class="flex items-center p-md bg-surface-container-lowest border border-outline-variant/20 rounded-xl cursor-pointer hover:bg-surface-container transition-colors group active-interaction">
+<input class="hidden peer" name="quiz-option" type="radio" value="2"/>
+<div class="w-6 h-6 mr-sm flex-shrink-0 relative">
+<img alt="Unchecked Option" class="absolute inset-0 w-full h-full peer-checked:opacity-0 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0ugvmK9mnuB5K3bu1y9fDoer6k4RLcJhEcKNzRtdN7otZ-NGKsBPS--ZLkSKV1-KCUcB-5bW86kLK6nVt2XRJp9uDqgAts5E5YbHbT_P58KPL0xaWjxWCabJkMILZHU2JQg2qM5M403i33LEXtze-lMgSRk4zKOjTLTfaRZyE5ZorcZgivD0dczmSADvESt4atgo3F6yWO6aw91WQl6cN8g3CXDN4TpnlFcdDUlH0SqlE4sDak7AjifJFkc"/>
+<img alt="Checked Option" class="absolute inset-0 w-full h-full opacity-0 peer-checked:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0uhArxC6-mUAH0QR21jIoQbp1fqP_RL1T2tYhxsH4kQAlSRD5eIu8rBFsDrltaE-ZrkhJSuywfhVzq0YNAMPx0mDYVopGDPJXRMmtQf0dz2ATQ-RfJH2saedfBWdDcJ6efTx1bkIzERBShGf6-wBakbwT9xYyNXo6JBvdnGQZgTK2R7o-cvYGBeRluYN2YeD57ts6LXuZkQM1FLltRUFHbh6fZIo5RH8YnBnPkVK76IaXFF0d-jeN0AfilVo"/>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Kiến thức lý thuyết phải đi kèm thực hành.</span>
+</label>
+<!-- Option 3 -->
+<label class="flex items-center p-md bg-surface-container-lowest border border-outline-variant/20 rounded-xl cursor-pointer hover:bg-surface-container transition-colors group active-interaction">
+<input class="hidden peer" name="quiz-option" type="radio" value="3"/>
+<div class="w-6 h-6 mr-sm flex-shrink-0 relative">
+<img alt="Unchecked Option" class="absolute inset-0 w-full h-full peer-checked:opacity-0 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0ugvmK9mnuB5K3bu1y9fDoer6k4RLcJhEcKNzRtdN7otZ-NGKsBPS--ZLkSKV1-KCUcB-5bW86kLK6nVt2XRJp9uDqgAts5E5YbHbT_P58KPL0xaWjxWCabJkMILZHU2JQg2qM5M403i33LEXtze-lMgSRk4zKOjTLTfaRZyE5ZorcZgivD0dczmSADvESt4atgo3F6yWO6aw91WQl6cN8g3CXDN4TpnlFcdDUlH0SqlE4sDak7AjifJFkc"/>
+<img alt="Checked Option" class="absolute inset-0 w-full h-full opacity-0 peer-checked:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0uhArxC6-mUAH0QR21jIoQbp1fqP_RL1T2tYhxsH4kQAlSRD5eIu8rBFsDrltaE-ZrkhJSuywfhVzq0YNAMPx0mDYVopGDPJXRMmtQf0dz2ATQ-RfJH2saedfBWdDcJ6efTx1bkIzERBShGf6-wBakbwT9xYyNXo6JBvdnGQZgTK2R7o-cvYGBeRluYN2YeD57ts6LXuZkQM1FLltRUFHbh6fZIo5RH8YnBnPkVK76IaXFF0d-jeN0AfilVo"/>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Cần học nhiều ngôn ngữ khác nhau.</span>
+</label>
+<!-- Option 4 -->
+<label class="flex items-center p-md bg-surface-container-lowest border border-outline-variant/20 rounded-xl cursor-pointer hover:bg-surface-container transition-colors group active-interaction">
+<input class="hidden peer" name="quiz-option" type="radio" value="4"/>
+<div class="w-6 h-6 mr-sm flex-shrink-0 relative">
+<img alt="Unchecked Option" class="absolute inset-0 w-full h-full peer-checked:opacity-0 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0ugvmK9mnuB5K3bu1y9fDoer6k4RLcJhEcKNzRtdN7otZ-NGKsBPS--ZLkSKV1-KCUcB-5bW86kLK6nVt2XRJp9uDqgAts5E5YbHbT_P58KPL0xaWjxWCabJkMILZHU2JQg2qM5M403i33LEXtze-lMgSRk4zKOjTLTfaRZyE5ZorcZgivD0dczmSADvESt4atgo3F6yWO6aw91WQl6cN8g3CXDN4TpnlFcdDUlH0SqlE4sDak7AjifJFkc"/>
+<img alt="Checked Option" class="absolute inset-0 w-full h-full opacity-0 peer-checked:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida/ADBb0uhArxC6-mUAH0QR21jIoQbp1fqP_RL1T2tYhxsH4kQAlSRD5eIu8rBFsDrltaE-ZrkhJSuywfhVzq0YNAMPx0mDYVopGDPJXRMmtQf0dz2ATQ-RfJH2saedfBWdDcJ6efTx1bkIzERBShGf6-wBakbwT9xYyNXo6JBvdnGQZgTK2R7o-cvYGBeRluYN2YeD57ts6LXuZkQM1FLltRUFHbh6fZIo5RH8YnBnPkVK76IaXFF0d-jeN0AfilVo"/>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Luôn đi bộ trong khi đang học bài.</span>
+</label>
+</div>
+<!-- Action Button -->
+<div class="mt-lg">
+<button class="w-full bg-primary text-on-primary font-label-md text-headline-md h-16 rounded-xl border-b-4 border-on-primary-fixed-variant active:border-b-0 active:translate-y-1 transition-all duration-75 flex items-center justify-center gap-xs">
+<span>TIẾP TỤC</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Filtered Out for focused Quiz experience as per relevance rule) -->
+<!-- We suppress global nav during focused activity but if we were to render it: -->
+<!-- The user is in a task-focused sub-page with a specific mission, so navigation is suppressed. -->
+<script>
+        // Simple micro-interaction for option selection styling
+        const labels = document.querySelectorAll('#options-group label');
+        const radioInputs = document.querySelectorAll('input[name="quiz-option"]');
+
+        radioInputs.forEach((input, index) => {
+            input.addEventListener('change', () => {
+                labels.forEach(l => l.classList.remove('option-selected', 'border-primary'));
+                if (input.checked) {
+                    labels[index].classList.add('option-selected', 'border-primary');
+                }
+            });
+        });
+
+        // Simple Countdown Timer Logic
+        let timeLeft = 45;
+        const timerElement = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.classList.add('text-error');
+            } else {
+                timeLeft--;
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                timerElement.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 10) {
+                    timerElement.classList.add('text-error');
+                }
+            }
+        }, 1000);
+    </script>
+</body></html>

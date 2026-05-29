@@ -1,5 +1,12 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-29] - Community Advanced Redesign (Phases 1-4)
+- **Added:** Bóc tách và tự động hóa tích hợp 95 SVG UI Assets chuẩn thương hiệu "Trăm Tiếng" từ bản thiết kế của Stitch.
+- **Added:** Nâng cấp API `GetPostDetail` trong `CommunityApiController` để hỗ trợ Cấu trúc Cây (Threaded Comments) đệ quy.
+- **Added:** Khởi tạo các Bảng dữ liệu tương tác bậc cao: `UserReactions`, `Polls`, `CommentVotes`, `CommentEditHistories`.
+- **Added:** Triển khai tính năng Xóa mềm (Soft Delete) và Lịch sử chỉnh sửa Bình luận qua `[PUT]` và `[DELETE]`.
+- **Added:** Xây dựng `CommunityPostDetail.jsx` (React) với giao diện tương tác 3D Reaction Popup, hệ thống Mention (`@username`) và Soft Delete Snackbar.
+- **Added:** Tích hợp `NotificationHub` qua SignalR để chuẩn bị hệ thống thông báo thời gian thực khi có tương tác (Mentions, Reactions).
 ### [2026-05-28] - Phase 3: Hyper-Connectivity & Cross-Module Sharing
 - **Added:** Nâng cấp cấu trúc `SharedContents` để hỗ trợ chia sẻ đa luồng (Tài nguyên, Sự kiện, Bài viết) qua tin nhắn cá nhân (`TargetUserId`) và Nhóm học tập.
 - **Added:** Bổ sung các bảng mở rộng tính năng tương tác sâu: `Attachments`, `EventDiscussions`, `GroupPosts`, `GroupPostComments`.

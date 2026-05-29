@@ -172,6 +172,14 @@ public partial class SmartLMSContext : DbContext
     // Community Profile & Gamification (Phase 4 & 5)
     public virtual DbSet<EntityBacklink> EntityBacklinks { get; set; }
     public virtual DbSet<UserRating> UserRatings { get; set; }
+    
+    // Community Advanced (Phase 6)
+    public virtual DbSet<UserReaction> UserReactions { get; set; }
+    public virtual DbSet<CommentVote> CommentVotes { get; set; }
+    public virtual DbSet<CommentEditHistory> CommentEditHistories { get; set; }
+    public virtual DbSet<Poll> Polls { get; set; }
+    public virtual DbSet<PollOption> PollOptions { get; set; }
+    public virtual DbSet<PollVote> PollVotes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -520,6 +528,22 @@ public partial class SmartLMSContext : DbContext
                   .WithMany()
                   .HasForeignKey(d => d.LessonId)
                   .OnDelete(DeleteBehavior.Cascade);
+        });
+        
+        // --- Community Advanced Features Mapping ---
+        modelBuilder.Entity<UserReaction>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.UserId, e.EntityType, e.EntityId }).IsUnique();
+        });
+
+        modelBuilder.Entity<PollVote>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.UserId, e.PollOptionId }).IsUnique();
+        });
+        
+        modelBuilder.Entity<CommentVote>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.UserId, e.CommentId }).IsUnique();
         });
 
         OnModelCreatingPartial(modelBuilder);
