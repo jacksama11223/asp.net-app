@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Stack, Title, Text, Group, Avatar, Badge, Paper, ActionIcon, Box, Button, Textarea, Menu } from '@mantine/core';
-import { LuReply, LuMoreVertical, LuPencil, LuTrash, LuShare } from 'react-icons/lu';
+import { LuReply, LuPencil, LuTrash, LuShare } from 'react-icons/lu';
+import { FiMoreVertical } from 'react-icons/fi';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../api';
@@ -103,7 +104,7 @@ export const CommunityPostDetail = () => {
                 {/* Menu Xóa/Sửa */}
                 <Menu position="bottom-end">
                   <Menu.Target>
-                    <ActionIcon variant="subtle" className="opacity-0 group-hover:opacity-100 transition-opacity"><LuMoreVertical size={16} /></ActionIcon>
+                    <ActionIcon variant="subtle" className="opacity-0 group-hover:opacity-100 transition-opacity"><FiMoreVertical size={16} /></ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Menu.Item leftSection={<LuPencil size={14} />}>Sửa bình luận</Menu.Item>
