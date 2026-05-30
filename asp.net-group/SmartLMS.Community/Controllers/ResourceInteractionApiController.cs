@@ -59,7 +59,7 @@ public class ResourceInteractionApiController : ControllerBase
 
     // POST /api/ResourceInteraction/123/share
     [HttpPost("{id}/share")]
-    public async Task<IActionResult> RecordShare(int id, [FromBody] ShareRequest req)
+    public async Task<IActionResult> RecordShare(int id, [FromBody] ResourceShareRequest req)
     {
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
         int? userId = int.TryParse(userIdClaim, out int uid) ? uid : null;
@@ -76,7 +76,7 @@ public class RatingRequest
     public int Score { get; set; }
 }
 
-public class ShareRequest
+public class ResourceShareRequest
 {
     public string SharedVia { get; set; } = "Link"; // Facebook, Twitter, Link
 }
