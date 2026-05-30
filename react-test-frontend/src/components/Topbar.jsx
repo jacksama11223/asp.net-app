@@ -1,3 +1,4 @@
+import '../assets/css/gamification-frames.css';
 import React, { useState, useEffect } from 'react';
 import { 
   Group, 

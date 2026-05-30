@@ -1,3 +1,4 @@
+import '../assets/css/gamification-frames.css';
 import React, { useState } from 'react';
 import { AppShell, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
