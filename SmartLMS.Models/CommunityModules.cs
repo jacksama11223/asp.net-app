@@ -16,6 +16,18 @@ public class CommunityResource
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public int UploaderId { get; set; }
     public User? Uploader { get; set; }
+    
+    // Metrics cho luồng Tracking & Gamification (Được tính toán bởi MediatR Events)
+    public int ViewCount { get; set; } = 0;
+    public int DownloadCount { get; set; } = 0;
+    public int BookmarkCount { get; set; } = 0;
+    public double ViralScore { get; set; } = 0.0;
+    public double PopularityScore { get; set; } = 0.0;
+
+    // Flags cho luồng Báo cáo (Moderation)
+    public bool IsHidden { get; set; } = false;
+    public bool IsDeleted { get; set; } = false;
+    public string Status { get; set; } = "Active"; // Active, Flagged, TakenDown
 }
 
 public class CommunityEvent
