@@ -23,6 +23,23 @@ namespace SmartLMS.Web.Controllers.Api.Community
             _context = context;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreatePoll([FromBody] Poll pollDto)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+            var post = await _context.Posts.FindAsync(pollDto.PostId);
+            if (post == null || post.AuthorId != userId)
+                return Forbid("Chỉ tác giả bài viết mới được tạo khảo sát.");
+
+            pollDto.CreatedAt = DateTime.Now;
+            _context.Polls.Add(pollDto);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { success = true, pollId = pollDto.Id });
+        }
+
         [HttpPost("{pollId}/vote")]
         public async Task<IActionResult> Vote(int pollId, [FromBody] int[] optionIds)
         {

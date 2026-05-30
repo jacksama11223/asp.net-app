@@ -228,4 +228,34 @@ public class CommunityApiController : ControllerBase
         await _context.SaveChangesAsync();
         return Ok(new { success = true });
     }
+
+    [HttpPost("comments/{id}/vote")]
+    public async Task<IActionResult> VoteComment(int id, [FromQuery] int vote)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+        if (vote != 1 && vote != -1) return BadRequest("Vote value must be 1 or -1.");
+
+        var existing = await _context.CommentVotes.FirstOrDefaultAsync(v => v.CommentId == id && v.UserId == userId);
+        
+        if (existing != null)
+        {
+            if (existing.VoteValue == vote)
+            {
+                _context.CommentVotes.Remove(existing); // Xóa vote (toggle off)
+            }
+            else
+            {
+                existing.VoteValue = vote; // Đổi chiều vote
+            }
+        }
+        else
+        {
+            _context.CommentVotes.Add(new CommentVote { UserId = userId, CommentId = id, VoteValue = vote });
+        }
+
+        await _context.SaveChangesAsync();
+        return Ok(new { success = true });
+    }
 }

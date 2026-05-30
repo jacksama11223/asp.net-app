@@ -92,37 +92,68 @@
         <div id="commentsList" class="space-y-6 pt-6 border-t border-slate-100">
             @if (Model.Comments != null && Model.Comments.Any())
             {
-                foreach (var c in Model.Comments.Where(x => !x.IsDeleted).OrderBy(x => x.CreatedAt))
+                // Recursive Local Function
+                void RenderComments(IEnumerable<SmartLMS.Models.Comment> allComments, int? parentId, int depth)
                 {
-                    var cAuthor = c.Author?.FullName ?? $"User {c.AuthorId}";
-                    var cAvatar = c.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cAuthor)}&background=random";
-                    <div class="flex gap-4">
-                        <a href="/profile/@c.AuthorId" title="Xem hồ sơ" class="shrink-0">
-                            <img src="@cAvatar" alt="@cAuthor" class="w-10 h-10 rounded-full border border-slate-200 hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer" />
-                        </a>
-                        <div class="flex-1">
-                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-sm relative">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div class="flex items-center gap-2">
-                                        <a href="/profile/@c.AuthorId" class="text-slate-800 font-black text-sm hover:text-cyan-600 transition-colors">@cAuthor</a>
-                                        <span class="text-slate-400 text-[10px] font-bold">@c.CreatedAt.ToString("dd/MM HH:mm")</span>
+                    var children = allComments.Where(c => c.ParentId == parentId).OrderBy(c => c.CreatedAt).ToList();
+                    if (!children.Any()) return;
+
+                    foreach (var c in children)
+                    {
+                        var cAuthor = c.Author?.FullName ?? $"User {c.AuthorId}";
+                        var cAvatar = c.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cAuthor)}&background=random";
+                        var paddingLeft = depth > 0 ? "ml-8 lg:ml-12 border-l-2 border-slate-100 pl-4" : "";
+                        var badgeHtml = Model.VerifiedCommentId == c.CommentId ? "<img src=\"/images/icons/verified-badge.svg\" class=\"w-4 h-4\" title=\"Câu trả lời đúng\"/>" : "";
+                        
+                        <div class="flex gap-4 @paddingLeft relative comment-thread-line">
+                            <a href="/profile/@c.AuthorId" title="Xem hồ sơ" class="shrink-0 z-10 bg-white">
+                                <img src="@cAvatar" alt="@cAuthor" class="w-10 h-10 rounded-full border border-slate-200 hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer" />
+                            </a>
+                            <div class="flex-1">
+                                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-sm relative">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <a href="/profile/@c.AuthorId" class="text-slate-800 font-black text-sm hover:text-cyan-600 transition-colors">@cAuthor</a>
+                                            @Html.Raw(badgeHtml)
+                                            <img src="/images/icons/level-1.svg" class="h-4" title="Level 1" alt="Level" onerror="this.style.display='none'"/>
+                                            <span class="text-slate-400 text-[10px] font-bold">@c.CreatedAt.ToString("dd/MM HH:mm")</span>
+                                        </div>
+                                        @if (c.IsPinned) {
+                                            <span class="px-2 py-0.5 bg-rose-100 text-rose-600 rounded text-[10px] font-black uppercase">Đã ghim</span>
+                                        }
                                     </div>
+                                    <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
+                                        @Html.Raw(c.Content)
+                                    </div>
+                                    @if (c.IsEdited) {
+                                        <div class="text-[10px] text-slate-400 font-semibold italic mt-1">(Đã chỉnh sửa)</div>
+                                    }
                                 </div>
-                                <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
-                                    @Html.Raw(c.Content)
+                                <div class="flex items-center gap-4 mt-2 px-2 relative group">
+                                    <button class="text-slate-400 hover:text-rose-500 text-xs font-bold transition-colors flex items-center gap-1 peer" onclick="reactComment(@c.CommentId, 'love')">
+                                        <i data-lucide="heart" class="w-3.5 h-3.5"></i> Thích
+                                    </button>
+                                    
+                                    <!-- Hover Reactions Menu -->
+                                    <div class="absolute bottom-6 left-0 bg-white border border-slate-100 rounded-full shadow-lg px-2 py-1 flex items-center gap-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all -translate-y-2 group-hover:translate-y-0 z-20">
+                                        <img src="/images/icons/love.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'love')" title="Love" onerror="this.src='https://cdn-icons-png.flaticon.com/128/2107/2107845.png'"/>
+                                        <img src="/images/icons/haha.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'haha')" title="Haha" onerror="this.src='https://cdn-icons-png.flaticon.com/128/1933/1933511.png'"/>
+                                        <img src="/images/icons/insightful.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'insightful')" title="Insightful" onerror="this.src='https://cdn-icons-png.flaticon.com/128/1184/1184462.png'"/>
+                                    </div>
+
+                                    <button class="text-slate-400 hover:text-cyan-600 text-xs font-bold transition-colors flex items-center gap-1" onclick="document.getElementById('commentContent').value='[Trả lời @@' + '@Uri.EscapeDataString(cAuthor)' + '] ';">
+                                        <i data-lucide="reply" class="w-3.5 h-3.5"></i> Phản hồi
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="flex items-center gap-4 mt-2 px-2">
-                                <button class="text-slate-400 hover:text-rose-500 text-xs font-bold transition-colors flex items-center gap-1">
-                                    <i data-lucide="heart" class="w-3.5 h-3.5"></i> Thích
-                                </button>
-                                <button class="text-slate-400 hover:text-cyan-600 text-xs font-bold transition-colors flex items-center gap-1">
-                                    <i data-lucide="reply" class="w-3.5 h-3.5"></i> Phản hồi
-                                </button>
                             </div>
                         </div>
-                    </div>
+
+                        // Render children recursively
+                        RenderComments(allComments, c.CommentId, depth + 1);
+                    }
                 }
+
+                RenderComments(Model.Comments.Where(x => !x.IsDeleted), null, 0);
             }
             else
             {
@@ -217,40 +248,7 @@
                 if (res.ok) {
                     const data = await res.json();
                     if (data.success) {
-                        const noComment = document.getElementById('noCommentMsg');
-                        if (noComment) noComment.remove();
-
-                        const c = data.comment;
-                        const formattedContent = c.content;
-                        
-                        const html = `
-                            <div class="flex gap-4 animate-fade-in">
-                                <a href="/profile/${c.authorId}" title="Xem hồ sơ" class="shrink-0">
-                                    <img src="${c.authorAvatar}" alt="${c.authorName}" class="w-10 h-10 rounded-full border border-slate-200 hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer" />
-                                </a>
-                                <div class="flex-1">
-                                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-sm relative">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <div class="flex items-center gap-2">
-                                                <a href="/profile/${c.authorId}" class="text-slate-800 font-black text-sm hover:text-cyan-600 transition-colors">${c.authorName}</a>
-                                                <span class="text-slate-400 text-[10px] font-bold">${c.createdAt}</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">${formattedContent}</div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mt-2 px-2">
-                                        <button class="text-slate-400 hover:text-rose-500 text-xs font-bold transition-colors flex items-center gap-1"><i data-lucide="heart" class="w-3.5 h-3.5"></i> Thích</button>
-                                        <button class="text-slate-400 hover:text-cyan-600 text-xs font-bold transition-colors flex items-center gap-1"><i data-lucide="reply" class="w-3.5 h-3.5"></i> Phản hồi</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        
-                        const list = document.getElementById('commentsList');
-                        list.insertAdjacentHTML('beforeend', html);
-                        document.getElementById('commentForm').reset();
-                        if(window.lucide) { lucide.createIcons(); }
-                        window.showToast && window.showToast('✅ Bình luận đã được gửi!');
+                        window.location.reload(); // Reload to render recursive comments correctly
                     }
                 } else if (res.status === 401) {
                     window.location.href = `/Auth/Login?returnUrl=/hub/post/${postId}`;
@@ -262,6 +260,21 @@
             } finally {
                 btn.disabled = false;
                 spinner.classList.add('hidden');
+            }
+        }
+
+        async function reactComment(commentId, type) {
+            try {
+                const voteValue = type === 'love' ? 1 : (type === 'haha' ? 1 : 1);
+                // Call the new Web API through Nginx reverse proxy
+                const res = await fetch(`/api/community/comments/${commentId}/vote?vote=${voteValue}`, { method: 'POST' });
+                if (res.ok) {
+                    window.showToast && window.showToast(`✅ Đã thả ${type}!`);
+                } else {
+                    window.showToast && window.showToast('⚠️ Vui lòng đăng nhập.');
+                }
+            } catch(e) {
+                console.error(e);
             }
         }
 
