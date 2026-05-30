@@ -27,7 +27,7 @@ function premiumPdfViewer() {
 
             try {
                 // Khởi tạo thư viện PDF.js
-                const pdfjsLib = window['pdfjs-dist/build/pdf'];
+                const pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
                 // Bắt buộc set workerSrc
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 

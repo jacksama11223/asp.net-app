@@ -214,6 +214,23 @@ public class CommunityController : Controller
         return View(resources);
     }
 
+    [HttpGet("resources/{id}")]
+    [HttpGet("/Community/Resources/{id}")]
+    public async Task<IActionResult> ResourceDetail(int id, [FromServices] SmartLMSContext db)
+    {
+        var res = await db.SharedResources
+            .Include(r => r.Uploader)
+            .FirstOrDefaultAsync(r => r.Id == id);
+            
+        if (res == null) return NotFound("Tài liệu không tồn tại.");
+        
+        // Cập nhật lượt xem
+        res.ViewCount++;
+        await db.SaveChangesAsync();
+        
+        return View(res);
+    }
+
     // 3. Event Listings
     [HttpGet("events")]
     [HttpGet("/Community/Events")]

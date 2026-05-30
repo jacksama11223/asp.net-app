@@ -42,8 +42,8 @@
             <div class="flex gap-4">
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <button @@click="isUploading = !isUploading" class="bg-white text-cyan-900 hover:bg-slate-50 font-bold px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2">
-                        <img src="/images/icons/social_share.svg" class="w-5 h-5 text-cyan-600" />
+                    <button @@click="isUploading = !isUploading" class="bg-white text-cyan-900 hover:bg-slate-50 font-bold px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 group">
+                        <img src="/images/frames/frame_attachment_file.svg" class="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
                         Tải lên Tài liệu
                     </button>
                 }
@@ -65,7 +65,7 @@
     <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
         <div class="flex-1 w-full relative">
             <input type="text" x-model="searchQuery" placeholder="Tìm kiếm sách, tài liệu, code..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-none rounded-xl text-sm font-medium text-slate-800 focus:ring-2 focus:ring-cyan-500 outline-none transition-all" />
-            <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <img src="/images/icons/nav_search.svg" class="w-5 h-5 absolute left-3 top-3 opacity-50" />
         </div>
         
         <div class="flex flex-wrap gap-2 items-center">
@@ -102,7 +102,7 @@
         <form class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-4">
             <div class="flex justify-between items-center pb-2 border-b border-slate-100">
                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                    <img src="/images/icons/social_share.svg" class="w-4 h-4 text-cyan-500" />
+                    <img src="/images/frames/frame_post_create.svg" class="w-4 h-4" onerror="this.src='/images/icons/social_share.svg'" />
                     Chia sẻ tài liệu & Đề thi thử
                 </h3>
                 <button type="button" @@click="isUploading = false" class="text-xs text-slate-400 hover:text-slate-600 font-bold">
@@ -186,27 +186,32 @@
                     <div class="h-28 bg-gradient-to-r from-slate-100 to-indigo-50 relative p-4 flex justify-between items-start">
                         <span class="bg-cyan-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">@res.Subject</span>
                         <div class="flex gap-2">
-                            <button @@click.stop="toggleBookmark(@res.Id)" class="p-2 bg-white rounded-full shadow-sm hover:scale-110 transition-transform">
-                                <svg class="w-4 h-4" :class="isBookmarked ? 'fill-cyan-500 text-cyan-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                            <!-- Bookmark & Share buttons -->
+                            <button @@click.stop="toggleBookmark(@res.Id)" class="p-2 bg-white rounded-full shadow-sm hover:scale-110 transition-transform" title="Lưu vào Bookmark">
+                                <img src="/images/icons/course_bookmark.svg" class="w-4 h-4 transition-all" :class="isBookmarked ? 'opacity-100 drop-shadow-[0_0_4px_rgba(6,182,212,0.8)]' : 'opacity-40'" />
                             </button>
-                            <button @@click.stop="openShare('RESOURCE', @res.Id)" class="p-2 bg-white rounded-full shadow-sm hover:scale-110 transition-transform group-hover:text-orange-500">
+                            <button @@click.stop="openShare('RESOURCE', @res.Id)" class="p-2 bg-white rounded-full shadow-sm hover:scale-110 transition-transform" title="Chia sẻ tài liệu">
                                 <img src="/images/icons/social_share.svg" class="w-4 h-4" />
                             </button>
                         </div>
                         
-                        <!-- File Type Icon nổi ở góc trái -->
-                        <div class="absolute -bottom-6 left-5 w-12 h-14 bg-white rounded-xl shadow-md flex flex-col items-center justify-center border border-slate-100 text-cyan-600 font-black">
-                            <img src="/images/icons/course_read_doc.svg" class="w-5 h-5 mb-0.5" />
+                        <!-- File Type Icon nổi ở góc trái có hiệu ứng glow -->
+                        <div class="absolute -bottom-6 left-5 w-12 h-14 bg-white rounded-xl shadow-md flex flex-col items-center justify-center border border-slate-100 text-cyan-600 font-black group-hover:shadow-cyan-100 group-hover:shadow-lg transition-shadow">
+                            <img
+                                src="/images/icons/@(res.FileType?.ToUpper() == "PDF" ? "course_read_doc" : res.FileType?.ToUpper() == "ZIP" ? "course_code_challenge" : "course_read_doc").svg"
+                                class="w-5 h-5 mb-0.5"
+                                onerror="this.src='/images/icons/course_read_doc.svg'"
+                            />
                             <span class="text-[9px] uppercase tracking-wider">@(res.FileType ?? "PDF")</span>
                         </div>
                     </div>
 
                     <!-- Content -->
                     <div class="p-5 pt-8 flex-1 flex flex-col">
-                        <h4 @@click="viewingPdf = true; currentPdfTitle = decodeURIComponent('@titleEscaped'); currentPdfUrl = '@res.FileUrl' || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; currentResourceId = @res.Id; recordView(@res.Id);"
+                        <a href="/hub/resources/@res.Id"
                             class="font-extrabold text-slate-800 text-lg mb-2 leading-snug hover:text-cyan-600 transition-colors cursor-pointer line-clamp-2">
                             @res.Title
-                        </h4>
+                        </a>
                         
                         <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed flex-1 mb-4">
                             @res.Description
@@ -223,8 +228,14 @@
                             </div>
                             
                             <div class="flex items-center gap-3 text-slate-400">
-                                <span class="flex items-center gap-1 text-xs font-bold"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> <span x-text="views"></span></span>
-                                <span class="flex items-center gap-1 text-xs font-bold text-indigo-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> <span x-text="downloads"></span></span>
+                                <span class="flex items-center gap-1 text-xs font-bold">
+                                    <img src="/images/icons/nav_profile.svg" class="w-4 h-4 opacity-50" />
+                                    <span x-text="views"></span>
+                                </span>
+                                <span class="flex items-center gap-1 text-xs font-bold text-indigo-500">
+                                    <img src="/images/icons/course_download.svg" class="w-4 h-4" />
+                                    <span x-text="downloads"></span>
+                                </span>
                             </div>
                         </div>
 
@@ -236,9 +247,10 @@
                                 </div>
                                 <span class="font-bold text-xs text-slate-600 truncate max-w-[120px]">@(res.Uploader?.FullName ?? "Member")</span>
                             </div>
-                            <button @@click.stop="viewingPdf = true; currentPdfTitle = decodeURIComponent('@titleEscaped'); currentPdfUrl = '@res.FileUrl' || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; currentResourceId = @res.Id; recordView(@res.Id);" class="bg-cyan-50 hover:bg-cyan-100 text-cyan-700 px-4 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                            <a href="/hub/resources/@res.Id" class="bg-cyan-50 hover:bg-cyan-600 hover:text-white text-cyan-700 px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 group/btn">
+                                <img src="/images/icons/course_read_doc.svg" class="w-3.5 h-3.5 group-hover/btn:brightness-200 transition-all" />
                                 Mở xem
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -246,274 +258,16 @@
         }
         else
         {
-            <div class="col-span-1 md:col-span-2 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-2">
-                <i data-lucide="file" class="mx-auto text-slate-300 w-8 h-8"></i>
-                <p class="font-bold">Chưa có tài liệu nào.</p>
+            <!-- Empty State: Dùng illustration SVG thay vì icon nhỏ -->
+            <div class="col-span-1 md:col-span-2 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-4">
+                <img src="/images/frames/illu_empty_feed.svg" class="w-20 h-20 mx-auto opacity-60" onerror="this.src='/images/frames/illu_empty_cart.svg'" />
+                <p class="font-bold text-slate-500">Chưa có tài liệu nào.</p>
+                <p class="text-sm text-slate-400">Hãy là người đầu tiên chia sẻ kiến thức!</p>
             </div>
         }
     </div>
 
-    <!-- TÍCH HỢP PREMIUM PDF VIEWER MODAL -->
-    <template x-teleport="body">
-        <div x-show="viewingPdf" 
-             class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 font-sans" 
-             style="display: none;">
-            
-            <!-- Backdrop mờ tối -->
-            <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-md" 
-                 x-show="viewingPdf" 
-                 x-transition.opacity 
-                 @@click="viewingPdf = false"></div>
-                 
-            <!-- Modal Content - Thiết kế Glassmorphism -->
-            <div class="relative w-full max-w-6xl h-[92vh] bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-[0_0_50px_rgba(8,145,178,0.15)] overflow-hidden flex flex-col border border-slate-700/50"
-                 x-show="viewingPdf" 
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 scale-95 translate-y-8"
-                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 scale-95 translate-y-8">
-                 
-                <!-- Ánh sáng trang trí glow -->
-                <div class="absolute -top-40 -right-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-[100px] pointer-events-none"></div>
-                <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px] pointer-events-none"></div>
 
-                <!-- Header Document Viewer -->
-                <div class="relative z-10 flex items-center justify-between px-6 py-4 bg-slate-900/50 border-b border-slate-700/50">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-500/30">
-                            <img src="/images/icons/course_read_doc.svg" class="w-5 h-5" />
-                        </div>
-                        <div>
-                            <h3 class="text-base font-black text-white leading-tight truncate max-w-2xl tracking-wide" x-text="currentPdfTitle">Loading...</h3>
-                            <p class="text-[11px] text-cyan-400 font-bold tracking-widest uppercase mt-0.5 flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                                SmartLMS Secure Viewer
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <a :href="currentPdfUrl" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl transition-all font-bold text-xs shadow-sm border border-slate-600/50">
-                            <img src="/images/icons/course_download.svg" class="w-4 h-4" />
-                            <span class="hidden sm:inline">Tải về máy</span>
-                        </a>
-                        <button @@click="viewingPdf = false" class="p-2 bg-rose-500/10 text-rose-400 hover:text-white hover:bg-rose-500 rounded-xl transition-all" title="Đóng">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Viewer Body -->
-                <div class="relative z-10 flex-1 overflow-hidden flex flex-col lg:flex-row">
-                    <!-- Khung Canvas hiển thị PDF (Premium PDF Viewer) -->
-                    <div class="w-full lg:w-2/3 h-full flex flex-col border-b lg:border-b-0 lg:border-r border-slate-700/50 bg-[#1a1c23]"
-                         x-data="premiumPdfViewer()" 
-                         x-init="$watch('currentPdfUrl', value => { if(value) initViewer(value); })">
-                        
-                        <!-- Toolbar ảo của PDF.js -->
-                        <div class="h-12 bg-slate-800 flex items-center justify-between px-4 border-b border-slate-700 flex-shrink-0 relative z-20 shadow-md">
-                            <div class="flex items-center gap-4">
-                                <div class="flex gap-1.5 hidden sm:flex">
-                                    <div class="w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></div>
-                                    <div class="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></div>
-                                    <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-                                </div>
-                                <div class="h-6 w-px bg-slate-700 hidden sm:block"></div>
-                                <!-- Dark Mode Toggle -->
-                                <button @@click="toggleDarkMode()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all" :class="isDarkMode ? 'bg-cyan-900/40 text-cyan-400' : 'bg-slate-700 text-slate-300'">
-                                    <svg x-show="!isDarkMode" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                    <svg x-show="isDarkMode" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                                    <span class="hidden md:inline" x-text="isDarkMode ? 'Dark Mode' : 'Light Mode'"></span>
-                                </button>
-                            </div>
-
-                            <!-- Pagination Controls -->
-                            <div class="flex items-center gap-3 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">
-                                <button @@click="prevPage()" :disabled="pageNum <= 1" class="text-slate-400 hover:text-white disabled:opacity-30 transition-colors p-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                                </button>
-                                <span class="text-xs font-bold text-slate-300 font-mono tracking-widest">
-                                    Trang <span x-text="pageNum" class="text-white"></span> / <span x-text="totalPages"></span>
-                                </span>
-                                <button @@click="nextPage()" :disabled="pageNum >= totalPages" class="text-slate-400 hover:text-white disabled:opacity-30 transition-colors p-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-
-                            <!-- Zoom Controls -->
-                            <div class="flex items-center gap-1">
-                                <button @@click="zoomOut()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"></path></svg>
-                                </button>
-                                <span class="text-[10px] font-bold text-cyan-400 w-10 text-center" x-text="Math.round(scale * 100) + '%'"></span>
-                                <button @@click="zoomIn()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Nội dung Canvas Render PDF -->
-                        <div class="flex-1 overflow-auto bg-[#1a1c23] flex justify-center p-4 relative custom-scrollbar">
-                            <div x-show="isLoadingPdf" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/80 z-10 backdrop-blur-sm">
-                                <svg class="animate-spin h-10 w-10 text-cyan-500 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                <p class="text-cyan-400 font-bold tracking-widest uppercase text-sm animate-pulse">Đang giải mã PDF...</p>
-                            </div>
-                            <!-- Áp dụng CSS Filter Invert khi bật Dark Mode -->
-                            <canvas x-ref="pdfCanvas" class="shadow-2xl transition-all duration-300" 
-                                    :style="isDarkMode ? 'filter: invert(90%) hue-rotate(180deg) contrast(1.1);' : 'filter: none;'">
-                            </canvas>
-                        </div>
-                    </div>
-
-                    </div>
-
-                    <!-- Side Panel Tương tác (Thảo luận đa tầng) -->
-                    <div class="w-full lg:w-1/3 h-[50vh] lg:h-full flex flex-col bg-slate-900/90 backdrop-blur-xl" 
-                         x-data="resourceDiscussion()" 
-                         x-init="$watch('currentResourceId', value => { if(value) openResource(value); })">
-                         
-                        <div class="p-4 border-b border-slate-700/50 flex justify-between items-center bg-slate-800/80 flex-shrink-0">
-                            <h4 class="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
-                                <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
-                                Thảo luận (<span x-text="comments.length"></span>)
-                            </h4>
-                            <button @@click="openReport(null)" class="text-xs text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1"><img src="/images/icons/course_locked.svg" class="w-3 h-3"/> Báo cáo</button>
-                        </div>
-
-                        <!-- Khu vực cuộn của Thảo luận -->
-                        <div class="flex-1 overflow-y-auto p-4 custom-scrollbar flex flex-col gap-4">
-                            <!-- Form Bình luận Gốc -->
-                            <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 backdrop-blur-sm shadow-lg flex-shrink-0">
-                            <div class="flex gap-4">
-                                <div class="w-10 h-10 rounded-full bg-slate-700 flex-shrink-0 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                </div>
-                                <div class="flex-1">
-                                    <textarea x-model="newComment" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm text-slate-300 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none transition-all" placeholder="Bạn có thắc mắc gì về tài liệu này? Hãy gõ @@AI nếu bạn muốn trợ lý ảo giải đáp tự động..."></textarea>
-                                    <div class="flex justify-between items-center mt-3">
-                                        <div class="text-xs text-slate-500 italic">Mẹo: Bạn có thể sử dụng Markdown và gõ <strong class="text-cyan-400">@@AI</strong> để gọi bot.</div>
-                                        <button @@click="postComment(null)" :disabled="!newComment.trim() || isLoading" class="bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                                            Gửi bình luận
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-
-                            <!-- Danh sách bình luận -->
-                            <div class="flex-1 flex flex-col">
-                            <div x-show="isLoading" class="text-slate-400 text-sm text-center py-8 flex flex-col items-center gap-3">
-                                <svg class="animate-spin h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                Đang tải bình luận...
-                            </div>
-                            <div x-show="!isLoading && comments.length === 0" class="text-slate-500 text-sm text-center py-10 border-2 border-dashed border-slate-700 rounded-xl">
-                                Chưa có thảo luận nào. Hãy là người đầu tiên đặt câu hỏi!
-                            </div>
-                            
-                            <div class="space-y-6 mt-2">
-                                <template x-for="comment in comments" :key="comment.id">
-                                    <div class="text-sm border-b border-slate-700/50 pb-5 last:border-0">
-                                        <div class="flex items-start justify-between">
-                                            <div class="flex items-center gap-3 mb-2">
-                                                <img :src="comment.authorAvatar" class="w-10 h-10 rounded-full bg-slate-700 border-2 border-slate-600 shadow-sm" />
-                                                <div>
-                                                    <div class="flex items-center gap-2">
-                                                        <span class="font-bold text-slate-200 text-sm" x-text="comment.authorName"></span>
-                                                        <span x-show="comment.authorName === '🤖 SmartLMS AI'" class="bg-indigo-500/20 text-indigo-400 text-[9px] px-1.5 py-0.5 rounded uppercase font-black tracking-wider border border-indigo-500/30">AI Bot</span>
-                                                    </div>
-                                                    <span class="text-xs text-slate-500" x-text="new Date(comment.createdAt).toLocaleString()"></span>
-                                                </div>
-                                            </div>
-                                            <button @@click="openReport(comment.id)" class="text-slate-600 hover:text-rose-400 p-1 transition-colors" title="Báo cáo vi phạm">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
-                                            </button>
-                                        </div>
-                                        
-                                        <p class="text-slate-300 text-sm leading-relaxed ml-13 mb-3 whitespace-pre-wrap" x-text="comment.content"></p>
-                                        
-                                        <div class="ml-13 flex items-center gap-4 text-xs font-bold text-slate-400">
-                                            <button @@click="upvote(comment.id)" class="hover:text-cyan-400 flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-md transition-colors border border-slate-700"><span class="text-[10px]">▲</span> <span x-text="comment.upvotes"></span></button>
-                                            <button @@click="activeReplyId = activeReplyId === comment.id ? null : comment.id" class="hover:text-cyan-400 flex items-center gap-1 transition-colors">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg> Phản hồi
-                                            </button>
-                                            <button @@click="deleteComment(comment.id)" class="hover:text-rose-400 transition-colors ml-auto">Xóa</button>
-                                        </div>
-
-                                        <!-- Form Trả lời -->
-                                        <div x-show="activeReplyId === comment.id" class="ml-13 mt-4 flex gap-3 items-start" x-transition>
-                                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=CurrentUser" class="w-8 h-8 rounded-full bg-slate-700 opacity-50" />
-                                            <div class="flex-1">
-                                                <textarea x-model="replyContent" @@keydown.enter="postComment(comment.id)" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none transition-all" placeholder="Viết phản hồi..."></textarea>
-                                                <div class="flex justify-end gap-2 mt-2">
-                                                    <button @@click="activeReplyId = null" class="px-4 py-1.5 text-xs text-slate-400 hover:text-slate-300 font-bold">Hủy</button>
-                                                    <button @@click="postComment(comment.id)" class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-1.5 rounded-lg text-xs font-bold transition-colors">Gửi</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Replies -->
-                                        <div class="ml-13 mt-4 space-y-4 border-l-2 border-slate-700 pl-4">
-                                            <template x-for="reply in comment.replies" :key="reply.id">
-                                                <div class="bg-slate-900/50 p-3.5 rounded-xl border border-slate-800">
-                                                    <div class="flex items-start justify-between">
-                                                        <div class="flex items-center gap-2 mb-1.5">
-                                                            <img :src="reply.authorAvatar" class="w-7 h-7 rounded-full bg-slate-700 border border-slate-600" />
-                                                            <div>
-                                                                <div class="flex items-center gap-1.5">
-                                                                    <span class="font-bold text-slate-300 text-xs" x-text="reply.authorName"></span>
-                                                                    <span x-show="reply.authorName === '🤖 SmartLMS AI'" class="bg-indigo-500/20 text-indigo-400 text-[8px] px-1 py-0.5 rounded uppercase font-black tracking-wider border border-indigo-500/30">AI Bot</span>
-                                                                </div>
-                                                                <span class="text-[10px] text-slate-500" x-text="new Date(reply.createdAt).toLocaleString()"></span>
-                                                            </div>
-                                                        </div>
-                                                        <button @@click="openReport(reply.id)" class="text-slate-600 hover:text-rose-400 transition-colors" title="Báo cáo">
-                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
-                                                        </button>
-                                                    </div>
-                                                    
-                                                    <p class="text-slate-400 text-sm leading-relaxed ml-9 mb-2 whitespace-pre-wrap" x-text="reply.content"></p>
-                                                    
-                                                    <div class="ml-9 flex items-center gap-3 text-[11px] font-bold text-slate-500">
-                                                        <button @@click="upvote(reply.id)" class="hover:text-cyan-400 flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded transition-colors"><span class="text-[9px]">▲</span> <span x-text="reply.upvotes"></span></button>
-                                                        <button @@click="deleteComment(reply.id)" class="hover:text-rose-400 ml-auto transition-colors">Xóa</button>
-                                                    </div>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-
-                        <!-- Report Modal (Teleport to body to avoid z-index/overflow issues) -->
-                        <template x-teleport="body">
-                            <div x-show="showReportModal" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;">
-                                <div @@click.away="showReportModal = false" class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
-                                    <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
-                                        <img src="/images/icons/course_locked.svg" class="w-5 h-5 text-rose-500" /> Báo cáo vi phạm
-                                    </h3>
-                                    <p class="text-xs text-slate-500">Giúp chúng tôi giữ môi trường học tập trong sạch. Chọn lý do báo cáo:</p>
-                                    <select x-model="reportReason" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-rose-500 text-sm font-bold text-slate-700">
-                                        <option value="">-- Chọn lý do --</option>
-                                        <option value="Spam / Quảng cáo">Spam / Quảng cáo</option>
-                                        <option value="Nội dung đồi trụy / Phản cảm">Nội dung đồi trụy / Phản cảm</option>
-                                        <option value="Vi phạm bản quyền">Vi phạm bản quyền</option>
-                                        <option value="Ngôn từ đả kích / Xúc phạm">Ngôn từ đả kích / Xúc phạm</option>
-                                    </select>
-                                    <div class="flex justify-end gap-3 pt-2">
-                                        <button @@click="showReportModal = false" class="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
-                                        <button @@click="submitReport" :disabled="!reportReason" class="px-4 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 disabled:bg-slate-400 transition-colors font-bold text-xs shadow-md">Gửi báo cáo</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
 
     <!-- Share Modal -->
     <div x-show="isOpen" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-transition>
@@ -543,6 +297,7 @@
             <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
                 <button @@click="isOpen = false" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
                 <button @@click="submitShare" :disabled="isSharing" class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:bg-slate-400 transition-colors font-bold shadow-md flex items-center gap-2">
+                    <img src="/images/icons/social_share.svg" class="w-4 h-4 brightness-200" />
                     <span x-text="isSharing ? 'Đang gửi...' : 'Gửi đi'"></span>
                 </button>
             </div>
