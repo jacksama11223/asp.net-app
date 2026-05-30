@@ -5,7 +5,7 @@ import {
   Rating, Tooltip, Transition, ThemeIcon
 } from '@mantine/core';
 import {
-  LuSearch, LuUploadCloud, LuBookmark, LuShare2, LuDownloadCloud, 
+  LuSearch, LuUpload, LuBookmark, LuShare2, LuDownload, 
   LuEye, LuSparkles, LuStar, LuMessageCircle
 } from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -107,7 +107,7 @@ export const ResourceLibrary = () => {
               Nơi hàng ngàn Developer chia sẻ Ebook, Source Code và Tài liệu học tập. Đánh giá, lưu trữ và chia sẻ để kiếm Viral XP!
             </Text>
             <Group>
-              <Button size="xl" radius="xl" color="white" c="brand-900" leftSection={<LuUploadCloud size={22} />} className="hover:scale-105 transition-transform font-bold">
+              <Button size="xl" radius="xl" color="white" c="brand-900" leftSection={<LuUpload size={22} />} className="hover:scale-105 transition-transform font-bold">
                 Tải lên Tài liệu
               </Button>
               <Button size="xl" radius="xl" variant="outline" color="white" className="hover:bg-white/10 transition-colors">
