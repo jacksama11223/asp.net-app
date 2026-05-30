@@ -1,8 +1,12 @@
 # Changelog - SmartLMS.AI Distributed System
 
 ### [2026-05-30] - Module Resource Discussion & AI RAG
+- **Added:** Triển khai Giai đoạn 4 - Premium UI Sync: Tích hợp thư viện `pdf.js` của Mozilla để thay thế hoàn toàn thẻ `<iframe>` mặc định.
+- **Added:** Tính năng **Dark Mode PDF** sử dụng CSS Filter (`invert(90%) hue-rotate(180deg)`) để bảo vệ mắt học viên khi đọc tài liệu nền trắng.
+- **Added:** Xây dựng Custom Toolbar cho PDF Viewer đồng bộ với giao diện Glassmorphism (hỗ trợ phân trang, phóng to/thu nhỏ `zoomIn`/`zoomOut`).
+- **Added:** Bố cục lại màn hình `Resources.cshtml`, đưa Side Panel thảo luận xuống thành Bottom Panel (giao diện `flex-col`) bên dưới PDF Viewer, mở rộng tối đa không gian đọc tài liệu.
 - **Added:** Triển khai Giai đoạn 1 của Thảo luận Tài nguyên (`ResourceDiscussionService` và `ResourceDiscussionApiController`).
-- **Added:** Giao diện Alpine.js quản lý State bình luận (Post, View, Reply lồng nhau) trực tiếp tại trang xem PDF (Side Panel).
+- **Added:** Giao diện Alpine.js quản lý State bình luận (Post, View, Reply lồng nhau) trực tiếp tại trang xem PDF (Bottom Panel).
 - **Added:** Tích hợp SignalR Real-time (`CommunityHub`) vào Thảo luận Tài nguyên (Giai đoạn 3), cho phép nhận bình luận mới không cần tải lại trang.
 - **Added:** Auto-Moderation bằng ML.NET sử dụng `ModerationService`, tự động chặn và tạo Báo cáo Vi phạm (`ResourceReport`) khi phát hiện ngôn từ độc hại.
 - **Added:** Trí tuệ Nhân tạo RAG (Retrieval-Augmented Generation) thông qua `ResourceRagService`.

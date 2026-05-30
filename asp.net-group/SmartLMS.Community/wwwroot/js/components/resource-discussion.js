@@ -1,6 +1,6 @@
-function resourceDiscussion(resourceId) {
+function resourceDiscussion() {
     return {
-        resourceId: resourceId,
+        resourceId: null,
         comments: [],
         newComment: '',
         replyContent: '',
@@ -11,10 +11,14 @@ function resourceDiscussion(resourceId) {
         reportingCommentId: null,
 
         async init() {
-            if (this.resourceId) {
-                await this.loadComments();
-                this.setupSignalR();
-            }
+            // Chờ gọi openResource(id) từ x-init thay vì khởi tạo ngay
+        },
+
+        async openResource(id) {
+            if (this.resourceId === id) return; // Tránh gọi lại nhiều lần
+            this.resourceId = id;
+            await this.loadComments();
+            this.setupSignalR();
         },
 
         setupSignalR() {

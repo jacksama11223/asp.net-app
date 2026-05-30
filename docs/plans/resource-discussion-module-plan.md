@@ -54,9 +54,17 @@ Thay vì code cứng HTML vào `Resources.cshtml`, chúng ta sẽ thiết kế m
 - [ ] Lưu báo cáo vào bảng `ResourceReport` với trạng thái "Pending".
 - [ ] Trang Admin ẩn dành cho Moderator duyệt các báo cáo (Chấp nhận -> Xóa bài, Từ chối -> Bỏ qua).
 
-### Giai đoạn 3: Tương Tác Nâng Cao & AI (Tương lai)
+### Giai đoạn 3: Tương Tác Nâng Cao & AI
 - [ ] Đính kèm hình ảnh/code snippet vào trong bình luận.
 - [x] **AI Assistant Insight:** Nút "Hỏi AI về tài liệu này" -> RAG quét nội dung PDF và sinh câu trả lời trong khu vực bình luận.
+
+### Giai đoạn 4: Trải Nghiệm & Đồng Bộ Giao Diện PDF (Premium UI Sync)
+- [ ] **Đồng bộ chủ đề tối (Dark Mode Integration):** Loại bỏ iframe PDF mặc định của trình duyệt (thường có màu trắng và toolbar không đồng bộ).
+- [ ] **Tích hợp PDF.js:** Sử dụng thư viện `pdf.js` của Mozilla để tự render nội dung PDF lên thẻ `<canvas>`, cho phép:
+  - Tùy biến toàn bộ thanh công cụ (Toolbar) khớp với Glassmorphism theme của trang web.
+  - Hỗ trợ Invert Color (đảo màu nền giấy trắng thành xám tối để bảo vệ mắt học viên).
+  - Khóa tính năng tải xuống (nếu tài liệu yêu cầu trả phí/VIP).
+- [ ] **Đồng bộ hóa Thanh cuộn (Custom Scrollbar):** Tạo sự liền mạch giữa trình xem tài liệu và khu vực thảo luận bên dưới.
 
 ---
 
