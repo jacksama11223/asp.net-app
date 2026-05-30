@@ -80,11 +80,11 @@
                         <!-- Badges (Mocked) -->
                         <div class="flex flex-wrap gap-1 justify-center max-h-12 overflow-y-hidden py-1">
                             <span class="bg-slate-50 text-slate-500 text-[9px] font-bold px-1.5 py-0.5 rounded border border-slate-100 flex items-center gap-0.5">
-                                <i data-lucide="award" class="w-2.5 h-2.5 text-cyan-500"></i> Top Learner
+                                <img src="/images/icons/badge_admin.svg" class="w-2.5 h-2.5 text-cyan-500" /> Top Learner
                             </span>
                             @if(rnd.Next(0, 2) == 1) {
                                 <span class="bg-slate-50 text-slate-500 text-[9px] font-bold px-1.5 py-0.5 rounded border border-slate-100 flex items-center gap-0.5">
-                                    <i data-lucide="award" class="w-2.5 h-2.5 text-orange-500"></i> Code Reviewer
+                                    <img src="/images/icons/badge_admin.svg" class="w-2.5 h-2.5 text-orange-500" /> Code Reviewer
                                 </span>
                             }
                         </div>
@@ -113,7 +113,7 @@
                                 <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Đã theo dõi
                             </span>
                             <span x-show="!following" class="flex items-center gap-1.5">
-                                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Theo dõi
+                                <img src="/images/icons/admin_users_manage.svg" class="w-3.5 h-3.5" /> Theo dõi
                             </span>
                         </button>
 
@@ -130,7 +130,7 @@
         else
         {
             <div class="col-span-1 sm:col-span-2 lg:col-span-3 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-2">
-                <i data-lucide="users" class="mx-auto text-slate-300 w-8 h-8"></i>
+                <img src="/images/icons/admin_users_manage.svg" class="mx-auto text-slate-300 w-8 h-8" />
                 <p class="font-bold">Không tìm thấy học viên nào.</p>
                 <p class="text-xs">Hãy sửa đổi bộ lọc tìm kiếm.</p>
             </div>

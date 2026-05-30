@@ -18,7 +18,7 @@
             </a>
             
             <button @@click="openShare('POST', @Model.PostId)" class="inline-flex items-center gap-2 text-sm font-bold text-cyan-600 hover:text-cyan-700 transition-colors bg-cyan-50 px-3 py-1.5 rounded-lg shadow-sm active:scale-95">
-                <i data-lucide="share-2" class="w-4 h-4"></i> Chia sẻ
+                <img src="/images/icons/social_share.svg" class="w-4 h-4" /> Chia sẻ
             </button>
         </div>
 
@@ -45,11 +45,11 @@
         <div class="flex items-center justify-between pt-6 border-t border-slate-100">
             <div class="flex items-center gap-4">
                 <button onclick="upvotePost(@Model.PostId, this)" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-500 hover:bg-rose-50 hover:text-rose-600 transition-colors text-sm font-bold cursor-pointer border border-slate-100">
-                    <i data-lucide="heart" class="w-4 h-4"></i>
+                    <img src="/images/icons/react_like.svg" class="w-4 h-4" />
                     <span id="voteCount_@Model.PostId">@Model.VoteCount</span>
                 </button>
                 <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 hover:text-cyan-600 hover:bg-cyan-50 transition-colors text-sm font-bold border border-transparent">
-                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                    <img src="/images/icons/comment_reply.svg" class="w-4 h-4" />
                     @(Model.Comments?.Count ?? 0)
                 </button>
             </div>
@@ -103,7 +103,7 @@
                         var cAuthor = c.Author?.FullName ?? $"User {c.AuthorId}";
                         var cAvatar = c.Author?.KYCDocUrl ?? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cAuthor)}&background=random";
                         var paddingLeft = depth > 0 ? "ml-8 lg:ml-12 border-l-2 border-slate-100 pl-4" : "";
-                        var badgeHtml = Model.VerifiedCommentId == c.CommentId ? "<img src=\"/images/icons/verified-badge.svg\" class=\"w-4 h-4\" title=\"Câu trả lời đúng\"/>" : "";
+                        var badgeHtml = Model.VerifiedCommentId == c.CommentId ? "<img src=\"/images/icons/badge_verified_answer.svg\" class=\"w-4 h-4\" title=\"Câu trả lời đúng\"/>" : "";
                         
                         <div class="flex gap-4 @paddingLeft relative comment-thread-line">
                             <a href="/profile/@c.AuthorId" title="Xem hồ sơ" class="shrink-0 z-10 bg-white">
@@ -115,7 +115,7 @@
                                         <div class="flex items-center gap-2">
                                             <a href="/profile/@c.AuthorId" class="text-slate-800 font-black text-sm hover:text-cyan-600 transition-colors">@cAuthor</a>
                                             @Html.Raw(badgeHtml)
-                                            <img src="/images/icons/level-1.svg" class="h-4" title="Level 1" alt="Level" onerror="this.style.display='none'"/>
+                                            <img src="/images/icons/level_1_seed.svg" class="h-4" title="Level 1" alt="Level" onerror="this.style.display='none'"/>
                                             <span class="text-slate-400 text-[10px] font-bold">@c.CreatedAt.ToString("dd/MM HH:mm")</span>
                                         </div>
                                         @if (c.IsPinned) {
@@ -131,14 +131,14 @@
                                 </div>
                                 <div class="flex items-center gap-4 mt-2 px-2 relative group">
                                     <button class="text-slate-400 hover:text-rose-500 text-xs font-bold transition-colors flex items-center gap-1 peer" onclick="reactComment(@c.CommentId, 'love')">
-                                        <i data-lucide="heart" class="w-3.5 h-3.5"></i> Thích
+                                        <img src="/images/icons/react_like.svg" class="w-3.5 h-3.5" /> Thích
                                     </button>
                                     
                                     <!-- Hover Reactions Menu -->
                                     <div class="absolute bottom-6 left-0 bg-white border border-slate-100 rounded-full shadow-lg px-2 py-1 flex items-center gap-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all -translate-y-2 group-hover:translate-y-0 z-20">
-                                        <img src="/images/icons/love.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'love')" title="Love" onerror="this.src='https://cdn-icons-png.flaticon.com/128/2107/2107845.png'"/>
-                                        <img src="/images/icons/haha.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'haha')" title="Haha" onerror="this.src='https://cdn-icons-png.flaticon.com/128/1933/1933511.png'"/>
-                                        <img src="/images/icons/insightful.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'insightful')" title="Insightful" onerror="this.src='https://cdn-icons-png.flaticon.com/128/1184/1184462.png'"/>
+                                        <img src="/images/icons/react_love.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'love')" title="Love" onerror="this.src='https://cdn-icons-png.flaticon.com/128/2107/2107845.png'"/>
+                                        <img src="/images/icons/react_haha.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'haha')" title="Haha" onerror="this.src='https://cdn-icons-png.flaticon.com/128/1933/1933511.png'"/>
+                                        <img src="/images/icons/react_like.svg" class="w-8 h-8 hover:scale-125 transition-transform cursor-pointer" onclick="reactComment(@c.CommentId, 'like')" title="Like" onerror="this.src='https://cdn-icons-png.flaticon.com/128/1184/1184462.png'"/>
                                     </div>
 
                                     <button class="text-slate-400 hover:text-cyan-600 text-xs font-bold transition-colors flex items-center gap-1" onclick="document.getElementById('commentContent').value='[Trả lời @@' + '@Uri.EscapeDataString(cAuthor)' + '] ';">
@@ -169,7 +169,7 @@
     <div x-show="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm" style="display: none;" x-transition>
         <div @@click.away="isOpen = false" class="bg-white rounded-3xl w-full max-w-md p-8 space-y-5 shadow-2xl">
             <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
-                <i data-lucide="share-2" class="w-5 h-5 text-cyan-600"></i> Chia sẻ nội dung
+                <img src="/images/icons/social_share.svg" class="w-5 h-5 text-cyan-600" /> Chia sẻ nội dung
             </h3>
             
             <div class="space-y-3">

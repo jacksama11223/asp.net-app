@@ -18,11 +18,11 @@
             
             <div class="flex items-center gap-6 pt-2 text-sm font-bold text-white/90">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <img src="/images/icons/admin_users_manage.svg" class="w-4 h-4" />
                     <span>@((Model.Members?.Count ?? 0) + 1) / 50 thành viên</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <i data-lucide="star" class="w-4 h-4 text-amber-300"></i>
+                    <img src="/images/icons/badge_mentor.svg" class="w-4 h-4 text-amber-300" />
                     <span>@Model.EXP XP (Rank Nhóm)</span>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <div x-show="attachments.length > 0" class="flex flex-wrap gap-2 mt-2" style="display: none;">
                     <template x-for="(file, index) in attachments" :key="index">
                         <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600">
-                            <i data-lucide="paperclip" class="w-3 h-3 text-cyan-600"></i>
+                            <img src="/images/icons/course_bookmark.svg" class="w-3 h-3 text-cyan-600" />
                             <span x-text="file.fileName"></span>
                             <button type="button" @@click="attachments.splice(index, 1)" class="text-rose-500 hover:text-rose-700 ml-1">&times;</button>
                         </div>
@@ -61,7 +61,7 @@
                         <!-- Nút Đính kèm tài liệu -->
                         <input type="file" id="fileUpload" class="hidden" @@change="uploadFile($event)" style="display: none;">
                         <button @@click="document.getElementById('fileUpload').click()" class="text-xs font-bold text-slate-500 hover:text-cyan-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-cyan-50 transition-colors">
-                            <i data-lucide="paperclip" class="w-4 h-4"></i> Đính kèm
+                            <img src="/images/icons/course_bookmark.svg" class="w-4 h-4" /> Đính kèm
                         </button>
                     </div>
                     <button @@click="submitPost()" :disabled="isSubmitting" class="bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-400 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2">
@@ -96,7 +96,7 @@
                             <template x-for="aid in (post.attachmentIds || '').split(',').filter(x => x)" :key="aid">
                                 <div @@click.prevent="window.documentViewer.open(aid)" class="attachment-viewer-btn cursor-pointer bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex items-center gap-3 hover:bg-cyan-50 hover:border-cyan-200 transition-colors group/file max-w-xs shadow-sm">
                                     <div class="bg-cyan-100 text-cyan-600 p-1.5 rounded-lg group-hover/file:bg-cyan-600 group-hover/file:text-white transition-colors">
-                                        <i data-lucide="paperclip" class="w-4 h-4"></i>
+                                        <img src="/images/icons/course_bookmark.svg" class="w-4 h-4" />
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-xs font-bold text-slate-700 truncate group-hover/file:text-cyan-700">File đính kèm</p>
@@ -107,14 +107,14 @@
 
                         <!-- Interactions -->
                         <div class="flex items-center gap-6 pt-4 border-t border-slate-50 text-xs font-bold text-slate-500">
-                            <button class="flex items-center gap-1.5 hover:text-rose-500 transition-colors"><i data-lucide="heart" class="w-4 h-4"></i> <span x-text="post.likesCount"></span></button>
+                            <button class="flex items-center gap-1.5 hover:text-rose-500 transition-colors"><img src="/images/icons/react_like.svg" class="w-4 h-4" /> <span x-text="post.likesCount"></span></button>
                             <button class="flex items-center gap-1.5 hover:text-cyan-600 transition-colors"><i data-lucide="message-circle" class="w-4 h-4"></i> <span x-text="post.commentsCount + ' Bình luận'"></span></button>
                         </div>
                     </div>
                 </template>
 
                 <div x-show="posts.length === 0" class="text-center py-10 text-slate-400 text-sm font-medium">
-                    <i data-lucide="message-square" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+                    <img src="/images/icons/comment_reply.svg" class="w-8 h-8 mx-auto mb-2 text-slate-300" />
                     Chưa có bài viết nào trong nhóm này. Hãy là người đầu tiên!
                 </div>
             </div>
@@ -175,8 +175,8 @@
                 let html = content.replace(/</g, '&lt;').replace(/>/g, '&gt;'); // Basic XSS protection
                 html = html.replace(/@@(\d+)/g, '<a href="/hub/events/$1" class="text-indigo-600 font-bold hover:underline">@@SựKiện-$1</a>');
                 html = html.replace(/#(\d+)/g, '<a href="/hub/groups/$1" class="text-purple-600 font-bold hover:underline">#Nhóm-$1</a>');
-                html = html.replace(/\[SHARED_QA:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><i data-lucide="help-circle" class="w-4 h-4 inline"></i> <a href="/hub/qa/$1" class="text-indigo-600">Đính kèm Câu hỏi QA-$1</a></div>');
-                html = html.replace(/\[SHARED_EVENT:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><i data-lucide="calendar" class="w-4 h-4 inline"></i> <a href="/hub/events/$1" class="text-indigo-600">Đính kèm Sự kiện Event-$1</a></div>');
+                html = html.replace(/\[SHARED_QA:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><img src="/images/icons/badge_verified_answer.svg" class="w-4 h-4 inline" /> <a href="/hub/qa/$1" class="text-indigo-600">Đính kèm Câu hỏi QA-$1</a></div>');
+                html = html.replace(/\[SHARED_EVENT:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><img src="/images/icons/nav_assessments.svg" class="w-4 h-4 inline" /> <a href="/hub/events/$1" class="text-indigo-600">Đính kèm Sự kiện Event-$1</a></div>');
                 html = html.replace(/\[SHARED_RESOURCE:(\d+)\]/g, '<div class="p-3 bg-slate-100 border border-slate-200 rounded-lg my-2 text-xs font-bold"><i data-lucide="file" class="w-4 h-4 inline"></i> <a href="/hub/resources" class="text-indigo-600">Đính kèm Tài nguyên Res-$1</a></div>');
                 return html;
             },

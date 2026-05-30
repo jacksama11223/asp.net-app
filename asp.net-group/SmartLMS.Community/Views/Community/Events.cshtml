@@ -112,11 +112,11 @@
                     <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
                         <div class="space-y-2.5 text-xs text-slate-600">
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <img src="/images/icons/nav_assessments.svg" class="w-3.5 h-3.5 text-cyan-500 shrink-0" />
                                 <span>Ngày: <strong>@evt.EventDate.ToString("dddd, dd/MM/yyyy")</strong></span>
                             </div>
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <img src="/images/icons/quiz_timer.svg" class="w-3.5 h-3.5 text-cyan-500 shrink-0" />
                                 <span>Thời gian: <strong>@evt.EventDate.ToString("HH:mm")</strong></span>
                             </div>
                             <div class="flex items-center gap-2.5">
@@ -124,7 +124,7 @@
                                 <span class="truncate">Nền tảng: <strong class="text-slate-700">@(evt.Location ?? "Online")</strong></span>
                             </div>
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-500 shrink-0"></i>
+                                <img src="/images/icons/admin_users_manage.svg" class="w-3.5 h-3.5 text-cyan-500 shrink-0" />
                                 <span>Số người đã đăng ký: <strong class="text-cyan-600">@(evt.Participants?.Count ?? 0) học viên</strong></span>
                             </div>
                         </div>
@@ -147,7 +147,7 @@
                                 class="shrink-0 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm"
                             >
                                 <span x-show="registered" style="display: none;" class="flex items-center gap-1">
-                                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                                    <img src="/images/icons/course_completed.svg" class="w-3.5 h-3.5" />
                                     Đã đăng ký
                                 </span>
                                 <span x-show="!registered">Đăng ký tham gia</span>
@@ -160,7 +160,7 @@
         else
         {
             <div class="col-span-1 md:col-span-2 bg-white border border-slate-100 rounded-2xl p-12 text-center text-slate-400 space-y-2">
-                <i data-lucide="calendar" class="mx-auto text-slate-300 w-8 h-8"></i>
+                <img src="/images/icons/nav_assessments.svg" class="mx-auto text-slate-300 w-8 h-8" />
                 <p class="font-bold">Không tìm thấy sự kiện nào.</p>
                 <p class="text-xs">Vui lòng quay lại sau hoặc chuyển đổi bộ lọc danh mục.</p>
             </div>

@@ -17,7 +17,7 @@
         <div class="space-y-4">
             <div class="flex items-center gap-2 px-2">
                 <div class="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center text-white">
-                    <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                    <img src="/images/icons/badge_mentor.svg" class="w-4 h-4 animate-pulse" />
                 </div>
                 <div>
                     <h2 class="text-sm font-black text-slate-800 leading-none">AI Study Mentor</h2>
@@ -27,23 +27,23 @@
 
             <div class="space-y-1">
                 <button @@click="mentorTab = 'chat'" :class="mentorTab === 'chat' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
-                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                    <img src="/images/icons/comment_reply.svg" class="w-3.5 h-3.5" />
                     <span>Thảo luận cùng AI</span>
                 </button>
                 <button @@click="mentorTab = 'quiz'" :class="mentorTab === 'quiz' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
-                    <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+                    <img src="/images/icons/badge_verified_answer.svg" class="w-3.5 h-3.5" />
                     <span>Đấu trường C# Quiz</span>
                 </button>
                 <button @@click="mentorTab = 'explainer'" :class="mentorTab === 'explainer' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
-                    <i data-lucide="code" class="w-3.5 h-3.5"></i>
+                    <img src="/images/icons/th_th_ch_l_p_tr_nh_tr_m_ti_ng.svg" class="w-3.5 h-3.5" />
                     <span>Trình giải nghĩa Code</span>
                 </button>
                 <button @@click="mentorTab = 'roadmap'" :class="mentorTab === 'roadmap' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
-                    <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                    <img src="/images/icons/course_read_doc.svg" class="w-3.5 h-3.5" />
                     <span>Lộ trình .NET Developer</span>
                 </button>
                 <button @@click="mentorTab = 'badges'" :class="mentorTab === 'badges' ? 'bg-cyan-600 text-white shadow shadow-cyan-200' : 'text-slate-600 hover:bg-slate-100'" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-all text-left cursor-pointer">
-                    <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <img src="/images/icons/trophy_cup.svg" class="w-3.5 h-3.5 text-amber-500" />
                     <span>Chứng chỉ học thuật</span>
                 </button>
             </div>
@@ -121,7 +121,7 @@
                     </select>
                 </div>
                 <button @@click="window.showToast('Đã tạo câu đố mới!')" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-black rounded-xl hover:shadow-lg transition-all shrink-0 flex items-center gap-2">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <img src="/images/icons/badge_mentor.svg" class="w-3.5 h-3.5" />
                     <span>Đổi Bộ Câu Hỏi Mới</span>
                 </button>
             </div>
@@ -155,7 +155,7 @@
                 <textarea rows="7" placeholder="Dán code C# hoặc SQL vào đây để phân tích..." class="w-full p-4 font-mono text-[11px] bg-slate-900 text-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500 leading-relaxed border border-slate-700">public async Task&lt;UserDto&gt; GetUserAsync(string id) { return await _db.Users.FindAsync(id); }</textarea>
                 <div class="flex justify-end">
                     <button @@click="window.showToast('AI đang phân tích code...')" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-extrabold transition-all inline-flex items-center gap-2 shadow shadow-cyan-200">
-                        <i data-lucide="code" class="w-3.5 h-3.5"></i> Phân tích mã nguồn
+                        <img src="/images/icons/th_th_ch_l_p_tr_nh_tr_m_ti_ng.svg" class="w-3.5 h-3.5" /> Phân tích mã nguồn
                     </button>
                 </div>
             </div>

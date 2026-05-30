@@ -60,7 +60,7 @@
             <div class="flex flex-wrap items-center justify-end gap-3.5 w-full sm:w-auto">
                 <div class="relative">
                     <input type="text" placeholder="Tìm thảo luận, tài liệu, lớp học..." class="pl-10 pr-4 py-2.5 bg-slate-100/80 border-none text-slate-700 placeholder-slate-450 rounded-full w-48 sm:w-64 focus:ring-2 focus:ring-cyan-500 focus:bg-white text-xs transition-all outline-none font-medium" />
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-450"></i>
+                    <img src="/images/icons/nav_search.svg" class="w-4 h-4 absolute left-3.5 top-3 text-slate-450" />
                 </div>
 
                 <div class="flex items-center gap-2.5">
@@ -72,7 +72,7 @@
                         <!-- Notification Bell -->
                         <div class="relative" x-data="notificationApp()">
                             <button @@click="toggleNotifications()" @@click.outside="open = false" class="relative p-2 text-slate-400 hover:text-cyan-600 transition-colors">
-                                <i data-lucide="bell" class="w-5 h-5"></i>
+                                <img src="/images/icons/nav_notifications.svg" class="w-5 h-5" />
                                 <span x-show="unreadCount > 0" x-text="unreadCount" class="absolute top-1 right-1 flex items-center justify-center w-3.5 h-3.5 bg-rose-500 text-white text-[9px] font-bold rounded-full border border-white"></span>
                             </button>
                             
@@ -94,7 +94,7 @@
                                              :class="notif.isRead ? 'hover:bg-slate-50' : 'bg-cyan-50 border-cyan-100'">
                                             <div class="flex items-start gap-3">
                                                 <div class="w-8 h-8 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center shrink-0">
-                                                    <i data-lucide="bell" class="w-4 h-4"></i>
+                                                    <img src="/images/icons/nav_notifications.svg" class="w-4 h-4" />
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <h4 class="text-xs font-bold text-slate-800" x-text="notif.title"></h4>
@@ -116,8 +116,8 @@
                                 <span class="text-xs font-bold text-slate-800 block leading-tight truncate max-w-[100px]">@userName</span>
                                 <span class="text-[9px] bg-cyan-50 border border-cyan-100 text-cyan-700 px-2 py-0.5 rounded-full uppercase tracking-tighter font-black">@userRole</span>
                             </div>
-                            <a href="/Auth/Logout" class="ml-1 text-[10px] text-slate-400 hover:text-red-500 font-bold transition-colors" title="Đăng xuất">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            <a href="/Auth/Logout" class="ml-1 opacity-70 hover:opacity-100 transition-opacity" title="Đăng xuất">
+                                <img src="/images/icons/nav_logout.svg" class="w-5 h-5" alt="Logout" />
                             </a>
                         </div>
                     }
@@ -144,42 +144,42 @@
         <div class="container mx-auto px-6 flex gap-6 md:gap-8 whitespace-nowrap overflow-x-auto pb-1 min-w-0" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
             
             <a href="/hub" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Index" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="message-square" class="w-4 h-4"></i> Diễn đàn Thảo luận
+                <img src="/images/icons/nav_community.svg" class="w-4 h-4 object-contain" /> Diễn đàn Thảo luận
             </a>
 
             @if (User.IsInRole("Admin") || User.IsInRole("Moderator") || User.Claims.Any(c => c.Type == System.Security.Claims.ClaimTypes.Role && (c.Value == "Admin" || c.Value == "Moderator")))
             {
                 <a href="/admin/moderation" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Moderation" ? "border-indigo-600 text-indigo-600 font-extrabold" : "border-transparent text-slate-500 hover:text-indigo-600")">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i> Trạm Kiểm Duyệt
+                    <img src="/images/icons/admin_security_logs.svg" class="w-4 h-4 object-contain" /> Trạm Kiểm Duyệt
                 </a>
             }
 
             <a href="/hub/resources" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Resources" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="book-open" class="w-4 h-4"></i> Chia sẻ Tài nguyên
+                <img src="/images/icons/course_read_doc.svg" class="w-4 h-4 object-contain" /> Chia sẻ Tài nguyên
             </a>
 
             <a href="/hub/events" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Events" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="calendar" class="w-4 h-4"></i> Danh sách Sự kiện
+                <img src="/images/icons/nav_assessments.svg" class="w-4 h-4 object-contain" /> Danh sách Sự kiện
             </a>
 
             <a href="/hub/qa" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "QA" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="help-circle" class="w-4 h-4"></i> Chuyên mục Q&A
+                <img src="/images/icons/badge_verified_answer.svg" class="w-4 h-4 object-contain" /> Chuyên mục Q&A
             </a>
 
             <a href="/hub/groups" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Groups" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="graduation-cap" class="w-4 h-4"></i> Nhóm tự học chung
+                <img src="/images/icons/course_completed.svg" class="w-4 h-4 object-contain" /> Nhóm tự học chung
             </a>
 
             <a href="/hub/members" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Members" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="users" class="w-4 h-4"></i> Danh mục Thành viên
+                <img src="/images/icons/admin_users_manage.svg" class="w-4 h-4 object-contain" /> Danh mục Thành viên
             </a>
 
             <a href="/hub/leaderboard" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Leaderboard" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="trophy" class="w-4 h-4"></i> Bảng vinh danh
+                <img src="/images/icons/leaderboard_podium.svg" class="w-4 h-4 object-contain" /> Bảng vinh danh
             </a>
 
             <a href="/hub/mentor" class="py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 border-b-2 @(currentAction == "Mentor" ? "border-cyan-600 text-cyan-600 font-extrabold" : "border-transparent text-slate-500 hover:text-cyan-600")">
-                <i data-lucide="sparkles" class="w-4 h-4 text-pink-500 animate-pulse"></i> Trợ Lý AI Mentor (Hot)
+                <img src="/images/icons/badge_mentor.svg" class="w-4 h-4 object-contain animate-pulse" /> Trợ Lý AI Mentor (Hot)
             </a>
 
         </div>
@@ -215,12 +215,12 @@
                 
                 <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center justify-between">
                     <span>Thành tích của bạn</span>
-                    <button class="text-cyan-600 hover:bg-cyan-50 p-1.5 rounded-lg transition-colors"><i data-lucide="bar-chart-2" class="w-4 h-4"></i></button>
+                    <button class="text-cyan-600 hover:bg-cyan-50 p-1.5 rounded-lg transition-colors"><img src="/images/icons/admin_revenue_chart.svg" class="w-4 h-4" /></button>
                 </h3>
                 
                 <div class="flex items-center gap-4 mb-5">
-                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-200/50">
-                        <i data-lucide="trophy" class="w-6 h-6"></i>
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-cyan-200/50 p-2">
+                        <img src="/images/icons/trophy_cup.svg" class="w-full h-full object-contain" />
                     </div>
                     <div>
                         <div class="text-2xl font-black text-slate-800 tracking-tight flex items-baseline gap-1">
@@ -246,7 +246,7 @@
             <!-- Top Contributors -->
             <div class="bg-white rounded-2xl p-5 border border-slate-150 shadow-sm relative overflow-hidden">
                 <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
-                    <i data-lucide="flame" class="w-4 h-4 text-orange-500"></i>
+                    <img src="/images/icons/streak_fire.svg" class="w-4 h-4" />
                     Thành viên sôi nổi
                 </h3>
                 
@@ -371,7 +371,7 @@
                                         <a :href="msg.postUrl" target="_blank" class="block mt-2 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:border-cyan-400 transition-colors cursor-pointer no-underline group block text-left">
                                             <div class="h-24 bg-gradient-to-br from-slate-200 to-slate-100 relative">
                                                 <div class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                                    <i data-lucide="link" class="w-8 h-8 text-slate-400"></i>
+                                                    <img src="/images/icons/social_copy_link.svg" class="w-8 h-8 text-slate-400" />
                                                 </div>
                                             </div>
                                             <div class="p-3">
