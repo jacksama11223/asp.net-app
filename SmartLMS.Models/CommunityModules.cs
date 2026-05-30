@@ -28,6 +28,13 @@ public class CommunityResource
     public bool IsHidden { get; set; } = false;
     public bool IsDeleted { get; set; } = false;
     public string Status { get; set; } = "Active"; // Active, Flagged, TakenDown
+
+    // Dữ liệu User context hiện tại
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public bool IsBookmarkedByCurrentUser { get; set; } = false;
+    
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public int CurrentUserRating { get; set; } = 0;
 }
 
 public class CommunityEvent

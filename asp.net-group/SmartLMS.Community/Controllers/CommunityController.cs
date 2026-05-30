@@ -206,7 +206,11 @@ public class CommunityController : Controller
     [HttpGet("/Community/Resources")]
     public async Task<IActionResult> Resources(string? fileType, string? subject)
     {
-        var resources = await _communityService.GetResourcesAsync(fileType, subject);
+        int userId = 0;
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!string.IsNullOrEmpty(userIdStr)) int.TryParse(userIdStr, out userId);
+
+        var resources = await _communityService.GetResourcesAsync(fileType, subject, userId);
         return View(resources);
     }
 

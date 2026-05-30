@@ -71,7 +71,7 @@ public class CommunityService : ICommunityService
     }
 
     // === 2. RESOURCE SHARING ===
-    public async Task<IEnumerable<CommunityResource>> GetResourcesAsync(string? fileType = null, string? subject = null)
+    public async Task<IEnumerable<CommunityResource>> GetResourcesAsync(string? fileType = null, string? subject = null, int userId = 0)
     {
         var query = _context.CommunityResources.Include(r => r.Uploader).AsQueryable();
         
@@ -81,7 +81,32 @@ public class CommunityService : ICommunityService
         if (!string.IsNullOrEmpty(subject))
             query = query.Where(r => r.Subject == subject);
 
-        return await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
+        var resources = await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
+
+        if (userId > 0 && resources.Any())
+        {
+            var resourceIds = resources.Select(r => r.Id).ToList();
+            
+            var userBookmarks = await _context.ResourceBookmarks
+                .Where(b => b.UserId == userId && resourceIds.Contains(b.ResourceId))
+                .Select(b => b.ResourceId)
+                .ToListAsync();
+
+            var userRatings = await _context.ResourceRatings
+                .Where(r => r.UserId == userId && resourceIds.Contains(r.ResourceId))
+                .ToDictionaryAsync(r => r.ResourceId, r => r.Score);
+
+            foreach (var res in resources)
+            {
+                res.IsBookmarkedByCurrentUser = userBookmarks.Contains(res.Id);
+                if (userRatings.TryGetValue(res.Id, out int score))
+                {
+                    res.CurrentUserRating = score;
+                }
+            }
+        }
+
+        return resources;
     }
 
     public async Task<CommunityResource> UploadResourceAsync(CommunityResource resource)

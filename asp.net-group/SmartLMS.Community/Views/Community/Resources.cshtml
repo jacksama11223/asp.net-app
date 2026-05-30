@@ -10,7 +10,10 @@
 <div class="space-y-6" x-data="{ 
     ...shareManager(),
     isUploading: false, 
+    uploadProgress: 0,
+    isUploadingFile: false,
     activeSubject: 'All',
+    activeFormat: 'All',
     searchQuery: '',
     viewingPdf: false, 
     currentPdfTitle: '', 
@@ -72,6 +75,13 @@
             <button @@click="activeSubject = 'Database Systems'" :class="activeSubject === 'Database Systems' ? 'bg-cyan-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-xl text-sm font-medium transition-all">
                 Database
             </button>
+
+            <!-- Pipe separator -->
+            <div class="w-px h-6 bg-slate-200 mx-2 hidden lg:block"></div>
+
+            <button @@click="activeFormat = 'All'" :class="activeFormat === 'All' ? 'text-indigo-600 bg-indigo-50 font-bold' : 'text-slate-400 hover:text-indigo-600'" class="text-xs px-2 py-1 rounded-md transition-all">Tất cả định dạng</button>
+            <button @@click="activeFormat = 'PDF'" :class="activeFormat === 'PDF' ? 'text-indigo-600 bg-indigo-50 font-bold' : 'text-slate-400 hover:text-indigo-600'" class="text-xs px-2 py-1 rounded-md flex items-center gap-1 transition-all"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> PDFs</button>
+            <button @@click="activeFormat = 'ZIP'" :class="activeFormat === 'ZIP' ? 'text-indigo-600 bg-indigo-50 font-bold' : 'text-slate-400 hover:text-indigo-600'" class="text-xs px-2 py-1 rounded-md flex items-center gap-1 transition-all"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Source Code</button>
         </div>
     </div>
 
@@ -125,9 +135,20 @@
                 </div>
             </div>
 
-            <div class="flex justify-end pt-2">
-                <button type="button" @@click="uploadResource()" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-sm px-6 py-2 rounded-xl transition-all shadow-md active:scale-95">
-                    Xác nhận tải lên
+            <div class="flex justify-end pt-2 items-center gap-4">
+                <!-- Progress bar area -->
+                <div x-show="isUploadingFile" class="flex-1 max-w-xs flex items-center gap-2" style="display: none;">
+                    <div class="w-full bg-slate-100 rounded-full h-2.5">
+                        <div class="bg-cyan-600 h-2.5 rounded-full transition-all duration-300" :style="`width: ${uploadProgress}%`"></div>
+                    </div>
+                    <span class="text-xs font-bold text-slate-500" x-text="`${uploadProgress}%`"></span>
+                </div>
+
+                <button type="button" @@click="uploadResource()" :disabled="isUploadingFile" :class="isUploadingFile ? 'bg-slate-400 cursor-not-allowed' : 'bg-cyan-600 hover:bg-cyan-700 active:scale-95 shadow-md'" class="text-white font-bold text-sm px-6 py-2 rounded-xl transition-all">
+                    <span x-show="!isUploadingFile">Xác nhận tải lên</span>
+                    <span x-show="isUploadingFile" class="flex items-center gap-2">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang tải lên...
+                    </span>
                 </button>
             </div>
         </form>
@@ -140,17 +161,15 @@
             foreach (var res in Model)
             {
                 var titleEscaped = Uri.EscapeDataString(res.Title ?? "");
-                var isLiked = false; // Fake state cho frontend mockup
-                
                 <div 
-                    x-show="(activeSubject === 'All' || activeSubject === '@res.Subject') && ('@res.Title.ToLower()'.includes(searchQuery.toLowerCase()) || '@res.Description?.ToLower()'.includes(searchQuery.toLowerCase()))"
+                    x-show="(activeSubject === 'All' || activeSubject === '@res.Subject') && (activeFormat === 'All' || activeFormat === '@res.FileType') && ('@res.Title.ToLower()'.includes(searchQuery.toLowerCase()) || '@res.Description?.ToLower()'.includes(searchQuery.toLowerCase()))"
                     x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 scale-95"
                     x-transition:enter-end="opacity-100 scale-100"
                     class="bg-white rounded-2xl border border-slate-100 flex flex-col hover:shadow-xl hover:border-cyan-200 transition-all group overflow-hidden"
                     x-data="{ 
-                        isBookmarked: false,
-                        myRating: 0,
+                        isBookmarked: @(res.IsBookmarkedByCurrentUser.ToString().ToLower()),
+                        myRating: @res.CurrentUserRating,
                         downloads: @res.DownloadCount,
                         views: @res.ViewCount,
                         voteCount: @res.VoteCount,
@@ -372,20 +391,45 @@
         formData.append('FileType', file.name.split('.').pop().toUpperCase());
         formData.append('File', file);
 
+        // Sử dụng Alpine data context
+        const alpineData = Alpine.$data(document.querySelector('[x-data]'));
+        alpineData.isUploadingFile = true;
+        alpineData.uploadProgress = 0;
+
         try {
-            const res = await fetch('/api/ResourceApi', { method: 'POST', body: formData });
-            if (res.ok) {
-                const data = await res.json();
-                window.showToast && window.showToast('✅ ' + data.message);
-                setTimeout(() => location.reload(), 1500);
-            } else if (res.status === 401) {
-                window.location.href = '/Auth/Login?returnUrl=/hub/resources';
-            } else {
-                const err = await res.json();
-                window.showToast && window.showToast('❌ ' + (err.message || 'Lỗi tải lên.'));
-            }
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/ResourceApi', true);
+            
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    alpineData.uploadProgress = Math.round((e.loaded / e.total) * 100);
+                }
+            };
+            
+            xhr.onload = function() {
+                alpineData.isUploadingFile = false;
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const data = JSON.parse(xhr.responseText);
+                    window.showToast && window.showToast('✅ ' + data.message);
+                    setTimeout(() => location.reload(), 1500);
+                } else if (xhr.status === 401) {
+                    window.location.href = '/Auth/Login?returnUrl=/hub/resources';
+                } else {
+                    let err = "Lỗi tải lên.";
+                    try { err = JSON.parse(xhr.responseText).message || err; } catch(e){}
+                    window.showToast && window.showToast('❌ ' + err);
+                }
+            };
+            
+            xhr.onerror = function() {
+                alpineData.isUploadingFile = false;
+                window.showToast && window.showToast('❌ Lỗi kết nối.');
+            };
+            
+            xhr.send(formData);
         } catch {
-            window.showToast && window.showToast('❌ Lỗi kết nối.');
+            alpineData.isUploadingFile = false;
+            window.showToast && window.showToast('❌ Lỗi không xác định.');
         }
     }
 

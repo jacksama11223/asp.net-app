@@ -14,7 +14,7 @@ public interface ICommunityService
     Task<Repost> RepostAsync(int userId, int originalPostId, string? customComment);
     
     // === 2. RESOURCE SHARING ===
-    Task<IEnumerable<CommunityResource>> GetResourcesAsync(string? fileType = null, string? subject = null);
+    Task<IEnumerable<CommunityResource>> GetResourcesAsync(string? fileType = null, string? subject = null, int userId = 0);
     Task<CommunityResource> UploadResourceAsync(CommunityResource resource);
     Task<bool> BookmarkResourceAsync(int resourceId, int userId);
     Task<bool> RateResourceAsync(int resourceId, int userId, int score, string? reviewText = null);
