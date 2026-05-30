@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartLMS.Data;
 
@@ -11,9 +12,11 @@ using SmartLMS.Data;
 namespace SmartLMS.Data.Migrations
 {
     [DbContext(typeof(SmartLMSContext))]
-    partial class SmartLMSContextModelSnapshot : ModelSnapshot
+    [Migration("20260530113523_ResourceSharingAdvanced")]
+    partial class ResourceSharingAdvanced
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -148,6 +148,16 @@ public partial class SmartLMSContext : DbContext
     public virtual DbSet<Post> Posts { get; set; }
     public virtual DbSet<Comment> Comments { get; set; }
     public virtual DbSet<CommunityResource> CommunityResources { get; set; }
+    
+    // Community Resource Advanced Features
+    public virtual DbSet<ResourceBookmark> ResourceBookmarks { get; set; }
+    public virtual DbSet<UserCollection> UserCollections { get; set; }
+    public virtual DbSet<ResourceCollectionItem> ResourceCollectionItems { get; set; }
+    public virtual DbSet<ResourceRating> ResourceRatings { get; set; }
+    public virtual DbSet<ResourceComment> ResourceComments { get; set; }
+    public virtual DbSet<ResourceReport> ResourceReports { get; set; }
+    public virtual DbSet<ResourceShare> ResourceShares { get; set; }
+
     public virtual DbSet<CommunityEvent> CommunityEvents { get; set; }
     public virtual DbSet<EventParticipant> EventParticipants { get; set; }
     public virtual DbSet<StudyGroup> StudyGroups { get; set; }
@@ -429,6 +439,56 @@ public partial class SmartLMSContext : DbContext
         modelBuilder.Entity<CommunityResource>(entity => {
             entity.HasKey(e => e.Id);
             entity.ToTable("CommunityResources");
+        });
+
+        modelBuilder.Entity<ResourceBookmark>(entity => {
+            entity.HasKey(e => new { e.ResourceId, e.UserId });
+            entity.ToTable("ResourceBookmarks");
+            entity.HasOne(d => d.Resource).WithMany().HasForeignKey(d => d.ResourceId);
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<UserCollection>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("UserCollections");
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<ResourceCollectionItem>(entity => {
+            entity.HasKey(e => new { e.CollectionId, e.ResourceId });
+            entity.ToTable("ResourceCollectionItems");
+            entity.HasOne(d => d.Collection).WithMany(p => p.Items).HasForeignKey(d => d.CollectionId);
+            entity.HasOne(d => d.Resource).WithMany().HasForeignKey(d => d.ResourceId);
+        });
+
+        modelBuilder.Entity<ResourceRating>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("ResourceRatings");
+            entity.HasIndex(e => new { e.ResourceId, e.UserId }).IsUnique(); // One rating per user per resource
+            entity.HasOne(d => d.Resource).WithMany().HasForeignKey(d => d.ResourceId);
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ResourceComment>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("ResourceComments");
+            entity.HasOne(d => d.Resource).WithMany().HasForeignKey(d => d.ResourceId);
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(d => d.ParentComment).WithMany(p => p.Replies).HasForeignKey(d => d.ParentCommentId);
+        });
+
+        modelBuilder.Entity<ResourceReport>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("ResourceReports");
+            entity.HasOne(d => d.Resource).WithMany().HasForeignKey(d => d.ResourceId);
+            entity.HasOne(d => d.Reporter).WithMany().HasForeignKey(d => d.ReporterId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ResourceShare>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("ResourceShares");
+            entity.HasOne(d => d.Resource).WithMany().HasForeignKey(d => d.ResourceId);
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<CommunityEvent>(entity => {
