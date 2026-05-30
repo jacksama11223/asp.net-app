@@ -186,18 +186,22 @@ public class CommunityService : ICommunityService
 
     public async Task<IEnumerable<UserActivityPoint>> GetLeaderboardAsync()
     {
-        return await _context.UserActivityPoints
-            .Include(p => p.User)
+        var topUsers = await _context.UserActivityPoints
             .GroupBy(p => p.UserId)
-            .Select(g => new UserActivityPoint 
-            { 
-                UserId = g.Key, 
-                User = g.First().User,
-                Points = g.Sum(x => x.Points) 
-            })
+            .Select(g => new { UserId = g.Key, Points = g.Sum(x => x.Points) })
             .OrderByDescending(p => p.Points)
             .Take(10)
             .ToListAsync();
+
+        var userIds = topUsers.Select(x => x.UserId).ToList();
+        var users = await _context.Users.Where(u => userIds.Contains(u.UserId)).ToDictionaryAsync(u => u.UserId);
+
+        return topUsers.Select(t => new UserActivityPoint
+        {
+            UserId = t.UserId,
+            Points = t.Points,
+            User = users.GetValueOrDefault(t.UserId)
+        }).ToList();
     }
 
     public async Task<IEnumerable<UserBadge>> GetUserBadgesAsync(int userId)

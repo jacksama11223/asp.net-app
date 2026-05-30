@@ -18,24 +18,15 @@ public class LeaderboardApiController : ControllerBase
     {
         var entries = await _service.GetLeaderboardAsync();
 
-        // Group by user, sum points
+        // entries has already been grouped by Service
         var grouped = entries
-            .GroupBy(e => e.UserId)
-            .Select(g => new
-            {
-                userId     = g.Key,
-                userName   = g.First().User?.FullName ?? "Ẩn danh",
-                avatarSeed = g.Key.ToString(),
-                totalPoints = g.Sum(e => e.Points),
-            })
-            .OrderByDescending(x => x.totalPoints)
             .Select((x, i) => new
             {
                 rank        = i + 1,
-                x.userId,
-                x.userName,
-                x.avatarSeed,
-                x.totalPoints,
+                userId      = x.UserId,
+                userName    = x.User?.FullName ?? "Ẩn danh",
+                avatarSeed  = x.UserId.ToString(),
+                totalPoints = x.Points,
             });
 
         return Ok(new { period, users = grouped });
@@ -52,9 +43,7 @@ public class LeaderboardApiController : ControllerBase
         var entries = await _service.GetLeaderboardAsync();
 
         var grouped = entries
-            .GroupBy(e => e.UserId)
-            .Select(g => new { userId = g.Key, totalPoints = g.Sum(e => e.Points) })
-            .OrderByDescending(x => x.totalPoints)
+            .Select(x => new { userId = x.UserId, totalPoints = x.Points })
             .ToList();
 
         var myIndex  = grouped.FindIndex(x => x.userId == userId);
