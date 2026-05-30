@@ -8,7 +8,7 @@ using SmartLMS.Business.Events;
 namespace SmartLMS.Community.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("CommunityApi/ResourceInteraction")]
 public class ResourceInteractionApiController : ControllerBase
 {
     private readonly IMediator _mediator;

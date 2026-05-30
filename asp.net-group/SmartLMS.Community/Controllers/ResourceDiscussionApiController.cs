@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace SmartLMS.Community.Controllers;
 
-[Route("api/ResourceDiscussion")]
+[Route("CommunityApi/ResourceDiscussion")]
 [ApiController]
 public class ResourceDiscussionApiController : ControllerBase
 {

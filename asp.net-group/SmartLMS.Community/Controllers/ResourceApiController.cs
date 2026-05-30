@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace SmartLMS.Community.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("CommunityApi/[controller]")]
 public class ResourceApiController : ControllerBase
 {
     private readonly ICommunityService _service;
