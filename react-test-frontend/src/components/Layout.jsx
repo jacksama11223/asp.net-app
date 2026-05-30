@@ -20,9 +20,8 @@ export const Layout = ({ children }) => {
         collapsed: { mobile: !mobileOpened, desktop: false }
       }}
       padding={{ base: 'md', sm: 'xl' }}
-      className="bg-slate-50 relative overflow-hidden transition-all duration-300"
+      className="frame-main-wrapper relative overflow-hidden transition-all duration-300"
     >
-      <div className="absolute inset-0 bg-mesh-gradient opacity-40 pointer-events-none" />
       
       <AppShell.Header className="bg-white/40 backdrop-blur-xl border-b border-black/5 z-50">
         <Topbar mobileOpened={mobileOpened} toggleMobile={toggleMobile} />

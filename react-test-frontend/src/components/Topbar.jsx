@@ -143,7 +143,7 @@ export const Topbar = ({ mobileOpened, toggleMobile }) => {
                   <Text size="sm" fw={700} className="text-slate-900 leading-none mb-1">{user.fullName || 'Student'}</Text>
                   <Text size="10px" tt="uppercase" fw={900} c="dimmed">Cấp độ {gamification.level}</Text>
                 </Box>
-                <Avatar size="md" radius="lg" src={null} color="brand" className="shadow-lg shadow-brand-500/20">
+                <Avatar size="md" radius="lg" src={null} color="brand" className="avatar-border-wrap avatar-lvl-99 shadow-lg shadow-brand-500/20">
                   <LuSparkles size={18} />
                 </Avatar>
                 <LuSettings size={14} className="text-slate-400" />
