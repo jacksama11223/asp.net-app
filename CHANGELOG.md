@@ -1,5 +1,13 @@
 # Changelog - SmartLMS.AI Distributed System
 
+### [2026-05-30] - Module Resource Discussion & AI RAG
+- **Added:** Triển khai Giai đoạn 1 của Thảo luận Tài nguyên (`ResourceDiscussionService` và `ResourceDiscussionApiController`).
+- **Added:** Giao diện Alpine.js quản lý State bình luận (Post, View, Reply lồng nhau) trực tiếp tại trang xem PDF (Side Panel).
+- **Added:** Tích hợp SignalR Real-time (`CommunityHub`) vào Thảo luận Tài nguyên (Giai đoạn 3), cho phép nhận bình luận mới không cần tải lại trang.
+- **Added:** Auto-Moderation bằng ML.NET sử dụng `ModerationService`, tự động chặn và tạo Báo cáo Vi phạm (`ResourceReport`) khi phát hiện ngôn từ độc hại.
+- **Added:** Trí tuệ Nhân tạo RAG (Retrieval-Augmented Generation) thông qua `ResourceRagService`.
+- **Added:** Hệ thống tự động phân tích câu hỏi chứa `@AI`, trích xuất thông tin từ PDF (qua Hangfire Background Jobs) và giả lập AI phản hồi thời gian thực qua SignalR.
+
 ### [2026-05-29] - Community Advanced Redesign (Phases 1-4)
 - **Added:** Bóc tách và tự động hóa tích hợp 95 SVG UI Assets chuẩn thương hiệu "Trăm Tiếng" từ bản thiết kế của Stitch.
 - **Added:** Nâng cấp API `GetPostDetail` trong `CommunityApiController` để hỗ trợ Cấu trúc Cây (Threaded Comments) đệ quy.

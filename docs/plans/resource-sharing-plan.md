@@ -61,3 +61,11 @@ Sau khi cập nhật mã nguồn trên máy tính nội bộ, Ngài chỉ cần 
    docker compose pull community backend
    docker compose up -d
    ```
+
+### Bước 5: Mở rộng Tương tác Sâu (Deep Engagement) - *Phần Đang Bị Thiếu*
+**Mục tiêu:** Xây dựng hệ thống bình luận (thảo luận đa tầng), trình duyệt đọc tài liệu trực tuyến (kèm gợi ý AI), và module báo cáo vi phạm nội dung (Moderation).
+*Phân tích hiện trạng:* Model `ResourceComment` và `ResourceReport` đã có trong database (`SmartLMSContext.cs`), nhưng hoàn toàn vắng mặt ở `ResourceApiController.cs`, `ICommunityService.cs` và chưa có UI trên `Resources.cshtml`.
+- **Cần làm 1:** Viết API `[HttpPost("{id}/comments")]` và `[HttpGet("{id}/comments")]` hỗ trợ đa tầng (ParentCommentId).
+- **Cần làm 2:** Xây dựng UI Comment Thread bên dưới mỗi tài liệu hoặc trong Side Panel của Premium PDF Viewer.
+- **Cần làm 3:** Viết API `[HttpPost("{id}/report")]` lưu báo cáo vi phạm.
+- **Cần làm 4:** Tích hợp AI Suggestion (Phân tích nội dung tài liệu và gợi ý học tập) vào Side Panel của PDF Viewer.

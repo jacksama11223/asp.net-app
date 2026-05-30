@@ -17,8 +17,12 @@
     searchQuery: '',
     viewingPdf: false, 
     currentPdfTitle: '', 
-    currentPdfUrl: '' 
+    currentPdfUrl: '',
+    currentResourceId: null
 }">
+    
+    <!-- Load Discussion Module Script -->
+    <script defer src="/js/components/resource-discussion.js"></script>
     
     <!-- Hero Section -->
     <div class="relative rounded-3xl p-8 md:p-12 overflow-hidden bg-gradient-to-br from-indigo-900 via-cyan-800 to-slate-900 text-white shadow-2xl">
@@ -197,7 +201,7 @@
 
                     <!-- Content -->
                     <div class="p-5 pt-8 flex-1 flex flex-col">
-                        <h4 @@click="viewingPdf = true; currentPdfTitle = decodeURIComponent('@titleEscaped'); currentPdfUrl = '@res.FileUrl' || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; recordView(@res.Id);"
+                        <h4 @@click="viewingPdf = true; currentPdfTitle = decodeURIComponent('@titleEscaped'); currentPdfUrl = '@res.FileUrl' || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; currentResourceId = @res.Id; recordView(@res.Id);"
                             class="font-extrabold text-slate-800 text-lg mb-2 leading-snug hover:text-cyan-600 transition-colors cursor-pointer line-clamp-2">
                             @res.Title
                         </h4>
@@ -230,7 +234,7 @@
                                 </div>
                                 <span class="font-bold text-xs text-slate-600 truncate max-w-[120px]">@(res.Uploader?.FullName ?? "Member")</span>
                             </div>
-                            <button @@click.stop="viewingPdf = true; currentPdfTitle = decodeURIComponent('@titleEscaped'); currentPdfUrl = '@res.FileUrl' || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; recordView(@res.Id);" class="bg-cyan-50 hover:bg-cyan-100 text-cyan-700 px-4 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                            <button @@click.stop="viewingPdf = true; currentPdfTitle = decodeURIComponent('@titleEscaped'); currentPdfUrl = '@res.FileUrl' || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; currentResourceId = @res.Id; recordView(@res.Id);" class="bg-cyan-50 hover:bg-cyan-100 text-cyan-700 px-4 py-1.5 rounded-lg text-xs font-bold transition-colors">
                                 Mở xem
                             </button>
                         </div>
@@ -315,21 +319,88 @@
                         <iframe :src="currentPdfUrl" class="w-full flex-1 bg-white" frameborder="0"></iframe>
                     </div>
 
-                    <!-- Side Panel Tương tác (Có thể bình luận tài liệu sau này) -->
-                    <div class="hidden lg:flex w-80 ml-6 flex-col gap-4">
-                        <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 backdrop-blur-sm">
-                            <h4 class="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">Thông tin file</h4>
-                            <div class="space-y-3 text-xs text-slate-400">
-                                <div class="flex justify-between"><span>Định dạng:</span><strong class="text-white">Document</strong></div>
-                                <div class="flex justify-between"><span>Quét mã độc:</span><strong class="text-emerald-400 flex items-center gap-1"><img src="/images/icons/admin_security_logs.svg" class="w-3 h-3" /> An toàn</strong></div>
+                    <!-- Side Panel Tương tác (Thảo luận đa tầng) -->
+                    <div class="hidden lg:flex w-80 ml-6 flex-col gap-4" x-data="resourceDiscussion()" x-init="$watch('currentResourceId', value => { if(value) { resourceId = value; loadComments(); } })">
+                        <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 backdrop-blur-sm flex justify-between items-center">
+                            <h4 class="text-xs font-black text-slate-300 uppercase tracking-widest">Thảo luận (<span x-text="comments.length"></span>)</h4>
+                            <button @@click="openReport(null)" class="text-xs text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1"><img src="/images/icons/course_locked.svg" class="w-3 h-3"/> Báo cáo</button>
+                        </div>
+
+                        <!-- Danh sách bình luận -->
+                        <div class="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 backdrop-blur-sm flex flex-col overflow-y-auto min-h-[300px]">
+                            <div x-show="isLoading" class="text-slate-400 text-xs text-center py-4">Đang tải bình luận...</div>
+                            <div x-show="!isLoading && comments.length === 0" class="text-slate-500 text-xs text-center py-4">Chưa có thảo luận nào. Hãy là người đầu tiên!</div>
+                            
+                            <div class="space-y-4">
+                                <template x-for="comment in comments" :key="comment.id">
+                                    <div class="text-sm border-b border-slate-700/50 pb-3 last:border-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <img :src="comment.authorAvatar" class="w-6 h-6 rounded-full bg-slate-700" />
+                                            <span class="font-bold text-slate-200 text-xs" x-text="comment.authorName"></span>
+                                            <span class="text-[10px] text-slate-500" x-text="new Date(comment.createdAt).toLocaleDateString()"></span>
+                                        </div>
+                                        <p class="text-slate-300 text-xs leading-relaxed ml-8 mb-2" x-text="comment.content"></p>
+                                        <div class="ml-8 flex gap-3 text-[10px] font-bold text-slate-400">
+                                            <button @@click="upvote(comment.id)" class="hover:text-cyan-400 flex items-center gap-1">▲ <span x-text="comment.upvotes"></span></button>
+                                            <button @@click="activeReplyId = activeReplyId === comment.id ? null : comment.id" class="hover:text-cyan-400">Trả lời</button>
+                                            <button @@click="deleteComment(comment.id)" class="hover:text-rose-400">Xóa</button>
+                                        </div>
+
+                                        <!-- Form Trả lời -->
+                                        <div x-show="activeReplyId === comment.id" class="ml-8 mt-2 flex gap-2">
+                                            <input type="text" x-model="replyContent" @@keydown.enter="postComment(comment.id)" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-cyan-500" placeholder="Viết câu trả lời..." />
+                                            <button @@click="postComment(comment.id)" class="bg-cyan-600 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-cyan-500">Gửi</button>
+                                        </div>
+
+                                        <!-- Replies -->
+                                        <div class="ml-8 mt-3 space-y-3 border-l-2 border-slate-700 pl-3">
+                                            <template x-for="reply in comment.replies" :key="reply.id">
+                                                <div>
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <img :src="reply.authorAvatar" class="w-5 h-5 rounded-full bg-slate-700" />
+                                                        <span class="font-bold text-slate-300 text-[11px]" x-text="reply.authorName"></span>
+                                                    </div>
+                                                    <p class="text-slate-400 text-[11px] leading-relaxed ml-7 mb-1" x-text="reply.content"></p>
+                                                    <div class="ml-7 flex gap-3 text-[9px] font-bold text-slate-500">
+                                                        <button @@click="upvote(reply.id)" class="hover:text-cyan-400">▲ <span x-text="reply.upvotes"></span></button>
+                                                        <button @@click="deleteComment(reply.id)" class="hover:text-rose-400">Xóa</button>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
                         </div>
 
-                        <div class="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 backdrop-blur-sm flex flex-col">
-                            <h4 class="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">Ghi chú học tập</h4>
-                            <textarea class="flex-1 w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-xs text-slate-300 focus:outline-none focus:border-cyan-500 resize-none" placeholder="Ghi chú nhanh khi đọc tài liệu..."></textarea>
-                            <button class="mt-3 w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs py-2 rounded-xl transition-colors shadow-lg shadow-cyan-500/20">Lưu ghi chú</button>
+                        <!-- Form Bình luận Gốc -->
+                        <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 backdrop-blur-sm">
+                            <textarea x-model="newComment" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-300 focus:outline-none focus:border-cyan-500 resize-none" placeholder="Viết bình luận hoặc hỏi đáp..."></textarea>
+                            <button @@click="postComment(null)" :disabled="!newComment.trim() || isLoading" class="mt-2 w-full bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold text-xs py-2 rounded-xl transition-colors">Đăng bình luận</button>
                         </div>
+
+                        <!-- Report Modal (Teleport to body to avoid z-index/overflow issues) -->
+                        <template x-teleport="body">
+                            <div x-show="showReportModal" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;">
+                                <div @@click.away="showReportModal = false" class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
+                                    <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+                                        <img src="/images/icons/course_locked.svg" class="w-5 h-5 text-rose-500" /> Báo cáo vi phạm
+                                    </h3>
+                                    <p class="text-xs text-slate-500">Giúp chúng tôi giữ môi trường học tập trong sạch. Chọn lý do báo cáo:</p>
+                                    <select x-model="reportReason" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-rose-500 text-sm font-bold text-slate-700">
+                                        <option value="">-- Chọn lý do --</option>
+                                        <option value="Spam / Quảng cáo">Spam / Quảng cáo</option>
+                                        <option value="Nội dung đồi trụy / Phản cảm">Nội dung đồi trụy / Phản cảm</option>
+                                        <option value="Vi phạm bản quyền">Vi phạm bản quyền</option>
+                                        <option value="Ngôn từ đả kích / Xúc phạm">Ngôn từ đả kích / Xúc phạm</option>
+                                    </select>
+                                    <div class="flex justify-end gap-3 pt-2">
+                                        <button @@click="showReportModal = false" class="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">Hủy</button>
+                                        <button @@click="submitReport" :disabled="!reportReason" class="px-4 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 disabled:bg-slate-400 transition-colors font-bold text-xs shadow-md">Gửi báo cáo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
