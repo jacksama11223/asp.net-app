@@ -558,8 +558,11 @@ app.UseAuthorization();
 
 app.MapHealthChecks("/health"); // Cổng giám sát cho Docker/K8s
 
-// Hangfire Dashboard (Hạn chế quyền Admin có thể cấu hình AuthorizationFilter sau)
-app.UseHangfireDashboard("/hangfire");
+// Hangfire Dashboard (Chỉ cho phép Localhost HOẶC User có Role Admin)
+app.UseHangfireDashboard("/hangfire", new Hangfire.Dashboard.DashboardOptions
+{
+    Authorization = new[] { new SmartLMS.Web.Filters.HangfireAuthorizationFilter() }
+});
 
 app.MapControllerRoute(
     name: "default",
