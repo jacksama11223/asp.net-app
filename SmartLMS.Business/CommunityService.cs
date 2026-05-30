@@ -91,6 +91,74 @@ public class CommunityService : ICommunityService
         return resource;
     }
 
+    public async Task<bool> BookmarkResourceAsync(int resourceId, int userId)
+    {
+        var existing = await _context.ResourceBookmarks.FirstOrDefaultAsync(b => b.ResourceId == resourceId && b.UserId == userId);
+        var resource = await _context.CommunityResources.FindAsync(resourceId);
+        
+        if (existing == null)
+        {
+            _context.ResourceBookmarks.Add(new ResourceBookmark { ResourceId = resourceId, UserId = userId });
+            if (resource != null) resource.BookmarkCount++;
+        }
+        else
+        {
+            _context.ResourceBookmarks.Remove(existing);
+            if (resource != null && resource.BookmarkCount > 0) resource.BookmarkCount--;
+        }
+        
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RateResourceAsync(int resourceId, int userId, int score, string? reviewText = null)
+    {
+        var existing = await _context.ResourceRatings.FirstOrDefaultAsync(r => r.ResourceId == resourceId && r.UserId == userId);
+        if (existing != null)
+        {
+            existing.Score = score;
+            existing.ReviewText = reviewText;
+        }
+        else
+        {
+            _context.ResourceRatings.Add(new ResourceRating { ResourceId = resourceId, UserId = userId, Score = score, ReviewText = reviewText });
+        }
+        
+        await _context.SaveChangesAsync();
+        
+        // Cập nhật lại trung bình Rating và VoteCount
+        var resource = await _context.CommunityResources.FindAsync(resourceId);
+        if (resource != null)
+        {
+            var ratings = await _context.ResourceRatings.Where(r => r.ResourceId == resourceId).ToListAsync();
+            resource.VoteCount = ratings.Count;
+            resource.Rating = ratings.Average(r => r.Score);
+            await _context.SaveChangesAsync();
+        }
+        
+        return true;
+    }
+
+    public async Task<bool> IncrementViewCountAsync(int resourceId)
+    {
+        var resource = await _context.CommunityResources.FindAsync(resourceId);
+        if (resource == null) return false;
+        
+        resource.ViewCount++;
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> IncrementDownloadCountAsync(int resourceId)
+    {
+        var resource = await _context.CommunityResources.FindAsync(resourceId);
+        if (resource == null) return false;
+        
+        resource.DownloadCount++;
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
     // === 3. EVENT LISTINGS ===
     public async Task<IEnumerable<CommunityEvent>> GetEventsAsync()
     {

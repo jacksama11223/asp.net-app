@@ -16,6 +16,10 @@ public interface ICommunityService
     // === 2. RESOURCE SHARING ===
     Task<IEnumerable<CommunityResource>> GetResourcesAsync(string? fileType = null, string? subject = null);
     Task<CommunityResource> UploadResourceAsync(CommunityResource resource);
+    Task<bool> BookmarkResourceAsync(int resourceId, int userId);
+    Task<bool> RateResourceAsync(int resourceId, int userId, int score, string? reviewText = null);
+    Task<bool> IncrementViewCountAsync(int resourceId);
+    Task<bool> IncrementDownloadCountAsync(int resourceId);
     
     // === 3. EVENT LISTINGS ===
     Task<IEnumerable<CommunityEvent>> GetEventsAsync();

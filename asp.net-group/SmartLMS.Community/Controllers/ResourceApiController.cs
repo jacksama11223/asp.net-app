@@ -73,6 +73,50 @@ public class ResourceApiController : ControllerBase
 
         return Ok(new { success = true, resourceId = result.Id, message = "Tài liệu đã được tải lên thành công! +20 XP 📚" });
     }
+
+    [HttpPost("{id}/bookmark")]
+    [Authorize]
+    public async Task<IActionResult> BookmarkResource(int id)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out int userId)) return Unauthorized();
+
+        await _service.BookmarkResourceAsync(id, userId);
+        return Ok(new { success = true, message = "Đã cập nhật bộ sưu tập." });
+    }
+
+    [HttpPost("{id}/rate")]
+    [Authorize]
+    public async Task<IActionResult> RateResource(int id, [FromBody] RateRequest req)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out int userId)) return Unauthorized();
+
+        if (req.Score < 1 || req.Score > 5) return BadRequest(new { message = "Điểm đánh giá phải từ 1 đến 5." });
+
+        await _service.RateResourceAsync(id, userId, req.Score, req.ReviewText);
+        return Ok(new { success = true, message = $"Cảm ơn bạn đã đánh giá {req.Score} sao!" });
+    }
+
+    [HttpPost("{id}/view")]
+    public async Task<IActionResult> ViewResource(int id)
+    {
+        await _service.IncrementViewCountAsync(id);
+        return Ok(new { success = true });
+    }
+
+    [HttpPost("{id}/download")]
+    public async Task<IActionResult> DownloadResource(int id)
+    {
+        await _service.IncrementDownloadCountAsync(id);
+        return Ok(new { success = true });
+    }
+}
+
+public class RateRequest
+{
+    public int Score { get; set; }
+    public string? ReviewText { get; set; }
 }
 
 public class UploadResourceRequest
