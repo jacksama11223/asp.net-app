@@ -559,7 +559,7 @@ app.UseAuthorization();
 app.MapHealthChecks("/health"); // Cổng giám sát cho Docker/K8s
 
 // Hangfire Dashboard (Chỉ cho phép Localhost HOẶC User có Role Admin)
-app.UseHangfireDashboard("/hangfire", new Hangfire.Dashboard.DashboardOptions
+app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
 {
     Authorization = new[] { new SmartLMS.Web.Filters.HangfireAuthorizationFilter() }
 });
