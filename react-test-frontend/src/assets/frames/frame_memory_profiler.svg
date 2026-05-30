@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 50">
+  <rect width="150" height="50" rx="8" fill="#0f172a"/>
+  <path d="M10 40 q20 -30 40 0 t40 -20 t40 20" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.5"/>
+  <text x="10" y="15" font-family="monospace" font-size="8" fill="#475569">MEM: 128MB</text>
+</svg>

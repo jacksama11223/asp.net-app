@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 250">
+  <rect x="2" y="2" width="296" height="246" rx="20" fill="#ffffff" stroke="#ef4444" stroke-width="2"/>
+  <circle cx="150" cy="80" r="40" fill="#fef2f2"/>
+  <path d="M135 65 l30 30 M135 95 l30 -30" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+  <text x="150" y="170" font-family="sans-serif" font-size="18" text-anchor="middle" fill="#ef4444" font-weight="bold">THANH TOÁN THẤT BẠI</text>
+</svg>

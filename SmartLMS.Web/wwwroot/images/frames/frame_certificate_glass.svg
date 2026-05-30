@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280">
+  <rect x="10" y="10" width="380" height="260" rx="4" fill="none" stroke="#22c55e" stroke-width="0.5" opacity="0.4"/>
+  <rect x="5" y="5" width="390" height="270" rx="6" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+  <path d="M200 60c-20 0-30 20-30 40s10 40 30 40 30-20 30-40-10-40-30-40z" fill="#22c55e" opacity="0.1"/>
+  <text x="200" y="200" font-family="serif" font-size="24" text-anchor="middle" fill="#22c55e">CERTIFICATE</text>
+</svg>

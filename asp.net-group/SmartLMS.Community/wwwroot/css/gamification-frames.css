@@ -1,0 +1,225 @@
+/* =========================================================================
+   TRĂM TIẾNG - HỆ THỐNG KHUNG GIAO DIỆN (GAMIFICATION FRAMES V2)
+   120+ SVG Wrappers, Patterns & Interactive Borders
+   Sử dụng CSS Background 100% 100% & 9-Slice Scaling
+   ========================================================================= */
+
+/* ---------------------------------------------------------
+   1. GLOBAL CONTAINERS & BACKGROUNDS
+--------------------------------------------------------- */
+.bg-body-community {
+    background-image: url('/images/frames/bg_body_community.svg');
+    background-size: 400px 400px; /* Lặp lại pattern chìm */
+    background-repeat: repeat;
+}
+.bg-body-lms {
+    background-image: url('/images/frames/bg_body_lms.svg');
+    background-size: 500px 500px;
+    background-repeat: repeat;
+}
+.bg-body-ecommerce {
+    background-image: url('/images/frames/bg_body_ecommerce.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+.frame-main-wrapper {
+    background-image: url('/images/frames/frame_main_wrapper.svg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border-radius: 24px;
+    overflow: hidden;
+}
+.frame-widget-sidebar {
+    background-image: url('/images/frames/frame_widget_sidebar.svg');
+    background-size: 100% 100%;
+    padding: 1.5rem;
+    border-radius: 16px;
+}
+
+/* ---------------------------------------------------------
+   2. HEADERS, SIDEBARS & NAVIGATION
+--------------------------------------------------------- */
+.frame-header-top {
+    background-image: url('/images/frames/frame_header_top.svg');
+    background-size: 100% 100%;
+}
+.frame-sidebar-left {
+    background-image: url('/images/frames/frame_sidebar_left.svg');
+    background-size: 100% 100%;
+}
+.btn-nav-active {
+    background-image: url('/images/frames/btn_nav_item_active.svg');
+    background-size: 100% 100%;
+    transition: all 0.3s ease;
+}
+.btn-nav-active:hover {
+    filter: brightness(1.1);
+}
+
+/* ---------------------------------------------------------
+   3. POST & THREAD FRAMES
+--------------------------------------------------------- */
+.frame-post-card {
+    background-image: url('/images/frames/frame_post_card.svg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: none; /* Dùng bóng của SVG */
+    border: none;
+    transition: transform 0.2s;
+}
+.frame-post-card:hover {
+    transform: translateY(-2px);
+}
+.frame-post-hot {
+    background-image: url('/images/frames/frame_post_hot.svg');
+    background-size: 100% 100%;
+    padding: 1.5rem;
+}
+.frame-post-pinned {
+    background-image: url('/images/frames/frame_post_pinned.svg');
+    background-size: 100% 100%;
+    padding: 1.5rem;
+}
+.frame-post-bounty {
+    background-image: url('/images/frames/frame_post_bounty.svg');
+    background-size: 100% 100%;
+    padding: 1.5rem;
+    animation: glow-pulse 3s infinite alternate;
+}
+@keyframes glow-pulse {
+    0% { filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.2)); }
+    100% { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.6)); }
+}
+.frame-input-content {
+    background-image: url('/images/frames/frame_input_content.svg');
+    background-size: 100% 100%;
+    padding: 1rem;
+}
+
+/* ---------------------------------------------------------
+   4. COMMENT & REACTION FRAMES
+--------------------------------------------------------- */
+.frame-comment-normal {
+    background-image: url('/images/frames/frame_comment_normal.svg');
+    background-size: 100% 100%;
+    padding: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.frame-comment-reply {
+    background-image: url('/images/frames/frame_comment_reply.svg');
+    background-size: 100% 100%;
+    padding: 1rem;
+    margin-left: 2rem;
+}
+.frame-comment-author {
+    background-image: url('/images/frames/frame_comment_author.svg');
+    background-size: 100% 100%;
+    padding: 1.25rem;
+}
+.frame-comment-verified {
+    background-image: url('/images/frames/frame_comment_verified.svg');
+    background-size: 100% 100%;
+    padding: 1.25rem;
+}
+.line-thread-branch {
+    /* Tạo hiệu ứng rễ cây chĩa nhánh */
+    background-image: url('/images/frames/line_thread_branch.svg');
+    background-repeat: repeat-y;
+    background-position: left top;
+    padding-left: 24px;
+}
+
+/* ---------------------------------------------------------
+   5. STUDY & QUIZ LAYOUTS
+--------------------------------------------------------- */
+.frame-quiz-container {
+    background-image: url('/images/frames/frame_quiz_container.svg');
+    background-size: 100% 100%;
+    padding: 2rem;
+}
+.frame-quiz-option {
+    background-image: url('/images/frames/frame_quiz_option_normal.svg');
+    background-size: 100% 100%;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.frame-quiz-option:hover {
+    filter: brightness(1.05);
+}
+.frame-quiz-option.correct {
+    background-image: url('/images/frames/frame_quiz_option_correct.svg');
+}
+.frame-quiz-option.wrong {
+    background-image: url('/images/frames/frame_quiz_option_wrong.svg');
+}
+.frame-flashcard {
+    background-image: url('/images/frames/frame_flashcard_front.svg');
+    background-size: 100% 100%;
+}
+
+/* ---------------------------------------------------------
+   6. CODE SANDBOX
+--------------------------------------------------------- */
+.frame-code-editor {
+    background-image: url('/images/frames/frame_code_editor_bg.svg');
+    background-size: 100% 100%;
+    padding: 1rem;
+    font-family: monospace;
+}
+.frame-terminal-output {
+    background-image: url('/images/frames/frame_terminal_output.svg');
+    background-size: 100% 100%;
+    padding: 1rem;
+}
+
+/* ---------------------------------------------------------
+   7. E-COMMERCE & COURSE CARDS
+--------------------------------------------------------- */
+.frame-pricing-pro {
+    background-image: url('/images/frames/frame_pricing_tier_pro.svg');
+    background-size: 100% 100%;
+    padding: 2rem;
+    transform: scale(1.05);
+    z-index: 10;
+}
+.btn-checkout-massive {
+    background-image: url('/images/frames/btn_checkout_massive.svg');
+    background-size: 100% 100%;
+    padding: 1rem 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+.btn-checkout-massive:hover {
+    transform: scale(1.02);
+}
+
+/* ---------------------------------------------------------
+   8. GAMIFICATION AVATAR BORDERS
+--------------------------------------------------------- */
+.avatar-border-wrap {
+    position: relative;
+    display: inline-block;
+}
+.avatar-border-wrap img.avatar-img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.avatar-border-wrap::after {
+    content: '';
+    position: absolute;
+    top: -15%; left: -15%;
+    width: 130%; height: 130%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+.avatar-lvl-1::after { background-image: url('/images/frames/border_avatar_lvl_01_seed.svg'); }
+.avatar-lvl-10::after { background-image: url('/images/frames/border_avatar_lvl_10_leaf.svg'); }
+.avatar-lvl-99::after { background-image: url('/images/frames/border_avatar_lvl_99_ancient.svg'); }
+.avatar-role-admin::after { background-image: url('/images/frames/border_role_admin.svg'); }

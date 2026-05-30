@@ -7,7 +7,7 @@ namespace scratch_hasher
     {
         static void Main(string[] args)
         {
-            string password = "1";
+            string password = "123456";
             string hash = BCrypt.Net.BCrypt.HashPassword(password);
             Console.WriteLine($"[HASH_START]{hash}[HASH_END]");
         }
