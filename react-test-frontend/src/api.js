@@ -141,3 +141,34 @@ export const getCommunityStats = async () => {
     totalGroups: Array.isArray(groups) ? groups.length : 0,
   };
 };
+
+// --- Resource Sharing APIs ---
+export const getResources = (fileType, subject) => {
+  const query = new URLSearchParams();
+  if (fileType) query.append('fileType', fileType);
+  if (subject) query.append('subject', subject);
+  return communityFetch(`/api/ResourceApi?${query.toString()}`);
+};
+
+export const viewResource = (id) => 
+  fetch(`${COMMUNITY_BASE}/api/ResourceInteraction/${id}/view`, { method: 'POST', credentials: 'include' }).then(res => res.json());
+
+export const bookmarkResource = (id) => 
+  fetch(`${COMMUNITY_BASE}/api/ResourceInteraction/${id}/bookmark`, { method: 'POST', credentials: 'include' }).then(res => res.json());
+
+export const rateResource = (id, score) => 
+  fetch(`${COMMUNITY_BASE}/api/ResourceInteraction/${id}/rate`, { 
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ score }),
+    credentials: 'include' 
+  }).then(res => res.json());
+
+export const shareResource = (id, sharedVia) => 
+  fetch(`${COMMUNITY_BASE}/api/ResourceInteraction/${id}/share`, { 
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sharedVia }),
+    credentials: 'include' 
+  }).then(res => res.json());
+

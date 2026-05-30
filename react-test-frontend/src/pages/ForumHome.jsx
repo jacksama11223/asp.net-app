@@ -70,6 +70,13 @@ export const ForumHome = () => {
           </Box>
           <Group>
             <Button 
+              size="md" radius="xl" color="brand" variant="light"
+              leftSection={<LuSparkles size={18} />}
+              onClick={() => navigate('/community/resources')}
+            >
+              Kho Tài Nguyên
+            </Button>
+            <Button 
               size="md" radius="xl" color="indigo" variant="light"
               leftSection={<LuZap size={18} />}
               onClick={() => navigate('/community/quiz-builder')}

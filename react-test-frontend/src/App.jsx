@@ -23,6 +23,7 @@ import MistakeNotebook from './pages/MistakeNotebook';
 import CodeWorkspace from './pages/CodeWorkspace';
 import { CourseManager } from './pages/CourseManager';
 import { MessageCenter } from './pages/MessageCenter';
+import { ResourceLibrary } from './pages/ResourceLibrary';
 import { ForumHome } from './pages/ForumHome';
 import { Leaderboard } from './pages/Leaderboard';
 import { PublicProfile } from './pages/PublicProfile';
@@ -65,6 +66,7 @@ function App() {
           <Route path="/community/post/new" element={<ProtectedRoute><CommunityNewPost /></ProtectedRoute>} />
           <Route path="/community/friends" element={<ProtectedRoute><CommunityFriends /></ProtectedRoute>} />
           <Route path="/community/quiz-builder" element={<ProtectedRoute><CommunityQuizBuilder /></ProtectedRoute>} />
+          <Route path="/community/resources" element={<ProtectedRoute><ResourceLibrary /></ProtectedRoute>} />
           <Route path="/wiki" element={<ProtectedRoute><PersonalWiki /></ProtectedRoute>} />
           <Route path="/booking" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
           <Route path="/study/:courseId" element={<ProtectedRoute><StudyWorkspace /></ProtectedRoute>} />
