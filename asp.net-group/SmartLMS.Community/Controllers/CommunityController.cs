@@ -218,7 +218,7 @@ public class CommunityController : Controller
     [HttpGet("/Community/Resources/{id}")]
     public async Task<IActionResult> ResourceDetail(int id, [FromServices] SmartLMSContext db)
     {
-        var res = await db.SharedResources
+        var res = await db.CommunityResources
             .Include(r => r.Uploader)
             .FirstOrDefaultAsync(r => r.Id == id);
             
