@@ -31,6 +31,7 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
     <link rel="stylesheet" href="~/css/gamification-frames.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="bg-body-community text-slate-800 bg-slate-50 flex flex-col min-h-screen overflow-x-hidden">
 
