@@ -47,7 +47,7 @@ function resourceDiscussion() {
         async loadComments() {
             this.isLoading = true;
             try {
-                const res = await fetch(`/CommunityApi/ResourceDiscussion/${this.resourceId}/comments`);
+                const res = await fetch(`/CommunityApi/ResourceDiscussion/${this.resourceId}/comments`, { credentials: 'include' });
                 if (res.ok) {
                     this.comments = await res.json();
                 }
@@ -66,6 +66,7 @@ function resourceDiscussion() {
                 const res = await fetch(`/CommunityApi/ResourceDiscussion/${this.resourceId}/comments`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({ content: content, parentCommentId: parentId })
                 });
 
@@ -88,7 +89,7 @@ function resourceDiscussion() {
 
         async upvote(commentId) {
             try {
-                const res = await fetch(`/CommunityApi/ResourceDiscussion/comments/${commentId}/upvote`, { method: 'POST' });
+                const res = await fetch(`/CommunityApi/ResourceDiscussion/comments/${commentId}/upvote`, { method: 'POST', credentials: 'include' });
                 if (res.ok) {
                     await this.loadComments();
                 } else if (res.status === 401) {
@@ -102,7 +103,7 @@ function resourceDiscussion() {
         async deleteComment(commentId) {
             if (!confirm('Bạn có chắc chắn muốn xóa bình luận này?')) return;
             try {
-                const res = await fetch(`/CommunityApi/ResourceDiscussion/comments/${commentId}`, { method: 'DELETE' });
+                const res = await fetch(`/CommunityApi/ResourceDiscussion/comments/${commentId}`, { method: 'DELETE', credentials: 'include' });
                 if (res.ok) {
                     await this.loadComments();
                     window.showToast && window.showToast('✅ Đã xóa bình luận');
@@ -128,6 +129,7 @@ function resourceDiscussion() {
                 const res = await fetch(`/CommunityApi/ResourceDiscussion/${this.resourceId}/report`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({ reason: this.reportReason + (this.reportingCommentId ? ` (Comment ID: ${this.reportingCommentId})` : '') })
                 });
 
