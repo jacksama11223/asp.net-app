@@ -1,5 +1,26 @@
 # Changelog - SmartLMS.AI Distributed System
 
+## [Unreleased] — 2026-05-30
+
+### Added
+- **[Community] Group Attachment Test** — Thêm kịch bản kiểm thử tự động `test_group_attachments.cjs` để giả lập xác thực, đăng bài, đính kèm file và kiểm tra File vật lý qua Iframe nhằm đảm bảo tính toàn vẹn của Module Học nhóm.
+
+### Fixed
+- **[Community] Lỗi 401 Unauthorized khi Upload File/Đăng bài** — Bổ sung `credentials: 'include'` cho `fetch` và `xhr.withCredentials = true` vào các thành phần tương tác của nhóm học tập (GroupDetail.cshtml, attachment-uploader.js) để gửi session cookie chính xác.
+- **[Community] Lỗi 404 Not Found khi xem PDF** — Khắc phục triệt để lỗi mất file đính kèm khi khởi động lại hệ thống bằng cách cấu hình Persistent Volume (`- ./uploads:/app/wwwroot/uploads`) trong `docker-compose.yml`. Cải tiến hàm `ViewAttachment` để trả về thông báo lỗi chi tiết khi không tìm thấy file vật lý thay vì chỉ trả mã HTTP vô danh.
+
+### Refactored
+- **[Community] Route `/hub/resources/{id}`** — Trang xem tài liệu PDF độc lập `ResourceDetail.cshtml`, không còn phụ thuộc modal.
+- **[Community] Module 9 trong `test_enterprise.cjs`** — Tự động kiểm tra API upload, API bình luận và route xem tài liệu.
+- **[Docs] `resource_svg_integration_plan.md`** — Kế hoạch tích hợp SVG chi tiết cho module Chia sẻ Tài nguyên.
+
+### Fixed
+- **[Community] PDF.js worker reference** — Sửa lỗi `window['pdfjs-dist/build/pdf']` không tồn tại, đổi sang `window.pdfjsLib`.
+
+### Refactored
+- **[Community] `Resources.cshtml`** — Xóa modal PDF cũ (gây xung đột z-index). Thay toàn bộ inline SVG bằng premium assets: `course_bookmark.svg`, `nav_search.svg`, `course_download.svg`, `nav_profile.svg`, `illu_empty_feed.svg`, `frame_attachment_file.svg`, `social_share.svg`.
+- **[Community] `ResourceDetail.cshtml`** — Tích hợp SVG cao cấp: `nav_back_arrow.svg`, `avatar_default_user.svg`, `comment_reply.svg`, `avatar_system_bot.svg`. Thêm badge AI Bot chính xác cho cả comment và reply.
+
 ### [2026-05-30] - Module Resource Discussion & AI RAG
 - **Added:** Triển khai Giai đoạn 4 - Premium UI Sync: Tích hợp thư viện `pdf.js` của Mozilla để thay thế hoàn toàn thẻ `<iframe>` mặc định.
 - **Added:** Tính năng **Dark Mode PDF** sử dụng CSS Filter (`invert(90%) hue-rotate(180deg)`) để bảo vệ mắt học viên khi đọc tài liệu nền trắng.

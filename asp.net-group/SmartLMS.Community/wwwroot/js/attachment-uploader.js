@@ -69,6 +69,7 @@ class AttachmentUploader {
             };
             
             xhr.open('POST', '/api/AttachmentApi/upload', true);
+            xhr.withCredentials = true;
             xhr.send(formData);
         }
         

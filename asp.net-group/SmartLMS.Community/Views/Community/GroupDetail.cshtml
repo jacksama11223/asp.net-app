@@ -187,7 +187,7 @@
 
             async fetchPosts() {
                 try {
-                    const res = await fetch(`/api/GroupApi/${groupId}/posts`);
+                    const res = await fetch(`/api/GroupApi/${groupId}/posts`, { credentials: 'include' });
                     if (res.ok) {
                         this.posts = await res.json();
                     }
@@ -207,6 +207,7 @@
                     window.showToast && window.showToast('ℹ️ Đang tải lên file...');
                     const res = await fetch('/api/AttachmentApi/upload', {
                         method: 'POST',
+                        credentials: 'include',
                         body: formData
                     });
 
@@ -235,6 +236,7 @@
                 try {
                     const res = await fetch(`/api/GroupApi/${groupId}/posts`, {
                         method: 'POST',
+                        credentials: 'include',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ content: this.newPostContent, attachmentIds })
                     });

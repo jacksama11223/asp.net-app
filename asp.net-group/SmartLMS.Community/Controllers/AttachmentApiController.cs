@@ -89,10 +89,10 @@ namespace SmartLMS.Community.Controllers
         public async Task<IActionResult> ViewAttachment(int id)
         {
             var attachment = await _context.Attachments.FindAsync(id);
-            if (attachment == null) return NotFound();
+            if (attachment == null) return NotFound(new { message = $"Attachment {id} not found in DB." });
 
             var filePath = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), attachment.FileUrl.TrimStart('/'));
-            if (!System.IO.File.Exists(filePath)) return NotFound();
+            if (!System.IO.File.Exists(filePath)) return NotFound(new { message = $"File not found at physical path: {filePath}" });
 
             var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(filePath, out string contentType))
