@@ -1,33 +1,45 @@
 function premiumPdfViewer() {
-    return {
-        pdfUrl: '',
-        pdfDoc: null,
-        pageNum: 1,
-        pageRendering: false,
-        pageNumPending: null,
-        scale: 1.2,
-        canvas: null,
-        ctx: null,
-        totalPages: 0,
-        isDarkMode: true, // Mặc định bật Dark Mode để bảo vệ mắt
-        isLoadingPdf: false,
+    // pdfDoc is intentionally left out of the returned object to avoid Alpine proxying which breaks PDF.js private fields
+    let _pdfDoc = null;
 
-        async initViewer(url) {
-            if (!url) return;
-            this.pdfUrl = url;
-            this.pageNum = 1;
-            this.totalPages = 0;
-            this.isLoadingPdf = true;
+            return {
+                pdfUrl: '',
+                pageNum: 1,
+                pageRendering: false,
+                pageNumPending: null,
+                scale: 1.2,
+                canvas: null,
+                ctx: null,
+                totalPages: 0,
+                isDarkMode: false, // Default to light mode for standard document viewing
+                isLoadingPdf: false,
+                viewerMode: 'pdf', // 'pdf', 'word', 'image', 'unsupported'
 
-            const isPdf = url.toLowerCase().endsWith('.pdf') || url.toLowerCase().includes('.pdf?');
-            if (!isPdf) {
-                this.isLoadingPdf = false;
-                window.showToast && window.showToast('⚠️ Định dạng tài liệu không hỗ trợ xem trực tuyến. Vui lòng tải về.');
-                return;
-            }
+                async initViewer(url) {
+                    if (!url) return;
+                    this.pdfUrl = url;
+                    this.pageNum = 1;
+                    this.totalPages = 0;
+                    
+                    const lowerUrl = url.toLowerCase();
+                    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('.pdf?')) {
+                        this.viewerMode = 'pdf';
+                    } else if (lowerUrl.match(/\.(doc|docx|ppt|pptx|xls|xlsx)$/)) {
+                        this.viewerMode = 'word';
+                        return;
+                    } else if (lowerUrl.match(/\.(jpeg|jpg|png|gif|webp)$/)) {
+                        this.viewerMode = 'image';
+                        return;
+                    } else {
+                        this.viewerMode = 'unsupported';
+                        window.showToast && window.showToast('⚠️ Định dạng tài liệu không hỗ trợ xem trực tuyến. Vui lòng tải về.');
+                        return;
+                    }
 
-            // Chờ canvas render trên DOM
-            await this.$nextTick();
+                    this.isLoadingPdf = true;
+
+                    // Chờ canvas render trên DOM
+                    await this.$nextTick();
             this.canvas = this.$refs.pdfCanvas;
             if (!this.canvas) return;
             this.ctx = this.canvas.getContext('2d');
@@ -39,8 +51,8 @@ function premiumPdfViewer() {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
                 const loadingTask = pdfjsLib.getDocument(this.pdfUrl);
-                this.pdfDoc = await loadingTask.promise;
-                this.totalPages = this.pdfDoc.numPages;
+                _pdfDoc = await loadingTask.promise;
+                this.totalPages = _pdfDoc.numPages;
                 this.renderPage(this.pageNum);
             } catch (error) {
                 console.error('Lỗi tải PDF:', error);
@@ -51,8 +63,9 @@ function premiumPdfViewer() {
         },
 
         renderPage(num) {
+            if (!_pdfDoc) return;
             this.pageRendering = true;
-            this.pdfDoc.getPage(num).then((page) => {
+            _pdfDoc.getPage(num).then((page) => {
                 const viewport = page.getViewport({ scale: this.scale });
                 this.canvas.height = viewport.height;
                 this.canvas.width = viewport.width;
@@ -106,6 +119,12 @@ function premiumPdfViewer() {
 
         toggleDarkMode() {
             this.isDarkMode = !this.isDarkMode;
+        },
+        
+        getGoogleDocsViewerUrl() {
+            // Need absolute URL for Google Docs Viewer
+            const absoluteUrl = this.pdfUrl.startsWith('http') ? this.pdfUrl : window.location.origin + this.pdfUrl;
+            return `https://docs.google.com/viewer?url=${encodeURIComponent(absoluteUrl)}&embedded=true`;
         }
     }
 }

@@ -44,7 +44,7 @@
              x-init="initViewer('@Model.FileUrl' || 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')">
             
             <!-- Toolbar ảo của PDF.js -->
-            <div class="h-12 bg-white flex items-center justify-between px-4 border-b border-slate-200 flex-shrink-0 relative z-20 shadow-sm">
+            <div x-show="viewerMode === 'pdf'" class="h-12 bg-white flex items-center justify-between px-4 border-b border-slate-200 flex-shrink-0 relative z-20 shadow-sm">
                 <div class="flex items-center gap-4">
                     <!-- Dark Mode Toggle -->
                     <button @@click="toggleDarkMode()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all" :class="isDarkMode ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'">
@@ -79,16 +79,32 @@
                 </div>
             </div>
 
-            <!-- Nội dung Canvas Render PDF -->
+            <!-- Nội dung Canvas Render PDF / DOC / IMG -->
             <div class="flex-1 overflow-auto bg-slate-100 flex justify-center p-4 relative custom-scrollbar">
+                
+                <!-- Hiệu ứng tải cho PDF -->
                 <div x-show="isLoadingPdf" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-10 backdrop-blur-sm">
                     <svg class="animate-spin h-10 w-10 text-cyan-500 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <p class="text-cyan-600 font-bold tracking-widest uppercase text-sm animate-pulse">Đang giải mã PDF...</p>
+                    <p class="text-cyan-600 font-bold tracking-widest uppercase text-sm animate-pulse">Đang nạp tài liệu...</p>
                 </div>
-                <!-- Áp dụng CSS Filter Invert khi bật Dark Mode -->
-                <canvas x-ref="pdfCanvas" class="shadow-2xl transition-all duration-300" 
+
+                <!-- PDF Viewer -->
+                <canvas x-show="viewerMode === 'pdf'" x-ref="pdfCanvas" class="shadow-2xl transition-all duration-300" 
                         :style="isDarkMode ? 'filter: invert(90%) hue-rotate(180deg) contrast(1.1);' : 'filter: none;'">
                 </canvas>
+                
+                <!-- Image Viewer -->
+                <img x-show="viewerMode === 'image'" :src="pdfUrl" class="max-w-full h-auto object-contain shadow-2xl rounded-lg" />
+                
+                <!-- Word/Office Viewer -->
+                <iframe x-show="viewerMode === 'word'" :src="getGoogleDocsViewerUrl()" class="w-full h-full border-0 bg-white rounded-lg shadow-inner"></iframe>
+                
+                <!-- Fallback Unsupported -->
+                <div x-show="viewerMode === 'unsupported'" class="flex flex-col items-center justify-center h-full w-full opacity-60">
+                    <img src="/images/icons/course_read_doc.svg" class="w-16 h-16 mb-4 grayscale" />
+                    <p class="text-slate-500 font-bold">Không hỗ trợ xem trực tiếp định dạng này.</p>
+                </div>
+                
             </div>
         </div>
 
