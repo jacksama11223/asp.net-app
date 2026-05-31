@@ -19,6 +19,13 @@ function premiumPdfViewer() {
             this.totalPages = 0;
             this.isLoadingPdf = true;
 
+            const isPdf = url.toLowerCase().endsWith('.pdf') || url.toLowerCase().includes('.pdf?');
+            if (!isPdf) {
+                this.isLoadingPdf = false;
+                window.showToast && window.showToast('⚠️ Định dạng tài liệu không hỗ trợ xem trực tuyến. Vui lòng tải về.');
+                return;
+            }
+
             // Chờ canvas render trên DOM
             await this.$nextTick();
             this.canvas = this.$refs.pdfCanvas;

@@ -57,7 +57,11 @@ public class ModerationService : IModerationService
                 new ReviewData { Text = "Spam spam click link nhận quà", IsToxic = true },
                 new ReviewData { Text = "Khóa học rất bổ ích, cảm ơn thầy", IsToxic = false },
                 new ReviewData { Text = "Video số 2 hơi bị mờ, có thể fix lại không?", IsToxic = false },
-                new ReviewData { Text = "Mình đã ứng dụng thành công, quá tuyệt", IsToxic = false }
+                new ReviewData { Text = "Mình đã ứng dụng thành công, quá tuyệt", IsToxic = false },
+                new ReviewData { Text = "Tài liệu này khá hay @AI giải thích thêm nhé", IsToxic = false },
+                new ReviewData { Text = "test thử bình luận nha mọi người", IsToxic = false },
+                new ReviewData { Text = "alo có ai ở đây không", IsToxic = false },
+                new ReviewData { Text = "bình luận bình thường", IsToxic = false }
             };
 
             var dataView = _mlContext.Data.LoadFromEnumerable(trainingData);
@@ -84,6 +88,6 @@ public class ModerationService : IModerationService
             result = _predictionEngine!.Predict(input);
         }
 
-        return result.Prediction;
+        return result.Prediction && result.Probability > 0.7f;
     }
 }
