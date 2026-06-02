@@ -4,7 +4,7 @@
 docker exec aspnet-app-backend-1 bash -c '
 apt-get update -qq && apt-get install -y -qq mariadb-client > /dev/null 2>&1
 
-mariadb -h db -u root -pSmartLMS_DB_Secure_2026 SmartLMS <<EOSQL
+mariadb -h db -u root -pSmartLMS_DB_Secure_2026 SmartLMS <<'EOSQL'
 
 -- ========================================
 -- STEP 1: Create StudyGroups table
