@@ -31,6 +31,7 @@ builder.Services.AddScoped<IResourceDiscussionService, ResourceDiscussionService
 builder.Services.AddScoped<IResourceRagService, ResourceRagService>();
 builder.Services.AddSingleton<IModerationService, ModerationService>();
 builder.Services.AddScoped<INotificationService, SmartLMS.Community.Services.CommunityNotificationService>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SmartLMS.Business.Handlers.CommunityEventHandlers).Assembly));
 
 // 3. Redis Cache
 var redisConnStr = builder.Configuration["Redis__ConnectionString"]

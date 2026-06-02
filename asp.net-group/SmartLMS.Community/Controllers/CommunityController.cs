@@ -69,6 +69,11 @@ public class CommunityController : Controller
     [HttpPost("post/new")]
     public async Task<IActionResult> SubmitPost([FromForm] string Title, [FromForm] string Content, [FromForm] string Category, [FromForm] string Tags, [FromServices] SmartLMSContext db)
     {
+        if (string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Content))
+        {
+            return BadRequest("Tiêu đề và nội dung không được để trống.");
+        }
+
         var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (!int.TryParse(userIdStr, out int userId)) userId = 1; // Fallback for local testing
 

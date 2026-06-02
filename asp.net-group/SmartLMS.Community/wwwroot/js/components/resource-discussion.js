@@ -81,6 +81,10 @@ function resourceDiscussion() {
                     window.showToast && window.showToast('✅ Đã gửi bình luận');
                 } else if (res.status === 401) {
                     window.location.href = '/Auth/Login';
+                } else {
+                    const err = await res.json().catch(() => null);
+                    const msg = err?.message || 'Có lỗi xảy ra khi gửi bình luận.';
+                    window.showToast ? window.showToast(`❌ ${msg}`) : alert(msg);
                 }
             } catch (e) {
                 console.error("Lỗi đăng bình luận:", e);
