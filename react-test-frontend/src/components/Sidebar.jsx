@@ -14,7 +14,7 @@ const studentNav = [
   { label: 'Kho khóa học', icon: LuBookOpen, path: '/my-learning', color: 'teal' },
   { label: 'Marketplace', icon: LuBookOpen, path: '/courses', color: 'indigo' },
   { label: 'Cộng đồng', icon: LuUsers, path: '/community', color: 'blue' },
-  { label: 'Coding Sandbox', icon: LuPenTool, path: '/CodingChallenge/Solve/1', isExternal: true, color: 'orange' },
+  { label: 'Coding Sandbox', icon: LuPenTool, path: '/coding', isExternal: false, color: 'orange' },
   { label: 'Achievement Hub', icon: LuSparkles, path: '/Assessment/AchievementHub', isExternal: true, color: 'violet' }
 ];
 

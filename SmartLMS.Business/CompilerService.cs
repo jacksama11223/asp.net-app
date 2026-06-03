@@ -1,12 +1,21 @@
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
 using SmartLMS.Models;
-using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using System.Net.Http;
 
 namespace SmartLMS.Business;
 
 public class CompilerService : ICompilerService
 {
+    private readonly HttpClient _httpClient;
+    private const string JDOODLE_CLIENT_ID = "135294bcbc937200a1df023f9aea2d92";
+    private const string JDOODLE_CLIENT_SECRET = "19e6234ab772a33327a6f899851866b88cd94556cba6ebab819d6e36b100b2e1";
+
+    public CompilerService()
+    {
+        _httpClient = new HttpClient();
+    }
+
     public async Task<CompilerResult> ExecuteAsync(string code, string language, List<TestCase> testCases)
     {
         if (language.ToLower() != "csharp")
@@ -22,11 +31,6 @@ public class CompilerService : ICompilerService
 
         try
         {
-            // Thiết lập môi trường chạy script (Sandbox cơ bản)
-            var scriptOptions = ScriptOptions.Default
-                .WithReferences(typeof(object).Assembly, typeof(Enumerable).Assembly)
-                .WithImports("System", "System.Collections.Generic", "System.Linq", "System.Text");
-
             foreach (var testCase in testCases)
             {
                 var tcResult = new TestCaseResult
@@ -37,23 +41,50 @@ public class CompilerService : ICompilerService
 
                 try
                 {
-                    // Trong thực tế, chúng ta nên bọc code của học viên vào một class/method 
-                    // để xử lý input truyền vào. Ở đây tôi giả định code của học viên là một script
-                    // và biến 'input' đã được định nghĩa sẵn.
-                    
-                    var globals = new ScriptGlobals { input = testCase.Input };
-                    var executionResult = await CSharpScript.EvaluateAsync(code, scriptOptions, globals, typeof(ScriptGlobals));
-                    
-                    string actualOutput = executionResult?.ToString() ?? string.Empty;
-                    tcResult.ActualOutput = actualOutput;
-
-                    if (actualOutput.Trim() == testCase.ExpectedOutput.Trim())
+                    var requestBody = new
                     {
-                        tcResult.Passed = true;
+                        clientId = JDOODLE_CLIENT_ID,
+                        clientSecret = JDOODLE_CLIENT_SECRET,
+                        script = code,
+                        stdin = testCase.Input,
+                        language = "csharp",
+                        versionIndex = "4" // C# mono
+                    };
+
+                    var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync("https://api.jdoodle.com/v1/execute", content);
+                    
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonStr = await response.Content.ReadAsStringAsync();
+                        using var doc = JsonDocument.Parse(jsonStr);
+                        
+                        // JDoodle trả về { "output": "kết quả", "statusCode": 200, "memory": "...", "cpuTime": "..." }
+                        if (doc.RootElement.TryGetProperty("output", out var outputElement))
+                        {
+                            string actualOutput = outputElement.GetString() ?? string.Empty;
+                            tcResult.ActualOutput = actualOutput;
+
+                            // JDoodle output thường có \n ở cuối
+                            if (actualOutput.Trim() == testCase.ExpectedOutput.Trim())
+                            {
+                                tcResult.Passed = true;
+                            }
+                            else
+                            {
+                                tcResult.Passed = false;
+                            }
+                        }
+                        else
+                        {
+                            tcResult.Passed = false;
+                            tcResult.ErrorMessage = "JDoodle không trả về output hợp lệ.";
+                        }
                     }
                     else
                     {
                         tcResult.Passed = false;
+                        tcResult.ErrorMessage = $"JDoodle API Error: {response.StatusCode}";
                     }
                 }
                 catch (Exception ex)
@@ -67,19 +98,14 @@ public class CompilerService : ICompilerService
 
             result.Message = result.TestCaseResults.All(t => t.Passed) 
                 ? "Chúc mừng! Bạn đã vượt qua tất cả các bài kiểm tra." 
-                : "Một số bài kiểm tra chưa đạt. Hãy thử lại nhé!";
+                : "Một số bài kiểm tra chưa đạt. Hãy kiểm tra lại Output nhé!";
         }
         catch (Exception ex)
         {
             result.Success = false;
-            result.Message = "Lỗi biên dịch: " + ex.Message;
+            result.Message = "Lỗi kết nối JDoodle: " + ex.Message;
         }
 
         return result;
     }
-}
-
-public class ScriptGlobals
-{
-    public string input { get; set; } = string.Empty;
 }

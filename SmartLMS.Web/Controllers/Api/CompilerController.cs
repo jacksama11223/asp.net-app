@@ -310,8 +310,8 @@ public class CompilerController : ControllerBase
         var challenge = new CodingChallenge
         {
             Title = $"Th\u1eed th\u00e1ch: {lesson.Title}",
-            Description = $"[T\u1ef1 \u0111\u1ed9ng t\u1ea1o b\u1edfi AI] Vi\u1ebft ch\u01b0\u01a1ng tr\u00ecnh C# \u0111\u1ec3 x\u1eed l\u00fd chu\u1ed7i 'input'. Tr\u1ea3 v\u1ec1 k\u1ebft qu\u1ea3 chu\u1ed7i mong mu\u1ed1n.\n\nInput: chu\u1ed7i \u0111\u1ea7u v\u00e0o 'input'\nOutput mong \u0111\u1ee3i: gi\u00e1 tr\u1ecb tr\u1ea3 v\u1ec1 th\u00edch h\u1ee3p.",
-            TemplateCode = "// S\u1eed d\u1ee5ng bi\u1ebfn to\u00e0n c\u1ee5c 'input' (string) c\u00f3 s\u1eb5n\n// V\u00ed d\u1ee5: return input.ToUpper();\nreturn input;",
+            Description = $"[Tự động tạo bởi AI] Viết chương trình C# để xử lý đầu vào từ Standard Input. Trả về kết quả ra Standard Output.\n\nInput: đọc qua Console.ReadLine()\nOutput mong đợi: in ra qua Console.WriteLine()",
+            TemplateCode = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        string input = Console.ReadLine();\n        // Xử lý và in kết quả\n        Console.WriteLine(input);\n    }\n}",
             Language = "csharp",
             Points = 100,
             CourseId = lesson.Module != null ? lesson.Module.CourseId : (int?)null,

@@ -21,6 +21,7 @@ import { TutorDashboard } from './pages/TutorDashboard';
 import { PersonalWiki } from './pages/PersonalWiki';
 import MistakeNotebook from './pages/MistakeNotebook';
 import CodeWorkspace from './pages/CodeWorkspace';
+import CodingChallenges from './pages/CodingChallenges';
 import { CourseManager } from './pages/CourseManager';
 import { MessageCenter } from './pages/MessageCenter';
 import { ResourceLibrary } from './pages/ResourceLibrary';
@@ -70,6 +71,7 @@ function App() {
           <Route path="/wiki" element={<ProtectedRoute><PersonalWiki /></ProtectedRoute>} />
           <Route path="/booking" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
           <Route path="/study/:courseId" element={<ProtectedRoute><StudyWorkspace /></ProtectedRoute>} />
+          <Route path="/coding" element={<ProtectedRoute><CodingChallenges /></ProtectedRoute>} />
           <Route path="/coding/:id" element={<CodeWorkspace />} />
           <Route path="/students" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">Students Management (Coming Soon)</Text></Box></ProtectedRoute>} />
           <Route path="/ai" element={<ProtectedRoute><Box p="xl" style={{ textAlign: 'center' }}><Text c="dimmed">AI Prediction Engine (Coming Soon)</Text></Box></ProtectedRoute>} />
