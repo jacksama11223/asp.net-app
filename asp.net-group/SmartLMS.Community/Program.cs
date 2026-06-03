@@ -31,7 +31,15 @@ builder.Services.AddScoped<IResourceDiscussionService, ResourceDiscussionService
 builder.Services.AddScoped<IResourceRagService, ResourceRagService>();
 builder.Services.AddSingleton<IModerationService, ModerationService>();
 builder.Services.AddScoped<INotificationService, SmartLMS.Community.Services.CommunityNotificationService>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SmartLMS.Business.Handlers.CommunityEventHandlers).Assembly));
+// MediatR: Chỉ đăng ký handler Community, loại trừ Gamification/Notification handler 
+// (chúng cần IMessageBus/IEmailService mà Community project không cung cấp)
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssemblyContaining<SmartLMS.Business.Handlers.CommunityEventHandlers>();
+    // Lọc bỏ handler không thuộc Community context
+    cfg.TypeEvaluator = t => 
+        t != typeof(SmartLMS.Business.Handlers.GamificationEventHandler) &&
+        t != typeof(SmartLMS.Business.Handlers.NotificationEventHandler);
+});
 
 // 3. Redis Cache
 var redisConnStr = builder.Configuration["Redis__ConnectionString"]
