@@ -6,8 +6,8 @@ import {
   ActionIcon, ScrollArea, Tabs, Loader, Divider, Paper 
 } from '@mantine/core';
 import { 
-  LuSearch, LuPlay, LuSend, LuCode2, LuCheckCircle2, 
-  LuArrowLeft, LuTrophy, LuCircle, LuAlertCircle 
+  LuSearch, LuPlay, LuSend, LuCode, LuCircleCheck, 
+  LuArrowLeft, LuTrophy, LuCircle, LuTriangleAlert 
 } from 'react-icons/lu';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -203,8 +203,8 @@ const CodingChallenges = () => {
             <div className="h-[250px] border-t border-slate-800 bg-[#0f172a] flex flex-col">
               <Tabs value={activeTab} onChange={setActiveTab} color="brand" radius="none">
                 <Tabs.List className="bg-[#1e293b]/40 border-slate-800">
-                  <Tabs.Tab value="testcases" leftSection={<LuCode2 size={14} />}>Test Cases</Tabs.Tab>
-                  <Tabs.Tab value="result" leftSection={<LuCheckCircle2 size={14} />}>Execution Result</Tabs.Tab>
+                  <Tabs.Tab value="testcases" leftSection={<LuCode size={14} />}>Test Cases</Tabs.Tab>
+                  <Tabs.Tab value="result" leftSection={<LuCircleCheck size={14} />}>Execution Result</Tabs.Tab>
                 </Tabs.List>
               </Tabs>
               
@@ -301,7 +301,7 @@ const CodingChallenges = () => {
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center">
-          <LuCode2 size={64} className="text-slate-800 mb-4" />
+          <LuCode size={64} className="text-slate-800 mb-4" />
           <Title order={3} className="text-slate-500">Select a challenge to start coding</Title>
         </div>
       )}
@@ -311,7 +311,7 @@ const CodingChallenges = () => {
 
 const AlertTitle = ({ success, message }) => (
   <Paper p="md" radius="md" className={`mb-4 flex gap-3 items-center border ${success ? 'bg-green-900/20 border-green-500/30 text-green-400' : 'bg-red-900/20 border-red-500/30 text-red-400'}`}>
-    {success ? <LuCheckCircle2 size={24} /> : <LuAlertCircle size={24} />}
+    {success ? <LuCircleCheck size={24} /> : <LuTriangleAlert size={24} />}
     <div>
       <Text fw={600}>{success ? 'Execution Successful' : 'Execution Failed'}</Text>
       <Text size="sm" opacity={0.8}>{message}</Text>
