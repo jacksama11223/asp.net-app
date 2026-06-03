@@ -1,0 +1,50 @@
+@model IEnumerable<SmartLMS.Models.AuditLog>
+
+@if (Model != null && Model.Any())
+{
+    <div class="audit-trail-container">
+        @foreach (var log in Model.OrderByDescending(l => l.Timestamp))
+        {
+            <div class="audit-item" style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 12px;">
+                <span style="
+                    display: inline-flex; align-items: center; justify-content: center;
+                    width: 32px; height: 32px; border-radius: 8px; font-size: 14px;
+                    background: @(log.ActionType == "LOGIN" ? "rgba(34,197,94,0.15)" :
+                                  log.ActionType == "DELETE" ? "rgba(239,68,68,0.15)" :
+                                  log.ActionType == "PUT" ? "rgba(234,179,8,0.15)" :
+                                  "rgba(59,130,246,0.15)");
+                    color: @(log.ActionType == "LOGIN" ? "#22c55e" :
+                             log.ActionType == "DELETE" ? "#ef4444" :
+                             log.ActionType == "PUT" ? "#eab308" :
+                             "#3b82f6");
+                ">
+                    @(log.ActionType == "LOGIN" ? "🔑" :
+                      log.ActionType == "DELETE" ? "🗑" :
+                      log.ActionType == "PUT" ? "✏️" :
+                      "➕")
+                </span>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 600; font-size: 13px; color: #e2e8f0;">
+                        @(log.ActionName ?? log.ActionType) 
+                        @if (!string.IsNullOrEmpty(log.EntityName))
+                        {
+                            <span style="color: #94a3b8; font-weight: 400;">trên @log.EntityName</span>
+                        }
+                    </div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                        @(log.ControllerName ?? "System") · User #@(log.UserId?.ToString() ?? "—")
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: #64748b; white-space: nowrap;">
+                    @log.Timestamp.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="audit-item" style="padding: 24px; text-align: center; color: #64748b;">
+        <p>Chưa có dữ liệu</p>
+    </div>
+}
